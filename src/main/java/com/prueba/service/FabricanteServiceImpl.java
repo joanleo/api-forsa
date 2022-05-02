@@ -1,0 +1,90 @@
+package com.prueba.service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.prueba.dto.FabricanteDTO;
+import com.prueba.entity.Fabricante;
+import com.prueba.exception.ResourceNotFoundException;
+import com.prueba.repository.FabricanteRepository;
+
+@Service
+public class FabricanteServiceImpl implements FabricanteService {
+	
+	@Autowired
+	private FabricanteRepository fabricanteRepo;
+	
+	@Autowired
+	private ModelMapper modelMapper;
+
+	@Override
+	public FabricanteDTO create(FabricanteDTO fabricanteDTO) {
+		Fabricante fabricante = mapearDTO(fabricanteDTO);
+		Optional<Fabricante> exist = fabricanteRepo.findById(fabricante.getNit());
+		if(exist == null) {
+			fabricanteRepo.save(fabricante);
+		}else {
+			throw new IllegalAccessError("El fabricante que esta tratando de crear ya existe"
+					+ fabricante.getNit() + " " + fabricante.getNombre() );
+		}
+		
+		return mapearEntidad(fabricante);
+	}
+
+	@Override
+	public List<FabricanteDTO> list() {
+		List<Fabricante> fabricantes = fabricanteRepo.findAll();
+		
+		return fabricantes.stream().map(fabricante -> mapearEntidad(fabricante)).collect(Collectors.toList());
+		
+	}
+
+	@Override
+	public FabricanteDTO getFabricante(Long id) {
+		Fabricante fabricante = fabricanteRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "id", id));
+		
+		return mapearEntidad(fabricante);
+	}
+
+	@Override
+	public FabricanteDTO update(Long id, FabricanteDTO fabricanteDTO) {
+		Fabricante fabricante = fabricanteRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "id", id));
+		
+		//fabricante.setDescripcion(fabricanteDTO.getDescripcion());
+		fabricante.setNit(fabricanteDTO.getNit());
+		fabricante.setNombre(fabricanteDTO.getNombre());
+		
+		return mapearEntidad(fabricante);
+	}
+
+	@Override
+	public void delete(Long id) {
+		Fabricante fabricante = fabricanteRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "id", id));
+		
+		fabricanteRepo.delete(fabricante);
+	}
+	
+	public FabricanteDTO mapearEntidad(Fabricante fabricante) {
+		return modelMapper.map(fabricante, FabricanteDTO.class);
+	}
+	
+	public Fabricante mapearDTO(FabricanteDTO fabricanteDTO) {
+		return modelMapper.map(fabricanteRepo, Fabricante.class);
+	}
+
+	@Override
+	public List<FabricanteDTO> findByName(String nombre) {
+		List<Fabricante> listFabricante = fabricanteRepo.findByNombreContains(nombre);
+		
+		return listFabricante.stream().map(fabricante -> mapearEntidad(fabricante)).collect(Collectors.toList());
+	}
+
+}
