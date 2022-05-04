@@ -30,7 +30,6 @@ public class Empresa {
 	@Column(name = "vcdescripcion")
 	private String descripcion;
 	
-	
 	@ManyToOne()
 	@JoinColumn(name = "nidtipo_empresa")
 	private TipoEmpresa tipoEmpresa;

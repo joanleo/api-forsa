@@ -74,7 +74,10 @@ public class ProductoServiceImpl implements ProductoService {
 		Producto producto = productoRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Producto", "Codigo de pieza", id));
 		
-		productoRepo.delete(producto);
+		if(producto.getVerificado() == false) {
+			producto.setIsEnable(false);
+		}
+		productoRepo.save(producto);
 
 	}
 

@@ -58,6 +58,17 @@ public class Producto {
     @Column(name = "bverificado", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
     private Boolean verificado = false;
     
+    @Column(name = "bisenable", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
+    private Boolean isEnable = false;
+    
+	public Boolean getIsEnable() {
+		return isEnable;
+	}
+
+	public void setIsEnable(Boolean isEnable) {
+		this.isEnable = isEnable;
+	}
+
 	public Familia getFamilia() {
 		return familia;
 	}

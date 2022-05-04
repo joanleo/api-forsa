@@ -39,6 +39,9 @@ public class Usuario {
     
     @Column(name = "vcpassword")
     private String password;
+    
+    @Column(name = "vctokenpassword")
+    private String tokenPassword;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "usuarios_roles", joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "nidusuario"), 
@@ -104,5 +107,14 @@ public class Usuario {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public String getTokenPassword() {
+		return tokenPassword;
+	}
+
+	public void setTokenPassword(String tokenPassword) {
+		this.tokenPassword = tokenPassword;
+	}
+	
 
 }

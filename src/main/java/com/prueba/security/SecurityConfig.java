@@ -46,23 +46,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	        "/swagger-ui.html/**",
 	        "/configuration/**",
 	        "/v2/api-docs",
-	        "/webjars/**"
+	        "/webjars/**",
+	        "/email-password/**"
 	};
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors();
-		http.csrf().disable()
-			.exceptionHandling()
-		    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-		    .and()
+		http.cors().and().csrf().disable()
 		    .authorizeRequests()
 		    //.antMatchers(HttpMethod.GET, "/**").permitAll()
 		    .antMatchers(HttpMethod.GET,"/productos").access("@userSecurity.hasPrivilege(authentication, '/productos')")
-		    .antMatchers(AUTH_WHITELIST).permitAll()//"/auth/**"
+		    .antMatchers(AUTH_WHITELIST
+		    ).permitAll()//"/auth/**"
 		    .anyRequest()
 		    .authenticated()
-		    .and()		    
+		    .and()
+		    .exceptionHandling()
+		    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+		    .and()
 		    .sessionManagement()
 		    .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
