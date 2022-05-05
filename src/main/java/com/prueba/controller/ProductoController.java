@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,9 +37,9 @@ public class ProductoController {
 	}
 	
 	@GetMapping
-	public List<ProductoDTO> list(@RequestParam(required=false) String letter){
-		if(letter != null) {
-			return productoService.searchProducts(letter);
+	public List<ProductoDTO> list(@RequestParam(required=false) String letters){
+		if(letters != null) {
+			return productoService.searchProducts(letters);
 		}else {
 			return productoService.list();			
 		}
@@ -88,5 +89,12 @@ public class ProductoController {
 		productoService.load(list);
 		
 		return new ResponseEntity<>("Se ha cargado la lista con exito", HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> delete(@PathVariable(name="id")Long id){
+		productoService.delete(id);
+		
+		return new ResponseEntity<>("Item eliminado con exito", HttpStatus.OK);
 	}
 }

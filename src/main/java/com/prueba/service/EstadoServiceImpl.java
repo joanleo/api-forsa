@@ -77,4 +77,11 @@ public class EstadoServiceImpl implements EstadoService {
 		return modelmapper.map(estadoDTO, Estado.class);
 	}
 
+	@Override
+	public List<EstadoDTO> findByTipo(String tipo) {
+		List<Estado> listEstados = estadoRepo.findByTipoContains(tipo);
+		
+		return listEstados.stream().map(estado -> mapearEntidad(estado)).collect(Collectors.toList());
+	}
+
 }

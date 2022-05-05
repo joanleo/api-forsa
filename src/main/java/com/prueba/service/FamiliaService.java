@@ -15,5 +15,7 @@ public interface FamiliaService {
 	public FamiliaDTO update(Long id, FamiliaDTO familiaDTO);
 	
 	public void delete(Long id);
+	
+	public List<FamiliaDTO> findByName(String name);
 
 }

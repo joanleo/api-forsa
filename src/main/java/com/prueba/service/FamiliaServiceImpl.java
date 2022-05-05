@@ -1,6 +1,7 @@
 package com.prueba.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,9 @@ public class FamiliaServiceImpl implements FamiliaService {
 
 	@Override
 	public List<FamiliaDTO> list() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Familia> listaFamilias = familiaRepo.findAll();
+		
+		return listaFamilias.stream().map(familia -> mapearEntidad(familia)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -62,6 +64,13 @@ public class FamiliaServiceImpl implements FamiliaService {
 	
 	public Familia mapearDTO(FamiliaDTO familiaDTO) {
 		return modelMapper.map(familiaDTO, Familia.class);
+	}
+
+	@Override
+	public List<FamiliaDTO> findByName(String name) {
+		List<Familia> listFamilias = familiaRepo.findByNombreContains(name);
+
+		return listFamilias.stream().map(familia -> mapearEntidad(familia)).collect(Collectors.toList());
 	}
 
 }

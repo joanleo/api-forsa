@@ -56,9 +56,10 @@ public class EmailController {
     	//UUID uuid = UUID.randomUUID();
     	String uuid = RandomString.make(6);
     	String tokenPassword = uuid;//.toString();
+    	String newPassword = passwordEncoder.encode(tokenPassword);
     	dto.setTokenPassword(tokenPassword);
     	//usuario.setTokenPassword(tokenPassword);
-    	usuario.setPassword(tokenPassword);
+    	usuario.setPassword(newPassword);
     	usuarioRepo.save(usuario);
         emailService.sendEmail(dto);
         return new ResponseEntity<String>("Correo enviado con éxito", HttpStatus.OK);

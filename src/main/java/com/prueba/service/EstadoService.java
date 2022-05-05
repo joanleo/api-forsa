@@ -16,5 +16,7 @@ public interface EstadoService {
 	public EstadoDTO update(Long id, EstadoDTO estadoDTO);
 	
 	public void delete(Long id);
+	
+	public List<EstadoDTO> findByTipo(String tipo);
 
 }

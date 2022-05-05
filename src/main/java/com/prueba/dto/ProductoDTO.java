@@ -13,7 +13,7 @@ import com.prueba.entity.Empresa;
 public class ProductoDTO {
 	 
 	@NotNull(message = "Este campo no puede ser nulo")
-	private Long codigoPieza;
+	private String codigoPieza;
 	
 	@NotBlank(message = "Este campo no puede ser nulo")
 	private String descripcion;
@@ -59,11 +59,11 @@ public class ProductoDTO {
 		super();
 	}
 
-	public Long getCodigoPieza() {
+	public String getCodigoPieza() {
 		return codigoPieza;
 	}
 
-	public void setCodigoPieza(Long codigoPieza) {
+	public void setCodigoPieza(String codigoPieza) {
 		this.codigoPieza = codigoPieza;
 	}
 

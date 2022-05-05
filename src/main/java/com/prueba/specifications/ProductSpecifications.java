@@ -21,26 +21,22 @@ public class ProductSpecifications {
 			List<Predicate> predicates = new ArrayList<>();
 			
 			if(searchDTO.getArea() != null && !searchDTO.getArea().isEmpty()) {
-				System.out.println(searchDTO.getArea().getClass()+" 1");
 				predicates.add(criteryBuilder.like(root.get("area"), "%"+searchDTO.getArea()+"%"));
 			}
 			if(searchDTO.getCodigoPieza() != null) {
-				predicates.add(criteryBuilder.equal(root.get("codigoPieza"), searchDTO.getCodigoPieza()));
+				predicates.add(criteryBuilder.like(root.get("codigoPieza"), "%"+searchDTO.getCodigoPieza()+"%"));
 			}
-			if(searchDTO.getDescripcion() != null && searchDTO.getDescripcion().isEmpty()) {
+			if(searchDTO.getDescripcion() != null && !searchDTO.getDescripcion().isEmpty()) {
 				predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+searchDTO.getDescripcion()+"%"));
 			}
 			if(searchDTO.getEmpresa() != null) {
 				predicates.add(criteryBuilder.equal(root.get("empresa"), searchDTO.getEmpresa()));
 			}
-			if(searchDTO.getEstado() != null) {
-				
+			if(searchDTO.getEstado() != null) {				
 				predicates.add(criteryBuilder.equal(root.get("estado"), searchDTO.getEstado()));
 			}
 			if(searchDTO.getFabricante() != null) {
-				String aux = searchDTO.getFabricante().getNit().toString();
-				System.out.println(root.<String>get("fabricante").as(String.class).toString()+" 2 "+searchDTO.getFabricante().getNit().toString());
-				predicates.add(criteryBuilder.like(root.<String>get("fabricante"), "%"+ aux +"%"));
+				predicates.add(criteryBuilder.equal(root.get("fabricante"), searchDTO.getFabricante()));
 			}
 			if(searchDTO.getFamilia() != null) {
 				predicates.add(criteryBuilder.equal(root.get("familia"), searchDTO.getFamilia()));

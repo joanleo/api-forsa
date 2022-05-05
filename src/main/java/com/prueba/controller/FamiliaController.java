@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.FamiliaDTO;
@@ -33,8 +34,12 @@ public class FamiliaController {
 	}
 	
 	@GetMapping
-	public List<FamiliaDTO> list(){
-		return familiaService.list();
+	public List<FamiliaDTO> list(@RequestParam(required=false) String letter){
+		if(letter != null) {
+			return familiaService.findByName(letter);
+		}else {
+			return familiaService.list();			
+		}
 	}
 	
 	@GetMapping("/{id}")

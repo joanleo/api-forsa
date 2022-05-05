@@ -8,7 +8,7 @@ import com.prueba.entity.Ubicacion;
 
 public class SearchDTO {
 	
-	private Long codigoPieza;
+	private String codigoPieza;
 	
 	private String descripcion;
 	
@@ -28,11 +28,11 @@ public class SearchDTO {
 	
 	private Boolean verificado = false;
 
-	public Long getCodigoPieza() {
+	public String getCodigoPieza() {
 		return codigoPieza;
 	}
 
-	public void setCodigoPieza(Long codigoPieza) {
+	public void setCodigoPieza(String codigoPieza) {
 		this.codigoPieza = codigoPieza;
 	}
 

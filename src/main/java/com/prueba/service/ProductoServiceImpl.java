@@ -63,7 +63,6 @@ public class ProductoServiceImpl implements ProductoService {
 		producto.setArea(productoDTO.getArea());
 		producto.setOrden(productoDTO.getOrden());
 		producto.setDescripcion(productoDTO.getDescripcion());
-		producto.setCodigoPieza(productoDTO.getCodigoPieza());
 		
 		
 		return mapearEntidad(producto);
@@ -76,6 +75,8 @@ public class ProductoServiceImpl implements ProductoService {
 		
 		if(producto.getVerificado() == false) {
 			producto.setIsEnable(false);
+		}else {
+			throw new IllegalAccessError("No es posible realizar la accion solicitada");
 		}
 		productoRepo.save(producto);
 
@@ -135,4 +136,5 @@ public class ProductoServiceImpl implements ProductoService {
 		productoRepo.saveAll(listProducts);
 		
 	}
+	
 }
