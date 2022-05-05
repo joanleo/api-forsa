@@ -38,7 +38,9 @@ public class ProductoController {
 	
 	@GetMapping
 	public List<ProductoDTO> list(@RequestParam(required=false) String letters){
+		System.out.println("Controller busqueda por letras");
 		if(letters != null) {
+			System.out.println("letras "+letters);
 			return productoService.searchProducts(letters);
 		}else {
 			return productoService.list();			

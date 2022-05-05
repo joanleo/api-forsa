@@ -34,9 +34,9 @@ public class FabricanteController {
 	}
 	
 	@GetMapping
-	public List<FabricanteDTO> list(@RequestParam(required = false) String letter){
-		if(letter != null) {
-			return fabricanteService.findByName(letter);			
+	public List<FabricanteDTO> list(@RequestParam(required = false) String letters){
+		if(letters != null) {
+			return fabricanteService.findByName(letters);			
 		}else {
 			return fabricanteService.list();
 		}

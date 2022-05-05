@@ -34,9 +34,9 @@ public class EstadoController {
 	}
 	
 	@GetMapping
-	public List<EstadoDTO> list(@RequestParam(required=false) String letter){
-		if(letter != null) {
-			return estadoService.findByTipo(letter);
+	public List<EstadoDTO> list(@RequestParam(required=false) String letters){
+		if(letters != null) {
+			return estadoService.findByTipo(letters);
 		}else {
 			return estadoService.list();			
 		}

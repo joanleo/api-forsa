@@ -34,9 +34,9 @@ public class EmpresaController {
 	}
 	
 	@GetMapping
-	public List<EmpresaDTO> list(@RequestParam(required=false) String letter){
-		if(letter != null) {
-			return empresaService.findByName(letter);
+	public List<EmpresaDTO> list(@RequestParam(required=false) String letters){
+		if(letters != null) {
+			return empresaService.findByName(letters);
 		}else {
 			return empresaService.list();			
 		}

@@ -34,9 +34,9 @@ public class FamiliaController {
 	}
 	
 	@GetMapping
-	public List<FamiliaDTO> list(@RequestParam(required=false) String letter){
-		if(letter != null) {
-			return familiaService.findByName(letter);
+	public List<FamiliaDTO> list(@RequestParam(required=false) String letters){
+		if(letters != null) {
+			return familiaService.findByName(letters);
 		}else {
 			return familiaService.list();			
 		}

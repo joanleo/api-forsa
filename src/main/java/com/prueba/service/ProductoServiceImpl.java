@@ -116,7 +116,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Override
 	public List<ProductoDTO> searchProducts(SearchDTO searchDTO) {
-		
+		System.out.println("Busqueda por DTO");
 		List<Producto> listProducts = productoRepo.findAll(productSpec.getProductos(searchDTO));
 		
 		return listProducts.stream().map(producto -> mapearEntidad(producto)).collect(Collectors.toList());
@@ -124,6 +124,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Override
 	public List<ProductoDTO> searchProducts(String letra) {
+		System.out.println("Busqueda por letras");
 		List<Producto> listProducts = productoRepo.findByDescripcionContains(letra);
 				
 		return listProducts.stream().map(producto -> mapearEntidad(producto)).collect(Collectors.toList());
