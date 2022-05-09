@@ -62,7 +62,7 @@ public class ProductoController {
 	}
 	
 	@GetMapping("{page}{items}")
-	public ApiResponse<Page<Producto>> search(@RequestBody SearchDTO searchDTO, @PathVariable(name = "page") int page, @PathVariable(name = "items") int items){
+	public ApiResponse<Page<Producto>> search(@RequestBody SearchDTO searchDTO, @RequestParam(name = "page") int page, @RequestParam(name = "items") int items){
 		System.out.println(searchDTO.getClass().getName());
 		Page<Producto> productos =  productoService.searchProducts(searchDTO, page, items);
 
