@@ -20,6 +20,6 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>, JpaSp
 	
 	public Producto findByCodigoPieza(String codigoPieza);
 	
-	List<Producto> findByDescripcionContains(String letra);
+	Page<Producto> findByDescripcionContains(String letra, Pageable pageable);
 	
 }

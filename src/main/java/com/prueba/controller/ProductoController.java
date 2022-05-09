@@ -40,13 +40,23 @@ public class ProductoController {
 	}
 	
 	@GetMapping
-	public List<ProductoDTO> list(@RequestParam(required=false) String letters){
-		System.out.println("Controller busqueda por letras");
-		if(letters != null) {
-			System.out.println("letras "+letters);
-			return productoService.searchProducts(letters);
+	public ApiResponse<Page<Producto>> list(@RequestParam(required=false) String letras,
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items, 
+			@RequestBody(required=false) SearchDTO searchDTO){
+		if(letras != null) {
+			System.out.println("Controller busqueda por letras 1");
+			System.out.println("letras "+letras);
+			Page<Producto> productos = productoService.searchProducts(letras);
+			return new ApiResponse<>(productos.getSize(), productos);
+		}if(items != 0){
+			System.out.println("Controller busqueda por letras 2 "+ items);
+			Page<Producto> productos =  productoService.searchProducts(searchDTO, pagina, items);
+			return new ApiResponse<>(productos.getSize(), productos);			
 		}else {
-			return productoService.list();			
+			System.out.println("Controller busqueda por letras 3");
+			Page<Producto> productos = productoService.list(pagina, items);
+			return new ApiResponse<>(productos.getSize(), productos);
 		}
 	}
 	
@@ -61,13 +71,13 @@ public class ProductoController {
 		return new ResponseEntity<ProductoDTO>(productoService.receive(id), HttpStatus.ACCEPTED);
 	}
 	
-	@GetMapping("{page}{items}")
-	public ApiResponse<Page<Producto>> search(@RequestBody SearchDTO searchDTO, @RequestParam(name = "page") int page, @RequestParam(name = "items") int items){
+	/*@GetMapping()
+	public ApiResponse<Page<Producto>> search( @RequestParam(name = "page") int page, @RequestParam(name = "items") int items, @RequestBody SearchDTO searchDTO){
 		System.out.println(searchDTO.getClass().getName());
 		Page<Producto> productos =  productoService.searchProducts(searchDTO, page, items);
 
 		return new ApiResponse<>(productos.getSize(), productos);
-	}
+	}*/
 	
 	@PostMapping("/load")
 	public ResponseEntity<String> loadProducts(@RequestBody List<ProductoDTO> list){

@@ -43,9 +43,10 @@ public class ProductoServiceImpl implements ProductoService {
 	}
 
 	@Override
-	public List<ProductoDTO> list() {
-		List<Producto> productos = productoRepo.findAll();
-		return productos.stream().map(producto -> mapearEntidad(producto)).collect(Collectors.toList());
+	public Page<Producto> list(Integer offset, Integer pageSize) {
+		System.out.println("Sin parametros"); 
+		Page<Producto> productos = productoRepo.findAll(PageRequest.of(0, 10));
+		return productos;
 	}
 
 	@Override
@@ -109,11 +110,12 @@ public class ProductoServiceImpl implements ProductoService {
 	
 
 	@Override
-	public List<ProductoDTO> searchProducts(String letra) {
-		List<Producto> listProducts = productoRepo.findByDescripcionContains(letra);
-				
-		return listProducts.stream().map(producto -> mapearEntidad(producto)).collect(Collectors.toList());
+	public Page<Producto> searchProducts(String letra) {
+		
+		 Page<Producto> listProducts = productoRepo.findByDescripcionContains(letra, PageRequest.of(0, 10));				
+		return listProducts;
 	}
+	
 
 	@Override
 	public void load(List<ProductoDTO> listProductoDTO) {

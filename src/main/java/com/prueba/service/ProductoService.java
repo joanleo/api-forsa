@@ -13,7 +13,7 @@ public interface ProductoService {
 
 	public ProductoDTO create(ProductoDTO productoDTO);
 	
-	public List<ProductoDTO> list();
+	public Page<Producto> list(Integer offset, Integer pageSize);
 	
 	public ProductoDTO getProducto(Long id);
 	
@@ -25,7 +25,7 @@ public interface ProductoService {
 	
 	public Page<Producto> searchProducts(SearchDTO searchDTO, int offset, int pageSize);
 	
-	List<ProductoDTO> searchProducts(String letra);
+	public Page<Producto> searchProducts(String letra);
 	
 	void load(List<ProductoDTO> listProductoDTO);
 }

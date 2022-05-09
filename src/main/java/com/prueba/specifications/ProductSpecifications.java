@@ -21,7 +21,8 @@ public class ProductSpecifications {
 			List<Predicate> predicates = new ArrayList<>();
 			
 			if(searchDTO.getArea() != null && !searchDTO.getArea().isEmpty()) {
-				predicates.add(criteryBuilder.like(root.get("area"), "%"+searchDTO.getArea()+"%"));
+				System.out.println(searchDTO.getArea().toString());
+				predicates.add(criteryBuilder.like(root.get("area").as(String.class), "%"+searchDTO.getArea().toString()+"%"));
 			}
 			if(searchDTO.getCodigoPieza() != null) {
 				predicates.add(criteryBuilder.like(root.get("codigoPieza"), "%"+searchDTO.getCodigoPieza()+"%"));
