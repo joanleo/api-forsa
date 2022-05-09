@@ -22,6 +22,7 @@ import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 
 import net.bytebuddy.utility.RandomString;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/email-password")
@@ -64,6 +65,7 @@ public class EmailController {
         return new ResponseEntity<String>("Correo enviado con éxito", HttpStatus.OK);
     }
     
+    @ApiIgnore
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDTO dto, BindingResult bindingResult) {
         if(bindingResult.hasErrors())
