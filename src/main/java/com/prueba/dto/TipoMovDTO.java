@@ -5,6 +5,8 @@ public class TipoMovDTO {
 	private Long id;
 	
 	private String nombre;
+	
+	public String descripcion;
 
 	public Long getId() {
 		return id;
@@ -22,4 +24,17 @@ public class TipoMovDTO {
 		this.nombre = nombre;
 	}
 
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public TipoMovDTO() {
+		super();
+	}
+
+	
 }

@@ -25,7 +25,7 @@ public class EmailService {
     @Autowired
     TemplateEngine templateEngine;
 
-    @Value("${mail.urlFront}")
+    @Value("${mail.url.front}")
     private String urlFront;
 
     public void sendEmail(EmailDTO dto) {

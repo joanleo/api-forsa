@@ -44,7 +44,7 @@ public class EmailController {
     	
     	Optional<Usuario> usuarioOpt = usuarioRepo.findByUsernameOrEmail(dto.getMailTo(), dto.getMailTo());
     	if(!usuarioOpt.isPresent()) {
-    		return new ResponseEntity<String>("No exixte ningun usuario con esas credenciales", HttpStatus.NOT_FOUND);
+    		return new ResponseEntity<String>("Correo enviado con éxito", HttpStatus.OK);
     	}
     	Usuario usuario = usuarioOpt.get(); 
     	dto.setMailFrom(mailFrom);

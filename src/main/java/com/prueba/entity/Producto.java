@@ -58,37 +58,14 @@ public class Producto {
     @Column(name = "bverificado", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
     private Boolean verificado = false;
     
-    @Column(name = "bisenable", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
-    private Boolean isEnable = false;
+    @Column(name = "bestaActivo", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
+    private Boolean estaActivo = false;
     
-	public Boolean getIsEnable() {
-		return isEnable;
-	}
-
-	public void setIsEnable(Boolean isEnable) {
-		this.isEnable = isEnable;
-	}
-
-	public Familia getFamilia() {
-		return familia;
-	}
-
-	public void setFamilia(Familia familia) {
-		this.familia = familia;
-	}
-
-	public Boolean getVerificado() {
-		return verificado;
-	}
-
-	public void setVerificado(Boolean verificado) {
-		this.verificado = verificado;
-	}
-
-	public Producto() {
-		this.verificado = false;
-		
-	}
+    @Column(name = "vcnconfirmacion", nullable = false)
+    private String nconfirmacion;
+    
+    @Column(name = "vcmotivoIngreso", nullable = false)
+    private String motivoIngreso;
 
 	public String getCodigoPieza() {
 		return codigoPieza;
@@ -122,6 +99,14 @@ public class Producto {
 		this.orden = orden;
 	}
 
+	public Familia getFamilia() {
+		return familia;
+	}
+
+	public void setFamilia(Familia familia) {
+		this.familia = familia;
+	}
+
 	public Fabricante getFabricante() {
 		return fabricante;
 	}
@@ -152,5 +137,43 @@ public class Producto {
 
 	public void setUbicacion(Ubicacion ubicacion) {
 		this.ubicacion = ubicacion;
-	}	
+	}
+
+	public Boolean getVerificado() {
+		return verificado;
+	}
+
+	public void setVerificado(Boolean verificado) {
+		this.verificado = verificado;
+	}
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
+	}
+
+	public String getNconfirmacion() {
+		return nconfirmacion;
+	}
+
+	public void setNconfirmacion(String nconfirmacion) {
+		this.nconfirmacion = nconfirmacion;
+	}
+
+	public String getMotivoIngreso() {
+		return motivoIngreso;
+	}
+
+	public void setMotivoIngreso(String motivoIngreso) {
+		this.motivoIngreso = motivoIngreso;
+	}
+
+	public Producto() {
+		super();
+	}
+    
+    
 }

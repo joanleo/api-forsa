@@ -80,7 +80,7 @@ public class ProductoServiceImpl implements ProductoService {
 				.orElseThrow(() -> new ResourceNotFoundException("Producto", "Codigo de pieza", id));
 		
 		if(producto.getVerificado() == false) {
-			producto.setIsEnable(false);
+			producto.setEstaActivo(false);
 		}else {
 			throw new IllegalAccessError("No es posible realizar la accion solicitada");
 		}

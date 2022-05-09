@@ -38,26 +38,12 @@ public class ProductoDTO {
 	private Boolean verificado = false;
 	
 	private UbicacionDTO ubicacion;
-
-	public UbicacionDTO getUbicacion() {
-		return ubicacion;
-	}
-
-	public void setUbicacion(UbicacionDTO ubicacion) {
-		this.ubicacion = ubicacion;
-	}
-
-	public Boolean getVerificado() {
-		return verificado;
-	}
-
-	public void setVerificado(Boolean verificado) {
-		this.verificado = verificado;
-	}
-
-	public ProductoDTO() {
-		super();
-	}
+	
+	private Boolean estaActivo;
+	
+	private String nconfirmacion;
+	
+	private String motivoIngreso;
 
 	public String getCodigoPieza() {
 		return codigoPieza;
@@ -90,8 +76,14 @@ public class ProductoDTO {
 	public void setOrden(String orden) {
 		this.orden = orden;
 	}
-	
-	
+
+	public FabricanteDTO getFabricante() {
+		return fabricante;
+	}
+
+	public void setFabricante(FabricanteDTO fabricante) {
+		this.fabricante = fabricante;
+	}
 
 	public FamiliaDTO getFamilia() {
 		return familia;
@@ -109,14 +101,6 @@ public class ProductoDTO {
 		this.estado = estado;
 	}
 
-	public FabricanteDTO getFabricante() {
-		return fabricante;
-	}
-
-	public void setFabricante(FabricanteDTO fabricante) {
-		this.fabricante = fabricante;
-	}
-
 	public Empresa getEmpresa() {
 		return empresa;
 	}
@@ -125,4 +109,49 @@ public class ProductoDTO {
 		this.empresa = empresa;
 	}
 
+	public Boolean getVerificado() {
+		return verificado;
+	}
+
+	public void setVerificado(Boolean verificado) {
+		this.verificado = verificado;
+	}
+
+	public UbicacionDTO getUbicacion() {
+		return ubicacion;
+	}
+
+	public void setUbicacion(UbicacionDTO ubicacion) {
+		this.ubicacion = ubicacion;
+	}
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
+	}
+
+	public String getNconfirmacion() {
+		return nconfirmacion;
+	}
+
+	public void setNconfirmacion(String nconfirmacion) {
+		this.nconfirmacion = nconfirmacion;
+	}
+
+	public String getMotivoIngreso() {
+		return motivoIngreso;
+	}
+
+	public void setMotivoIngreso(String motivoIngreso) {
+		this.motivoIngreso = motivoIngreso;
+	}
+
+	public ProductoDTO() {
+		super();
+	}
+
+	
 }
