@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.prueba.dto.ApiResponse;
 import com.prueba.dto.ProductoDTO;
 import com.prueba.dto.SearchDTO;
+import com.prueba.entity.Producto;
 import com.prueba.service.ProductoService;
 
 import io.swagger.annotations.Api;
@@ -58,31 +61,12 @@ public class ProductoController {
 		return new ResponseEntity<ProductoDTO>(productoService.receive(id), HttpStatus.ACCEPTED);
 	}
 	
-	@GetMapping("/search")
-	public List<ProductoDTO> search(@RequestBody SearchDTO searchDTO){
+	@GetMapping("/search/{offset}/{pageSize}")
+	public ApiResponse<Page<Producto>> search(@RequestBody SearchDTO searchDTO, @PathVariable int offset, @PathVariable int pageSize){
 		System.out.println(searchDTO.getClass().getName());
-		/*String query = "SELECT p FROM productos as p WHERE ";
-		if(searchDTO.getCodigoPieza() != null && searchDTO.getArea() != null) {
-			System.out.println("Dos parametros");
-			return productoService.search(searchDTO.getArea(), searchDTO.getCodigoPieza());
-		}
-		if(searchDTO.getArea() != null) return productoService.search(searchDTO.getArea());
-		
-		if(searchDTO.getDescripcion() != null) query += " and p.vcdescripcion=:" + searchDTO.getDescripcion();
-		if(searchDTO.getEmpresa() != null) query += " and p.vcnitempresa=:" + searchDTO.getEmpresa();
-		if(searchDTO.getEstado() != null) query += " and p.nidestado=:" + searchDTO.getEstado();
-		if(searchDTO.getFabricante() != null) query += " and p.vcnitfabricante=:" + searchDTO.getFabricante();
-		if(searchDTO.getFamilia() != null) query += " and p.nidfamilia=:" + searchDTO.getFamilia();
-		if(searchDTO.getOrden() != null) query += " and p.vcorden=:" + searchDTO.getOrden();
-		if(searchDTO.getVerificado() != null) query += " and p.bverificado=:" + searchDTO.getVerificado();
-		
-		System.out.println(query);
-		
-		
-		return productoService.search(searchDTO.getArea());*/
-		
-		return productoService.searchProducts(searchDTO);
-		
+		Page<Producto> productos =  productoService.searchProducts(searchDTO, offset, pageSize);
+
+		return new ApiResponse<>(productos.getSize(), productos);
 	}
 	
 	@PostMapping("/load")

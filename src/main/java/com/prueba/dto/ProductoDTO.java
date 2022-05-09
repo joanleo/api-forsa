@@ -19,7 +19,7 @@ public class ProductoDTO {
 	private String descripcion;
 	
 	@NotBlank(message = "Este campo no puede ser nulo")
-	private String area;
+	private Float area;
 	
 	@NotBlank(message = "Este campo no puede ser nulo")
 	private String orden;
@@ -75,11 +75,11 @@ public class ProductoDTO {
 		this.descripcion = descripcion;
 	}
 
-	public String getArea() {
+	public Float getArea() {
 		return area;
 	}
 
-	public void setArea(String area) {
+	public void setArea(Float area) {
 		this.area = area;
 	}
 

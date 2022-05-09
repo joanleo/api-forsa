@@ -29,16 +29,16 @@ public class Producto {
     private String descripcion;
 	
     @Column(name = "vcarea", nullable = false)
-    private String area;
+    private Float area;
     
     @Column(name = "vcorden", nullable = false)
     private String orden;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "nidfamilia", nullable = false)
     private Familia familia;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitfabricante")
     private Fabricante fabricante;
     
@@ -46,11 +46,11 @@ public class Producto {
     @JoinColumn(name = "vcnitEmpresa")
     private Empresa empresa;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "nidestado")
     private Estado estado;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "nidubicacion")
     private Ubicacion ubicacion;
@@ -106,11 +106,11 @@ public class Producto {
 		this.descripcion = descripcion;
 	}
 
-	public String getArea() {
+	public Float getArea() {
 		return area;
 	}
 
-	public void setArea(String area) {
+	public void setArea(Float area) {
 		this.area = area;
 	}
 

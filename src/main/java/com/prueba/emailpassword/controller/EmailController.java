@@ -1,7 +1,6 @@
 package com.prueba.emailpassword.controller;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.validation.Valid;
 

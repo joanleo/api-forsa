@@ -2,8 +2,11 @@ package com.prueba.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.prueba.dto.ProductoDTO;
 import com.prueba.dto.SearchDTO;
+import com.prueba.entity.Producto;
 
 
 public interface ProductoService {
@@ -20,11 +23,7 @@ public interface ProductoService {
 	
 	public ProductoDTO receive(Long id);
 	
-	/*public List<ProductoDTO> search(String area);
-	
-	public List<ProductoDTO> search(String area, Long codigopieza);*/
-	
-	public List<ProductoDTO> searchProducts(SearchDTO searchDTO);
+	public Page<Producto> searchProducts(SearchDTO searchDTO, int offset, int pageSize);
 	
 	List<ProductoDTO> searchProducts(String letra);
 	

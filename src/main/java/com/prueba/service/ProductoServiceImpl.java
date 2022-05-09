@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.ProductoDTO;
@@ -43,8 +45,13 @@ public class ProductoServiceImpl implements ProductoService {
 	@Override
 	public List<ProductoDTO> list() {
 		List<Producto> productos = productoRepo.findAll();
-		
 		return productos.stream().map(producto -> mapearEntidad(producto)).collect(Collectors.toList());
+	}
+
+	@Override
+	public Page<Producto> searchProducts(SearchDTO searchDTO, int offset, int pageSize) {
+		Page<Producto> listProducts = productoRepo.findAll(productSpec.getProductos(searchDTO), PageRequest.of(offset, pageSize));		
+		return listProducts;//listProducts.stream().map(producto -> mapearEntidad(producto)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -63,7 +70,6 @@ public class ProductoServiceImpl implements ProductoService {
 		producto.setArea(productoDTO.getArea());
 		producto.setOrden(productoDTO.getOrden());
 		producto.setDescripcion(productoDTO.getDescripcion());
-		
 		
 		return mapearEntidad(producto);
 	}
@@ -95,36 +101,15 @@ public class ProductoServiceImpl implements ProductoService {
 		Producto producto = productoRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Producto", "Codigo de pieza", id));
 		
-		producto.setVerificado(true);
-		
+		producto.setVerificado(true);	
 		productoRepo.save(producto);
 		
 		return mapearEntidad(producto);
 	}
-/*
-	@Override
-	public List<ProductoDTO> search(String area) {
-		
-		return productoRepo.search(area).stream().map(producto -> mapearEntidad(producto)).collect(Collectors.toList());
-	}
-
-	@Override
-	public List<ProductoDTO> search(String area, Long codigopieza) {
-
-		return productoRepo.search(area,codigopieza).stream().map(producto -> mapearEntidad(producto)).collect(Collectors.toList());
-	}*/
-
-	@Override
-	public List<ProductoDTO> searchProducts(SearchDTO searchDTO) {
-		System.out.println("Busqueda por DTO");
-		List<Producto> listProducts = productoRepo.findAll(productSpec.getProductos(searchDTO));
-		
-		return listProducts.stream().map(producto -> mapearEntidad(producto)).collect(Collectors.toList());
-	}
+	
 
 	@Override
 	public List<ProductoDTO> searchProducts(String letra) {
-		System.out.println("Busqueda por letras");
 		List<Producto> listProducts = productoRepo.findByDescripcionContains(letra);
 				
 		return listProducts.stream().map(producto -> mapearEntidad(producto)).collect(Collectors.toList());
@@ -133,7 +118,6 @@ public class ProductoServiceImpl implements ProductoService {
 	@Override
 	public void load(List<ProductoDTO> listProductoDTO) {
 		List<Producto> listProducts = listProductoDTO.stream().map(productoDTO -> mapearDTO(productoDTO)).collect(Collectors.toList());
-		
 		productoRepo.saveAll(listProducts);
 		
 	}

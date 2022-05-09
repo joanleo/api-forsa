@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 
 @Entity
@@ -24,9 +26,7 @@ public class Fabricante {
     @Column(name = "vcnombre")
     private String nombre;
     
-    @Column(name = "vcdescripcion")
-    private String descripcion;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "fabricante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Producto> productos;
 
@@ -44,14 +44,6 @@ public class Fabricante {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
 	}
 
 	public List<Producto> getProductos() {
