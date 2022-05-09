@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,10 +61,10 @@ public class ProductoController {
 		return new ResponseEntity<ProductoDTO>(productoService.receive(id), HttpStatus.ACCEPTED);
 	}
 	
-	@GetMapping("/search/{offset}/{pageSize}")
-	public ApiResponse<Page<Producto>> search(@RequestBody SearchDTO searchDTO, @PathVariable int offset, @PathVariable int pageSize){
+	@GetMapping("{page}{items}")
+	public ApiResponse<Page<Producto>> search(@RequestBody SearchDTO searchDTO, @PathVariable(name = "page") int page, @PathVariable(name = "items") int items){
 		System.out.println(searchDTO.getClass().getName());
-		Page<Producto> productos =  productoService.searchProducts(searchDTO, offset, pageSize);
+		Page<Producto> productos =  productoService.searchProducts(searchDTO, page, items);
 
 		return new ApiResponse<>(productos.getSize(), productos);
 	}
