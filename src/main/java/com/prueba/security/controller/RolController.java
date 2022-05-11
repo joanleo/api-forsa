@@ -42,7 +42,7 @@ public class RolController {
 	}
 	
 	@GetMapping("/{id}")
-	@ApiOperation(value = "Encunetra un rol", notes = "Retorna un rol por su id")
+	@ApiOperation(value = "Encuentra un rol", notes = "Retorna un rol por su id")
 	public ResponseEntity<RolDTO> get(@PathVariable(name = "id") Long id){
 		return ResponseEntity.ok(rolService.getRol(id));
 	}

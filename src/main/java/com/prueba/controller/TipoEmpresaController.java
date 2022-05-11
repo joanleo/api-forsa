@@ -41,7 +41,7 @@ public class TipoEmpresaController {
 	}
 	
 	@GetMapping("/{id}")
-	@ApiOperation(value = "Emcuentra un tipo de empresa", notes = "Retorna un tipo de empresa segun su id")
+	@ApiOperation(value = "Encuentra un tipo de empresa", notes = "Retorna un tipo de empresa segun su id")
 	public ResponseEntity<TipoEmpresaDTO> getEmpresa(@PathVariable(name = "id") Long id){
 		return ResponseEntity.ok(tipoEmpresaService.getTipoEmpresa(id));
 	}
