@@ -44,8 +44,12 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Override
 	public Page<Producto> list(Integer offset, Integer pageSize) {
-		System.out.println("Sin parametros"); 
-		Page<Producto> productos = productoRepo.findAll(PageRequest.of(0, 10));
+		if(pageSize == 0) {
+			System.out.println("Sin parametros"); 
+			Page<Producto> productos = productoRepo.findAll(PageRequest.of(0, 10));
+			return productos;
+		}
+		Page<Producto> productos = productoRepo.findAll(PageRequest.of(offset, pageSize));
 		return productos;
 	}
 
