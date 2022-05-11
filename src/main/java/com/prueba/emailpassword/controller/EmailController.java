@@ -21,11 +21,14 @@ import com.prueba.emailpassword.service.EmailService;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import net.bytebuddy.utility.RandomString;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
-@RequestMapping("/email-password")
+@RequestMapping("/email")
+@Api(tags = "Email", description = "Recuperacion de nombre de usuario y/o contraseña")
 public class EmailController {
 
     @Autowired
@@ -40,8 +43,9 @@ public class EmailController {
     @Autowired
     private PasswordEncoder passwordEncoder;
     
-    @PostMapping("/send-email")
-    public ResponseEntity<?> sendEmailTemplate(@RequestBody EmailDTO dto) {
+    @PostMapping("/password")
+    @ApiOperation(value = "Envio de contraseña")
+    public ResponseEntity<?> sendEmailPasswor(@RequestBody EmailDTO dto) {
     	
     	Optional<Usuario> usuarioOpt = usuarioRepo.findByUsernameOrEmail(dto.getMailTo(), dto.getMailTo());
     	if(!usuarioOpt.isPresent()) {
@@ -63,6 +67,26 @@ public class EmailController {
     	usuarioRepo.save(usuario);
         emailService.sendEmail(dto);
         return new ResponseEntity<String>("Correo enviado con éxito", HttpStatus.OK);
+    }
+    
+    @PostMapping("/username")
+    @ApiOperation(value = "Envio de nombre de usuario")
+    public ResponseEntity<?> sendEmailUsername(@RequestBody EmailDTO dto){
+    	Optional<Usuario> usuarioOpt = usuarioRepo.findByUsernameOrEmail(dto.getMailTo(), dto.getMailTo());
+    	if(!usuarioOpt.isPresent()) {
+    		return new ResponseEntity<String>("Correo enviado con éxito", HttpStatus.OK);
+    	}
+    	Usuario usuario = usuarioOpt.get(); 
+    	dto.setMailFrom(mailFrom);
+    	dto.setMailTo(usuario.getEmail());
+    	
+    	dto.setSubject("Envio de credencial username");
+    	dto.setUserName(usuario.getNombre());
+    	dto.setTokenPassword(usuario.getUsername());
+    	
+    	emailService.sendEmail(dto);
+    	
+    	return new ResponseEntity<String>("Correo enviado con éxito", HttpStatus.OK);
     }
     
     @ApiIgnore

@@ -19,6 +19,7 @@ import com.prueba.security.dto.RolDTO;
 import com.prueba.security.service.RolService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/roles")
@@ -29,24 +30,27 @@ public class RolController {
 	private RolService rolService;
 	
 	@PostMapping
+	@ApiOperation(value = "Crear un rol", notes = "Crea un nuevo rol")
 	public ResponseEntity<RolDTO> create(@Valid @RequestBody RolDTO rolDTO){
 		return new ResponseEntity<RolDTO>(rolService.create(rolDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
+	@ApiOperation(value = "Encuentra los roles", notes = "Retorna todos los roles existentes")
 	public List<RolDTO> list(){
 		return rolService.list();
 	}
 	
 	@GetMapping("/{id}")
+	@ApiOperation(value = "Encunetra un rol", notes = "Retorna un rol por su id")
 	public ResponseEntity<RolDTO> get(@PathVariable(name = "id") Long id){
 		return ResponseEntity.ok(rolService.getRol(id));
 	}
 	
 	@DeleteMapping("/{id}")
+	@ApiOperation(value = "Elimina un rol", notes = "Elimina el rol kque concuerde con el id especificado")
 	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) {
 		rolService.delete(id);
-
 		return new ResponseEntity<>("Rol eliminado con exito", HttpStatus.OK);
 	}
 }

@@ -18,26 +18,30 @@ import com.prueba.dto.TipoEmpresaDTO;
 import com.prueba.service.TipoEmpresaService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/tipoempresas")
-@Api(tags = "Tipos empresa")
+@Api(tags = "Tipos empresa", description = "Opereciones referentes a los tipos de empresa")
 public class TipoEmpresaController {
 	
 	@Autowired
 	private TipoEmpresaService tipoEmpresaService;
 	
 	@PostMapping
+	@ApiOperation(value = "Crea un tipo de empresa", notes = "Crea un nuevo tipo de empresa")
 	public ResponseEntity<TipoEmpresaDTO> create(@Valid @RequestBody TipoEmpresaDTO tipoEmpresaDTO){
 		return new ResponseEntity<TipoEmpresaDTO>(tipoEmpresaService.create(tipoEmpresaDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
+	@ApiOperation(value = "Encuentra los tipos de empresa", notes = "Retorna todos los tipos de empresas")
 	public List<TipoEmpresaDTO> getEmpresas(){
 		return tipoEmpresaService.list();
 	}
 	
 	@GetMapping("/{id}")
+	@ApiOperation(value = "Emcuentra un tipo de empresa", notes = "Retorna un tipo de empresa segun su id")
 	public ResponseEntity<TipoEmpresaDTO> getEmpresa(@PathVariable(name = "id") Long id){
 		return ResponseEntity.ok(tipoEmpresaService.getTipoEmpresa(id));
 	}

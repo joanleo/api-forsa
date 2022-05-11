@@ -18,26 +18,30 @@ import com.prueba.dto.TipoUbicacionDTO;
 import com.prueba.service.TipoUbicacionService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/tiposubicaciones")
-@Api(tags = "Tipos ubicaciones")
+@Api(tags = "Tipos ubicaciones", description = "Operaciones referentes a los tipos de ubicaciones")
 public class TipoUbicacionController {
 	
 	@Autowired
 	private TipoUbicacionService tipoUbicService;
 	
 	@PostMapping
+	@ApiOperation(value = "Crea un tipo de ubicacion", notes = "Crea un nuevo tipo de ubicacion")
 	public ResponseEntity<TipoUbicacionDTO> create(@Valid @RequestBody TipoUbicacionDTO tipoUbicacionDTO){
 		return new ResponseEntity<TipoUbicacionDTO>(tipoUbicService.create(tipoUbicacionDTO), HttpStatus.CREATED); 
 	}
 	
 	@GetMapping
+	@ApiOperation(value = "Encuentra los tipos de ubicacion", notes = "Retorna todos los tipos de ubicacion")
 	public List<TipoUbicacionDTO> getTiposUbic(){
 		return tipoUbicService.list();
 	}
 
 	@GetMapping("/{id}")
+	@ApiOperation(value = "Encuentra un tipo de ubicacion", notes = "Retorna un tipo de ubicacion segun su id")
 	public ResponseEntity<TipoUbicacionDTO> getTipoUbic(@PathVariable(name="id") Long id){
 		return ResponseEntity.ok(tipoUbicService.getTipoMov(id));
 	}

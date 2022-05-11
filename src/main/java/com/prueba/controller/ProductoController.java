@@ -28,21 +28,21 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/productos")
-@Api(tags = "Productos", description = "Operaciones referentes a los productos")
+@RequestMapping("/activos")
+@Api(tags = "Activos", description = "Operaciones referentes a los activos")
 public class ProductoController {
 
 	@Autowired
 	private ProductoService productoService;
 	
 	@PostMapping
-	@ApiOperation(value = "Crea un producto", notes = "Crea un nuevo producto")
+	@ApiOperation(value = "Crea un activo", notes = "Crea un nuevo activo")
 	public ResponseEntity<ProductoDTO> create(@Valid @RequestBody ProductoDTO productoDTO){
 		return new ResponseEntity<ProductoDTO>(productoService.create(productoDTO), HttpStatus.CREATED);
 	}
 	
 	@PostMapping("/indexados")
-	@ApiOperation(value = "Encuentra los productos", notes = "Encuentra los productos que concuerden con las especificaciones enviadas en el Json, se puede indicar o no los parametros de la paginacion")
+	@ApiOperation(value = "Encuentra los activos", notes = "Encuentra los activos que concuerden con las especificaciones enviadas en el Json, se puede indicar o no los parametros de la paginacion")
 	public ApiResponse<Page<Producto>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 											@RequestParam(required=false, defaultValue = "0") Integer items, 
 											@RequestBody(required=false) SearchDTO searchDTO){
@@ -52,7 +52,7 @@ public class ProductoController {
 	}
 	
 	@GetMapping
-	@ApiOperation(value = "Encuentra los productos", notes = "Retorna los productos que contengan las letras indicadas, retorna todos los productos si no se indica ninguna letra, se puede indicar o no los parametros de la paginacion")
+	@ApiOperation(value = "Encuentra los activos", notes = "Retorna los activos que contengan las letras indicadas, retorna todos los activos si no se indica ninguna letra, se puede indicar o no los parametros de la paginacion")
 	public ApiResponse<Page<Producto>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 											@RequestParam(required=false, defaultValue = "0") Integer items,
 											@RequestParam(required=false) String letras){
@@ -69,13 +69,13 @@ public class ProductoController {
 	}
 	
 	@GetMapping("/{id}")
-	@ApiOperation(value = "Encuentra un producto", notes = "Retorna un usuario por el id")
+	@ApiOperation(value = "Encuentra un activo", notes = "Retorna un activo por el id")
 	public ResponseEntity<ProductoDTO> get(@PathVariable(name = "id") Long id){
 		return ResponseEntity.ok(productoService.getProducto(id));
 	}
 	
 	@PatchMapping("/{id}")
-	@ApiOperation(value = "Verifica un producto", notes = "Actualiza un producto por su id")
+	@ApiOperation(value = "Verifica un activo", notes = "Actualiza un activo por su id")
 	public ResponseEntity<ProductoDTO> verify(@PathVariable(name = "id") Long id){
 		
 		return new ResponseEntity<ProductoDTO>(productoService.receive(id), HttpStatus.ACCEPTED);
@@ -90,7 +90,7 @@ public class ProductoController {
 	}*/
 	
 	@PostMapping("/load")
-	@ApiOperation(value = "Carga de productos")
+	@ApiOperation(value = "Carga de activos", notes = "AUN PENDIENTE POR DEFINIR")
 	public ResponseEntity<String> loadProducts(@RequestBody List<ProductoDTO> list){
 		System.out.println(list);
 		productoService.load(list);
@@ -99,7 +99,7 @@ public class ProductoController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@ApiOperation(value = "Elimina un producto", notes = "Elimina un producto por su id")
+	@ApiOperation(value = "Elimina un activo", notes = "Elimina un activo por su id")
 	public ResponseEntity<String> delete(@PathVariable(name="id")Long id){
 		productoService.delete(id);		
 		return new ResponseEntity<>("Item eliminado con exito", HttpStatus.OK);

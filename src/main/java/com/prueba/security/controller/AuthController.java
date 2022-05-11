@@ -27,10 +27,11 @@ import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.UsuarioRepository;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/auth")
-@Api(tags = "Autenticacion")
+@Api(tags = "Autenticacion", description = "Operaciones de autenticacion y registro de usuarios")
 public class AuthController {
 
 	@Autowired
@@ -49,6 +50,7 @@ public class AuthController {
 	private JwtTokenProvider jwtTokenProvider;
 	
 	@PostMapping("/login")
+	@ApiOperation(value = "Autenticacion de usuarios")
 	public ResponseEntity<JWTAuthResonseDTO> authenticateUser(@RequestBody LoginDTO loginDTO){
 		
 		Authentication autentication = authenticationMnager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUsernameOrEmail(), loginDTO.getPassword()));
@@ -69,6 +71,7 @@ public class AuthController {
 	}
 	
 	@PostMapping("/register")
+	@ApiOperation(value = "Registro de usuarios")
 	public ResponseEntity<?> registrarUsuario(@RequestBody RegistroDTO registroDTO){
 		if(usuarioRepo.existsByUsername(registroDTO.getUsername())) {
 			return new ResponseEntity<>("Ese nombre de usuario ya existe",HttpStatus.BAD_REQUEST);

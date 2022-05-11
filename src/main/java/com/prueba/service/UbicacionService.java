@@ -15,5 +15,7 @@ public interface UbicacionService {
 	public UbicacionDTO update(Long id, UbicacionDTO ubicacionDTO);
 	
 	public void delete(Long id);
+	
+	public List<UbicacionDTO> findByName(String name);
 
 }

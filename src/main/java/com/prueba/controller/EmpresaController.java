@@ -19,21 +19,24 @@ import com.prueba.dto.EmpresaDTO;
 import com.prueba.service.EmpresaService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/empresas")
-@Api(tags = "Empresas")
+@Api(tags = "Empresas",description = "Operaciones referentes a las empresas")
 public class EmpresaController {
 	
 	@Autowired
 	private EmpresaService empresaService;
 	
 	@PostMapping
+	@ApiOperation(value = "Crea una empresa", notes = "Crea una nueva empresa")
 	public ResponseEntity<EmpresaDTO> create(@Valid @RequestBody EmpresaDTO empresaDTO){
 		return new ResponseEntity<EmpresaDTO>(empresaService.create(empresaDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
+	@ApiOperation(value = "Encuentra las empresas", notes = "Retorna las empresas que en su nombre contengan las letrtas indicadas, retorna todas las empresas si no se indica ninguna letra")
 	public List<EmpresaDTO> list(@RequestParam(required=false) String letters){
 		if(letters != null) {
 			return empresaService.findByName(letters);
@@ -43,6 +46,7 @@ public class EmpresaController {
 	}
 	
 	@GetMapping("/{id}")
+	@ApiOperation(value = "Encuentra un producto", notes = "Retorna una empresa por el id")
 	public ResponseEntity<EmpresaDTO> get(@PathVariable(name = "id") Long id){
 		return ResponseEntity.ok(empresaService.getEmpresa(id));
 	}

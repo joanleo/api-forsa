@@ -36,7 +36,6 @@ public class FamiliaServiceImpl implements FamiliaService {
 	@Override
 	public List<FamiliaDTO> list() {
 		List<Familia> listaFamilias = familiaRepo.findAll();
-		
 		return listaFamilias.stream().map(familia -> mapearEntidad(familia)).collect(Collectors.toList());
 	}
 
@@ -69,7 +68,6 @@ public class FamiliaServiceImpl implements FamiliaService {
 	@Override
 	public List<FamiliaDTO> findByName(String name) {
 		List<Familia> listFamilias = familiaRepo.findByNombreContains(name);
-
 		return listFamilias.stream().map(familia -> mapearEntidad(familia)).collect(Collectors.toList());
 	}
 

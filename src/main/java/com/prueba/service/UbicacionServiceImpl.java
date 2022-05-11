@@ -37,7 +37,6 @@ public class UbicacionServiceImpl implements UbicacionService {
 	@Override
 	public List<UbicacionDTO> list() {
 		List<Ubicacion> ubicaciones = ubicacionRepo.findAll();
-		
 		return ubicaciones.stream().map(ubicacion -> mapearEntidad(ubicacion)).collect(Collectors.toList());
 	}
 
@@ -79,6 +78,12 @@ public class UbicacionServiceImpl implements UbicacionService {
 	
 	public Ubicacion mapearDTO(UbicacionDTO ubicacionDTO) {
 		return modelMapper.map(ubicacionDTO, Ubicacion.class);
+	}
+
+	@Override
+	public List<UbicacionDTO> findByName(String name) {
+		List<Ubicacion> ubicaciones = ubicacionRepo.findByNombreContains(name);
+		return ubicaciones.stream().map(ubicacion -> mapearEntidad(ubicacion)).collect(Collectors.toList());
 	}
 
 }

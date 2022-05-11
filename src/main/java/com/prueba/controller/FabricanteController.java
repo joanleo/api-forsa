@@ -19,21 +19,24 @@ import com.prueba.dto.FabricanteDTO;
 import com.prueba.service.FabricanteService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/fabricantes")
-@Api(tags = "Fabricantes")
+@Api(tags = "Fabricantes", description = "Operaciones referentes a los fabricantes")
 public class FabricanteController {
 
 	@Autowired
 	private FabricanteService fabricanteService;
 	
 	@PostMapping
+	@ApiOperation(value = "Crea un fabricante", notes = "Crea un nuevo fabricante")
 	public ResponseEntity<FabricanteDTO> create(@Valid @RequestBody FabricanteDTO fabricanteDTO){
 		return new ResponseEntity<FabricanteDTO>(fabricanteService.create(fabricanteDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
+	@ApiOperation(value = "Encuenta los fabricantes", notes = "Retorna los fabricantes que en su nombre contengan las letrtas indicadas, retorna todos los fabricantes si no se indica ninguna letra")
 	public List<FabricanteDTO> list(@RequestParam(required = false) String letters){
 		if(letters != null) {
 			return fabricanteService.findByName(letters);			
@@ -43,6 +46,7 @@ public class FabricanteController {
 	}
 	
 	@GetMapping("/{id}")
+	@ApiOperation(value = "Encuentra un fabricante", notes = "Retorna un fabricante por el id")
 	public FabricanteDTO get(@PathVariable(name = "id") Long id) {
 		return fabricanteService.getFabricante(id);
 	}
