@@ -25,8 +25,8 @@ public class EmailService {
     @Autowired
     TemplateEngine templateEngine;
 
-    @Value("${mail.url.front}")
-    private String urlFront;
+    //@Value("${mail.url.front}")
+    //private String urlFront;
 
     public void sendEmail(EmailDTO dto) {
         MimeMessage message = javaMailSender.createMimeMessage();

@@ -55,6 +55,11 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Override
 	public Page<Producto> searchProducts(SearchDTO searchDTO, int offset, int pageSize) {
+		if(pageSize == 0) {
+			System.out.println("Sin parametros"); 
+			Page<Producto> productos = productoRepo.findAll(productSpec.getProductos(searchDTO),PageRequest.of(0, 10));
+			return productos;
+		}
 		Page<Producto> listProducts = productoRepo.findAll(productSpec.getProductos(searchDTO), PageRequest.of(offset, pageSize));		
 		return listProducts;//listProducts.stream().map(producto -> mapearEntidad(producto)).collect(Collectors.toList());
 	}
