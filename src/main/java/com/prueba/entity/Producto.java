@@ -61,10 +61,10 @@ public class Producto {
     @Column(name = "bestaActivo", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
     private Boolean estaActivo = false;
     
-    @Column(name = "vcnconfirmacion", nullable = false)
+    @Column(name = "vcnconfirmacion")
     private String nconfirmacion;
     
-    @Column(name = "vcmotivoIngreso", nullable = false)
+    @Column(name = "vcmotivoIngreso")
     private String motivoIngreso;
 
 	public String getCodigoPieza() {
