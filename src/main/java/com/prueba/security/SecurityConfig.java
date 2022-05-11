@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	        "/configuration/**",
 	        "/v2/api-docs",
 	        "/webjars/**",
-	        "/email-password/**"
+	        "/email/**"
 	};
 
 	@Override
