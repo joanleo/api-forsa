@@ -22,9 +22,6 @@ public class Familia {
     
     @Column(name = "vcnombre")
     private String nombre;
-    
-    @Column(name = "vcdescripcion")
-    private String descripcion;
 
     @JsonIgnore
     @OneToMany(mappedBy = "familia")
@@ -44,14 +41,6 @@ public class Familia {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
 	}
 
 	public List<Producto> getProductos() {

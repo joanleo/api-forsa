@@ -14,9 +14,7 @@
 	<version>1.0</version>
 	<name>base</name>
 	<description>Prueba de api</description>
-	<!--  <properties>
-		<java.version>11</java.version>
-	</properties>-->
+	<!-- <properties> <java.version>11</java.version> </properties> -->
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -92,6 +90,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.11.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

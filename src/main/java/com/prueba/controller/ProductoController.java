@@ -1,6 +1,5 @@
 package com.prueba.controller;
 
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.ProductoDTO;
@@ -76,9 +76,9 @@ public class ProductoController {
 	
 	@PatchMapping("/{id}")
 	@ApiOperation(value = "Verifica un activo", notes = "Actualiza un activo por su id")
-	public ResponseEntity<ProductoDTO> verify(@PathVariable(name = "id") Long id){
+	public ResponseEntity<ProductoDTO> verify(@PathVariable(name = "id") Long id/*, @RequestParam String ubicacion, @RequestParam String estado*/){
 		
-		return new ResponseEntity<ProductoDTO>(productoService.receive(id), HttpStatus.ACCEPTED);
+		return new ResponseEntity<ProductoDTO>(productoService.receive(id/*, ubicacion, estado*/), HttpStatus.ACCEPTED);
 	}
 	
 	/*@GetMapping()
@@ -89,18 +89,24 @@ public class ProductoController {
 		return new ApiResponse<>(productos.getSize(), productos);
 	}*/
 	
-	@PostMapping("/load")
+	@PostMapping("/cargar")
 	@ApiOperation(value = "Carga de activos", notes = "AUN PENDIENTE POR DEFINIR")
-	public ResponseEntity<String> loadProducts(@RequestBody List<ProductoDTO> list){
-		System.out.println(list);
-		productoService.load(list);
+	public ResponseEntity<String> loadProducts(@RequestParam("archivo") MultipartFile file){ //@RequestBody List<ProductoDTO> list
+		
+		try {
+			productoService.loadFile(file);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		//System.out.println(list);
+		//productoService.load(list);
 		
 		return new ResponseEntity<>("Se ha cargado la lista con exito", HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "Elimina un activo", notes = "Elimina un activo por su id")
-	public ResponseEntity<String> delete(@PathVariable(name="id")Long id){
+	public ResponseEntity<String> delete(@PathVariable(name="id")String id){
 		productoService.delete(id);		
 		return new ResponseEntity<>("Item eliminado con exito", HttpStatus.OK);
 	}

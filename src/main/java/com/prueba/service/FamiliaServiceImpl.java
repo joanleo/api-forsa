@@ -28,7 +28,7 @@ public class FamiliaServiceImpl implements FamiliaService {
 		if(exist == null) {
 			familiaRepo.save(familia);
 		}else {
-			throw new IllegalAccessError("La familia que esta tratando de crear ya existe " + familia.getNombre() + "Descripcio: " + familia.getDescripcion());
+			throw new IllegalAccessError("La familia que esta tratando de crear ya existe " + familia.getNombre() + "Descripcio: " + familia.getNombre());
 		}
 		return mapearEntidad(familia);
 	}

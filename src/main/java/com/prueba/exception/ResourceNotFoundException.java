@@ -11,12 +11,20 @@ public class ResourceNotFoundException extends RuntimeException {
 	private String recurso;
 	private String campo;
 	private Long valor;
+	private String val;
 
 	public ResourceNotFoundException(String recurso, String campo, Long valor) {
 		super(String.format("%s no encontrado con %s: '%s'", recurso, campo, valor));
 		this.recurso = recurso;
 		this.campo = campo;
 		this.valor = valor;
+	}
+	
+	public ResourceNotFoundException(String recurso, String campo, String valor) {
+		super(String.format("%s no encontrado con %s: '%s'", recurso, campo, valor));
+		this.recurso = recurso;
+		this.campo = campo;
+		this.val = valor;
 	}
 
 	public String getRecurso() {
@@ -41,6 +49,14 @@ public class ResourceNotFoundException extends RuntimeException {
 
 	public void setValor(Long valor) {
 		this.valor = valor;
+	}
+
+	public String getVal() {
+		return val;
+	}
+
+	public void setVal(String val) {
+		this.val = val;
 	}
 
 }

@@ -3,7 +3,6 @@ package com.prueba.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -55,9 +54,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.cors().and().csrf().disable()
 		    .authorizeRequests()
 		    //.antMatchers(HttpMethod.GET, "/**").permitAll()
-		    .antMatchers(HttpMethod.GET,"/productos").access("@userSecurity.hasPrivilege(authentication, '/productos')")
+		    //.antMatchers(HttpMethod.GET,"/productos").access("@userSecurity.hasPrivilege(authentication, '/productos')")
 		    .antMatchers(AUTH_WHITELIST
-		    ).permitAll()//"/auth/**"
+		    ).permitAll()
 		    .anyRequest()
 		    .authenticated()
 		    .and()
