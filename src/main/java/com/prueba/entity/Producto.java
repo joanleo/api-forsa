@@ -55,10 +55,10 @@ public class Producto {
     @JoinColumn(name = "nidubicacion")
     private Ubicacion ubicacion;
 
-    @Column(name = "bverificado", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
+    @Column(name = "bverificado", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
     private Boolean verificado = false;
     
-    @Column(name = "bestaActivo", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
+    @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
     private Boolean estaActivo = false;
     
     @Column(name = "vcnconfirmacion")
@@ -173,6 +173,32 @@ public class Producto {
 
 	public Producto() {
 		super();
+	}
+
+
+	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
+			Fabricante fabricante, Empresa empresa, Estado estado, Ubicacion ubicacion, String nconfirmacion,
+			String motivoIngreso) {
+		super();
+		this.codigoPieza = codigoPieza;
+		this.descripcion = descripcion;
+		this.area = area;
+		this.orden = orden;
+		this.familia = familia;
+		this.fabricante = fabricante;
+		this.empresa = empresa;
+		this.estado = estado;
+		this.ubicacion = ubicacion;
+		this.nconfirmacion = nconfirmacion;
+		this.motivoIngreso = motivoIngreso;
+	}
+
+	@Override
+	public String toString() {
+		return "Producto [codigoPieza=" + codigoPieza + ", descripcion=" + descripcion + ", area=" + area + ", orden="
+				+ orden + ", familia=" + familia + ", fabricante=" + fabricante + ", empresa=" + empresa + ", estado="
+				+ estado + ", ubicacion=" + ubicacion + ", verificado=" + verificado + ", estaActivo=" + estaActivo
+				+ ", nconfirmacion=" + nconfirmacion + ", motivoIngreso=" + motivoIngreso + "]";
 	}
     
     

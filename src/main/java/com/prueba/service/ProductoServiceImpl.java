@@ -48,6 +48,7 @@ public class ProductoServiceImpl implements ProductoService {
 		Producto exist = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
 		
 		if(exist == null) {
+			System.out.println(producto.toString());
 			productoRepo.save(producto);
 		}else {
 			throw new IllegalAccessError("El producto con id "+ producto.getCodigoPieza() + " que trata de crear ya existe");
@@ -174,22 +175,18 @@ public class ProductoServiceImpl implements ProductoService {
 						
 						String line = it.nextLine();
 						String[] producto = line.split("\\|");
-						System.out.println("********************************************");
 						lineError = "El tamaño del arreglo esta errado linea " + count;
-						System.out.println("Tamaño del arreglo  " + (producto.length));
 						if(producto.length > 7) {
 							error = true;
-							System.out.println(lineError);
+							Eror err = new Eror();
 							errores.add(lineError);
 						}
-						System.out.println("********************************************");
 						System.out.println("Codigopieza " + producto[0] + " Tipo " + ((Object)producto[0]).getClass().getSimpleName());
 						Matcher matcher = special.matcher(producto[0]);
 						boolean CodigopiezaconstainsSymbols = matcher.find();
 						if(CodigopiezaconstainsSymbols) {
 							error = true;
 							codigoPiezaError = "Codigopieza Contiene caracteres especiales linea " + count;
-							System.out.println(codigoPiezaError);
 							errores.add(codigoPiezaError);
 						}						
 						
@@ -199,7 +196,6 @@ public class ProductoServiceImpl implements ProductoService {
 						if(nombreconstainsSymbols) {
 							error = true;
 							nombreError = "Nombre Contiene caracteres especiales linea " + count;
-							System.out.println(nombreError);
 							errores.add(nombreError);
 						}						
 						
@@ -208,7 +204,6 @@ public class ProductoServiceImpl implements ProductoService {
 						} catch (Exception e) {
 							error = true;
 							areaError = "Error en el campo Area en la linea " + count + " " + e;
-							System.out.println(e);
 							errores.add(areaError);
 						}
 						
@@ -219,7 +214,6 @@ public class ProductoServiceImpl implements ProductoService {
 						if(ordenconstainsSymbols) {
 							error = true;
 							ordenError = "Orden Contiene caracteres especiales linea " + count;
-							System.out.println(ordenError);
 							errores.add(ordenError);
 						}						
 						
@@ -228,7 +222,6 @@ public class ProductoServiceImpl implements ProductoService {
 						} catch (Exception e) {
 							error = true;
 							familiaError = "Error en el campo Familia en la linea " + count + " " + e;
-							System.out.println(familiaError);
 							errores.add(familiaError);
 						}
 						
@@ -264,7 +257,10 @@ public class ProductoServiceImpl implements ProductoService {
 						System.out.println("Primer registro");
 					}
 					System.out.println("los errores son:");
-					System.out.println(errores);
+					for(String er: errores) {
+						System.out.println(er);						
+					}
+					//erorRepo.saveAll(errores);
 				}
 			}
 			

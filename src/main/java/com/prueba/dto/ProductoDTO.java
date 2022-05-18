@@ -18,7 +18,7 @@ public class ProductoDTO {
 	@NotBlank(message = "Este campo no puede ser nulo")
 	private String descripcion;
 	
-	@NotBlank(message = "Este campo no puede ser nulo")
+	@NotNull(message = "Este campo no puede ser nulo")
 	private Float area;
 	
 	@NotBlank(message = "Este campo no puede ser nulo")
@@ -39,7 +39,7 @@ public class ProductoDTO {
 	
 	private UbicacionDTO ubicacion;
 	
-	private Boolean estaActivo;
+	private Boolean estaActivo = false;
 	
 	private String nconfirmacion;
 	
