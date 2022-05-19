@@ -20,6 +20,8 @@ public class CorsConfig{
                 .allowedMethods("DELETE")
                 .allowedMethods("PUT")
                 .allowedMethods("PATCH")
+                .allowedMethods("POST")
+                .allowedMethods("GET")
                 .allowedHeaders("*");
             }
         };
