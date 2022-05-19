@@ -61,10 +61,10 @@ public class ProductoServiceImpl implements ProductoService {
 	public Page<Producto> list(Integer offset, Integer pageSize) {
 		if(pageSize == 0) {
 			System.out.println("Sin parametros"); 
-			Page<Producto> productos = productoRepo.findAll(PageRequest.of(0, 10));
+			Page<Producto> productos = productoRepo.findAllByEstaActivoContains(true, PageRequest.of(0, 10));
 			return productos;
 		}
-		Page<Producto> productos = productoRepo.findAll(PageRequest.of(offset, pageSize));
+		Page<Producto> productos = productoRepo.findAllByEstaActivoContains(true, PageRequest.of(offset, pageSize));
 		return productos;
 	}
 

@@ -12,7 +12,7 @@ import com.prueba.entity.Producto;
 
 public interface ProductoRepository extends JpaRepository<Producto, Long>, JpaSpecificationExecutor<Producto>{
 	
-	public Page<Producto> findAll(Pageable page);
+	public Page<Producto> findAllByEstaActivoContains(Boolean value,Pageable page);
 	
 	public List<Producto> findByEmpresa(Empresa empresa);
 	
