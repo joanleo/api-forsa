@@ -13,7 +13,7 @@ public class CorsConfig implements WebMvcConfigurer{
 	public void addCorsMappings(CorsRegistry registry) {
 		// TODO Auto-generated method stub
 		WebMvcConfigurer.super.addCorsMappings(registry);
-		registry.addMapping("/**");
+		registry.addMapping("/**").allowedOrigins("*");
 	}
 
 }
