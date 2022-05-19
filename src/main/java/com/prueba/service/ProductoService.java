@@ -16,11 +16,11 @@ public interface ProductoService {
 	
 	public Page<Producto> list(Integer offset, Integer pageSize);
 	
-	public ProductoDTO getProducto(Long id);
+	public ProductoDTO getProducto(String id);
 	
-	public ProductoDTO update(Long id, ProductoDTO productoDTO);
+	public ProductoDTO update(String id, ProductoDTO productoDTO);
 	
-	public void delete(Long id);
+	public void delete(String id);
 	
 	public ProductoDTO receive(Long id);
 	

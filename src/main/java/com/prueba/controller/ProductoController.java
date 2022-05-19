@@ -72,7 +72,7 @@ public class ProductoController {
 	
 	@GetMapping("/{id}")
 	@ApiOperation(value = "Encuentra un activo", notes = "Retorna un activo por el id")
-	public ResponseEntity<ProductoDTO> get(@PathVariable(name = "id") Long id){
+	public ResponseEntity<ProductoDTO> get(@PathVariable(name = "id") String id){
 		return ResponseEntity.ok(productoService.getProducto(id));
 	}
 	
@@ -108,7 +108,7 @@ public class ProductoController {
 	
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "Elimina un activo", notes = "Elimina un activo por su id")
-	public ResponseEntity<String> delete(@PathVariable(name="id")Long id){
+	public ResponseEntity<String> delete(@PathVariable(name="id")String id){
 		productoService.delete(id);		
 		return new ResponseEntity<>("Item eliminado con exito", HttpStatus.OK);
 	}

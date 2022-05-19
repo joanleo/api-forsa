@@ -80,27 +80,34 @@ public class ProductoServiceImpl implements ProductoService {
 	}
 
 	@Override
-	public ProductoDTO getProducto(Long id) {
-		Producto producto = productoRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Producto", "Codigo de pieza", id));
+	public ProductoDTO getProducto(String codigoPieza) {
+				
+		Producto exist = productoRepo.findByCodigoPieza(codigoPieza);
 		
-		return mapearEntidad(producto);
+		if(exist == null) {
+			throw new IllegalAccessError("El producto con codigo de pieza "+ codigoPieza + " no existe");
+		}
+		
+		return mapearEntidad(exist);
 	}
 
 	@Override
-	public ProductoDTO update(Long id, ProductoDTO productoDTO) {
-		Producto producto = productoRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Producto", "Codigo de pieza", id));
+	public ProductoDTO update(String codigoPieza, ProductoDTO productoDTO) {
+		Producto exist = productoRepo.findByCodigoPieza(codigoPieza);
 		
-		producto.setArea(productoDTO.getArea());
-		producto.setOrden(productoDTO.getOrden());
-		producto.setDescripcion(productoDTO.getDescripcion());
+		if(exist == null) {
+			throw new IllegalAccessError("El producto con codigo de pieza "+ codigoPieza + " no existe");
+		}
 		
-		return mapearEntidad(producto);
+		exist.setArea(productoDTO.getArea());
+		exist.setOrden(productoDTO.getOrden());
+		exist.setDescripcion(productoDTO.getDescripcion());
+		
+		return mapearEntidad(exist);
 	}
 
 	@Override
-	public void delete(Long id) {
+	public void delete(String id) {
 		Producto producto = productoRepo.findByCodigoPieza(id);
 		
 		if(producto == null) {

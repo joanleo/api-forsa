@@ -23,7 +23,7 @@ public class Producto {
 	
 	@Id
     @Column(name = "vccodigopieza")
-    private Long codigoPieza;
+    private String codigoPieza;
 
 	@Column(name = "vcdescripcion")
     private String descripcion;
@@ -67,11 +67,11 @@ public class Producto {
     @Column(name = "vcmotivoIngreso")
     private String motivoIngreso;
 
-	public Long getCodigoPieza() {
+	public String getCodigoPieza() {
 		return codigoPieza;
 	}
 
-	public void setCodigoPieza(Long codigoPieza) {
+	public void setCodigoPieza(String codigoPieza) {
 		this.codigoPieza = codigoPieza;
 	}
 
@@ -176,7 +176,7 @@ public class Producto {
 	}
 
 
-	public Producto(Long codigoPieza, String descripcion, Float area, String orden, Familia familia,
+	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
 			Fabricante fabricante, Empresa empresa, Estado estado, Ubicacion ubicacion, String nconfirmacion,
 			String motivoIngreso) {
 		super();
