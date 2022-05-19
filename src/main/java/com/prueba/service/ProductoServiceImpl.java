@@ -141,7 +141,8 @@ public class ProductoServiceImpl implements ProductoService {
 		
 		/*producto.setUbicacion(ubicacion);
 		producto.setEstado(estado);*/
-		producto.setVerificado(true);	
+		producto.setVerificado(true);
+		producto.setEstaActivo(true);
 		productoRepo.save(producto);
 		
 		return mapearEntidad(producto);
