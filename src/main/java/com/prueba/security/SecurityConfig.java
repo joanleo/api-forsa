@@ -51,7 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable()
+		http.cors();
+		http.csrf().disable()
 		    .authorizeRequests()
 		    //.antMatchers(HttpMethod.GET, "/**").permitAll()
 		    //.antMatchers(HttpMethod.GET,"/productos").access("@userSecurity.hasPrivilege(authentication, '/productos')")
