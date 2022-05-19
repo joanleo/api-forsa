@@ -139,9 +139,14 @@ public class ProductoServiceImpl implements ProductoService {
 	
 
 	@Override
-	public Page<Producto> searchProducts(String letra) {
+	public Page<Producto> searchProducts(String letra, int offset, int pageSize) {
 		
-		 Page<Producto> listProducts = productoRepo.findByDescripcionContains(letra, PageRequest.of(0, 10));				
+		if(pageSize == 0) {
+			System.out.println("Sin parametros"); 
+			Page<Producto> productos = productoRepo.findAll(/*productSpec.getProductosActivos(letra),*/PageRequest.of(0, 10));
+			return productos;
+		}
+		Page<Producto> listProducts = productoRepo.findAll(/*productSpec.getProductosActivos(letra),*/ PageRequest.of(offset, pageSize));		
 		return listProducts;
 	}
 	

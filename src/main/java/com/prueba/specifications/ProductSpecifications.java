@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -52,6 +53,19 @@ public class ProductSpecifications {
 			query.orderBy(criteryBuilder.desc(root.get("codigoPieza")));
 			
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
+		};
+	}
+		
+		public Specification<Producto> getProductosActivos(String letras){
+			return (root, query, criteryBuilder) ->{
+				List<Predicate> predicates = new ArrayList<>();
+				
+				predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+letras+ "%"));
+				//Root<Producto> activo = query.from(Producto.class);
+				predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
+				
+				
+				return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
 	}
 }
