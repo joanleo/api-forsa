@@ -20,7 +20,7 @@ public interface ProductoService {
 	
 	public ProductoDTO update(Long id, ProductoDTO productoDTO);
 	
-	public void delete(String id);
+	public void delete(Long id);
 	
 	public ProductoDTO receive(Long id);
 	

@@ -100,7 +100,7 @@ public class ProductoServiceImpl implements ProductoService {
 	}
 
 	@Override
-	public void delete(String id) {
+	public void delete(Long id) {
 		Producto producto = productoRepo.findByCodigoPieza(id);
 		
 		if(producto == null) {

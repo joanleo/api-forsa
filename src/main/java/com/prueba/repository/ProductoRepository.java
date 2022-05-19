@@ -18,7 +18,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>, JpaSp
 	
 	public List<Producto> findByFabricanteLike(Long fabricante);
 	
-	public Producto findByCodigoPieza(String codigoPieza);
+	public Producto findByCodigoPieza(Long codigoPieza);
 	
 	Page<Producto> findByDescripcionContains(String letra, Pageable pageable);
 	
