@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.prueba.emailpassword.dto.ChangePasswordDTO;
 import com.prueba.emailpassword.dto.EmailDTO;
 import com.prueba.emailpassword.service.EmailService;
+import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 
@@ -45,11 +46,11 @@ public class EmailController {
     
     @PostMapping("/password")
     @ApiOperation(value = "Envio de contraseña")
-    public ResponseEntity<?> sendEmailPasswor(@RequestBody EmailDTO dto) {
+    public ResponseEntity<ResDTO> sendEmailPasswor(@RequestBody EmailDTO dto) {
     	
     	Optional<Usuario> usuarioOpt = usuarioRepo.findByUsernameOrEmail(dto.getMailTo(), dto.getMailTo());
     	if(!usuarioOpt.isPresent()) {
-    		return new ResponseEntity<String>("Correo enviado con éxito", HttpStatus.OK);
+    		return new ResponseEntity<ResDTO>(new ResDTO("Correo enviado con éxito"), HttpStatus.OK);
     	}
     	Usuario usuario = usuarioOpt.get(); 
     	dto.setMailFrom(mailFrom);
@@ -66,7 +67,7 @@ public class EmailController {
     	usuario.setPassword(newPassword);
     	usuarioRepo.save(usuario);
         emailService.sendEmail(dto);
-        return new ResponseEntity<String>("Correo enviado con éxito", HttpStatus.OK);
+        return new ResponseEntity<ResDTO>(new ResDTO("Correo enviado con éxito"), HttpStatus.OK);
     }
     
     @PostMapping("/username")
