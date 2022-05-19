@@ -78,7 +78,7 @@ public class ProductoController {
 	
 	@PatchMapping("/{id}")
 	@ApiOperation(value = "Verifica un activo", notes = "Actualiza un activo por su id")
-	public ResponseEntity<ProductoDTO> verify(@PathVariable(name = "id") Long id/*, @RequestParam String ubicacion, @RequestParam String estado*/){
+	public ResponseEntity<ProductoDTO> verify(@PathVariable(name = "id") String id/*, @RequestParam String ubicacion, @RequestParam String estado*/){
 		
 		return new ResponseEntity<ProductoDTO>(productoService.receive(id/*, ubicacion, estado*/), HttpStatus.ACCEPTED);
 	}

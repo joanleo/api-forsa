@@ -132,9 +132,12 @@ public class ProductoServiceImpl implements ProductoService {
 	}
 
 	@Override
-	public ProductoDTO receive(Long id/*, String ubicacion, String estado*/) {
-		Producto producto = productoRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Producto", "Codigo de pieza", id));
+	public ProductoDTO receive(String id/*, String ubicacion, String estado*/) {
+		Producto producto = productoRepo.findByCodigoPieza(id);
+		
+		if(producto == null) {
+			throw new ResourceNotFoundException("Producto", "No existe", id);
+		}
 		
 		/*producto.setUbicacion(ubicacion);
 		producto.setEstado(estado);*/

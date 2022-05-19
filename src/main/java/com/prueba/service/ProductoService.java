@@ -22,7 +22,7 @@ public interface ProductoService {
 	
 	public void delete(String id);
 	
-	public ProductoDTO receive(Long id);
+	public ProductoDTO receive(String id);
 	
 	public Page<Producto> searchProducts(SearchDTO searchDTO, int offset, int pageSize);
 	
