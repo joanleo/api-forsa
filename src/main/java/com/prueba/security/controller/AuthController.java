@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.prueba.security.dto.JWTAuthResonseDTO;
 import com.prueba.security.dto.LoginDTO;
 import com.prueba.security.dto.RegistroDTO;
-import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.jwt.JwtTokenProvider;
@@ -73,13 +72,13 @@ public class AuthController {
 	
 	@PostMapping("/register")
 	@ApiOperation(value = "Registro de usuarios")
-	public ResponseEntity<ResDTO> registrarUsuario(@RequestBody RegistroDTO registroDTO){
+	public ResponseEntity<?> registrarUsuario(@RequestBody RegistroDTO registroDTO){
 		if(usuarioRepo.existsByUsername(registroDTO.getUsername())) {
-			return new ResponseEntity<ResDTO>(new ResDTO("Ese nombre de usuario ya existe"),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Ese nombre de usuario ya existe",HttpStatus.BAD_REQUEST);
 		}
 		
 		if(usuarioRepo.existsByEmail(registroDTO.getEmail())) {
-			return new ResponseEntity<ResDTO>(new ResDTO("Ese email de usuario ya existe"),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Ese email de usuario ya existe",HttpStatus.BAD_REQUEST);
 		}
 		
 		Usuario usuario = new Usuario();
@@ -92,6 +91,6 @@ public class AuthController {
 		usuario.setRoles(Arrays.asList(roles));
 		
 		usuarioRepo.save(usuario);
-		return new ResponseEntity<ResDTO>(new ResDTO("Usuario registrado exitosamente"),HttpStatus.OK);
+		return new ResponseEntity<>("Usuario registrado exitosamente",HttpStatus.OK);
 	}
 }
