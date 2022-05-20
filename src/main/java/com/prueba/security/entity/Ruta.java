@@ -9,15 +9,15 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "Rutas")
+@Table(name = "m_rutas")
 public class Ruta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "nidRuta")
+    @Column(name = "nidRuta", length = 3)
     private Long id;
 
-    @Column(name = "vcruta", nullable = false)
+    @Column(name = "vcruta", length = 64, nullable = false)
     private String ruta;
 
 	public Long getId() {

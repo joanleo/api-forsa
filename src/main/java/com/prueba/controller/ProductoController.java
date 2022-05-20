@@ -85,14 +85,6 @@ public class ProductoController {
 		return new ResponseEntity<ProductoDTO>(productoService.receive(id/*, ubicacion, estado*/), HttpStatus.ACCEPTED);
 	}
 	
-	/*@GetMapping()
-	public ApiResponse<Page<Producto>> search( @RequestParam(name = "page") int page, @RequestParam(name = "items") int items, @RequestBody SearchDTO searchDTO){
-		System.out.println(searchDTO.getClass().getName());
-		Page<Producto> productos =  productoService.searchProducts(searchDTO, page, items);
-
-		return new ApiResponse<>(productos.getSize(), productos);
-	}*/
-	
 	@PostMapping("/cargar")
 	@ApiOperation(value = "Carga de activos", notes = "AUN PENDIENTE POR DEFINIR")
 	public ResponseEntity<ResDTO> loadProducts(@RequestParam("archivo") MultipartFile file, WebRequest webRequest){ //@RequestBody List<ProductoDTO> list

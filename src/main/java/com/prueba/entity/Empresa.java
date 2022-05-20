@@ -16,18 +16,18 @@ import com.prueba.security.entity.Usuario;
 
 
 @Entity
-@Table(name = "Empresas")
+@Table(name = "empresas")
 public class Empresa {
 	
 	@Id
-	@Column(name = "vcnitempresa", nullable = false)
+	@Column(name = "vcnitempresa", length = 12, nullable = false)
 	private Long nit;
 	
-	@Column(name = "vcnombre", nullable = false)
+	@Column(name = "vcnombre", length = 48, nullable = false)
 	private String nombre;
 	
-	@Column(name = "nconfirmacion")
-	private String nconfimacion;
+	@Column(name = "nconfirmacion", length = 8)
+	private String nconfimacion = "D-0";
 	
 	@ManyToOne()
 	@JoinColumn(name = "nidtipo_empresa")

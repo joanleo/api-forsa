@@ -139,6 +139,8 @@ public class ProductoServiceImpl implements ProductoService {
 		if(producto == null) {
 			throw new ResourceNotFoundException("Producto", "No existe", id);
 		}
+		//Capturar datos de la empresa del usuario
+		
 		
 		/*producto.setUbicacion(ubicacion);
 		producto.setEstado(estado);*/

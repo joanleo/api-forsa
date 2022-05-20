@@ -10,21 +10,21 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ubicaciones")
+@Table(name = "mov_ubicaciones")
 public class Ubicacion {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "nidubicacion")
+	@Column(name = "nidubicacion", length = 4)
 	private Long id;
 	
-	@Column(name = "vcdireccion")
+	@Column(name = "vcdireccion", length = 64)
 	private String direccion;
 	
-	@Column(name = "vcciudad")
+	@Column(name = "vcciudad", length = 20)
 	private String ciudad;
 	
-	@Column(name = "vcnombre")
+	@Column(name = "vcnombre", length = 32)
 	private String nombre;
 	
 	@ManyToOne

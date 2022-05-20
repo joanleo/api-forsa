@@ -18,25 +18,38 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
 		  property = "codigoPieza")
 @Entity
-@Table(name = "Productos")
+@Table(name = "mov_activos")
 public class Producto {
 	
 	@Id
-    @Column(name = "vccodigopieza")
+    @Column(name = "vccodigopieza", length = 20)
     private String codigoPieza;
 
-	@Column(name = "vcdescripcion")
+	@Column(name = "vcnombre", length = 32)
     private String descripcion;
 	
     @Column(name = "narea", nullable = false)
     private Float area;
     
-    @Column(name = "vcorden", nullable = false)
+    @Column(name = "vcorden", length = 7, nullable = false)
     private String orden;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "nidfamilia", nullable = false)
     private Familia familia;
+
+    @Column(name = "vcnconfirmacion", length = 8)
+    private String nconfirmacion;
+
+    @Column(name = "bverificado", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
+    private Boolean verificado = false;
+    
+    @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
+    private Boolean estaActivo = false;
+    
+    
+    @Column(name = "vcmotivoIngreso")
+    private String motivoIngreso;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitfabricante")
@@ -55,17 +68,6 @@ public class Producto {
     @JoinColumn(name = "nidubicacion")
     private Ubicacion ubicacion;
 
-    @Column(name = "bverificado", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
-    private Boolean verificado = false;
-    
-    @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
-    private Boolean estaActivo = false;
-    
-    @Column(name = "vcnconfirmacion")
-    private String nconfirmacion;
-    
-    @Column(name = "vcmotivoIngreso")
-    private String motivoIngreso;
 
 	public String getCodigoPieza() {
 		return codigoPieza;

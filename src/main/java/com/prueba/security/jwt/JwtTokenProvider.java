@@ -40,6 +40,7 @@ public class JwtTokenProvider {
 	
 	public String obtenerUsernameDelJWT(String token) {
 		Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+		System.out.println(claims);
 		return claims.getSubject();
 	}
 	

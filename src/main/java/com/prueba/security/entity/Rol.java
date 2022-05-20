@@ -20,13 +20,13 @@ import com.prueba.entity.Empresa;
 public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "nidrol")
+    @Column(name = "nidrol", length = 2)
     private Long id;
     
-    @Column(name = "vcnombre", nullable = false)
+    @Column(name = "vcnombre", length = 20, nullable = false)
     private String nombre;
     
-    @Column(name = "vcdescripcion")
+    @Column(name = "vcdescripcion", length = 100)
     private String descripcion;
     
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "role")

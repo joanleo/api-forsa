@@ -59,7 +59,7 @@ public class AuthController {
 		
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(loginDTO.getUsernameOrEmail(), loginDTO.getUsernameOrEmail()).get();
 		//System.out.println(usuario.getEmpresa());
-		System.out.println(usuario.getEmail());
+		System.out.println(autentication);
 		
 		//Obtenemos el token
 		String token = jwtTokenProvider.generarToken(autentication);

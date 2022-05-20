@@ -8,15 +8,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Estados")
+@Table(name = "m_estados")
 public class Estado {
     
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "nidestado")
+	@Column(name = "nidestado", length = 2)
     private Long id;
 	
-	@Column(name = "vcnombre")
+	@Column(name = "vcnombre", length = 20)
     private String tipo;
 
 	public Long getId() {

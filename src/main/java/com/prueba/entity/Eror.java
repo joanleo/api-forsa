@@ -13,13 +13,13 @@ public class Eror {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", length = 9)
 	private Long id;
 	
-	@Column(name = "niderror")
+	@Column(name = "niderror", length = 4)
 	private Integer idError;
 	
-	@Column(name = "vcproceso")
+	@Column(name = "vcproceso", length = 64)
 	private String proceso;
 	
 	@Column(name = "vcdescripcion")

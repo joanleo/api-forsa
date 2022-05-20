@@ -16,14 +16,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
-@Table(name = "Fabricantes")
+@Table(name = "m_fabricantes")
 public class Fabricante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "vcnitfabricante")
+    @Column(name = "vcnitfabricante", length = 12)
     private Long nit;
     
-    @Column(name = "vcnombre")
+    @Column(name = "vcnombre",length = 48)
     private String nombre;
     
     @JsonIgnore

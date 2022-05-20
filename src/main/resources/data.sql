@@ -1,10 +1,10 @@
-INSERT INTO tipos_ubicacion
+INSERT INTO m_tipos_ubicacion
 (`nidtipo_ubicacion`,
-`vctipo`)
+`vcnombre`)
 VALUES
 (1, 'Obra');
 
-INSERT INTO ubicaciones
+INSERT INTO mov_ubicaciones
 (`nidubicacion`,
 `vcciudad`,
 `vcdireccion`,
@@ -15,7 +15,7 @@ VALUES
 (1, 'Cali', 'Calle Cra', 'Las flores 1', 1),
 (2, 'Cali', 'Calle Cra', 'Las avenidas 1', 1);
 
-INSERT INTO familias
+INSERT INTO m_familias
 (`nidfamilia`,
 `vcnombre`
 )
@@ -25,7 +25,7 @@ VALUES
 (3, 'familia3'),
 (4, 'familia4');
 
-INSERT INTO fabricantes
+INSERT INTO m_fabricantes
 (`vcnitfabricante`,
 `vcnombre`
 )
@@ -33,24 +33,21 @@ VALUES
 ('11111','Fabricante prueba'),
 ('12345', 'Formaletas XX');
 
-INSERT INTO estados
+INSERT INTO m_estados
 (`nidestado`,
-`vcdescripcion`,
-`vctipo`)
+`vcnombre`)
 VALUES
-(1,'Bueno','Bueno'),
-(2,'Regular','Regular'),
-(3,'Malo','Malo')
-;
+(1,'Bueno'),
+(2,'Regular'),
+(3,'Malo');
 
-INSERT INTO tipos_empresa
+INSERT INTO m_tipos_empresa
 (`nidtipo_empresa`,
-`vcdescripcion`,
-`vctipo`)
+`vcnombre`)
 VALUES
-(1,'Admin','Admin'),
-(2,'Owner','Owner'),
-(3,'Cliente','Cliente');
+(1,'Admin'),
+(2,'Owner'),
+(3,'Cliente');
 
 INSERT INTO empresas
 (`vcnitempresa`,
@@ -61,10 +58,10 @@ VALUES
 ('23456','Empresa Prueba Y',3),
 ('34567','Empresa Prueba Z',3);
 
-INSERT INTO productos
+INSERT INTO mov_activos
 (`vccodigopieza`,
-`vcarea`,
-`vcdescripcion`,
+`narea`,
+`vcnombre`,
 `vcorden`,
 `vcnit_empresa`,
 `nidestado`,

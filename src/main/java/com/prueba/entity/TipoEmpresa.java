@@ -13,15 +13,15 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "tipos_empresa")
+@Table(name = "m_tipos_empresa")
 public class TipoEmpresa {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "nidtipo_empresa")
+	@Column(name = "nidtipo_empresa", length = 2)
 	private Long id;
 	
-	@Column(name = "vcnombre")
+	@Column(name = "vcnombre", length = 20)
 	private String tipo;
 	
 	@JsonIgnore

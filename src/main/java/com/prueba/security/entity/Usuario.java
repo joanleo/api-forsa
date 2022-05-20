@@ -25,16 +25,16 @@ public class Usuario {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "nidusuario")
+    @Column(name = "nidusuario", length = 3)
     private Long id;
     
-    @Column(name = "vcnombre")
+    @Column(name = "vcnombre", length = 48)
     private String nombre;
     
-    @Column(name = "vcusername")
+    @Column(name = "vcusername", length = 20)
     private String username;
     
-    @Column(name = "vcemail")
+    @Column(name = "vcemail", length = 48)
     private String email;
     
     @Column(name = "vcpassword")

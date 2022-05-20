@@ -14,12 +14,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "trazas")
+@Table(name = "mov_trazas")
 public class Trazabilidad {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "vcid_traza")
+	@Column(name = "vcid_traza", length = 6)
 	private Long id;
 	
 	

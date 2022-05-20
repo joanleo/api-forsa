@@ -18,9 +18,10 @@ public class PoliRol {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "nidPoli_Rol")
+	@Column(name = "nidPoli_Rol", length = 3)
 	private Long id;
 	
+	@Column(name = "vcnombre", length = 20)
 	private String nombre;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

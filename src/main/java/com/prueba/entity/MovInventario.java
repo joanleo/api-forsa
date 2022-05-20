@@ -23,7 +23,7 @@ public class MovInventario {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "nidmov")
+	@Column(name = "nidmov", length = 6)
 	private Long id;
 	
 	@Column(name = "dfecha")
