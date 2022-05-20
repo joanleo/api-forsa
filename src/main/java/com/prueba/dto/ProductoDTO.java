@@ -35,11 +35,11 @@ public class ProductoDTO {
 	
 	private Empresa empresa;
 	
-	private Boolean verificado = false;
+	private Boolean verificado = true;
 	
 	private UbicacionDTO ubicacion;
 	
-	private Boolean estaActivo = false;
+	private Boolean estaActivo = true;
 	
 	private String nconfirmacion;
 	
