@@ -32,7 +32,7 @@ public class JwtTokenProvider {
 		Date fechaActual = new Date();
 		Date fechaExpiracion = new Date(fechaActual.getTime() + jwtExpirationInMs);
 		
-		String token = Jwts.builder().setIssuer(nombre).setSubject(username).setIssuedAt(new Date()).setExpiration(fechaExpiracion)
+		String token = Jwts.builder().setSubject(username).setIssuedAt(new Date()).setExpiration(fechaExpiracion)
 				.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
 		
 		return token;
