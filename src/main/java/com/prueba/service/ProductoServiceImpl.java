@@ -152,11 +152,21 @@ public class ProductoServiceImpl implements ProductoService {
 		//Capturar datos de la empresa del usuario
 		
 		Empresa empresa = empresaRepo.findByNitOrderByFecha(producto.getEmpresa().getNit());
-		String[] nconfirmacion = null;
-		if(empresa != null) {
-			nconfirmacion = empresa.getNconfimacion().split("-");
+
+		String[] nconfirmacion = new String[2];
+		Integer numero = 0;
+		if(empresa != null && empresa.getNconfimacion() != null) {
+			System.out.println(empresa.getNombre());
+			System.out.println(empresa.getNconfimacion());
+			nconfirmacion = empresa.getNconfimacion().split("-");			
+			numero =  Integer.parseInt(nconfirmacion[1]) + 1;
+		}else {
+			nconfirmacion[0] = "D-";
+			nconfirmacion[1] = "0";
+			numero++;
+			System.out.println(numero);
 		}
-		Integer numero =  Integer.parseInt(nconfirmacion[1]) + 1;
+		System.out.println("afuera"+numero);
 		String nconf = nconfirmacion[0] + "-" + numero.toString();
 		producto.setNconfirmacion(nconf);
 		System.out.println(nconf);
