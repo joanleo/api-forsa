@@ -16,7 +16,7 @@ public class TipoUbicacion {
 	@Column(name = "nidtipo_ubicacion")
 	private Long id;
 	
-	@Column(name = "vctipo")
+	@Column(name = "vcnombre")
 	private String nombre;
 
 

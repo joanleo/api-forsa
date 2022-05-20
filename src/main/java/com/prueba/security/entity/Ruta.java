@@ -20,9 +20,6 @@ public class Ruta {
     @Column(name = "vcruta", nullable = false)
     private String ruta;
 
-    @Column(name = "vcdescripcion")
-    private String descripcion;
-
 	public Long getId() {
 		return id;
 	}
@@ -39,15 +36,6 @@ public class Ruta {
 		this.ruta = ruta;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
-
 	public Ruta() {
 		super();
 	}
@@ -56,7 +44,6 @@ public class Ruta {
 		super();
 		this.id = id;
 		this.ruta = ruta;
-		this.descripcion = descripcion;
 
 	}
     

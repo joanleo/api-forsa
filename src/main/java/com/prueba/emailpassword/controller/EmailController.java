@@ -72,10 +72,10 @@ public class EmailController {
     
     @PostMapping("/username")
     @ApiOperation(value = "Envio de nombre de usuario")
-    public ResponseEntity<?> sendEmailUsername(@RequestBody EmailDTO dto){
+    public ResponseEntity<ResDTO> sendEmailUsername(@RequestBody EmailDTO dto){
     	Optional<Usuario> usuarioOpt = usuarioRepo.findByUsernameOrEmail(dto.getMailTo(), dto.getMailTo());
     	if(!usuarioOpt.isPresent()) {
-    		return new ResponseEntity<String>("Correo enviado con éxito", HttpStatus.OK);
+    		return new ResponseEntity<ResDTO>(new ResDTO("Correo enviado con éxito"), HttpStatus.OK);
     	}
     	Usuario usuario = usuarioOpt.get(); 
     	dto.setMailFrom(mailFrom);
@@ -87,7 +87,7 @@ public class EmailController {
     	
     	emailService.sendEmail(dto);
     	
-    	return new ResponseEntity<String>("Correo enviado con éxito", HttpStatus.OK);
+    	return new ResponseEntity<ResDTO>(new ResDTO("Correo enviado con éxito"), HttpStatus.OK);
     }
     
     @ApiIgnore

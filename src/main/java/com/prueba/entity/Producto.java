@@ -28,7 +28,7 @@ public class Producto {
 	@Column(name = "vcdescripcion")
     private String descripcion;
 	
-    @Column(name = "vcarea", nullable = false)
+    @Column(name = "narea", nullable = false)
     private Float area;
     
     @Column(name = "vcorden", nullable = false)

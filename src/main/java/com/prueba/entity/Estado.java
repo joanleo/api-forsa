@@ -16,16 +16,9 @@ public class Estado {
 	@Column(name = "nidestado")
     private Long id;
 	
-	@Column(name = "vctipo")
+	@Column(name = "vcnombre")
     private String tipo;
-    
-	@Column(name = "vcdescripcion")
-    private String descripcion;
 
-    /*@OneToMany(mappedBy = "estado")
-    @JoinColumn(name = "vccodigoPieza")
-    private List<Producto> productos;
-*/
 	public Long getId() {
 		return id;
 	}
@@ -40,14 +33,6 @@ public class Estado {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
 	}
 
 	public Estado() {

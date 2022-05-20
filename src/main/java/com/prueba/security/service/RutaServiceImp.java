@@ -29,7 +29,7 @@ public class RutaServiceImp implements RutaService {
 		if(exist == null) {
 			rutaRepo.save(ruta);
 		}else {
-			throw new IllegalAccessError("La ruta que desea crear ya existe" + " " + ruta.getRuta() + " " + ruta.getDescripcion());
+			throw new IllegalAccessError("La ruta que desea crear ya existe" + " " + ruta.getRuta() );
 		}
 		
 		return mapearEntidad(ruta);
@@ -56,7 +56,6 @@ public class RutaServiceImp implements RutaService {
 				.orElseThrow(() -> new ResourceNotFoundException("Ruta", "id", id));
 		
 		ruta.setRuta(rutaDTO.getRuta());
-		ruta.setDescripcion(rutaDTO.getDescripcion());
 		
 		return mapearEntidad(ruta);
 	}

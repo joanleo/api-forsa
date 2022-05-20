@@ -21,12 +21,8 @@ public class TipoEmpresa {
 	@Column(name = "nidtipo_empresa")
 	private Long id;
 	
-	@Column(name = "vctipo")
+	@Column(name = "vcnombre")
 	private String tipo;
-	
-	@JsonIgnore
-	@Column(name = "vcdescripcion")
-	private String descripcion;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "tipoEmpresa")
@@ -48,14 +44,6 @@ public class TipoEmpresa {
 		this.tipo = tipo;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
 	public List<Empresa> getEmpresas() {
 		return empresas;
 	}
@@ -72,7 +60,6 @@ public class TipoEmpresa {
 		super();
 		this.id = id;
 		this.tipo = tipo;
-		this.descripcion = descripcion;
 
 	}
 	

@@ -54,7 +54,6 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 		TipoEmpresa tipoEmpresa = tipoEmpresaRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Tipo de Empresa", "id", id));
 		
-		tipoEmpresa.setDescripcion(tipoEmpresaDTO.getDescripcion());
 		tipoEmpresa.setTipo(tipoEmpresaDTO.getTipo());
 		
 		tipoEmpresaRepo.save(tipoEmpresa);

@@ -28,7 +28,7 @@ public class EstadoServiceImpl implements EstadoService {
 		if(exist == null) {
 			estadoRepo.save(estado);
 		}else {
-			throw new IllegalAccessError("El estado que esta tratando de crear ya existe" + estado.getTipo() + "Descripcion: " + estado.getDescripcion());
+			throw new IllegalAccessError("El estado que esta tratando de crear ya existe" + estado.getTipo());
 		}
 		
 		return mapearEntidad(estado);

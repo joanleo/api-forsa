@@ -15,6 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+//Para realizar inventariio
+
 @Entity
 @Table(name = "mov_inventario")
 public class MovInventario {

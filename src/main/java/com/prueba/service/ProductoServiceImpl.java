@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prueba.dto.ProductoDTO;
@@ -170,8 +171,9 @@ public class ProductoServiceImpl implements ProductoService {
 	}
 
 	@Override
-	public String loadFile(MultipartFile file) {
+	public String loadFile(MultipartFile file, WebRequest webRequest) {
 		try {
+			System.out.println(webRequest.getDescription(false));
 			int count = 1;
 			if(!file.isEmpty()) {
 				File newFile = new File("src/main/resources/targetFile.tmp");
@@ -194,7 +196,9 @@ public class ProductoServiceImpl implements ProductoService {
 						lineError = "El tamaño del arreglo esta errado linea " + count;
 						if(producto.length > 7) {
 							error = true;
-							Eror err = new Eror();
+							//Eror err = new Eror();
+
+							
 							errores.add(lineError);
 						}
 						System.out.println("Codigopieza " + producto[0] + " Tipo " + ((Object)producto[0]).getClass().getSimpleName());

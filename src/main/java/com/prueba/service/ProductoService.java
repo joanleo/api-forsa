@@ -3,6 +3,7 @@ package com.prueba.service;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prueba.dto.ProductoDTO;
@@ -30,5 +31,5 @@ public interface ProductoService {
 	
 	public void load(List<ProductoDTO> listProductoDTO);
 	
-	public String loadFile(MultipartFile file);
+	public String loadFile(MultipartFile file, WebRequest webRequest);
 }

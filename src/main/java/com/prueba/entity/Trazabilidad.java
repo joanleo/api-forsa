@@ -32,7 +32,7 @@ public class Trazabilidad {
 		fecha = new Date();
 	}
 	
-	@Column(name = "vcdecripcion")
+	@Column(name = "vcdescripcion")
 	private String descripcion;
 	
 	@OneToOne(targetEntity = TipoMov.class, cascade = javax.persistence.CascadeType.ALL)

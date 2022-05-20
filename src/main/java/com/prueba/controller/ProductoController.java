@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.ProductoDTO;
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Producto;
+import com.prueba.security.dto.ResDTO;
 import com.prueba.service.ProductoService;
 
 import io.swagger.annotations.Api;
@@ -93,23 +95,23 @@ public class ProductoController {
 	
 	@PostMapping("/cargar")
 	@ApiOperation(value = "Carga de activos", notes = "AUN PENDIENTE POR DEFINIR")
-	public ResponseEntity<String> loadProducts(@RequestParam("archivo") MultipartFile file){ //@RequestBody List<ProductoDTO> list
+	public ResponseEntity<ResDTO> loadProducts(@RequestParam("archivo") MultipartFile file, WebRequest webRequest){ //@RequestBody List<ProductoDTO> list
 		
 		try {
-			productoService.loadFile(file);
+			productoService.loadFile(file, webRequest);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 		//System.out.println(list);
 		//productoService.load(list);
 		
-		return new ResponseEntity<>("Se ha cargado la lista con exito", HttpStatus.OK);
+		return new ResponseEntity<ResDTO>(new ResDTO("Se ha cargado la lista con exito"), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "Elimina un activo", notes = "Elimina un activo por su id")
-	public ResponseEntity<String> delete(@PathVariable(name="id")String id){
-		productoService.delete(id);		
-		return new ResponseEntity<>("Item eliminado con exito", HttpStatus.OK);
+	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")String id){
+		productoService.delete(id);
+		return new ResponseEntity<ResDTO>(new ResDTO("Item eliminado con exito"), HttpStatus.OK);
 	}
 }

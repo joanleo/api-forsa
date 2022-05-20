@@ -16,7 +16,7 @@ public class Eror {
 	@Column(name = "id")
 	private Long id;
 	
-	@Column(name = "nerror")
+	@Column(name = "niderror")
 	private Integer idError;
 	
 	@Column(name = "vcproceso")

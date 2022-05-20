@@ -26,9 +26,8 @@ public class Empresa {
 	@Column(name = "vcnombre", nullable = false)
 	private String nombre;
 	
-	@JsonIgnore
-	@Column(name = "vcdescripcion")
-	private String descripcion;
+	@Column(name = "nconfirmacion")
+	private String nconfimacion;
 	
 	@ManyToOne()
 	@JoinColumn(name = "nidtipo_empresa")
@@ -74,12 +73,12 @@ public class Empresa {
 		this.nombre = nombre;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public String getNconfimacion() {
+		return nconfimacion;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setNconfimacion(String nconfimacion) {
+		this.nconfimacion = nconfimacion;
 	}
 
 	public TipoEmpresa getTipoEmpresa() {
