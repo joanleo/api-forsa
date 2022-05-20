@@ -21,9 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.prueba.dto.ProductoDTO;
 import com.prueba.dto.SearchDTO;
+import com.prueba.entity.Empresa;
 import com.prueba.entity.Eror;
 import com.prueba.entity.Producto;
 import com.prueba.exception.ResourceNotFoundException;
+import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.ErorRepository;
 import com.prueba.repository.ProductoRepository;
 import com.prueba.specifications.ProductSpecifications;
@@ -33,6 +35,9 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Autowired
 	private ProductoRepository productoRepo;
+	
+	@Autowired
+	private EmpresaRepository empresaRepo;
 	
 	@Autowired
 	private ModelMapper modelMapper;
@@ -47,6 +52,7 @@ public class ProductoServiceImpl implements ProductoService {
 	public ProductoDTO create(ProductoDTO productoDTO) {
 		Producto producto = mapearDTO(productoDTO);
 		Producto exist = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
+		//Empresa empresa = empresaRepo.
 		
 		if(exist == null) {
 			System.out.println(producto.toString());
