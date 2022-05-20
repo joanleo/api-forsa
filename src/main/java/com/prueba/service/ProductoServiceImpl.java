@@ -52,8 +52,8 @@ public class ProductoServiceImpl implements ProductoService {
 	public ProductoDTO create(ProductoDTO productoDTO) {
 		Producto producto = mapearDTO(productoDTO);
 		Producto exist = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
-		//Empresa empresa = empresaRepo.
-		
+		Empresa empresa = empresaRepo.findTopByOrderByFecha();
+		System.out.println(empresa);
 		if(exist == null) {
 			System.out.println(producto.toString());
 			productoRepo.save(producto);

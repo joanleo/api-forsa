@@ -12,6 +12,6 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
 	
 	public List<Empresa> findByNombreContains(String nombre);
 	
-	public Empresa findTopByOrderByNit();
+	public Empresa findTopByOrderByFecha();
 
 }
