@@ -62,7 +62,7 @@ public class AuthController {
 		System.out.println(autentication);
 		
 		//Obtenemos el token
-		String token = jwtTokenProvider.generarToken(autentication);
+		String token = jwtTokenProvider.generarToken(autentication, usuario.getNombre());
 		
 		UserDetails user = (UserDetails)autentication.getPrincipal();
 		

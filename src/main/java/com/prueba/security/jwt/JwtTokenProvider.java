@@ -27,12 +27,12 @@ public class JwtTokenProvider {
 	@Value("${jwt.expiration-milliseconds}")
 	private int jwtExpirationInMs;
 	
-	public String generarToken(Authentication authentication) {
+	public String generarToken(Authentication authentication, String nombre) {
 		String username = authentication.getName();
 		Date fechaActual = new Date();
 		Date fechaExpiracion = new Date(fechaActual.getTime() + jwtExpirationInMs);
 		
-		String token = Jwts.builder().setSubject(username).setIssuedAt(new Date()).setExpiration(fechaExpiracion)
+		String token = Jwts.builder().setIssuer(nombre).setSubject(username).setIssuedAt(new Date()).setExpiration(fechaExpiracion)
 				.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
 		
 		return token;
