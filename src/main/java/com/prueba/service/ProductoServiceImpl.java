@@ -53,7 +53,7 @@ public class ProductoServiceImpl implements ProductoService {
 		Producto producto = mapearDTO(productoDTO);
 		Producto exist = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
 		Empresa empresa = empresaRepo.findTopByOrderByFecha();
-		System.out.println(empresa);
+		System.out.println(empresa.getNconfimacion());
 		if(exist == null) {
 			System.out.println(producto.toString());
 			productoRepo.save(producto);
