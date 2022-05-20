@@ -113,6 +113,12 @@ public class Empresa {
 	public Empresa() {
 		super();
 	}
+
+	@Override
+	public String toString() {
+		return "Empresa [fecha=" + fecha + ", nit=" + nit + ", nombre=" + nombre + ", nconfimacion=" + nconfimacion
+				+ ", tipoEmpresa=" + tipoEmpresa + ", productos=" + productos + ", usuarios=" + usuarios + "]";
+	}
 	
 	
 }

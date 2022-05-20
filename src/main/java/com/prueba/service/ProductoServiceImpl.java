@@ -52,8 +52,12 @@ public class ProductoServiceImpl implements ProductoService {
 	public ProductoDTO create(ProductoDTO productoDTO) {
 		Producto producto = mapearDTO(productoDTO);
 		Producto exist = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
-		Empresa empresa = empresaRepo.findTopByOrderByFecha();
-		System.out.println(empresa.getNconfimacion());
+		Empresa empresa = empresaRepo.findByNitOrderByFecha(productoDTO.getEmpresa().getNit());
+		if(empresa != null) {
+			System.out.println(empresa.getNconfimacion());			
+		}else {
+			System.out.println("error en la consulta de empresa");
+		}
 		if(exist == null) {
 			System.out.println(producto.toString());
 			productoRepo.save(producto);
@@ -147,12 +151,25 @@ public class ProductoServiceImpl implements ProductoService {
 		}
 		//Capturar datos de la empresa del usuario
 		
+		Empresa empresa = empresaRepo.findByNitOrderByFecha(producto.getEmpresa().getNit());
+		String[] nconfirmacion = null;
+		if(empresa != null) {
+			nconfirmacion = empresa.getNconfimacion().split("-");
+		}
+		Integer numero =  Integer.parseInt(nconfirmacion[1]) + 1;
+		String nconf = nconfirmacion[0] + "-" + numero.toString();
+		producto.setNconfirmacion(nconf);
+		System.out.println(nconf);
+		
 		
 		/*producto.setUbicacion(ubicacion);
 		producto.setEstado(estado);*/
 		producto.setVerificado(true);
 		producto.setEstaActivo(true);
 		productoRepo.save(producto);
+		
+		empresa.setNconfimacion(nconf);
+		empresaRepo.save(empresa);
 		
 		return mapearEntidad(producto);
 	}
