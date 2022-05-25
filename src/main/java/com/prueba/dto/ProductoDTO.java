@@ -37,6 +37,7 @@ public class ProductoDTO {
 	
 	private Boolean verificado = true;
 	
+	@NotNull(message = "Este campo no puede ser nulo")
 	private UbicacionDTO ubicacion;
 	
 	private Boolean estaActivo = true;
