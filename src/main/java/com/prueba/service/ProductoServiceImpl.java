@@ -134,11 +134,13 @@ public class ProductoServiceImpl implements ProductoService {
 			throw new ResourceNotFoundException("Producto", "No existe", id);
 		}
 		
-		if(producto.getVerificado() == false) {
+		/*if(producto.getVerificado() == false) {
 			producto.setEstaActivo(false);
 		}else {
 			throw new IllegalAccessError("No es posible realizar la accion solicitada");
-		}
+		}*/
+		producto.setEstaActivo(false);
+		
 		productoRepo.save(producto);
 
 	}
@@ -158,42 +160,49 @@ public class ProductoServiceImpl implements ProductoService {
 	public ProductoDTO receive(String id/*, String ubicacion, String estado*/) {
 		Producto producto = productoRepo.findByCodigoPieza(id);
 		
+		
 		if(producto == null) {
 			throw new ResourceNotFoundException("Producto", "No existe", id);
 		}
-		//Capturar datos de la empresa del usuario
 		
-		Empresa empresa = empresaRepo.findByNitOrderByFecha(producto.getEmpresa().getNit());
-
-		String[] nconfirmacion = new String[2];
-		Integer numero = 0;
-		if(empresa != null && empresa.getNconfimacion() != null) {
-			System.out.println(empresa.getNombre());
-			System.out.println(empresa.getNconfimacion());
-			nconfirmacion = empresa.getNconfimacion().split("-");			
-			numero =  Integer.parseInt(nconfirmacion[1]) + 1;
+		if(!producto.getVerificado() && producto.getEstaActivo()) {
+			//Capturar datos de la empresa del usuario
+			
+			Empresa empresa = empresaRepo.findByNitOrderByFecha(producto.getEmpresa().getNit());
+			
+			String[] nconfirmacion = new String[2];
+			Integer numero = 0;
+			if(empresa != null && empresa.getNconfimacion() != null) {
+				System.out.println(empresa.getNombre());
+				System.out.println(empresa.getNconfimacion());
+				nconfirmacion = empresa.getNconfimacion().split("-");			
+				numero =  Integer.parseInt(nconfirmacion[1]) + 1;
+			}else {
+				nconfirmacion[0] = "D";
+				nconfirmacion[1] = "0";
+				numero++;
+				System.out.println(numero);
+			}
+			System.out.println("afuera"+numero);
+			String nconf = nconfirmacion[0] + "-" + numero.toString();
+			producto.setNconfirmacion(nconf);
+			System.out.println(nconf);
+			
+			
+			/*producto.setUbicacion(ubicacion);
+			producto.setEstado(estado);*/
+			producto.setVerificado(true);
+			producto.setEstaActivo(true);
+			productoRepo.save(producto);
+			
+			empresa.setNconfimacion(nconf);
+			empresaRepo.save(empresa);
+			
+			return mapearEntidad(producto);
+			
 		}else {
-			nconfirmacion[0] = "D";
-			nconfirmacion[1] = "0";
-			numero++;
-			System.out.println(numero);
+			throw new IllegalAccessError("No se puede realizar esta accion el activo ya fue verificado");
 		}
-		System.out.println("afuera"+numero);
-		String nconf = nconfirmacion[0] + "-" + numero.toString();
-		producto.setNconfirmacion(nconf);
-		System.out.println(nconf);
-		
-		
-		/*producto.setUbicacion(ubicacion);
-		producto.setEstado(estado);*/
-		producto.setVerificado(true);
-		producto.setEstaActivo(true);
-		productoRepo.save(producto);
-		
-		empresa.setNconfimacion(nconf);
-		empresaRepo.save(empresa);
-		
-		return mapearEntidad(producto);
 	}
 	
 
