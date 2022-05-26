@@ -4,18 +4,18 @@ import string
 def createFile():
     with open("archivo.txt", "w") as file:
         lista = string.ascii_uppercase + "[!@#$%&*()_+=|<>?{}\\[\\]~-]"
-        for row in range(5000):
+        for row in range(100):
             codigopieza = randint(10000,99999)
 
             nom = ''.join((str(letra) for letra in sample(lista, 8)))
-            nombre = f"Producto prueba {nom} {row}"
+            nombre = f"Producto prueba {nom}  {row+1}"
 
             area = round(random(), 2)
 
             
-            orden = ''.join((str(letra) for letra in sample(lista, 2))) + str(row)
+            orden = ''.join((str(letra) for letra in sample(lista, 2))) + "  " + str(row+1)
 
-            familias = ['Familia1', 'Familia2', 'Familia3', 'Familia4', 'Familia5', 'Familia6', 'Familia7', 'Familia8', 'Familia9', 'Familia10']
+            familias = [1,2,3,4,5]
             familia = choice(familias)
 
             fabricantes = [11111, 12345]

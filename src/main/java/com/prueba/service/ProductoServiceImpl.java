@@ -3,6 +3,9 @@ package com.prueba.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,6 +18,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,6 +53,7 @@ public class ProductoServiceImpl implements ProductoService {
 	@Autowired
 	private ErorRepository erorRepo;
 
+	
 	@Override
 	public ProductoDTO create(ProductoDTO productoDTO) {
 		Producto producto = mapearDTO(productoDTO);
@@ -68,6 +74,7 @@ public class ProductoServiceImpl implements ProductoService {
 		return mapearEntidad(producto);
 	}
 
+	
 	@Override
 	public Page<Producto> list(Integer offset, Integer pageSize) {
 		if(pageSize == 0) {
@@ -79,6 +86,7 @@ public class ProductoServiceImpl implements ProductoService {
 		return productos;
 	}
 
+	
 	@Override
 	public Page<Producto> searchProducts(SearchDTO searchDTO, int offset, int pageSize) {
 		if(pageSize == 0) {
@@ -90,6 +98,7 @@ public class ProductoServiceImpl implements ProductoService {
 		return listProducts;//listProducts.stream().map(producto -> mapearEntidad(producto)).collect(Collectors.toList());
 	}
 
+	
 	@Override
 	public ProductoDTO getProducto(String codigoPieza) {
 				
@@ -102,6 +111,7 @@ public class ProductoServiceImpl implements ProductoService {
 		return mapearEntidad(exist);
 	}
 
+	
 	@Override
 	public ProductoDTO update(String codigoPieza, ProductoDTO productoDTO) {
 		Producto exist = productoRepo.findByCodigoPieza(codigoPieza);
@@ -117,6 +127,7 @@ public class ProductoServiceImpl implements ProductoService {
 		return mapearEntidad(exist);
 	}
 
+	
 	@Override
 	public void delete(String id) {
 		Producto producto = productoRepo.findByCodigoPieza(id);
@@ -134,14 +145,17 @@ public class ProductoServiceImpl implements ProductoService {
 
 	}
 
+	
 	public ProductoDTO mapearEntidad(Producto producto) {
 		return modelMapper.map(producto, ProductoDTO.class);
 	}
 
+	
 	public Producto mapearDTO(ProductoDTO productoDTO) {
 		return modelMapper.map(productoDTO, Producto.class);
 	}
 
+	
 	@Override
 	public ProductoDTO receive(String id/*, String ubicacion, String estado*/) {
 		Producto producto = productoRepo.findByCodigoPieza(id);
@@ -208,8 +222,15 @@ public class ProductoServiceImpl implements ProductoService {
 	@Override
 	public String loadFile(MultipartFile file, WebRequest webRequest) {
 		try {
-			System.out.println(webRequest.getDescription(false));
-			int count = 1;
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			String currentUserName = "";
+			if ((authentication != null)) {
+			    currentUserName = authentication.getName();
+			}
+			String ruta = webRequest.getDescription(false);
+			Eror errorr = erorRepo.findTopByOrderByIdErrorDesc();
+			int idError = errorr.getIdError();
+			int count = 0;
 			if(!file.isEmpty()) {
 				File newFile = new File("src/main/resources/targetFile.tmp");
 				try (OutputStream os = new FileOutputStream(newFile)) {
@@ -223,100 +244,159 @@ public class ProductoServiceImpl implements ProductoService {
 				try {
 					Pattern special = Pattern.compile("[!@#$%&*()_+=|<>?{}\\\\[\\\\]~-]", Pattern.CASE_INSENSITIVE);
 					String lineError, codigoPiezaError, nombreError, areaError, ordenError, familiaError, fabricanteError, empresaError = "";
-					
+					Long start = System.currentTimeMillis();
 					while(it.hasNext()) {
-						
+						count++;
 						String line = it.nextLine();
 						String[] producto = line.split("\\|");
 						lineError = "El tamaño del arreglo esta errado linea " + count;
 						if(producto.length > 7) {
 							error = true;
-							//Eror err = new Eror();
-
-							
+							Eror nuevoError = new Eror(idError, ruta, lineError, currentUserName);
+							erorRepo.save(nuevoError);
 							errores.add(lineError);
 						}
-						System.out.println("Codigopieza " + producto[0] + " Tipo " + ((Object)producto[0]).getClass().getSimpleName());
+						//System.out.println("Codigopieza " + producto[0] + " Tipo " + ((Object)producto[0]).getClass().getSimpleName());
+						String codigoPieza = producto[0];
 						Matcher matcher = special.matcher(producto[0]);
 						boolean CodigopiezaconstainsSymbols = matcher.find();
 						if(CodigopiezaconstainsSymbols) {
 							error = true;
 							codigoPiezaError = "Codigopieza Contiene caracteres especiales linea " + count;
+							Eror nuevoError = new Eror(idError, ruta, codigoPiezaError, currentUserName);
+							erorRepo.save(nuevoError);
 							errores.add(codigoPiezaError);
 						}						
 						
-						System.out.println("Nombre " + producto[1] + " Tipo " + ((Object)producto[1]).getClass().getSimpleName());
+						//System.out.println("Nombre " + producto[1] + " Tipo " + ((Object)producto[1]).getClass().getSimpleName());
+						String nombre = producto[1];
 						matcher = special.matcher(producto[1]);
 						boolean nombreconstainsSymbols = matcher.find();
 						if(nombreconstainsSymbols) {
 							error = true;
 							nombreError = "Nombre Contiene caracteres especiales linea " + count;
+							Eror nuevoError = new Eror(idError, ruta, nombreError, currentUserName);
+							erorRepo.save(nuevoError);
 							errores.add(nombreError);
 						}						
 						
 						try {
-							System.out.println("Area " + producto[2] + " Tipo " + ((Object)Float.parseFloat(producto[2])).getClass().getSimpleName());							
+							//System.out.println("Area " + producto[2] + " Tipo " + ((Object)Float.parseFloat(producto[2])).getClass().getSimpleName());
+							Float area = Float.parseFloat(producto[2]);
 						} catch (Exception e) {
 							error = true;
 							areaError = "Error en el campo Area en la linea " + count + " " + e;
+							Eror nuevoError = new Eror(idError, ruta, areaError, currentUserName);
+							erorRepo.save(nuevoError);
 							errores.add(areaError);
 						}
 						
-						
-						System.out.println("Orden " + producto[3] + " Tipo " + ((Object)producto[3]).getClass().getSimpleName());
+						//System.out.println("Orden " + producto[3] + " Tipo " + ((Object)producto[3]).getClass().getSimpleName());
+						String orden = producto[3];
 						matcher = special.matcher(producto[1]);
 						boolean ordenconstainsSymbols = matcher.find();
 						if(ordenconstainsSymbols) {
 							error = true;
 							ordenError = "Orden Contiene caracteres especiales linea " + count;
+							Eror nuevoError = new Eror(idError, ruta, ordenError, currentUserName);
+							erorRepo.save(nuevoError);
 							errores.add(ordenError);
 						}						
 						
 						try {
-							System.out.println("Familia " + producto[4] + " Tipo " + ((Object)Integer.parseInt(producto[4])).getClass().getSimpleName());							
+							//System.out.println("Familia " + producto[4] + " Tipo " + ((Object)Integer.parseInt(producto[4])).getClass().getSimpleName());
+							Integer familia = Integer.parseInt(producto[4]);
 						} catch (Exception e) {
 							error = true;
 							familiaError = "Error en el campo Familia en la linea " + count + " " + e;
+							Eror nuevoError = new Eror(idError, ruta, familiaError, currentUserName);
+							erorRepo.save(nuevoError);
 							errores.add(familiaError);
 						}
-						
-						
+											
 						try {
-							System.out.println("Fabricante " + producto[5] + "  Tipo " + ((Object)Integer.parseInt(producto[5])).getClass().getSimpleName());							
+							//System.out.println("Fabricante " + producto[5] + "  Tipo " + ((Object)Integer.parseInt(producto[5])).getClass().getSimpleName());
+							Integer fabricante = Integer.parseInt(producto[5]);
 						} catch (Exception e) {
 							error = true;
 							fabricanteError = "Error en el campo Fabricante en la linea " + count + " " + e;
+							Eror nuevoError = new Eror(idError, ruta, fabricanteError, currentUserName);
+							erorRepo.save(nuevoError);
 							System.out.println(e);
 							errores.add(fabricanteError);
 						}
 						
 						
 						try {
-							System.out.println("Empresa " + producto[6] + " Tipo " + ((Object)Integer.parseInt(producto[6])).getClass().getSimpleName());							
+							//System.out.println("Empresa " + producto[6] + " Tipo " + ((Object)Integer.parseInt(producto[6])).getClass().getSimpleName());
+							Integer empresa = Integer.parseInt(producto[6]);
 						} catch (Exception e) {
 							error = true;
 							empresaError = "Error en el campo Empresa en la linea " + count + " " + e;
+							Eror nuevoError = new Eror(idError, ruta, empresaError, currentUserName);
+							erorRepo.save(nuevoError);
 							System.out.println(e);
 							errores.add(empresaError);
 						}
 						
-						count++;
+						
 					}
+					Long end = System.currentTimeMillis();
+					System.out.println("Duracion de carga de errores linea por linea "+count+" lineas: "+(end-start)/1000+" segundos");
 				} catch (Exception e) {
 					System.out.println(e);
 				}
 				
 				if(error) {
-					Eror errorr = erorRepo.findTopByOrderByIdErrorDesc();
+					//Eror errorr = erorRepo.findTopByOrderByIdErrorDesc();
+					List<Eror> erroresCarga = new ArrayList<Eror>();
 					if(errorr == null) {
 						System.out.println("Primer registro");
-					}
-					System.out.println("los errores son:");
+						for(String er: errores) {
+							Eror nuevoError = new Eror(1, ruta, er, currentUserName);
+							//System.out.println(nuevoError);
+						 	erroresCarga.add(nuevoError);
+						}
+						erorRepo.saveAll(erroresCarga);
+					}else {
+						//int idError = errorr.getIdError();
+						System.out.println("Ya existen registros: "+ idError);
+						idError+=1;
+						System.out.println("Siguiente registro: "+ idError);
+						File filename = new File("src/main/resources/errorFile.dat");
+					 	RandomAccessFile stream = new RandomAccessFile(filename, "rw");
+					 	FileChannel channel = stream.getChannel(); 
+						for(String er: errores) {
+							
+							Eror nuevoError = new Eror(idError, ruta, er, currentUserName);
+							//System.out.println(nuevoError);
+						 	erroresCarga.add(nuevoError);
+						 	
+						    
+						    String linea = nuevoError.toString()+"|";
+						    byte[] strBytes = linea.getBytes();
+						    ByteBuffer buffer = ByteBuffer.allocate(strBytes.length);
+						    buffer.put(strBytes);
+						    buffer.flip();
+						    channel.write(buffer);
+						    
+						}
+						stream.close();
+					    channel.close();
+						Long start = System.currentTimeMillis();
+						erorRepo.saveAll(erroresCarga);
+						Long end = System.currentTimeMillis();
+						System.out.println("Duracion de carga de errores con "+count+" lineas: "+(end-start)/1000+" segundos");
+
+					/*System.out.println("los errores son:");
 					for(String er: errores) {
 						System.out.println(er);						
 					}
-					//erorRepo.saveAll(errores);
+					//erorRepo.saveAll(errores);*/
+					}
 				}
+			}else {
+				System.out.println("Archivo vacio");
 			}
 			
 			

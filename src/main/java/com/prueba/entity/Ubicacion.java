@@ -71,4 +71,8 @@ public class Ubicacion {
 		this.tipo = tipo;
 	}
 
+	public Ubicacion() {
+		super();
+	}
+
 }

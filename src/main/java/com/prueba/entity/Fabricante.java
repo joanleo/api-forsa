@@ -52,5 +52,14 @@ public class Fabricante {
 
 	public void setProductos(List<Producto> productos) {
 		this.productos = productos;
+	}
+
+	public Fabricante(Long nit) {
+		super();
+		this.nit = nit;
+	}
+
+	public Fabricante() {
+		super();
 	}    
 }

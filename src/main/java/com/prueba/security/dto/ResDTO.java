@@ -18,10 +18,5 @@ public class ResDTO {
 	public void setRespuesta(String respuesta) {
 		this.respuesta = respuesta;
 	}
-	public HttpStatus getDescripcion() {
-		return status;
-	}
-	public void setDescripcion(HttpStatus descripcion) {
-		this.status = descripcion;
-	}
+
 }

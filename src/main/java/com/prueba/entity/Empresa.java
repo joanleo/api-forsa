@@ -114,6 +114,11 @@ public class Empresa {
 		super();
 	}
 
+	public Empresa(Long nit) {
+		super();
+		this.nit = nit;
+	}
+
 	@Override
 	public String toString() {
 		return "Empresa [fecha=" + fecha + ", nit=" + nit + ", nombre=" + nombre + ", nconfimacion=" + nconfimacion

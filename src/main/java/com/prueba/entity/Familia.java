@@ -49,6 +49,15 @@ public class Familia {
 
 	public void setProductos(List<Producto> productos) {
 		this.productos = productos;
+	}
+
+	public Familia(Long id) {
+		super();
+		this.id = id;
+	}
+
+	public Familia() {
+		super();
 	}    
 }
 

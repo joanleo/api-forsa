@@ -1,11 +1,16 @@
 package com.prueba.controller;
 
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +30,7 @@ import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Producto;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.service.ProductoService;
+import com.prueba.util.CsvExportService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +42,9 @@ public class ProductoController {
 
 	@Autowired
 	private ProductoService productoService;
+	
+	@Autowired
+	private CsvExportService csvService;
 	
 	@PostMapping
 	@ApiOperation(value = "Crea un activo", notes = "Crea un nuevo activo")
@@ -105,5 +114,13 @@ public class ProductoController {
 	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")String id){
 		productoService.delete(id);
 		return new ResponseEntity<ResDTO>(new ResDTO("Item eliminado con exito"), HttpStatus.OK);
+	}
+	
+	@GetMapping("/descarga")
+	public void getCsvProducts(HttpServletResponse servletResponse) throws IOException {
+		
+		servletResponse.setContentType("text/csv");
+        servletResponse.addHeader("Content-Disposition","attachment; filename=\"productos.csv\"");
+        csvService.writeEmployeesToCsv(servletResponse.getWriter());
 	}
 }

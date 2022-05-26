@@ -8,10 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -211,6 +208,18 @@ public class Producto {
 		this.ubicacion = ubicacion;
 		this.nconfirmacion = nconfirmacion;
 		this.motivoIngreso = motivoIngreso;
+	}
+
+	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
+			Fabricante fabricante, Empresa empresa) {
+		super();
+		this.codigoPieza = codigoPieza;
+		this.descripcion = descripcion;
+		this.area = area;
+		this.orden = orden;
+		this.familia = familia;
+		this.fabricante = fabricante;
+		this.empresa = empresa;
 	}
 
 	@Override

@@ -1,11 +1,15 @@
 package com.prueba.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "errores")
@@ -27,6 +31,10 @@ public class Eror {
 	
 	@Column(name = "vcusuario")
 	private String usuario;
+	
+	@UpdateTimestamp
+	@Column(name = "dfecha")
+	private Date fecha;
 
 	public Long getId() {
 		return id;
@@ -68,8 +76,29 @@ public class Eror {
 		this.usuario = usuario;
 	}
 
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+
 	public Eror() {
 		super();
+	}
+
+	public Eror(Integer idError, String proceso, String descripcion, String usuario) {
+		super();
+		this.idError = idError;
+		this.proceso = proceso;
+		this.descripcion = descripcion;
+		this.usuario = usuario;
+	}
+
+	@Override
+	public String toString() {
+		return id + "," + idError + "," + proceso + "," + descripcion + "," + usuario;
 	}
 
 }
