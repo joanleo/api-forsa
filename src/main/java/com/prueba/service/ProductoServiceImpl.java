@@ -173,7 +173,7 @@ public class ProductoServiceImpl implements ProductoService {
 			nconfirmacion = empresa.getNconfimacion().split("-");			
 			numero =  Integer.parseInt(nconfirmacion[1]) + 1;
 		}else {
-			nconfirmacion[0] = "D-";
+			nconfirmacion[0] = "D";
 			nconfirmacion[1] = "0";
 			numero++;
 			System.out.println(numero);

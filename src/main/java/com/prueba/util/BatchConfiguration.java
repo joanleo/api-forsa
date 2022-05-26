@@ -22,8 +22,8 @@ import org.springframework.core.io.ClassPathResource;
 
 import com.prueba.entity.Producto;
 
-@Configuration
-@EnableBatchProcessing
+//@Configuration
+//@EnableBatchProcessing
 public class BatchConfiguration {
 
 	@Autowired
