@@ -2,6 +2,7 @@ package com.prueba.controller;
 
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -28,6 +29,7 @@ import com.prueba.dto.ApiResponse;
 import com.prueba.dto.ProductoDTO;
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Producto;
+import com.prueba.repository.ProductoRepository;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.service.ProductoService;
 import com.prueba.util.CsvExportService;
@@ -45,6 +47,9 @@ public class ProductoController {
 	
 	@Autowired
 	private CsvExportService csvService;
+	
+	@Autowired
+	private ProductoRepository productoRepo;
 	
 	@PostMapping
 	@ApiOperation(value = "Crea un activo", notes = "Crea un nuevo activo")
@@ -116,11 +121,33 @@ public class ProductoController {
 		return new ResponseEntity<ResDTO>(new ResDTO("Item eliminado con exito"), HttpStatus.OK);
 	}
 	
-	@GetMapping("/descarga")
-	public void getCsvProducts(HttpServletResponse servletResponse) throws IOException {
-		
+	@PostMapping("/descarga")
+	public void getCsvProducts(HttpServletResponse servletResponse,
+								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+								@RequestParam(required=false, defaultValue = "0") Integer items,
+								@RequestParam(required=false) String letras,
+								@RequestBody(required=false) SearchDTO searchDTO) throws IOException {
 		servletResponse.setContentType("text/csv");
         servletResponse.addHeader("Content-Disposition","attachment; filename=\"productos.csv\"");
-        csvService.writeEmployeesToCsv(servletResponse.getWriter());
+        
+        
+        //List<Producto> productos = productoRepo.findAllByEstaActivoTrue();
+        
+		if (searchDTO != null) {
+			System.out.println("Se envio SearchDTO");
+			List<Producto> productos =  productoService.searchProducts(searchDTO);
+			csvService.writeEmployeesToCsv(servletResponse.getWriter(), productos);
+		}else if(letras != null){
+			System.out.println("Controller busqueda por letras");
+			List<Producto> productos = productoService.searchProducts(letras);
+			csvService.writeEmployeesToCsv(servletResponse.getWriter(), productos);
+		}else{
+			System.out.println("Controller busqueda vacia");
+			List<Producto> productos = productoRepo.findAllByEstaActivoTrue();
+			csvService.writeEmployeesToCsv(servletResponse.getWriter(), productos);
+		}
+		
+		
+        
 	}
 }

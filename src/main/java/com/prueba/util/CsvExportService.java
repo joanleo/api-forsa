@@ -22,9 +22,9 @@ public class CsvExportService {
 	@Autowired
     private  ProductoRepository productoRepo;
 
-    public void writeEmployeesToCsv(Writer writer) {
+    public void writeEmployeesToCsv(Writer writer, List<Producto> productos) {
 
-        List<Producto> productos = productoRepo.findAll();
+        //List<Producto> productos = productoRepo.findAll();
         try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
             for (Producto producto : productos) {
                 csvPrinter.printRecord(producto.getCodigoPieza(), producto.getDescripcion(), producto.getArea(),

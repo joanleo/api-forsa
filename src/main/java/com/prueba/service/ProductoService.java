@@ -27,7 +27,11 @@ public interface ProductoService {
 	
 	public Page<Producto> searchProducts(SearchDTO searchDTO, int offset, int pageSize);
 	
+	public List<Producto> searchProducts(SearchDTO searchDTO);
+	
 	public Page<Producto> searchProducts(String letra, int offset, int pageSize);
+	
+	public List<Producto> searchProducts(String letra);
 	
 	public void load(List<ProductoDTO> listProductoDTO);
 	

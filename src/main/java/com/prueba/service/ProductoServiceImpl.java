@@ -78,7 +78,6 @@ public class ProductoServiceImpl implements ProductoService {
 	@Override
 	public Page<Producto> list(Integer offset, Integer pageSize) {
 		if(pageSize == 0) {
-			System.out.println("Sin parametros"); 
 			Page<Producto> productos = productoRepo.findAllByEstaActivoTrue(PageRequest.of(0, 10));
 			return productos;
 		}
@@ -90,7 +89,6 @@ public class ProductoServiceImpl implements ProductoService {
 	@Override
 	public Page<Producto> searchProducts(SearchDTO searchDTO, int offset, int pageSize) {
 		if(pageSize == 0) {
-			System.out.println("Sin parametros"); 
 			Page<Producto> productos = productoRepo.findAll(productSpec.getProductos(searchDTO),PageRequest.of(0, 10));
 			return productos;
 		}
@@ -203,7 +201,6 @@ public class ProductoServiceImpl implements ProductoService {
 	public Page<Producto> searchProducts(String letra, int offset, int pageSize) {
 		
 		if(pageSize == 0) {
-			System.out.println("Sin parametros"); 
 			Page<Producto> productos = productoRepo.findAll(/*productSpec.getProductosActivos(letra),*/PageRequest.of(0, 10));
 			return productos;
 		}
@@ -405,6 +402,21 @@ public class ProductoServiceImpl implements ProductoService {
 		}
 		
 		return "Archivo cargado con exito";
+	}
+
+
+	@Override
+	public List<Producto> searchProducts(SearchDTO searchDTO) {
+		
+		List<Producto> listProducts = productoRepo.findAll(productSpec.getProductos(searchDTO));		
+		return listProducts;
+	}
+
+
+	@Override
+	public List<Producto> searchProducts(String letra) {
+		List<Producto> listProducts = productoRepo.findAll(productSpec.getProductosActivos(letra));		
+		return listProducts;
 	}
 	
 }

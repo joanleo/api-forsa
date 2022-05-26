@@ -14,6 +14,8 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>, JpaSp
 	
 	public Page<Producto> findAllByEstaActivoTrue(Pageable page);
 	
+	public List<Producto> findAllByEstaActivoTrue();
+	
 	public List<Producto> findByEmpresa(Empresa empresa);
 	
 	public List<Producto> findByFabricanteLike(Long fabricante);
