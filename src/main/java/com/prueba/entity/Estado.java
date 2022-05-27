@@ -39,4 +39,9 @@ public class Estado {
 		super();
 	}
 
+	public Estado(Long id) {
+		super();
+		this.id = id;
+	}
+
 }

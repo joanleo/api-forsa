@@ -75,4 +75,9 @@ public class Ubicacion {
 		super();
 	}
 
+	public Ubicacion(Long id) {
+		super();
+		this.id = id;
+	}
+
 }

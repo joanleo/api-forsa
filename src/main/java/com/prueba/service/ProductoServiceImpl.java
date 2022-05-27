@@ -28,9 +28,11 @@ import com.prueba.dto.ProductoDTO;
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Eror;
+import com.prueba.entity.Estado;
 import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
 import com.prueba.entity.Producto;
+import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.ErorRepository;
@@ -158,7 +160,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	
 	@Override
-	public ProductoDTO receive(String id/*, String ubicacion, String estado*/) {
+	public ProductoDTO receive(String id, ProductoDTO productoDTO) {
 		
 		Producto producto = productoRepo.findByCodigoPieza(id);		
 		if(producto == null) {
@@ -186,9 +188,10 @@ public class ProductoServiceImpl implements ProductoService {
 			String nconf = nconfirmacion[0] + "-" + numero.toString();
 			producto.setNconfirmacion(nconf);
 			System.out.println(nconf);
-			
-			/*producto.setUbicacion(ubicacion);
-			producto.setEstado(estado);*/
+			Ubicacion nuevaUbicacion = new Ubicacion(productoDTO.getUbicacion().getId());
+			Estado nuevoEstado = new Estado(productoDTO.getEstado().getId());
+			producto.setUbicacion(nuevaUbicacion);
+			producto.setEstado(nuevoEstado);
 			producto.setVerificado(true);
 			producto.setEstaActivo(true);
 			productoRepo.save(producto);

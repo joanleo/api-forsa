@@ -92,9 +92,12 @@ public class ProductoController {
 	
 	@PatchMapping("/{id}")
 	@ApiOperation(value = "Verifica un activo", notes = "Actualiza un activo por su id")
-	public ResponseEntity<ProductoDTO> verify(@PathVariable(name = "id") String id/*, @RequestParam String ubicacion, @RequestParam String estado*/){
-		
-		return new ResponseEntity<ProductoDTO>(productoService.receive(id/*, ubicacion, estado*/), HttpStatus.ACCEPTED);
+	public ResponseEntity<ProductoDTO> verify(@PathVariable(name = "id") String id,
+												@RequestBody(required=false) ProductoDTO productoDTO){
+		if(productoDTO == null) {
+			throw new IllegalArgumentException("Falta informacion");
+		}
+		return new ResponseEntity<ProductoDTO>(productoService.receive(id, productoDTO), HttpStatus.ACCEPTED);
 	}
 	
 	@PostMapping("/cargar")
