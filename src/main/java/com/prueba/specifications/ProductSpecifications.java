@@ -64,6 +64,9 @@ public class ProductSpecifications {
 			if(searchDTO.getEstaActivo() != null && !searchDTO.getEstaActivo()) {
 				predicates.add(criteryBuilder.isFalse(root.get("estaActivo").as(Boolean.class)));				
 			}
+			if(searchDTO.getMotivoIngreso() != null) {
+				predicates.add(criteryBuilder.like(root.get("motivoIngreso"), "%"+searchDTO.getMotivoIngreso()+"%"));
+			}
 			
 			
 			

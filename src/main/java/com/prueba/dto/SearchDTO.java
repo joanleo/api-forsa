@@ -30,6 +30,8 @@ public class SearchDTO {
 	
 	private Boolean estaActivo;
 	
+	private String motivoIngreso;
+	
 
 	public SearchDTO() {
 		super();
@@ -121,6 +123,14 @@ public class SearchDTO {
 
 	public void setEstaActivo(Boolean estaActivo) {
 		this.estaActivo = estaActivo;
+	}
+
+	public String getMotivoIngreso() {
+		return motivoIngreso;
+	}
+
+	public void setMotivoIngreso(String motivoIngreso) {
+		this.motivoIngreso = motivoIngreso;
 	}
 
 	@Override
