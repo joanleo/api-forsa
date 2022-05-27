@@ -44,7 +44,7 @@ public class ProductoDTO {
 	
 	private String nconfirmacion;
 	
-	private String motivoIngreso;
+	private String motivoIngreso ="Compra";
 
 	public String getCodigoPieza() {
 		return codigoPieza;

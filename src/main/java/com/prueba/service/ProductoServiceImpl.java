@@ -134,12 +134,11 @@ public class ProductoServiceImpl implements ProductoService {
 			throw new ResourceNotFoundException("Producto", "No existe", id);
 		}
 		
-		/*if(producto.getVerificado() == false) {
+		if(!producto.getVerificado() && producto.getEstaActivo()) {
 			producto.setEstaActivo(false);
 		}else {
 			throw new IllegalAccessError("No es posible realizar la accion solicitada");
-		}*/
-		producto.setEstaActivo(false);
+		}
 		
 		productoRepo.save(producto);
 
@@ -158,16 +157,14 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Override
 	public ProductoDTO receive(String id/*, String ubicacion, String estado*/) {
-		Producto producto = productoRepo.findByCodigoPieza(id);
 		
-		
+		Producto producto = productoRepo.findByCodigoPieza(id);		
 		if(producto == null) {
 			throw new ResourceNotFoundException("Producto", "No existe", id);
 		}
 		
 		if(!producto.getVerificado() && producto.getEstaActivo()) {
-			//Capturar datos de la empresa del usuario
-			
+			//Capturar datos de la empresa del usuario		
 			Empresa empresa = empresaRepo.findByNitOrderByFecha(producto.getEmpresa().getNit());
 			
 			String[] nconfirmacion = new String[2];
@@ -188,7 +185,6 @@ public class ProductoServiceImpl implements ProductoService {
 			producto.setNconfirmacion(nconf);
 			System.out.println(nconf);
 			
-			
 			/*producto.setUbicacion(ubicacion);
 			producto.setEstado(estado);*/
 			producto.setVerificado(true);
@@ -198,11 +194,15 @@ public class ProductoServiceImpl implements ProductoService {
 			empresa.setNconfimacion(nconf);
 			empresaRepo.save(empresa);
 			
-			return mapearEntidad(producto);
 			
-		}else {
+			
+		}else if(producto.getVerificado()){
 			throw new IllegalAccessError("No se puede realizar esta accion el activo ya fue verificado");
+		}else if(!producto.getEstaActivo()) {
+			throw new IllegalAccessError("No se puede realizar esta accion el activo no esta activo");
 		}
+		
+		return mapearEntidad(producto);
 	}
 	
 
