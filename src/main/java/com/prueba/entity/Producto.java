@@ -48,11 +48,11 @@ public class Producto {
     private Boolean verificado = false;
     
     @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
-    private Boolean estaActivo = false;
+    private Boolean estaActivo = true;
     
     
     @Column(name = "vcmotivoIngreso")
-    private String motivoIngreso;
+    private String motivoIngreso = "Compra";
     
     @UpdateTimestamp
 	@Column(name = "dupdatefecha")

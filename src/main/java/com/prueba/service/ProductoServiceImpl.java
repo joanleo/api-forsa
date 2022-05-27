@@ -28,6 +28,8 @@ import com.prueba.dto.ProductoDTO;
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Eror;
+import com.prueba.entity.Fabricante;
+import com.prueba.entity.Familia;
 import com.prueba.entity.Producto;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
@@ -230,12 +232,19 @@ public class ProductoServiceImpl implements ProductoService {
 		try {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			String currentUserName = "";
-			if ((authentication != null)) {
+			if (authentication != null) {
 			    currentUserName = authentication.getName();
+			}else {
+				throw new IllegalAccessException("Debe estar logueado para realizar esta accion");
+			}
+			String extArchivo = file.getOriginalFilename().split("\\.")[1];
+			System.out.println(extArchivo);
+			if(!extArchivo.equals("txt")) {
+				throw new IllegalArgumentException("El tipo de archivo no es compatible");
 			}
 			String ruta = webRequest.getDescription(false);
-			Eror errorr = erorRepo.findTopByOrderByIdErrorDesc();
-			int idError = errorr.getIdError();
+			//Eror errorr = erorRepo.findTopByOrderByIdErrorDesc();
+			//int idError = errorr.getIdError();
 			int count = 0;
 			if(!file.isEmpty()) {
 				File newFile = new File("src/main/resources/targetFile.tmp");
@@ -245,21 +254,30 @@ public class ProductoServiceImpl implements ProductoService {
 				LineIterator it = FileUtils.lineIterator(newFile);
 				
 				boolean error = false;
-				List<String> errores = new ArrayList<String>(); 
+				List<String> errores = new ArrayList<String>();
+				List<Producto> listProductos = new ArrayList<Producto>();
 				
 				try {
 					Pattern special = Pattern.compile("[!@#$%&*()_+=|<>?{}\\\\[\\\\]~-]", Pattern.CASE_INSENSITIVE);
 					String lineError, codigoPiezaError, nombreError, areaError, ordenError, familiaError, fabricanteError, empresaError = "";
 					Long start = System.currentTimeMillis();
+					System.out.println("Inicio guadado errores 1 a 1");
 					while(it.hasNext()) {
+						boolean erroresCiclo = false;
 						count++;
 						String line = it.nextLine();
 						String[] producto = line.split("\\|");
 						lineError = "El tamaño del arreglo esta errado linea " + count;
+						
+						Float area = 0.0f;
+						Integer familia = 0;
+						Integer fabricante = 0;
+						Integer empresa = 0;
+						
 						if(producto.length > 7) {
 							error = true;
-							Eror nuevoError = new Eror(idError, ruta, lineError, currentUserName);
-							erorRepo.save(nuevoError);
+							erroresCiclo = true;
+							//Eror nuevoError = new Eror(idError, ruta, lineError, currentUserName);
 							errores.add(lineError);
 						}
 						//System.out.println("Codigopieza " + producto[0] + " Tipo " + ((Object)producto[0]).getClass().getSimpleName());
@@ -268,9 +286,9 @@ public class ProductoServiceImpl implements ProductoService {
 						boolean CodigopiezaconstainsSymbols = matcher.find();
 						if(CodigopiezaconstainsSymbols) {
 							error = true;
+							erroresCiclo = true;
 							codigoPiezaError = "Codigopieza Contiene caracteres especiales linea " + count;
-							Eror nuevoError = new Eror(idError, ruta, codigoPiezaError, currentUserName);
-							erorRepo.save(nuevoError);
+							//Eror nuevoError = new Eror(idError, ruta, codigoPiezaError, currentUserName);
 							errores.add(codigoPiezaError);
 						}						
 						
@@ -280,20 +298,20 @@ public class ProductoServiceImpl implements ProductoService {
 						boolean nombreconstainsSymbols = matcher.find();
 						if(nombreconstainsSymbols) {
 							error = true;
+							erroresCiclo = true;
 							nombreError = "Nombre Contiene caracteres especiales linea " + count;
-							Eror nuevoError = new Eror(idError, ruta, nombreError, currentUserName);
-							erorRepo.save(nuevoError);
+							//Eror nuevoError = new Eror(idError, ruta, nombreError, currentUserName);
 							errores.add(nombreError);
 						}						
 						
 						try {
 							//System.out.println("Area " + producto[2] + " Tipo " + ((Object)Float.parseFloat(producto[2])).getClass().getSimpleName());
-							Float area = Float.parseFloat(producto[2]);
+							area = Float.parseFloat(producto[2]);
 						} catch (Exception e) {
 							error = true;
+							erroresCiclo = true;
 							areaError = "Error en el campo Area en la linea " + count + " " + e;
-							Eror nuevoError = new Eror(idError, ruta, areaError, currentUserName);
-							erorRepo.save(nuevoError);
+							//Eror nuevoError = new Eror(idError, ruta, areaError, currentUserName);
 							errores.add(areaError);
 						}
 						
@@ -303,49 +321,53 @@ public class ProductoServiceImpl implements ProductoService {
 						boolean ordenconstainsSymbols = matcher.find();
 						if(ordenconstainsSymbols) {
 							error = true;
+							erroresCiclo = true;
 							ordenError = "Orden Contiene caracteres especiales linea " + count;
-							Eror nuevoError = new Eror(idError, ruta, ordenError, currentUserName);
-							erorRepo.save(nuevoError);
+							//Eror nuevoError = new Eror(idError, ruta, ordenError, currentUserName);
 							errores.add(ordenError);
 						}						
 						
 						try {
 							//System.out.println("Familia " + producto[4] + " Tipo " + ((Object)Integer.parseInt(producto[4])).getClass().getSimpleName());
-							Integer familia = Integer.parseInt(producto[4]);
+							familia = Integer.parseInt(producto[4]);
 						} catch (Exception e) {
 							error = true;
+							erroresCiclo = true;
 							familiaError = "Error en el campo Familia en la linea " + count + " " + e;
-							Eror nuevoError = new Eror(idError, ruta, familiaError, currentUserName);
-							erorRepo.save(nuevoError);
+							//Eror nuevoError = new Eror(idError, ruta, familiaError, currentUserName);
 							errores.add(familiaError);
 						}
 											
 						try {
 							//System.out.println("Fabricante " + producto[5] + "  Tipo " + ((Object)Integer.parseInt(producto[5])).getClass().getSimpleName());
-							Integer fabricante = Integer.parseInt(producto[5]);
+							fabricante = Integer.parseInt(producto[5]);
 						} catch (Exception e) {
 							error = true;
+							erroresCiclo = true;
 							fabricanteError = "Error en el campo Fabricante en la linea " + count + " " + e;
-							Eror nuevoError = new Eror(idError, ruta, fabricanteError, currentUserName);
-							erorRepo.save(nuevoError);
-							System.out.println(e);
+							//Eror nuevoError = new Eror(idError, ruta, fabricanteError, currentUserName);
 							errores.add(fabricanteError);
 						}
 						
 						
 						try {
 							//System.out.println("Empresa " + producto[6] + " Tipo " + ((Object)Integer.parseInt(producto[6])).getClass().getSimpleName());
-							Integer empresa = Integer.parseInt(producto[6]);
+							empresa = Integer.parseInt(producto[6]);
 						} catch (Exception e) {
 							error = true;
+							erroresCiclo = true;
 							empresaError = "Error en el campo Empresa en la linea " + count + " " + e;
-							Eror nuevoError = new Eror(idError, ruta, empresaError, currentUserName);
-							erorRepo.save(nuevoError);
-							System.out.println(e);
+							//Eror nuevoError = new Eror(idError, ruta, empresaError, currentUserName);
 							errores.add(empresaError);
 						}
 						
-						
+						if(!erroresCiclo) {
+							Familia familiaAdd = new Familia(new Long(familia));
+							Fabricante fabricanteAdd = new Fabricante(new Long(fabricante));
+							Empresa empresaAdd = new Empresa(new Long(empresa));
+							Producto product = new Producto(codigoPieza,nombre,area,orden,familiaAdd,fabricanteAdd,empresaAdd);
+							listProductos.add(product);
+						}
 					}
 					Long end = System.currentTimeMillis();
 					System.out.println("Duracion de carga de errores linea por linea "+count+" lineas: "+(end-start)/1000+" segundos");
@@ -353,8 +375,11 @@ public class ProductoServiceImpl implements ProductoService {
 					System.out.println(e);
 				}
 				
+				productoRepo.saveAll(listProductos);
+				
 				if(error) {
-					//Eror errorr = erorRepo.findTopByOrderByIdErrorDesc();
+					Eror errorr = erorRepo.findTopByOrderByIdErrorDesc();
+					
 					List<Eror> erroresCarga = new ArrayList<Eror>();
 					if(errorr == null) {
 						System.out.println("Primer registro");
@@ -365,7 +390,7 @@ public class ProductoServiceImpl implements ProductoService {
 						}
 						erorRepo.saveAll(erroresCarga);
 					}else {
-						//int idError = errorr.getIdError();
+						int idError = errorr.getIdError();
 						System.out.println("Ya existen registros: "+ idError);
 						idError+=1;
 						System.out.println("Siguiente registro: "+ idError);
@@ -401,6 +426,7 @@ public class ProductoServiceImpl implements ProductoService {
 					//erorRepo.saveAll(errores);*/
 					}
 				}
+				
 			}else {
 				System.out.println("Archivo vacio");
 			}

@@ -3,7 +3,7 @@ import string
 
 def createFile():
     with open("archivo.txt", "w") as file:
-        lista = string.ascii_uppercase + "[!@#$%&*()_+=|<>?{}\\[\\]~-]"
+        lista = string.ascii_uppercase #+ "[!@#$%&*()_+=|<>?{}\\[\\]~-]"
         for row in range(100):
             codigopieza = randint(10000,99999)
 
@@ -15,7 +15,7 @@ def createFile():
             
             orden = ''.join((str(letra) for letra in sample(lista, 2))) + "  " + str(row+1)
 
-            familias = [1,2,3,4,5]
+            familias = [1,2,3,4]
             familia = choice(familias)
 
             fabricantes = [11111, 12345]
