@@ -131,7 +131,7 @@ public class ProductoController {
         
         
         //List<Producto> productos = productoRepo.findAllByEstaActivoTrue();
-        
+        System.out.println("Descarga de activos en csv");
 		if (searchDTO != null) {
 			System.out.println("Se envio SearchDTO");
 			List<Producto> productos =  productoService.searchProducts(searchDTO);
