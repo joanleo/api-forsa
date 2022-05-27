@@ -27,6 +27,13 @@ public class SearchDTO {
 	private Ubicacion ubicacion;
 	
 	private Boolean verificado = false;
+	
+	private Boolean estaActivo = false;
+	
+
+	public SearchDTO() {
+		super();
+	}
 
 	public String getCodigoPieza() {
 		return codigoPieza;
@@ -106,6 +113,14 @@ public class SearchDTO {
 
 	public void setUbicacion(Ubicacion ubicacion) {
 		this.ubicacion = ubicacion;
+	}
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
 	}
 
 }

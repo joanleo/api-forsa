@@ -48,6 +48,14 @@ public class ProductSpecifications {
 			if(searchDTO.getUbicacion() != null) {
 				predicates.add(criteryBuilder.equal(root.get("ubicacion"), searchDTO.getUbicacion()));
 			}
+			if(searchDTO.getVerificado()) {
+				predicates.add(criteryBuilder.isTrue(root.get("verificado").as(Boolean.class)));
+			}
+			if(searchDTO.getEstaActivo()) {
+				predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));				
+			}
+			
+			
 			
 			query.orderBy(criteryBuilder.desc(root.get("codigoPieza")));
 			
