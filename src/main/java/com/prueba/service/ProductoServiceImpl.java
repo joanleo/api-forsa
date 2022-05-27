@@ -174,8 +174,6 @@ public class ProductoServiceImpl implements ProductoService {
 			String[] nconfirmacion = new String[2];
 			Integer numero = 0;
 			if(empresa != null && empresa.getNconfimacion() != null) {
-				System.out.println(empresa.getNombre());
-				System.out.println(empresa.getNconfimacion());
 				nconfirmacion = empresa.getNconfimacion().split("-");			
 				numero =  Integer.parseInt(nconfirmacion[1]) + 1;
 			}else {
@@ -187,7 +185,6 @@ public class ProductoServiceImpl implements ProductoService {
 			System.out.println("afuera"+numero);
 			String nconf = nconfirmacion[0] + "-" + numero.toString();
 			producto.setNconfirmacion(nconf);
-			System.out.println(nconf);
 			Ubicacion nuevaUbicacion = new Ubicacion(productoDTO.getUbicacion().getId());
 			Estado nuevoEstado = new Estado(productoDTO.getEstado().getId());
 			producto.setUbicacion(nuevaUbicacion);

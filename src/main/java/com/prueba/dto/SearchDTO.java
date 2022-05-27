@@ -26,9 +26,9 @@ public class SearchDTO {
 	
 	private Ubicacion ubicacion;
 	
-	private Boolean verificado = false;
+	private Boolean verificado;
 	
-	private Boolean estaActivo = false;
+	private Boolean estaActivo;
 	
 
 	public SearchDTO() {
@@ -121,6 +121,14 @@ public class SearchDTO {
 
 	public void setEstaActivo(Boolean estaActivo) {
 		this.estaActivo = estaActivo;
+	}
+
+	@Override
+	public String toString() {
+		return "SearchDTO [codigoPieza=" + codigoPieza + ", descripcion=" + descripcion + ", area=" + area + ", orden="
+				+ orden + ", fabricante=" + fabricante + ", familia=" + familia + ", estado=" + estado + ", empresa="
+				+ empresa + ", ubicacion=" + ubicacion + ", verificado=" + verificado + ", estaActivo=" + estaActivo
+				+ "]";
 	}
 
 }

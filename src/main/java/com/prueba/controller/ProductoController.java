@@ -61,6 +61,7 @@ public class ProductoController {
 											@RequestParam(required=false, defaultValue = "0") Integer items, 
 											@RequestBody(required=false) SearchDTO searchDTO){
 		System.out.println("Controller busqueda por letras 2 "+ items);
+		System.out.println(searchDTO);
 		Page<Producto> productos =  productoService.searchProducts(searchDTO, pagina, items);
 		return new ApiResponse<>(productos.getSize(), productos);
 	}
@@ -95,7 +96,7 @@ public class ProductoController {
 	public ResponseEntity<ProductoDTO> verify(@PathVariable(name = "id") String id,
 												@RequestBody(required=false) ProductoDTO productoDTO){
 		if(productoDTO == null) {
-			throw new IllegalArgumentException("Falta informacion");
+			throw new IllegalArgumentException("Falta informacion"); 
 		}
 		return new ResponseEntity<ProductoDTO>(productoService.receive(id, productoDTO), HttpStatus.ACCEPTED);
 	}

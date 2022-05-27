@@ -18,6 +18,8 @@ public class ProductSpecifications {
 	public Specification<Producto> getProductos(SearchDTO searchDTO){
 		return (root, query, criteryBuilder) ->{
 			
+			System.out.println(searchDTO);
+			
 			List<Predicate> predicates = new ArrayList<>();
 			
 			if(searchDTO.getArea() != null && !searchDTO.getArea().isEmpty()) {
@@ -48,11 +50,19 @@ public class ProductSpecifications {
 			if(searchDTO.getUbicacion() != null) {
 				predicates.add(criteryBuilder.equal(root.get("ubicacion"), searchDTO.getUbicacion()));
 			}
-			if(searchDTO.getVerificado()) {
+			if(searchDTO.getVerificado() != null && searchDTO.getVerificado() ) {
+				
 				predicates.add(criteryBuilder.isTrue(root.get("verificado").as(Boolean.class)));
 			}
-			if(searchDTO.getEstaActivo()) {
+			if(searchDTO.getVerificado() != null && !searchDTO.getVerificado() ) {
+							
+				predicates.add(criteryBuilder.isFalse(root.get("verificado").as(Boolean.class)));
+			}
+			if(searchDTO.getEstaActivo() != null && searchDTO.getEstaActivo()) {
 				predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));				
+			}
+			if(searchDTO.getEstaActivo() != null && !searchDTO.getEstaActivo()) {
+				predicates.add(criteryBuilder.isFalse(root.get("estaActivo").as(Boolean.class)));				
 			}
 			
 			
