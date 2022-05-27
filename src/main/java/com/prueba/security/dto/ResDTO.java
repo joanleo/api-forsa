@@ -4,19 +4,19 @@ import org.springframework.http.HttpStatus;
 
 public class ResDTO {
 
-	String respuesta;
+	String response;
 	HttpStatus status;
 	
 	public ResDTO(String respuesta) {
 		super();
-		this.respuesta = respuesta;
+		this.response = respuesta;
 
 	}
 	public String getRespuesta() {
-		return respuesta;
+		return response;
 	}
 	public void setRespuesta(String respuesta) {
-		this.respuesta = respuesta;
+		this.response = respuesta;
 	}
 
 }
