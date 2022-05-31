@@ -238,7 +238,6 @@ public class ProductoServiceImpl implements ProductoService {
 				throw new IllegalAccessException("Debe estar logueado para realizar esta accion");
 			}
 			String extArchivo = file.getOriginalFilename().split("\\.")[1];
-			System.out.println(extArchivo);
 			if(!extArchivo.equals("txt")) {
 				throw new IllegalArgumentException("El tipo de archivo no es compatible");
 			}
@@ -367,6 +366,8 @@ public class ProductoServiceImpl implements ProductoService {
 							Empresa empresaAdd = new Empresa(new Long(empresa));
 							Producto product = new Producto(codigoPieza,nombre,area,orden,familiaAdd,fabricanteAdd,empresaAdd);
 							listProductos.add(product);
+						}else {
+							System.out.println("Error");
 						}
 					}
 					Long end = System.currentTimeMillis();
@@ -374,9 +375,29 @@ public class ProductoServiceImpl implements ProductoService {
 				} catch (Exception e) {
 					System.out.println(e);
 				}
+				Long startProducts = System.currentTimeMillis();
 				
-				productoRepo.saveAll(listProductos);
+				File filename = new File("src/main/resources/procts.txt");
+			 	RandomAccessFile stream = new RandomAccessFile(filename, "rw");
+			 	FileChannel channel = stream.getChannel(); 
+				for(Producto producto: listProductos) {
+									    
+				    String linea = producto.toString()+"\r\n";
+				    byte[] strBytes = linea.getBytes();
+				    ByteBuffer buffer = ByteBuffer.allocate(strBytes.length);
+				    buffer.put(strBytes);
+				    buffer.flip();
+				    channel.write(buffer);
+				    
+				}
+				stream.close();
+			    channel.close();
 				
+				
+				
+				productoRepo.bulkLoadData();
+				Long endProducts = System.currentTimeMillis();
+				System.out.println("Duracion de carga de " + listProductos.size() + " productos: "+(endProducts-startProducts)/1000+" segundos");
 				if(error) {
 					Eror errorr = erorRepo.findTopByOrderByIdErrorDesc();
 					
@@ -388,9 +409,9 @@ public class ProductoServiceImpl implements ProductoService {
 							//System.out.println(nuevoError);
 						 	erroresCarga.add(nuevoError);
 						}
-						erorRepo.saveAll(erroresCarga);
+						//erorRepo.saveAll(erroresCarga);
 					}else {
-						int idError = errorr.getIdError();
+						/*int idError = errorr.getIdError();
 						System.out.println("Ya existen registros: "+ idError);
 						idError+=1;
 						System.out.println("Siguiente registro: "+ idError);
@@ -404,7 +425,7 @@ public class ProductoServiceImpl implements ProductoService {
 						 	erroresCarga.add(nuevoError);
 						 	
 						    
-						    String linea = nuevoError.toString()+"|";
+						    String linea = nuevoError.toString()+"\r\n";
 						    byte[] strBytes = linea.getBytes();
 						    ByteBuffer buffer = ByteBuffer.allocate(strBytes.length);
 						    buffer.put(strBytes);
@@ -417,7 +438,7 @@ public class ProductoServiceImpl implements ProductoService {
 						Long start = System.currentTimeMillis();
 						erorRepo.saveAll(erroresCarga);
 						Long end = System.currentTimeMillis();
-						System.out.println("Duracion de carga de errores con "+count+" lineas: "+(end-start)/1000+" segundos");
+						System.out.println("Duracion de carga de errores con "+count+" lineas: "+(end-start)/1000+" segundos");*/
 
 					/*System.out.println("los errores son:");
 					for(String er: errores) {

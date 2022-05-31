@@ -224,10 +224,8 @@ public class Producto {
 
 	@Override
 	public String toString() {
-		return "Producto [codigoPieza=" + codigoPieza + ", descripcion=" + descripcion + ", area=" + area + ", orden="
-				+ orden + ", familia=" + familia + ", fabricante=" + fabricante + ", empresa=" + empresa + ", estado="
-				+ estado + ", ubicacion=" + ubicacion + ", verificado=" + verificado + ", estaActivo=" + estaActivo
-				+ ", nconfirmacion=" + nconfirmacion + ", motivoIngreso=" + motivoIngreso + "]";
+		return codigoPieza + "," + descripcion + "," + area + ","
+				+ orden + "," + familia.getId() + "," + fabricante.getNit() + "," + empresa.getNit();
 	}
     
     

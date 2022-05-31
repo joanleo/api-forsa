@@ -4,7 +4,7 @@ import string
 def createFile():
     with open("archivo.txt", "w") as file:
         lista = string.ascii_uppercase #+ "[!@#$%&*()_+=|<>?{}\\[\\]~-]"
-        for row in range(100):
+        for row in range(50):
             codigopieza = randint(10000,99999)
 
             nom = ''.join((str(letra) for letra in sample(lista, 8)))
@@ -13,7 +13,7 @@ def createFile():
             area = round(random(), 2)
 
             
-            orden = ''.join((str(letra) for letra in sample(lista, 2))) + "  " + str(row+1)
+            orden = ''.join((str(letra) for letra in sample(lista, 2))) #+ "  " + str(row+1)
 
             familias = [1,2,3,4]
             familia = choice(familias)
