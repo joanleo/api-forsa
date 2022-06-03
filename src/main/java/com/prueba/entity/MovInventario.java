@@ -15,12 +15,16 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 //Para realizar inventariio
 
 @Entity
 @Table(name = "mov_inventario", uniqueConstraints = { @UniqueConstraint(columnNames = { "nidmov" }) })
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class MovInventario {
 	
 	@Id
@@ -38,8 +42,9 @@ public class MovInventario {
 	@OneToOne(targetEntity = Ubicacion.class, cascade = CascadeType.ALL)
 	private Ubicacion ubicacion;
 	
-	@JsonIgnore
+	
 	@OneToMany(mappedBy = "movimiento", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
 	public List<DetalleInv> detalles = new ArrayList<DetalleInv>();
 
 	public MovInventario() {

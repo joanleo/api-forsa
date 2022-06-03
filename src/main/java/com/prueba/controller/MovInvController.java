@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,9 +48,7 @@ public class MovInvController {
 												 @RequestParam(required=false) @DateTimeFormat(pattern = "dd-MM-yyyy")Date  desde,
 												 @RequestParam(required=false) @DateTimeFormat(pattern = "dd-MM-yyyy")Date  hasta)throws ParseException{
 		
-		
-		System.out.println(desde);
-		
+				
 		if(letras != null) {
 			System.out.println("letras "+letras);
 			Page<MovInventario> inventarios = movInvService.searchInv(letras, pagina, items);
@@ -59,8 +58,12 @@ public class MovInvController {
 			return new ApiResponse<>(inventarios.getSize(), inventarios);
 		}
 		
-		
-		//return null;
+	}
+	
+	@GetMapping("/detalle/{id}")
+	@ApiOperation(value = "Encuentra un inventario", notes = "Retorna un inventario segun el numero de inventario")
+	public ResponseEntity<MovInventario> getInventario(@PathVariable Long id){
+		return ResponseEntity.ok(movInvService.getInventario(id));
 	}
 
 }

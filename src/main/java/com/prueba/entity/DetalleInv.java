@@ -9,18 +9,25 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "detalle_mov")
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class DetalleInv {
 
 	@EmbeddedId
 	private DetalleInv_id id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@MapsId("idMov")
+	@JsonBackReference
 	private MovInventario movimiento;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@MapsId("codigoPieza")
 	private Producto producto;
 

@@ -75,4 +75,12 @@ public class MovInventarioServiceImp implements MovInventarioService {
 		return inventarios;
 	}
 
+	@Override
+	public MovInventario getInventario(Long id) {
+
+		MovInventario inventario = movInvRepo.findById(id)
+									.orElseThrow(()-> new ResourceNotFoundException("inventario", "id", id));
+		return inventario;
+	}
+
 }

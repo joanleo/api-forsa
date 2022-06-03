@@ -13,4 +13,6 @@ public interface MovInventarioService {
 
 	Page<MovInventario> list(Integer pagina, Integer items);
 
+	MovInventario getInventario(Long id);
+
 }
