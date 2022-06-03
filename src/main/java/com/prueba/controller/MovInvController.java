@@ -61,7 +61,7 @@ public class MovInvController {
 	}
 	
 	@GetMapping("/detalle/{id}")
-	@ApiOperation(value = "Encuentra un inventario", notes = "Retorna un inventario segun el numero de inventario")
+	@ApiOperation(value = "Encuentra un inventario", notes = "Retorna un inventario con detalle segun el numero de inventario")
 	public ResponseEntity<MovInventario> getInventario(@PathVariable Long id){
 		return ResponseEntity.ok(movInvService.getInventario(id));
 	}
