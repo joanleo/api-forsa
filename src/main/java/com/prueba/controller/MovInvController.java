@@ -1,7 +1,5 @@
 package com.prueba.controller;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.apache.tomcat.util.json.ParseException;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.MovInventarioDTO;
 import com.prueba.entity.MovInventario;
-import com.prueba.entity.Producto;
 import com.prueba.service.MovInventarioService;
 
 import io.swagger.annotations.Api;
@@ -42,7 +39,8 @@ public class MovInvController {
 	}
 	
 	@GetMapping
-	@ApiOperation(value = "Lista los inventarios existentes", notes = "Retorna los inventarios que se encuentren en el rango de fechas dado o que en su nombre contenga las letras indicadas")
+	@ApiOperation(value = "Lista los inventarios existentes", notes = "Retorna los inventarios que se encuentren en el rango de fechas dado o que en su nombre "
+			+ "	contenga los valores  indicadas en la variable letras. Si no se incluye ningun valor retorna todos los inventarios existentes")
 	public ApiResponse<Page<MovInventario>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 												 @RequestParam(required=false, defaultValue = "10") Integer items,
 												 @RequestParam(required=false) String letras,
@@ -53,12 +51,10 @@ public class MovInvController {
 		System.out.println(desde);
 		
 		if(letras != null) {
-			System.out.println("Controller busqueda por letras 1");
 			System.out.println("letras "+letras);
 			Page<MovInventario> inventarios = movInvService.searchInv(letras, pagina, items);
 			return new ApiResponse<>(inventarios.getSize(), inventarios);
 		}else {
-			System.out.println("Controller busqueda por letras 3");
 			Page<MovInventario> inventarios = movInvService.list(pagina, items);
 			return new ApiResponse<>(inventarios.getSize(), inventarios);
 		}
