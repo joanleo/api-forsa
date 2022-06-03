@@ -74,8 +74,7 @@ public class Producto {
     @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "nidubicacion")
     private Ubicacion ubicacion;
-
-
+    
 	public String getCodigoPieza() {
 		return codigoPieza;
 	}
@@ -220,6 +219,11 @@ public class Producto {
 		this.familia = familia;
 		this.fabricante = fabricante;
 		this.empresa = empresa;
+	}
+
+	public Producto(String codigoPieza) {
+		super();
+		this.codigoPieza = codigoPieza;
 	}
 
 	@Override

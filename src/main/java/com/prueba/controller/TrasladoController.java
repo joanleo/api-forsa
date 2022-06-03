@@ -1,0 +1,60 @@
+package com.prueba.controller;
+
+import java.time.LocalDate;
+
+import org.apache.tomcat.util.json.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.prueba.dto.ApiResponse;
+import com.prueba.dto.TrasladoDTO;
+import com.prueba.entity.Traslado;
+import com.prueba.service.TrasladoService;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@RestController
+@RequestMapping("/traslados")
+@Api(tags = "Traslados", description = "Operaciones referentes a los traslados")
+public class TrasladoController {
+	
+	@Autowired
+	private TrasladoService trasladoService;
+		
+	@PostMapping
+	@ApiOperation(value = "Crea un traslado", notes = "Crea un nuevo traslado")
+	public ApiResponse<TrasladoDTO> create(@RequestBody TrasladoDTO trasladoDTO){
+		System.out.println(trasladoDTO.getCantProductos());
+		return new ApiResponse<>(trasladoService.create(trasladoDTO), HttpStatus.CREATED);
+	}
+	
+	@GetMapping("/{id}")
+	@ApiOperation(value = "Encuentra un traslado", notes = "Retorna el traslado segun el id indicado")
+	public ResponseEntity<Traslado> get(@PathVariable(name = "id")Long id){
+		
+		return ResponseEntity.ok(trasladoService.getTraslado(id));
+	}
+	
+	@GetMapping("/fecha")
+	@ApiOperation(value = "Encuentra traslados entre fechas dadas", notes = "Retorna listado de traslado entre dos fechas dadas")
+	public ApiResponse<Page<Traslado>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+											@RequestParam(required=false, defaultValue = "0") Integer items,
+											@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate desde,
+											@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate hasta)throws ParseException{
+		Page<Traslado> traslados = trasladoService.findBetweenDates(desde, hasta, pagina, items);
+		
+		return new ApiResponse<>(traslados.getSize(), traslados);
+	}
+
+}

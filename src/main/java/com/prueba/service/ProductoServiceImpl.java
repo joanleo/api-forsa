@@ -62,14 +62,15 @@ public class ProductoServiceImpl implements ProductoService {
 	public ProductoDTO create(ProductoDTO productoDTO) {
 		Producto producto = mapearDTO(productoDTO);
 		Producto exist = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
-		Empresa empresa = empresaRepo.findByNitOrderByFecha(productoDTO.getEmpresa().getNit());
-		if(empresa != null) {
+		//Empresa empresa = empresaRepo.findByNitOrderByFecha(productoDTO.getEmpresa().getNit());
+		
+		/*if(empresa != null) {
 			System.out.println(empresa.getNconfimacion());			
 		}else {
 			System.out.println("error en la consulta de empresa");
-		}
+		}*/
 		if(exist == null) {
-			System.out.println(producto.toString());
+			//System.out.println(producto.toString());
 			productoRepo.save(producto);
 		}else {
 			throw new IllegalAccessError("El producto con id "+ producto.getCodigoPieza() + " que trata de crear ya existe");
@@ -227,6 +228,7 @@ public class ProductoServiceImpl implements ProductoService {
 		
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public String loadFile(MultipartFile file, WebRequest webRequest) {
 		try {

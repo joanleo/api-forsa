@@ -44,7 +44,7 @@ public class EstadoServiceImpl implements EstadoService {
 	@Override
 	public EstadoDTO getEstado(Long id) {
 		Estado estado = estadoRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("EStado", "id", id));
+				.orElseThrow(() -> new ResourceNotFoundException("Estado", "id", id));
 		
 		return mapearEntidad(estado);
 	}

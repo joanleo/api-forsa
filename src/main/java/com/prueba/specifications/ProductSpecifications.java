@@ -76,16 +76,16 @@ public class ProductSpecifications {
 		};
 	}
 		
-		public Specification<Producto> getProductosActivos(String letras){
-			return (root, query, criteryBuilder) ->{
-				List<Predicate> predicates = new ArrayList<>();
-				
-				predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+letras+ "%"));
-				//Root<Producto> activo = query.from(Producto.class);
-				predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
-				
-				
-				return criteryBuilder.and(predicates.toArray(new Predicate[0]));
+	public Specification<Producto> getProductosActivos(String letras){
+		return (root, query, criteryBuilder) ->{
+			List<Predicate> predicates = new ArrayList<>();
+			
+			predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+letras+ "%"));
+			//Root<Producto> activo = query.from(Producto.class);
+			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
+			
+			
+			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
 	}
 }
