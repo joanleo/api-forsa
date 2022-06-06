@@ -20,7 +20,7 @@ import com.prueba.security.entity.Usuario;
 
 
 @Entity
-@Table(name = "empresas")
+@Table(name = "m_empresas")
 public class Empresa {
 	
 	@Temporal(TemporalType.TIMESTAMP)

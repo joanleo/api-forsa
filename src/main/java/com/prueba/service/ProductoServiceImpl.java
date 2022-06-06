@@ -262,7 +262,7 @@ public class ProductoServiceImpl implements ProductoService {
 					Pattern special = Pattern.compile("[!@#$%&*()_+=|<>?{}\\\\[\\\\]~-]", Pattern.CASE_INSENSITIVE);
 					String lineError, codigoPiezaError, nombreError, areaError, ordenError, familiaError, fabricanteError, empresaError = "";
 					Long start = System.currentTimeMillis();
-					System.out.println("Inicio guadado errores 1 a 1");
+					System.out.println("Inicio verificacion");
 					while(it.hasNext()) {
 						boolean erroresCiclo = false;
 						count++;
@@ -373,13 +373,15 @@ public class ProductoServiceImpl implements ProductoService {
 						}
 					}
 					Long end = System.currentTimeMillis();
-					System.out.println("Duracion de carga de errores linea por linea "+count+" lineas: "+(end-start)/1000+" segundos");
+					System.out.println("Duracion de le verificacion "+count+" lineas: "+(end-start)/1000+" segundos");
 				} catch (Exception e) {
 					System.out.println(e);
 				}
+				
+				System.out.println("Inicio de guardado");
 				Long startProducts = System.currentTimeMillis();
 				
-				File filename = new File("src/main/resources/procts.txt");
+				/*File filename = new File("src/main/resources/procts.txt");
 			 	RandomAccessFile stream = new RandomAccessFile(filename, "rw");
 			 	FileChannel channel = stream.getChannel(); 
 				for(Producto producto: listProductos) {
@@ -393,11 +395,11 @@ public class ProductoServiceImpl implements ProductoService {
 				    
 				}
 				stream.close();
-			    channel.close();
+			    channel.close();*/
 				
+				productoRepo.saveAll(listProductos);
 				
-				
-				productoRepo.bulkLoadData();
+				//productoRepo.bulkLoadData();
 				Long endProducts = System.currentTimeMillis();
 				System.out.println("Duracion de carga de " + listProductos.size() + " productos: "+(endProducts-startProducts)/1000+" segundos");
 				if(error) {

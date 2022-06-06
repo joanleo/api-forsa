@@ -4,7 +4,7 @@ INSERT INTO m_tipos_ubicacion
 VALUES
 (1, 'Obra');
 
-INSERT INTO mov_ubicaciones
+INSERT INTO m_ubicaciones
 (`nidubicacion`,
 `vcciudad`,
 `vcdireccion`,
@@ -49,7 +49,7 @@ VALUES
 (2,'Owner'),
 (3,'Cliente');
 
-INSERT INTO empresas
+INSERT INTO m_empresas
 (`vcnitempresa`,
 `vcnombre`,
 `nidtipo_empresa`)
