@@ -17,7 +17,7 @@ public class Estado {
     private Long id;
 	
 	@Column(name = "vcnombre", length = 20)
-    private String tipo;
+    private String tipo="";
 
 	public Long getId() {
 		return id;

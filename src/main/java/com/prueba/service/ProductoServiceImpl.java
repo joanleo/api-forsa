@@ -413,15 +413,15 @@ public class ProductoServiceImpl implements ProductoService {
 							//System.out.println(nuevoError);
 						 	erroresCarga.add(nuevoError);
 						}
-						//erorRepo.saveAll(erroresCarga);
+						erorRepo.saveAll(erroresCarga);
 					}else {
-						/*int idError = errorr.getIdError();
-						System.out.println("Ya existen registros: "+ idError);
+						int idError = errorr.getIdError();
+						//System.out.println("Ya existen registros: "+ idError);
 						idError+=1;
-						System.out.println("Siguiente registro: "+ idError);
-						File filename = new File("src/main/resources/errorFile.dat");
+						//System.out.println("Siguiente registro: "+ idError);
+						/*File filename = new File("src/main/resources/errorFile.dat");
 					 	RandomAccessFile stream = new RandomAccessFile(filename, "rw");
-					 	FileChannel channel = stream.getChannel(); 
+					 	FileChannel channel = stream.getChannel();*/ 
 						for(String er: errores) {
 							
 							Eror nuevoError = new Eror(idError, ruta, er, currentUserName);
@@ -429,20 +429,20 @@ public class ProductoServiceImpl implements ProductoService {
 						 	erroresCarga.add(nuevoError);
 						 	
 						    
-						    String linea = nuevoError.toString()+"\r\n";
+						    /*String linea = nuevoError.toString()+"\r\n";
 						    byte[] strBytes = linea.getBytes();
 						    ByteBuffer buffer = ByteBuffer.allocate(strBytes.length);
 						    buffer.put(strBytes);
 						    buffer.flip();
-						    channel.write(buffer);
+						    channel.write(buffer);*/
 						    
 						}
-						stream.close();
-					    channel.close();
+						/*stream.close();
+					    channel.close();*/
 						Long start = System.currentTimeMillis();
 						erorRepo.saveAll(erroresCarga);
 						Long end = System.currentTimeMillis();
-						System.out.println("Duracion de carga de errores con "+count+" lineas: "+(end-start)/1000+" segundos");*/
+						System.out.println("Duracion de carga de errores con "+count+" lineas: "+(end-start)/1000+" segundos");
 
 					/*System.out.println("los errores son:");
 					for(String er: errores) {

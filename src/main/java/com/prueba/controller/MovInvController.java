@@ -45,8 +45,8 @@ public class MovInvController {
 	public ApiResponse<Page<MovInventario>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 												 @RequestParam(required=false, defaultValue = "10") Integer items,
 												 @RequestParam(required=false) String letras,
-												 @RequestParam(required=false) @DateTimeFormat(pattern = "dd-MM-yyyy")Date  desde,
-												 @RequestParam(required=false) @DateTimeFormat(pattern = "dd-MM-yyyy")Date  hasta)throws ParseException{
+												 @RequestParam(required=false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date  desde,
+												 @RequestParam(required=false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date  hasta)throws ParseException{
 		
 				
 		if(letras != null) {

@@ -25,7 +25,7 @@ public class Ubicacion {
 	private String ciudad;
 	
 	@Column(name = "vcnombre", length = 32)
-	private String nombre;
+	private String nombre="";
 	
 	@ManyToOne
 	@JoinColumn(name = "nidtipo_ubicacion")

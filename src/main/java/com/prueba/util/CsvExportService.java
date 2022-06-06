@@ -23,8 +23,8 @@ public class CsvExportService {
         try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
             for (Producto producto : productos) {
                 csvPrinter.printRecord(producto.getCodigoPieza(), producto.getDescripcion(), producto.getArea(),
-                		producto.getEmpresa().getNombre(), producto.getEstado().getTipo(), producto.getFabricante().getNombre(), 
-                		producto.getFamilia().getNombre(), producto.getOrden(), producto.getUbicacion().getNombre());
+                		producto.getEmpresa().getNombre(), producto.getEstado().getTipo() == null?" ":producto.getEstado().getTipo(), producto.getFabricante().getNombre(), 
+                		producto.getFamilia().getNombre(), producto.getOrden(), producto.getUbicacion().getNombre() == null?" ":producto.getUbicacion().getNombre());
             }
         } catch (IOException e) {
             log.error("Error While writing CSV ", e);

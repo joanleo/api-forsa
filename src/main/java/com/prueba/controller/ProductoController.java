@@ -130,8 +130,8 @@ public class ProductoController {
 								@RequestParam(required=false, defaultValue = "0") Integer items,
 								@RequestParam(required=false) String letras,
 								@RequestBody(required=false) SearchDTO searchDTO) throws IOException {
-		servletResponse.setContentType("csv");
-        servletResponse.addHeader("Content-Disposition","attachment; filename=productos.csv");
+		servletResponse.setContentType("application/x-download");
+        servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "productos.csv" + "\"");
         
         
         //List<Producto> productos = productoRepo.findAllByEstaActivoTrue();
