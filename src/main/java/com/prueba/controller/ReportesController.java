@@ -11,14 +11,20 @@ import org.springframework.web.bind.annotation.RestController;
 import com.prueba.dto.ReporteVerificacionDTO;
 import com.prueba.service.ProductoService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/reportes")
+@Api(tags = "Reportes", description = "Reportes")
 public class ReportesController {
 	
 	@Autowired
 	private ProductoService productoService;
 	
 	@GetMapping("/verificacion")
+	@ApiOperation(value = "Crea un reporte de verificacion", notes = "Retorna un listado de los activos de una orden dada "
+			+ "segun el filtro indicado. Los filtros podran ser 'faltantes', 'sobrantes', 'ok', 'todos'")
 	public ResponseEntity<ReporteVerificacionDTO> getVerificacion(
 			@RequestParam(required=false) String orden,
 			@RequestParam(required=false, defaultValue = "todos") String filtro){
