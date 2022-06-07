@@ -42,6 +42,7 @@ public class MovInventarioServiceImp implements MovInventarioService {
 					.orElseThrow(() -> new ResourceNotFoundException("Ubicacion", "Id", movInventarioDto.getUbicacion().getId())); 
 			inventario.setUbicacion(ubicacion);
 			inventario.setId(movInventarioDto.getId());
+			inventario.setRealizo(movInventarioDto.getRealizo());
 			List<Producto> productos = movInventarioDto.getProductos();
 			
 			for(Producto producto: productos) {

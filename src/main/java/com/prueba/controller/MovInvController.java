@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.MovInventarioDTO;
 import com.prueba.entity.MovInventario;
+import com.prueba.security.entity.Usuario;
+import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.service.MovInventarioService;
 
 import io.swagger.annotations.Api;
@@ -32,15 +36,24 @@ public class MovInvController {
 	@Autowired
 	private MovInventarioService movInvService;
 	
+	@Autowired
+	private UsuarioRepository usuarioRepo;
+	
 	@PostMapping
 	@ApiOperation(value = "Crea un inventario", notes = "Crea un nuevo inventario")
 	public ResponseEntity<MovInventarioDTO> create(@RequestBody MovInventarioDTO movInventarioDto){
 		System.out.println(movInventarioDto.getUbicacion().getId());
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		System.out.println(usuario);
+		movInventarioDto.setRealizo(usuario);
 		return new ResponseEntity<MovInventarioDTO>(movInvService.create(movInventarioDto), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	@ApiOperation(value = "Lista los inventarios existentes", notes = "Retorna los inventarios que se encuentren en el rango de fechas dado (formato de fecha 'dd-MM-yyyy') o que en su nombre "
+	@ApiOperation(value = "Lista los inventarios existentes", notes = "Retorna los inventarios que se encuentren en el rango de fechas dado (formato de fecha 'yyyy-MM-dd') o que en su nombre "
 			+ "	contenga los valores  indicadas en la variable letras. Si no se incluye ningun valor retorna todos los inventarios existentes")
 	public ApiResponse<Page<MovInventario>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 												 @RequestParam(required=false, defaultValue = "10") Integer items,

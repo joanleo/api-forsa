@@ -18,6 +18,7 @@ import javax.persistence.UniqueConstraint;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.prueba.security.entity.Usuario;
 
 //Para realizar inventariio
 
@@ -44,7 +45,18 @@ public class MovInventario {
 	
 	@OneToMany(mappedBy = "movimiento", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
-	public List<DetalleInv> detalles = new ArrayList<DetalleInv>();
+	private List<DetalleInv> detalles = new ArrayList<DetalleInv>();
+	
+	@OneToOne(targetEntity = Usuario.class, cascade = CascadeType.ALL)
+	private Usuario realizo;
+
+	public Usuario getRealizo() {
+		return realizo;
+	}
+
+	public void setRealizo(Usuario realizo) {
+		this.realizo = realizo;
+	}
 
 	public MovInventario() {
 		super();

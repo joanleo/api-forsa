@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.prueba.entity.Empresa;
 
 
@@ -31,23 +32,29 @@ public class Usuario {
     @Column(name = "vcnombre", length = 48)
     private String nombre;
     
+    @JsonIgnore
     @Column(name = "vcusername", length = 20)
     private String username;
     
+    @JsonIgnore
     @Column(name = "vcemail", length = 48)
     private String email;
     
+    @JsonIgnore
     @Column(name = "vcpassword")
     private String password;
     
+    @JsonIgnore
     @Column(name = "vctokenpassword")
     private String tokenPassword;
-
+    
+    @JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "usuarios_roles", joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "nidusuario"), 
 	inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "nidrol"))
 	private Collection<Rol> roles;
 	
+    @JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
