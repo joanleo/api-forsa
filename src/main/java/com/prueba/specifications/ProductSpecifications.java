@@ -108,6 +108,11 @@ public class ProductSpecifications {
 				predicates.add(criteryBuilder.isFalse(root.get("importado").as(Boolean.class)));
 				predicates.add(criteryBuilder.isTrue(root.get("verificado").as(Boolean.class)));
 			}
+			if(filtro != null && filtro.equalsIgnoreCase("ok" )) {
+				System.out.println("Filtro 2 " + filtro);
+				predicates.add(criteryBuilder.isTrue(root.get("importado").as(Boolean.class)));
+				predicates.add(criteryBuilder.isTrue(root.get("verificado").as(Boolean.class)));
+			}
 						
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};

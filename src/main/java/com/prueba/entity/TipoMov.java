@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "m_tipo_mov")
 public class TipoMov {
@@ -22,6 +24,7 @@ public class TipoMov {
 	@Column(name = "vcnombre", length = 20)
 	private String nombre;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;

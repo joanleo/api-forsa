@@ -20,7 +20,7 @@ public class ReportesController {
 	
 	@GetMapping("/verificacion")
 	public ResponseEntity<ReporteVerificacionDTO> getVerificacion(
-			@RequestParam String orden,
+			@RequestParam(required=false) String orden,
 			@RequestParam(required=false, defaultValue = "todos") String filtro){
 		System.out.println("Controller orden " + orden);
 		System.out.println("Controller filtro " + filtro);

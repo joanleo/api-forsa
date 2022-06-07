@@ -3,7 +3,6 @@ package com.prueba.dto;
 import java.util.List;
 
 import com.prueba.entity.Producto;
-import com.prueba.security.entity.Usuario;
 
 public class ReporteVerificacionDTO {
 	
@@ -13,9 +12,7 @@ public class ReporteVerificacionDTO {
 	
 	String filtro;
 	
-	List<Producto> faltantes;
-	
-	List<Producto> sobrantes;
+	List<Producto> activos;
 
 	/*public Usuario getRealizo() {
 		return realizo;
@@ -41,22 +38,13 @@ public class ReporteVerificacionDTO {
 		this.filtro = filtro;
 	}
 
-	public List<Producto> getFaltantes() {
-		return faltantes;
+	public List<Producto> getActivos() {
+		return activos;
 	}
 
-	public void setFaltantes(List<Producto> faltantes) {
-		this.faltantes = faltantes;
+	public void setActivos(List<Producto> activos) {
+		this.activos = activos;
 	}
-
-	public List<Producto> getSobrantes() {
-		return sobrantes;
-	}
-
-	public void setSobrantes(List<Producto> sobrantes) {
-		this.sobrantes = sobrantes;
-	}
-
 
 
 }

@@ -3,9 +3,6 @@ package com.prueba.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -38,8 +35,6 @@ import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.ErorRepository;
 import com.prueba.repository.ProductoRepository;
-import com.prueba.security.entity.Usuario;
-import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.ProductSpecifications;
 
 @Service
@@ -60,9 +55,6 @@ public class ProductoServiceImpl implements ProductoService {
 	@Autowired
 	private ErorRepository erorRepo;
 	
-	@Autowired
-	private UsuarioRepository usuarioRepo;
-
 	
 	@Override
 	public ProductoDTO create(ProductoDTO productoDTO) {
@@ -496,7 +488,7 @@ public class ProductoServiceImpl implements ProductoService {
 		Usuario usuario = usuarioRepo.findByUsername(authentication.getName()).get();
 		System.out.println(currentUserName);*/
 		List<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro));
-		List<Producto> faltantes = new ArrayList<Producto>();
+		/*List<Producto> faltantes = new ArrayList<Producto>();
 		List<Producto> sobrantes = new ArrayList<Producto>();
 		for(Producto producto: productos) {
 			if(producto != null && !producto.getImportado() && producto.getVerificado()) {
@@ -505,18 +497,19 @@ public class ProductoServiceImpl implements ProductoService {
 			if(producto != null && producto.getImportado() && !producto.getVerificado()) {
 				faltantes.add(producto);
 			}
-		}
+		}*/
 		ReporteVerificacionDTO reporte = new ReporteVerificacionDTO();
 		reporte.setOrden(orden);
 		reporte.setFiltro(filtro);
-		if(!faltantes.isEmpty()) {
+		reporte.setActivos(productos);
+		/*if(!faltantes.isEmpty()) {
 			reporte.setFaltantes(faltantes);			
 		}
 		if(!sobrantes.isEmpty()) {
 			reporte.setSobrantes(sobrantes);
 		}
-		//reporte.setRealizo(usuario);
-		
+		reporte.setRealizo(usuario);
+		*/
 		return reporte;
 	}
 	

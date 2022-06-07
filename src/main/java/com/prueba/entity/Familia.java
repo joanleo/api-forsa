@@ -30,6 +30,7 @@ public class Familia {
     @OneToMany(mappedBy = "familia")
     private List<Producto> productos;
     
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
