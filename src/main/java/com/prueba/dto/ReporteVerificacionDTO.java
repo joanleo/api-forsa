@@ -7,12 +7,56 @@ import com.prueba.security.entity.Usuario;
 
 public class ReporteVerificacionDTO {
 	
-	Usuario realizo;
+	//Usuario realizo;
 	
 	String orden;
 	
 	String filtro;
 	
-	List<Producto> productos;
+	List<Producto> faltantes;
+	
+	List<Producto> sobrantes;
+
+	/*public Usuario getRealizo() {
+		return realizo;
+	}
+
+	public void setRealizo(Usuario realizo) {
+		this.realizo = realizo;
+	}*/
+
+	public String getOrden() {
+		return orden;
+	}
+
+	public void setOrden(String orden) {
+		this.orden = orden;
+	}
+
+	public String getFiltro() {
+		return filtro;
+	}
+
+	public void setFiltro(String filtro) {
+		this.filtro = filtro;
+	}
+
+	public List<Producto> getFaltantes() {
+		return faltantes;
+	}
+
+	public void setFaltantes(List<Producto> faltantes) {
+		this.faltantes = faltantes;
+	}
+
+	public List<Producto> getSobrantes() {
+		return sobrantes;
+	}
+
+	public void setSobrantes(List<Producto> sobrantes) {
+		this.sobrantes = sobrantes;
+	}
+
+
 
 }

@@ -7,6 +7,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prueba.dto.ProductoDTO;
+import com.prueba.dto.ReporteVerificacionDTO;
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Producto;
 
@@ -36,4 +37,6 @@ public interface ProductoService {
 	public void load(List<ProductoDTO> listProductoDTO);
 	
 	public String loadFile(MultipartFile file, WebRequest webRequest);
+
+	public ReporteVerificacionDTO getVerificacion(String orden, String filtro);
 }

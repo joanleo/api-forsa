@@ -74,12 +74,12 @@ public class ProductoController {
 		
 		System.out.println("Letras digitadas");
 		if(letras != null) {
-			System.out.println("Controller busqueda por letras 1");
-			System.out.println("letras "+letras);
+			//System.out.println("Controller busqueda por letras 1");
+			//System.out.println("letras "+letras);
 			Page<Producto> productos = productoService.searchProducts(letras, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);
 		}else {
-			System.out.println("Controller busqueda por letras 3");
+			//System.out.println("Controller busqueda por letras 3");
 			Page<Producto> productos = productoService.list(pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);
 		}

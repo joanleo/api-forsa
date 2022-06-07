@@ -88,4 +88,28 @@ public class ProductSpecifications {
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
 	}
+
+	public Specification<Producto> getVerificacion(String orden, String filtro) {
+		return (root, query, criteryBuilder) ->{
+			
+			List<Predicate> predicates = new ArrayList<>();
+			System.out.println("Specification orden " + orden);
+			System.out.println("Specification filtro " + filtro);
+			if(orden != null) {
+				predicates.add(criteryBuilder.equal(root.get("orden"), orden));				
+			}
+			if(filtro != null && filtro.equalsIgnoreCase("faltantes")) {
+				System.out.println("Filtro 1 " + filtro);
+				predicates.add(criteryBuilder.isTrue(root.get("importado").as(Boolean.class)));
+				predicates.add(criteryBuilder.isFalse(root.get("verificado").as(Boolean.class)));
+			}
+			if(filtro != null && filtro.equalsIgnoreCase("sobrantes" )) {
+				System.out.println("Filtro 2 " + filtro);
+				predicates.add(criteryBuilder.isFalse(root.get("importado").as(Boolean.class)));
+				predicates.add(criteryBuilder.isTrue(root.get("verificado").as(Boolean.class)));
+			}
+						
+			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
+		};
+	}
 }

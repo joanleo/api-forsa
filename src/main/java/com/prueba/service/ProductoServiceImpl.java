@@ -25,6 +25,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prueba.dto.ProductoDTO;
+import com.prueba.dto.ReporteVerificacionDTO;
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Eror;
@@ -37,6 +38,8 @@ import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.ErorRepository;
 import com.prueba.repository.ProductoRepository;
+import com.prueba.security.entity.Usuario;
+import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.ProductSpecifications;
 
 @Service
@@ -56,6 +59,9 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Autowired
 	private ErorRepository erorRepo;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepo;
 
 	
 	@Override
@@ -477,6 +483,41 @@ public class ProductoServiceImpl implements ProductoService {
 	public List<Producto> searchProducts(String letra) {
 		List<Producto> listProducts = productoRepo.findAll(productSpec.getProductosActivos(letra));		
 		return listProducts;
+	}
+
+
+	@Override
+	public ReporteVerificacionDTO getVerificacion(String orden, String filtro) {
+		/*String currentUserName = "";
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if ((authentication != null)) {
+		    currentUserName = authentication.getName();
+		}
+		Usuario usuario = usuarioRepo.findByUsername(authentication.getName()).get();
+		System.out.println(currentUserName);*/
+		List<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro));
+		List<Producto> faltantes = new ArrayList<Producto>();
+		List<Producto> sobrantes = new ArrayList<Producto>();
+		for(Producto producto: productos) {
+			if(producto != null && !producto.getImportado() && producto.getVerificado()) {
+				sobrantes.add(producto);
+			}
+			if(producto != null && producto.getImportado() && !producto.getVerificado()) {
+				faltantes.add(producto);
+			}
+		}
+		ReporteVerificacionDTO reporte = new ReporteVerificacionDTO();
+		reporte.setOrden(orden);
+		reporte.setFiltro(filtro);
+		if(!faltantes.isEmpty()) {
+			reporte.setFaltantes(faltantes);			
+		}
+		if(!sobrantes.isEmpty()) {
+			reporte.setSobrantes(sobrantes);
+		}
+		//reporte.setRealizo(usuario);
+		
+		return reporte;
 	}
 	
 }

@@ -75,6 +75,17 @@ public class Producto {
     @JoinColumn(name = "nidubicacion")
     private Ubicacion ubicacion;
     
+    @Column(name = "bimportado", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
+    private Boolean importado = true;
+    
+	public Boolean getImportado() {
+		return importado;
+	}
+
+	public void setImportado(Boolean importado) {
+		this.importado = importado;
+	}
+
 	public String getCodigoPieza() {
 		return codigoPieza;
 	}
