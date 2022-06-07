@@ -2,6 +2,7 @@ package com.prueba.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,6 +31,18 @@ public class Ubicacion {
 	@ManyToOne
 	@JoinColumn(name = "nidtipo_ubicacion")
 	private TipoUbicacion tipo;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "vcnitempresa")
+    private Empresa empresa;
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
 
 	public Long getId() {
 		return id;

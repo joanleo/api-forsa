@@ -63,7 +63,7 @@ public class Producto {
     private Fabricante fabricante;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "vcnitEmpresa")
+    @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
     
     @ManyToOne(fetch = FetchType.EAGER)

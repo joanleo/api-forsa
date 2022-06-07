@@ -1,46 +1,3 @@
-INSERT INTO m_tipos_ubicacion
-(`nidtipo_ubicacion`,
-`vcnombre`)
-VALUES
-(1, 'Obra');
-
-INSERT INTO m_ubicaciones
-(`nidubicacion`,
-`vcciudad`,
-`vcdireccion`,
-`vcnombre`,
-`nidtipo_ubicacion`
-)
-VALUES
-(1, 'Cali', 'Calle Cra', 'Las flores 1', 1),
-(2, 'Cali', 'Calle Cra', 'Las avenidas 1', 1);
-
-INSERT INTO m_familias
-(`nidfamilia`,
-`vcnombre`
-)
-VALUES
-(1, 'familia1'),
-(2, 'familia2'),
-(3, 'familia3'),
-(4, 'familia4');
-
-INSERT INTO m_fabricantes
-(`vcnitfabricante`,
-`vcnombre`
-)
-VALUES
-('11111','Fabricante prueba'),
-('12345', 'Formaletas XX');
-
-INSERT INTO m_estados
-(`nidestado`,
-`vcnombre`)
-VALUES
-(1,'Bueno'),
-(2,'Regular'),
-(3,'Malo');
-
 INSERT INTO m_tipos_empresa
 (`nidtipo_empresa`,
 `vcnombre`)
@@ -56,14 +13,63 @@ INSERT INTO m_empresas
 VALUES
 ('1111','Empresa Prueba X',3),
 ('23456','Empresa Prueba Y',3),
-('34567','Empresa Prueba Z',3);
+('34567','Empresa Prueba Z',3),
+('2222','Metrolink sas',1);
+
+INSERT INTO m_tipos_ubicacion
+(`nidtipo_ubicacion`,
+`vcnombre`,
+`vcnitempresa`)
+VALUES
+(1, 'Obra', '1111');
+
+INSERT INTO m_ubicaciones
+(`nidubicacion`,
+`vcciudad`,
+`vcdireccion`,
+`vcnombre`,
+`nidtipo_ubicacion`,
+`vcnitempresa`
+)
+VALUES
+(1, 'Cali', 'Calle Cra', 'Las flores 1', 1, '1111'),
+(2, 'Cali', 'Calle Cra', 'Las avenidas 1', 1, '1111');
+
+INSERT INTO m_familias
+(`nidfamilia`,
+`vcnombre`,
+`vcnitempresa`
+)
+VALUES
+(1, 'familia1', '1111'),
+(2, 'familia2', '1111'),
+(3, 'familia3', '1111'),
+(4, 'familia4', '1111');
+
+INSERT INTO m_fabricantes
+(`vcnitfabricante`,
+`vcnombre`,
+`vcnitempresa`
+)
+VALUES
+('11111','Fabricante prueba', '1111'),
+('12345', 'Formaletas XX', '1111');
+
+INSERT INTO m_estados
+(`nidestado`,
+`vcnombre`,
+`vcnitempresa`)
+VALUES
+(1,'Bueno', '1111'),
+(2,'Regular', '1111'),
+(3,'Malo', '1111');
 
 INSERT INTO mov_activos
 (`vccodigopieza`,
 `narea`,
 `vcnombre`,
 `vcorden`,
-`vcnit_empresa`,
+`vcnitempresa`,
 `nidestado`,
 `vcnitfabricante`,
 `nidfamilia`,

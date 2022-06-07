@@ -2,9 +2,12 @@ package com.prueba.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +21,18 @@ public class Estado {
 	
 	@Column(name = "vcnombre", length = 20)
     private String tipo="";
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "vcnitempresa")
+    private Empresa empresa;
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
 
 	public Long getId() {
 		return id;

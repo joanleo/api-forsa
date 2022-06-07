@@ -48,8 +48,8 @@ public class Usuario {
 	inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "nidrol"))
 	private Collection<Rol> roles;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vcnitEmpresa")
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
 	
 	public Empresa getEmpresa() {

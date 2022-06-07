@@ -24,7 +24,7 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 	@Override
 	public TipoUbicacionDTO create(TipoUbicacionDTO tipoUbicacionDTO) {
 		TipoUbicacion tipoUbicacion = mapearDTO(tipoUbicacionDTO);
-		TipoUbicacion exist = tipoUbicRepo.findByNombre(tipoUbicacion.getnombre());
+		TipoUbicacion exist = tipoUbicRepo.findByNombre(tipoUbicacion.getNombre());
 		
 		if(exist != null) {
 			tipoUbicRepo.save(tipoUbicacion);
@@ -55,7 +55,7 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 		TipoUbicacion tipoUbicacion = tipoUbicRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Tipo de ubicacion", "id", id));
 		
-		tipoUbicacion.setnombre(tipoUbicacionDTO.getNombre());
+		tipoUbicacion.setNombre(tipoUbicacionDTO.getNombre());
 		
 		tipoUbicRepo.save(tipoUbicacion);
 		
