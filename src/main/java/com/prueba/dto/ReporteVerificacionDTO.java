@@ -6,21 +6,12 @@ import com.prueba.entity.Producto;
 
 public class ReporteVerificacionDTO {
 	
-	//Usuario realizo;
 	
 	String orden;
 	
 	String filtro;
 	
 	List<Producto> activos;
-
-	/*public Usuario getRealizo() {
-		return realizo;
-	}
-
-	public void setRealizo(Usuario realizo) {
-		this.realizo = realizo;
-	}*/
 
 	public String getOrden() {
 		return orden;

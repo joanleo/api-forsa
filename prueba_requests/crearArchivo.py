@@ -10,7 +10,7 @@ def createFile():
             nom = ''.join((str(letra) for letra in sample(lista, 8)))
             nombre = f"Producto prueba {nom}  {row+1}"
 
-            area = round(random(), 2)
+            area = round(random(), 5)
 
             
             orden = ''.join((str(letra) for letra in sample(lista, 2))) #+ "  " + str(row+1)

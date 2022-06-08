@@ -31,7 +31,7 @@ public class Producto {
 	@Column(name = "vcnombre", length = 32)
     private String descripcion;
 	
-    @Column(name = "narea", nullable = false)
+    @Column(name = "narea", precision = 10, scale = 2, nullable = false)
     private Float area;
     
     @Column(name = "vcorden", length = 7, nullable = false)

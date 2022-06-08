@@ -520,5 +520,12 @@ public class ProductoServiceImpl implements ProductoService {
 		
 		return reporte;*/
 	}
+
+
+	@Override
+	public List<Producto> getVerificacion(String orden, String filtro){
+		List<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro));
+		return productos;
+	}
 	
 }
