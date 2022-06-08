@@ -50,7 +50,7 @@ public class ReportesController {
 		return reporte;//new ResponseEntity<ReporteVerificacionDTO>(reporte, HttpStatus.OK);
 	}
 	
-	@GetMapping("/verificacion/descargar")
+	@GetMapping("/verificacion/descarga")
 	@ApiOperation(value = "Crea un reporte de verificacion en formato PDF", notes = "Retorna un PDF con el listado de los activos de una orden dada "
 			+ "segun el filtro indicado. Los filtros podran ser 'faltantes', 'sobrantes', 'ok', 'todos'")
 	public void exportToPDF(HttpServletResponse response,
