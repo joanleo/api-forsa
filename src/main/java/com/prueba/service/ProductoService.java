@@ -38,5 +38,5 @@ public interface ProductoService {
 	
 	public String loadFile(MultipartFile file, WebRequest webRequest);
 
-	public ReporteVerificacionDTO getVerificacion(String orden, String filtro);
+	public Page<Producto> getVerificacion(String orden, String filtro, int offset, int pageSize);
 }
