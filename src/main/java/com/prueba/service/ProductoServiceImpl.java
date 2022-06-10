@@ -22,7 +22,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prueba.dto.ProductoDTO;
-import com.prueba.dto.ReporteVerificacionDTO;
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Eror;
@@ -34,6 +33,7 @@ import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.ErorRepository;
+import com.prueba.repository.FamiliaRepository;
 import com.prueba.repository.ProductoRepository;
 import com.prueba.specifications.ProductSpecifications;
 
@@ -54,6 +54,9 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Autowired
 	private ErorRepository erorRepo;
+	
+	@Autowired
+	private FamiliaRepository familiaRepo;
 	
 	
 	@Override
@@ -257,7 +260,7 @@ public class ProductoServiceImpl implements ProductoService {
 				List<Producto> listProductos = new ArrayList<Producto>();
 				
 				try {
-					Pattern special = Pattern.compile("[!@#$%&*()_+=|<>?{}\\\\[\\\\]~-]", Pattern.CASE_INSENSITIVE);
+					Pattern special = Pattern.compile("[!@#$%&*()_+=|<>?{}\\\\[\\\\]~]", Pattern.CASE_INSENSITIVE);
 					String lineError, codigoPiezaError, nombreError, areaError, ordenError, familiaError, fabricanteError, empresaError = "";
 					Long start = System.currentTimeMillis();
 					System.out.println("Inicio verificacion");
@@ -269,7 +272,8 @@ public class ProductoServiceImpl implements ProductoService {
 						lineError = "El tamaño del arreglo esta errado linea " + count;
 						
 						Float area = 0.0f;
-						Integer familia = 0;
+						//Integer familia = 0;
+						String familia = "";
 						Integer fabricante = 0;
 						Integer empresa = 0;
 						
@@ -293,6 +297,7 @@ public class ProductoServiceImpl implements ProductoService {
 						
 						//System.out.println("Nombre " + producto[1] + " Tipo " + ((Object)producto[1]).getClass().getSimpleName());
 						String nombre = producto[1];
+						System.out.println(nombre);
 						matcher = special.matcher(producto[1]);
 						boolean nombreconstainsSymbols = matcher.find();
 						if(nombreconstainsSymbols) {
@@ -316,7 +321,7 @@ public class ProductoServiceImpl implements ProductoService {
 						
 						//System.out.println("Orden " + producto[3] + " Tipo " + ((Object)producto[3]).getClass().getSimpleName());
 						String orden = producto[3];
-						matcher = special.matcher(producto[1]);
+						matcher = special.matcher(producto[3]);
 						boolean ordenconstainsSymbols = matcher.find();
 						if(ordenconstainsSymbols) {
 							error = true;
@@ -326,7 +331,7 @@ public class ProductoServiceImpl implements ProductoService {
 							errores.add(ordenError);
 						}						
 						
-						try {
+						/*try {
 							//System.out.println("Familia " + producto[4] + " Tipo " + ((Object)Integer.parseInt(producto[4])).getClass().getSimpleName());
 							familia = Integer.parseInt(producto[4]);
 						} catch (Exception e) {
@@ -334,6 +339,18 @@ public class ProductoServiceImpl implements ProductoService {
 							erroresCiclo = true;
 							familiaError = "Error en el campo Familia en la linea " + count + " " + e;
 							//Eror nuevoError = new Eror(idError, ruta, familiaError, currentUserName);
+							errores.add(familiaError);
+						}*/
+						
+						familia = producto[4];
+						System.out.println(familia);
+						matcher = special.matcher(producto[4]);
+						boolean familiaconstainsSymbols = matcher.find();
+						if(familiaconstainsSymbols) {
+							error = true;
+							erroresCiclo = true;
+							familiaError = "Familia Contiene caracteres especiales linea " + count;
+							//Eror nuevoError = new Eror(idError, ruta, ordenError, currentUserName);
 							errores.add(familiaError);
 						}
 											
@@ -361,8 +378,10 @@ public class ProductoServiceImpl implements ProductoService {
 						}
 						
 						if(!erroresCiclo) {
-							Familia familiaAdd = new Familia(new Long(familia));
+							Familia familiaAdd = familiaRepo.findByNombre(familia);
+							System.out.println(familiaAdd.getNombre());
 							Fabricante fabricanteAdd = new Fabricante(new Long(fabricante));
+							System.out.println(fabricanteAdd.getNombre());
 							Empresa empresaAdd = new Empresa(new Long(empresa));
 							Producto product = new Producto(codigoPieza,nombre,area,orden,familiaAdd,fabricanteAdd,empresaAdd);
 							listProductos.add(product);

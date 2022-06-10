@@ -48,11 +48,11 @@ public class MovInventarioServiceImp implements MovInventarioService {
 			for(Producto producto: productos) {
 				Producto actualizar = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
 				if(actualizar != null) {
-					actualizar.setEstado(producto.getEstado());
+					inventario.addActivo(actualizar);
 				}else {
 					throw new IllegalAccessError("El activo con codigo de pieza " + producto.getCodigoPieza() + " no existe");
 				}
-				inventario.addActivo(actualizar);
+				
 			}			
 			movInvRepo.save(inventario);
 		}else {

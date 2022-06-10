@@ -1,6 +1,11 @@
 package com.prueba.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +23,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lowagie.text.DocumentException;
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.MovInventarioDTO;
 import com.prueba.entity.MovInventario;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.service.MovInventarioService;
+import com.prueba.util.ReporteInventarioPDF;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -77,6 +84,24 @@ public class MovInvController {
 	@ApiOperation(value = "Encuentra un inventario", notes = "Retorna un inventario con detalle segun el numero de inventario")
 	public ResponseEntity<MovInventario> getInventario(@PathVariable Long id){
 		return ResponseEntity.ok(movInvService.getInventario(id));
+	}
+	
+	@GetMapping("/detalle/{id}/descarga")
+	@ApiOperation(value = "Crea un inventario en formato PDF", notes = "Retorna un inventario con detalle segun el numero de inventario")
+	public void exportToPDF(HttpServletResponse response,
+							@PathVariable Long id) throws DocumentException, IOException {
+		response.setContentType("application/pdf");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=reporteVerificacion_" + id + "_" + currentDateTime + ".pdf";
+		response.setHeader(headerKey, headerValue);
+		
+		MovInventario inventario = movInvService.getInventario(id);
+		
+		ReporteInventarioPDF exportar = new ReporteInventarioPDF(inventario);
+		exportar.export(response);
+		
 	}
 
 }

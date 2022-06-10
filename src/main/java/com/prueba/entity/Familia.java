@@ -74,6 +74,11 @@ public class Familia {
 
 	public Familia() {
 		super();
+	}
+
+	public Familia(String nombre) {
+		super();
+		this.nombre = nombre;
 	}    
 }
 

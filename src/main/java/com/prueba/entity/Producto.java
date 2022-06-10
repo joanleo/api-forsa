@@ -28,7 +28,7 @@ public class Producto {
     @Column(name = "vccodigopieza", length = 20)
     private String codigoPieza;
 
-	@Column(name = "vcnombre", length = 32)
+	@Column(name = "vcnombre", length = 60)
     private String descripcion;
 	
     @Column(name = "narea", precision = 10, scale = 2, nullable = false)

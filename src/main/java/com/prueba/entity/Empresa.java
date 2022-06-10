@@ -53,6 +53,18 @@ public class Empresa {
 	@JsonIgnore
 	@OneToMany(mappedBy = "empresa")
 	private List<Usuario> usuarios;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "empresa")
+	private List<Familia> familias;
+
+	public List<Familia> getFamilias() {
+		return familias;
+	}
+
+	public void setFamilias(List<Familia> familias) {
+		this.familias = familias;
+	}
 
 	public List<Usuario> getUsuarios() {
 		return usuarios;
