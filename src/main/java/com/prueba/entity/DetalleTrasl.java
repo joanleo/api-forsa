@@ -22,7 +22,7 @@ public class DetalleTrasl {
 	private Traslado traslado;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("codigoPieza")
+	@MapsId("id")
 	private Producto producto;
 	
 	@Column(name = "bestaRecibido")

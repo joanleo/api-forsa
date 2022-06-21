@@ -29,12 +29,16 @@ import com.prueba.entity.Estado;
 import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
 import com.prueba.entity.Producto;
+import com.prueba.entity.Producto_id;
 import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.ErorRepository;
+import com.prueba.repository.FabricanteRepository;
 import com.prueba.repository.FamiliaRepository;
 import com.prueba.repository.ProductoRepository;
+import com.prueba.security.entity.Usuario;
+import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.ProductSpecifications;
 
 @Service
@@ -45,6 +49,9 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Autowired
 	private EmpresaRepository empresaRepo;
+	
+	@Autowired
+	private FabricanteRepository fabricanteRepo;
 	
 	@Autowired
 	private ModelMapper modelMapper;
@@ -58,11 +65,14 @@ public class ProductoServiceImpl implements ProductoService {
 	@Autowired
 	private FamiliaRepository familiaRepo;
 	
+	@Autowired
+	private UsuarioRepository usuarioRepo;
+	
 	
 	@Override
 	public ProductoDTO create(ProductoDTO productoDTO) {
 		Producto producto = mapearDTO(productoDTO);
-		Producto exist = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
+		Producto exist = productoRepo.findByProducto_id(productoDTO.getProducto_id());
 		//Empresa empresa = empresaRepo.findByNitOrderByFecha(productoDTO.getEmpresa().getNit());
 		
 		/*if(empresa != null) {
@@ -71,10 +81,9 @@ public class ProductoServiceImpl implements ProductoService {
 			System.out.println("error en la consulta de empresa");
 		}*/
 		if(exist == null) {
-			//System.out.println(producto.toString());
 			productoRepo.save(producto);
 		}else {
-			throw new IllegalAccessError("El producto con id "+ producto.getCodigoPieza() + " que trata de crear ya existe");
+			throw new IllegalAccessError("El producto con id "+ productoDTO.getCodigoPieza() + " que trata de crear ya existe");
 		}
 		
 		return mapearEntidad(producto);
@@ -162,7 +171,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	
 	@Override
-	public ProductoDTO receive(String id, ProductoDTO productoDTO) {
+	public ProductoDTO receive(String id, ProductoDTO productoDTO) throws IllegalAccessException {
 		
 		Producto producto = productoRepo.findByCodigoPieza(id);		
 		if(producto == null) {
@@ -170,6 +179,15 @@ public class ProductoServiceImpl implements ProductoService {
 		}
 		
 		if(!producto.getVerificado() && producto.getEstaActivo()) {
+			
+			Usuario usuario = null;
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if(authentication != null) {
+			    usuario = usuarioRepo.findByUsername(authentication.getName()).get();
+			}else {
+				throw new IllegalAccessException("Debe estar logueado para realizar esta accion");
+			}
+
 			//Capturar datos de la empresa del usuario		
 			Empresa empresa = empresaRepo.findByNitOrderByFecha(producto.getEmpresa().getNit());
 			
@@ -193,6 +211,7 @@ public class ProductoServiceImpl implements ProductoService {
 			producto.setEstado(nuevoEstado);
 			producto.setVerificado(true);
 			producto.setEstaActivo(true);
+			producto.setReviso(usuario);
 			productoRepo.save(producto);
 			
 			empresa.setNconfimacion(nconf);
@@ -297,7 +316,7 @@ public class ProductoServiceImpl implements ProductoService {
 						
 						//System.out.println("Nombre " + producto[1] + " Tipo " + ((Object)producto[1]).getClass().getSimpleName());
 						String nombre = producto[1];
-						System.out.println(nombre);
+						//System.out.println(nombre);
 						matcher = special.matcher(producto[1]);
 						boolean nombreconstainsSymbols = matcher.find();
 						if(nombreconstainsSymbols) {
@@ -343,7 +362,7 @@ public class ProductoServiceImpl implements ProductoService {
 						}*/
 						
 						familia = producto[4];
-						System.out.println(familia);
+						//System.out.println(familia);
 						matcher = special.matcher(producto[4]);
 						boolean familiaconstainsSymbols = matcher.find();
 						if(familiaconstainsSymbols) {
@@ -378,12 +397,18 @@ public class ProductoServiceImpl implements ProductoService {
 						}
 						
 						if(!erroresCiclo) {
-							Familia familiaAdd = familiaRepo.findByNombre(familia);
-							System.out.println(familiaAdd.getNombre());
-							Fabricante fabricanteAdd = new Fabricante(new Long(fabricante));
-							System.out.println(fabricanteAdd.getNombre());
-							Empresa empresaAdd = new Empresa(new Long(empresa));
-							Producto product = new Producto(codigoPieza,nombre,area,orden,familiaAdd,fabricanteAdd,empresaAdd);
+							Familia familiaAdd = familiaRepo.findBySigla(familia);
+							//System.out.println("Sin errores");
+							//System.out.println("Familia "+familiaAdd.getNombre());
+							
+							Fabricante fabricanteAdd = fabricanteRepo.findByNit(new Long(fabricante));
+							//System.out.println("Fabricante "+fabricanteAdd.getNombre());
+							
+							//System.out.println("Empresa "+empresa);							
+							Empresa empresaAdd = empresaRepo.findByNit(new Long(empresa));
+							//System.out.println("Empresa "+empresaAdd.getNombre());
+							
+							Producto product = new Producto(new Producto_id(empresaAdd.getNit(), codigoPieza),nombre,area,orden,familiaAdd,fabricanteAdd,empresaAdd);
 							listProductos.add(product);
 						}else {
 							System.out.println("Error");
@@ -414,7 +439,7 @@ public class ProductoServiceImpl implements ProductoService {
 				stream.close();
 			    channel.close();*/
 				
-				productoRepo.saveAll(listProductos);
+				productoRepo.saveAllAndFlush(listProductos);
 				
 				//productoRepo.bulkLoadData();
 				Long endProducts = System.currentTimeMillis();

@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Producto_id;
 
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
@@ -45,6 +46,8 @@ public class ProductoDTO {
 	private String nconfirmacion;
 	
 	private String motivoIngreso ="Compra";
+	
+	private Producto_id producto_id = new Producto_id(empresa.getNit(), codigoPieza);
 
 	public String getCodigoPieza() {
 		return codigoPieza;
@@ -148,6 +151,14 @@ public class ProductoDTO {
 
 	public void setMotivoIngreso(String motivoIngreso) {
 		this.motivoIngreso = motivoIngreso;
+	}
+
+	public Producto_id getProducto_id() {
+		return producto_id;
+	}
+
+	public void setProducto_id(Producto_id producto_id) {
+		this.producto_id = producto_id;
 	}
 
 	public ProductoDTO() {

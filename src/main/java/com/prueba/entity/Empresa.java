@@ -4,6 +4,7 @@ package com.prueba.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -47,7 +48,7 @@ public class Empresa {
 	private TipoEmpresa tipoEmpresa;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "empresa")
+	@OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL)
 	private List<Producto> productos;
 	
 	@JsonIgnore
@@ -57,7 +58,13 @@ public class Empresa {
 	@JsonIgnore
 	@OneToMany(mappedBy = "empresa")
 	private List<Familia> familias;
+	
+	@Column(name = "bestaActiva", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+	private Boolean estaActiva;
 
+	
+	
+	
 	public List<Familia> getFamilias() {
 		return familias;
 	}
@@ -120,8 +127,19 @@ public class Empresa {
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
+	}	
+
+	public Boolean getEstaActiva() {
+		return estaActiva;
 	}
 
+	public void setEstaActiva(Boolean estaActiva) {
+		this.estaActiva = estaActiva;
+	}
+
+	
+	
+	
 	public Empresa() {
 		super();
 	}

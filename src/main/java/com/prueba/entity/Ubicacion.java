@@ -38,6 +38,9 @@ public class Ubicacion {
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
+	
+	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+	private Boolean estaActivo;
 
 	public Empresa getEmpresa() {
 		return empresa;
@@ -86,6 +89,17 @@ public class Ubicacion {
 	public void setTipo(TipoUbicacion tipo) {
 		this.tipo = tipo;
 	}
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
+	}
+	
+	
+	
 
 	public Ubicacion() {
 		super();

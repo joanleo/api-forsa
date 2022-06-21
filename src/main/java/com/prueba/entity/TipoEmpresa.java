@@ -27,7 +27,14 @@ public class TipoEmpresa {
 	@JsonIgnore
 	@OneToMany(mappedBy = "tipoEmpresa")
 	private List<Empresa> empresas;
+	
+	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+	private Boolean estaActivo;
 
+	
+	
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -50,7 +57,19 @@ public class TipoEmpresa {
 
 	public void setEmpresas(List<Empresa> empresas) {
 		this.empresas = empresas;
+	}	
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
 	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
+	}
+	
+	
+	
+	
 
 	public TipoEmpresa() {
 		super();

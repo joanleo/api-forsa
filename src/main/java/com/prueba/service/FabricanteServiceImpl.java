@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.FabricanteDTO;
+import com.prueba.entity.Empresa;
 import com.prueba.entity.Fabricante;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.FabricanteRepository;
@@ -37,8 +38,8 @@ public class FabricanteServiceImpl implements FabricanteService {
 	}
 
 	@Override
-	public List<FabricanteDTO> list() {
-		List<Fabricante> fabricantes = fabricanteRepo.findAll();
+	public List<FabricanteDTO> list(Empresa empresa) {
+		List<Fabricante> fabricantes = fabricanteRepo.findByEmpresaAndEstaActivo(empresa, true);
 		
 		return fabricantes.stream().map(fabricante -> mapearEntidad(fabricante)).collect(Collectors.toList());
 		
@@ -69,7 +70,20 @@ public class FabricanteServiceImpl implements FabricanteService {
 		Fabricante fabricante = fabricanteRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "id", id));
 		
+		if(fabricante.getProductos().size() > 0) {
+			throw new IllegalAccessError("El fabricante no se puede elliminar, tiene productos asociados");
+		}
+		
 		fabricanteRepo.delete(fabricante);
+	}
+	
+	@Override
+	public void unable(Long id) {
+		Fabricante fabricante = fabricanteRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "id", id));
+		
+		fabricante.setEstaActivo(false);
+		fabricanteRepo.save(fabricante);		
 	}
 	
 	public FabricanteDTO mapearEntidad(Fabricante fabricante) {
@@ -81,10 +95,12 @@ public class FabricanteServiceImpl implements FabricanteService {
 	}
 
 	@Override
-	public List<FabricanteDTO> findByName(String nombre) {
-		List<Fabricante> listFabricante = fabricanteRepo.findByNombreContains(nombre);
+	public List<FabricanteDTO> findByNameAndEmpresaAndEstaActivo(String letras, Empresa empresa, Boolean estaActivo) {
+		List<Fabricante> listFabricante = fabricanteRepo.findByNombreContainsAndEmpresaAndEstaActivo(letras, empresa, true);
 		
 		return listFabricante.stream().map(fabricante -> mapearEntidad(fabricante)).collect(Collectors.toList());
 	}
+
+	
 
 }

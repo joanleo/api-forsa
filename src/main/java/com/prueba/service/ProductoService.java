@@ -23,7 +23,7 @@ public interface ProductoService {
 	
 	public void delete(String id);
 	
-	public ProductoDTO receive(String id, ProductoDTO productoDTO);
+	public ProductoDTO receive(String id, ProductoDTO productoDTO) throws IllegalAccessException;
 	
 	public Page<Producto> searchProducts(SearchDTO searchDTO, int offset, int pageSize);
 	

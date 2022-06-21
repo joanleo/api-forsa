@@ -23,8 +23,11 @@ public class Familia {
     @Column(name = "nidfamilia", length = 3)
     private Long id;
     
-    @Column(name = "vcnombre", length = 20)
+    @Column(name = "vcnombre", length = 80)
     private String nombre;
+    
+    @Column(name = "vcsigla", length = 3)
+    private String sigla;
 
     @JsonIgnore
     @OneToMany(mappedBy = "familia")
@@ -34,6 +37,10 @@ public class Familia {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
+    
+    @Column(name = "bestaActiva", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+    private Boolean estaActiva;
+    
 
 	public Empresa getEmpresa() {
 		return empresa;
@@ -67,6 +74,25 @@ public class Familia {
 		this.productos = productos;
 	}
 
+	public String getSigla() {
+		return sigla;
+	}
+
+	public void setSigla(String sigla) {
+		this.sigla = sigla;
+	}
+
+	public Boolean getEstaActiva() {
+		return estaActiva;
+	}
+
+	public void setEstaActiva(Boolean estaActiva) {
+		this.estaActiva = estaActiva;
+	}
+
+	
+	
+	
 	public Familia(Long id) {
 		super();
 		this.id = id;

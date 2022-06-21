@@ -2,6 +2,8 @@ package com.prueba.dto;
 
 import javax.validation.constraints.NotBlank;
 
+import com.prueba.entity.Empresa;
+
 public class FabricanteDTO {
 	
 	@NotBlank(message = "Este campo no puede ser nulo")
@@ -9,6 +11,8 @@ public class FabricanteDTO {
 	
 	@NotBlank(message = "Este campo no puede ser nulo")
     private String nombre;
+	
+	private Empresa empresa;
 
 	public Long getNit() {
 		return nit;
@@ -24,6 +28,14 @@ public class FabricanteDTO {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 
 }

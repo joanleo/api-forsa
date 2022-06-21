@@ -37,7 +37,13 @@ public class Fabricante {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
-
+    
+    @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+    private Boolean estaActivo;
+    
+    
+    
+    
 	public Empresa getEmpresa() {
 		return empresa;
 	}
@@ -68,8 +74,19 @@ public class Fabricante {
 
 	public void setProductos(List<Producto> productos) {
 		this.productos = productos;
+	}	
+	
+	public Boolean getEstaActivo() {
+		return estaActivo;
 	}
 
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
+	}
+
+	
+	
+	
 	public Fabricante(Long nit) {
 		super();
 		this.nit = nit;

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.EstadoDTO;
+import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EstadoRepository;
@@ -35,8 +36,8 @@ public class EstadoServiceImpl implements EstadoService {
 	}
 
 	@Override
-	public List<EstadoDTO> list() {
-		List<Estado> estados = estadoRepo.findAll();
+	public List<EstadoDTO> list(Empresa empresa) {
+		List<Estado> estados = estadoRepo.findByEmpresaAndEstaActivo(empresa, true);
 		
 		return estados.stream().map(estado -> mapearEntidad(estado)).collect(Collectors.toList());
 	}
@@ -69,6 +70,17 @@ public class EstadoServiceImpl implements EstadoService {
 		estadoRepo.delete(estado);
 	}
 	
+	@Override
+	public void unable(Long id) {
+		Estado estado = estadoRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("EStado", "id", id));
+		
+		estado.setEstaActivo(false);
+		estadoRepo.save(estado);
+		
+	}
+	
+	
 	public EstadoDTO mapearEntidad(Estado estado) {
 		return modelmapper.map(estado, EstadoDTO.class);
 	}
@@ -78,10 +90,12 @@ public class EstadoServiceImpl implements EstadoService {
 	}
 
 	@Override
-	public List<EstadoDTO> findByTipo(String tipo) {
-		List<Estado> listEstados = estadoRepo.findByTipoContains(tipo);
+	public List<EstadoDTO> findByTipoAndEmpresaAndEstaActivo(String tipo, Empresa empresa, Boolean estaActivo) {
+		List<Estado> listEstados = estadoRepo.findByTipoContainsAndEstaActivo(tipo, estaActivo);
 		
 		return listEstados.stream().map(estado -> mapearEntidad(estado)).collect(Collectors.toList());
 	}
+
+
 
 }

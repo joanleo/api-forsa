@@ -3,13 +3,14 @@ package com.prueba.service;
 import java.util.List;
 
 import com.prueba.dto.EstadoDTO;
+import com.prueba.entity.Empresa;
 
 
 public interface EstadoService {
 	
 	public EstadoDTO create(EstadoDTO estadoDTO);
 	
-	public List<EstadoDTO> list();
+	public List<EstadoDTO> list(Empresa empresa);
 	
 	public EstadoDTO getEstado(Long id);
 	
@@ -17,6 +18,8 @@ public interface EstadoService {
 	
 	public void delete(Long id);
 	
-	public List<EstadoDTO> findByTipo(String tipo);
+	public List<EstadoDTO> findByTipoAndEmpresaAndEstaActivo(String tipo, Empresa empresa, Boolean estaActivo);
+
+	public void unable(Long id);
 
 }

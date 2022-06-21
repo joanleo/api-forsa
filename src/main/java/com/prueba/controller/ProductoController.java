@@ -79,7 +79,7 @@ public class ProductoController {
 			Page<Producto> productos = productoService.searchProducts(letras, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);
 		}else {
-			//System.out.println("Controller busqueda por letras 3");
+			System.out.println("Controller busqueda por letras 3");
 			Page<Producto> productos = productoService.list(pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);
 		}
@@ -94,7 +94,7 @@ public class ProductoController {
 	@PatchMapping("/{id}")
 	@ApiOperation(value = "Verifica un activo", notes = "Actualiza un activo por su id")
 	public ResponseEntity<ProductoDTO> verify(@PathVariable(name = "id") String id,
-												@RequestBody(required=false) ProductoDTO productoDTO){
+												@RequestBody(required=false) ProductoDTO productoDTO) throws IllegalAccessException{
 		if(productoDTO == null) {
 			throw new IllegalArgumentException("Falta informacion"); 
 		}

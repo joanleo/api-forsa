@@ -64,10 +64,24 @@ public class EmpresaServiceImpl implements EmpresaService {
 	public void delete(Long id) {
 		Empresa empresa = empresaRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Empresa", "id", id));
-		
+		if(empresa.getProductos().size() > 0 || empresa.getUsuarios().size() > 0) {
+			throw new IllegalAccessError("No se pude eliminar la empresa tiene usuarios y/o productos asociados");
+		}
 		empresaRepo.delete(empresa);
 
 	}
+	
+	@Override
+	public void unable(Long id) {
+		Empresa empresa = empresaRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Empresa", "id", id));
+		
+		empresa.setEstaActiva(false);
+		empresaRepo.save(empresa);
+		
+	}
+	
+	
 
 	public EmpresaDTO mapearEntidad(Empresa Empresa) {
 		return modelMapper.map(Empresa, EmpresaDTO.class);
@@ -78,9 +92,11 @@ public class EmpresaServiceImpl implements EmpresaService {
 	}
 
 	@Override
-	public List<EmpresaDTO> findByName(String name) {
-		List<Empresa> listEmpresas = empresaRepo.findByNombreContains(name);
+	public List<EmpresaDTO> findByNameAndEstaActiva(String name, Boolean estaActiva) {
+		List<Empresa> listEmpresas = empresaRepo.findByNombreContainsAndEstaActiva(name, estaActiva);
 		
 		return listEmpresas.stream().map(empresa -> mapearEntidad(empresa)).collect(Collectors.toList());
 	}
+
+
 }

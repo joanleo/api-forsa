@@ -3,12 +3,13 @@ package com.prueba.service;
 import java.util.List;
 
 import com.prueba.dto.FamiliaDTO;
+import com.prueba.entity.Empresa;
 
 public interface FamiliaService {
 
-	public FamiliaDTO create(FamiliaDTO familiaDto);
+	public FamiliaDTO create(FamiliaDTO familiaDto, Empresa empresa);
 	
-	public List<FamiliaDTO> list();
+	public List<FamiliaDTO> list(Empresa empresa);
 	
 	public FamiliaDTO getFamilia(Long id);
 	
@@ -16,6 +17,10 @@ public interface FamiliaService {
 	
 	public void delete(Long id);
 	
-	public List<FamiliaDTO> findByName(String name);
+	public List<FamiliaDTO> findByNameAndEmpresa(String name, Empresa empresa);
+
+	public void unable(Long id);
+
+	public List<FamiliaDTO> findByNameAndEmpreaAndEstaActiva(String letters, Empresa empresa, Boolean estaActiva);
 
 }

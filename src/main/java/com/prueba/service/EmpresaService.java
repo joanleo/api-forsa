@@ -16,5 +16,7 @@ public interface EmpresaService {
 	
 	public void delete(Long id);
 	
-	public List<EmpresaDTO> findByName(String name);
+	public List<EmpresaDTO> findByNameAndEstaActiva(String name, Boolean estaActiva);
+
+	public void unable(Long id);
 }

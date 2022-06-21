@@ -27,7 +27,7 @@ public class DetalleInv {
 	private MovInventario movimiento;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@MapsId("codigoPieza")
+	@MapsId("id")
 	private Producto producto;
 
 	public DetalleInv() {

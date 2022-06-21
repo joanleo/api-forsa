@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
+import com.prueba.entity.Producto_id;
 
 public interface ProductoRepository extends JpaRepository<Producto, Long>, JpaSpecificationExecutor<Producto>{
 	
@@ -27,9 +28,6 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>, JpaSp
 	
 	public Page<Producto> findByDescripcion(String letra, Boolean activo, Pageable pageable);
 	
-	@Modifying
-    @Transactional
-    @Query (value="LOAD DATA INFILE 'src/main/resources/procts.txt' INTO TABLE mov_activos FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n'", nativeQuery = true)
-    public void bulkLoadData();
+	public Producto findByProducto_id(Producto_id producto_id);
 	
 }

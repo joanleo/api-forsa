@@ -29,10 +29,11 @@ public class TipoMov {
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
 
-	public Empresa getEmpresa() {
-		return empresa;
-	}
 
+
+	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+	private Boolean estaActibo;
+	
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
@@ -52,4 +53,34 @@ public class TipoMov {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+
+	public Boolean getEstaActibo() {
+		return estaActibo;
+	}
+
+	public void setEstaActibo(Boolean estaActibo) {
+		this.estaActibo = estaActibo;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+	
+	
+	
+	
+
+	public TipoMov(Long id, String nombre, Empresa empresa, Boolean estaActibo) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.empresa = empresa;
+		this.estaActibo = estaActibo;
+	}
+
+	public TipoMov() {
+		super();
+	}
+	
+	
 }

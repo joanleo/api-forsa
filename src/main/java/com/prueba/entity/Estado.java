@@ -29,10 +29,16 @@ public class Estado {
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
 	
+	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+	private Boolean estaActivo;
+	
+	
+	
+	
 	public Empresa getEmpresa() {
 		return empresa;
 	}
-
+	
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
@@ -53,6 +59,17 @@ public class Estado {
 		this.tipo = tipo;
 	}
 
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
+	}
+
+	
+	
+	
 	public Estado() {
 		super();
 	}

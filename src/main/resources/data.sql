@@ -41,10 +41,13 @@ INSERT INTO m_familias
 `vcnitempresa`
 )
 VALUES
-(1, 'familia1', '1111'),
-(2, 'familia2', '1111'),
-(3, 'familia3', '1111'),
-(4, 'familia4', '1111');
+(1, 'Formaletas para muro', '2222'),
+(2, 'Formaleta unión muro losa', '2222'),
+(3, 'Formaletas para losas', '2222'),
+(4, 'Formaletas para Culata', '2222'),
+(5, 'Formaletas para escalera', '2222'),
+(6, 'Formaletas para punto fijo', '2222'),
+(10, 'Accesorios', '2222');
 
 INSERT INTO m_fabricantes
 (`vcnitfabricante`,

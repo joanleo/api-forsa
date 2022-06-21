@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.MovInventarioDTO;
+import com.prueba.entity.Empresa;
 import com.prueba.entity.MovInventario;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Ubicacion;
@@ -64,15 +65,16 @@ public class MovInventarioServiceImp implements MovInventarioService {
 	}
 
 	@Override
-	public Page<MovInventario> searchInv(String letras, Integer pagina, Integer items) {
+	public Page<MovInventario> searchInv(String letras, Empresa empresa, Integer pagina, Integer items) {
 		
-		Page<MovInventario> inventarios = movInvRepo.findAll(inventarioSpec.getInvenId(letras), PageRequest.of(0, 10));
+		Page<MovInventario> inventarios = movInvRepo.findAll(inventarioSpec.getInvenId(letras, empresa), PageRequest.of(0, 10));
 		return inventarios;
 	}
 
 	@Override
-	public Page<MovInventario> list(Integer pagina, Integer items) {
-		Page<MovInventario> inventarios = movInvRepo.findAll(PageRequest.of(pagina, items));
+	public Page<MovInventario> list(Empresa empresa, Integer pagina, Integer items) {
+		System.out.println("servicio");
+		Page<MovInventario> inventarios = movInvRepo.findByEmpresa(empresa, PageRequest.of(pagina, items));
 		return inventarios;
 	}
 
