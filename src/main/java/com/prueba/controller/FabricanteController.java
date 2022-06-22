@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -80,23 +81,66 @@ public class FabricanteController {
 		}
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{id},{nit}")
 	@ApiOperation(value = "Encuentra un fabricante", notes = "Retorna un fabricante por el id")
-	public FabricanteDTO get(@PathVariable(name = "id") Long id) {
-		return fabricanteService.getFabricante(id);
+	public FabricanteDTO get(@PathVariable(name = "id") Long id,
+			 				 @PathVariable(required=false) Long nit){
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		
+		if(nit != null) {
+		empresa = util.obtenerEmpresa(nit);
+		}else {
+		empresa = usuario.getEmpresa();			
+		}
+		return fabricanteService.getFabricante(id, empresa);
 	}
+	
+	@PutMapping("/{ni}")
+	@ApiOperation(value = "Actualiza un fabricante", notes = "Actualiza los datos de un fabricante")
+	public ResponseEntity<FabricanteDTO> update(@Valid @RequestBody FabricanteDTO fabricanteDTO,
+												@PathVariable Long nit){
+		FabricanteDTO actualizado = fabricanteService.update(nit, fabricanteDTO);
+		
+		return new ResponseEntity<FabricanteDTO>(actualizado, HttpStatus.OK);
+	}
+	
 	
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "Elimina un fabricante", notes = "Elimina un fabricante por su id")
-	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id){
-		fabricanteService.delete(id);
+	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
+			 							 @PathVariable(required=false) Long nit){
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		
+		if(nit != null) {
+		empresa = util.obtenerEmpresa(nit);
+		}else {
+		empresa = usuario.getEmpresa();			
+}
+		fabricanteService.delete(id, empresa); 
 		return new ResponseEntity<ResDTO>(new ResDTO("Fabricante eliminado con exito"), HttpStatus.OK);
 	}
 	
 	@PatchMapping("/{id}")
 	@ApiOperation(value = "Inhabilita un fabricante", notes = "Inhabilita un fabricante por su id")
-	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id){
-		fabricanteService.unable(id);
+	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
+				@PathVariable(required=false) Long nit){
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		
+		if(nit != null) {
+		empresa = util.obtenerEmpresa(nit);
+		}else {
+		empresa = usuario.getEmpresa();			
+		}
+		fabricanteService.unable(id, empresa);
 		return new ResponseEntity<ResDTO>(new ResDTO("Fabricante eliminado con exito"), HttpStatus.OK);
 	}
 	

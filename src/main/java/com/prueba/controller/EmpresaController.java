@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.EmpresaDTO;
@@ -45,6 +47,15 @@ public class EmpresaController {
 	@ApiOperation(value = "Crea una empresa", notes = "Crea una nueva empresa")
 	public ResponseEntity<EmpresaDTO> create(@Valid @RequestBody EmpresaDTO empresaDTO){
 		return new ResponseEntity<EmpresaDTO>(empresaService.create(empresaDTO), HttpStatus.CREATED);
+	}
+	
+	@PutMapping("/{nit}")
+	@ApiOperation(value = "Actualiza una empresa", notes = "Actualiza los datos de una empresa")
+	public ResponseEntity<EmpresaDTO> update(@Valid @RequestBody EmpresaDTO empresaDTO,
+											 @PathVariable Long nit){
+		EmpresaDTO actualizada = empresaService.update(nit, empresaDTO);
+		
+		return new ResponseEntity<>(actualizada, HttpStatus.OK);
 	}
 	
 	@GetMapping

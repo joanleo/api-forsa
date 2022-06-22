@@ -1,5 +1,7 @@
 package com.prueba.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,6 +34,11 @@ public class TipoUbicacion {
 	
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
 	private Boolean estaActivo;
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "nidubicacion")
+	private List<Ubicacion> ubicaciones;
 
 	public Long getId() {
 		return id;
@@ -62,12 +70,20 @@ public class TipoUbicacion {
 
 	public void setEstaActivo(Boolean estaActivo) {
 		this.estaActivo = estaActivo;
-	}
-	
-	
-	
-	
+	}	
 
+	public List<Ubicacion> getUbicaciones() {
+		return ubicaciones;
+	}
+
+	public void setUbicaciones(List<Ubicacion> ubicaciones) {
+		this.ubicaciones = ubicaciones;
+	}
+
+	
+	
+	
+	
 	public TipoUbicacion() {
 		super();
 	}

@@ -7,7 +7,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.prueba.dto.TipoMovDTO;
 import com.prueba.dto.TipoUbicacionDTO;
+import com.prueba.entity.Empresa;
+import com.prueba.entity.TipoMov;
 import com.prueba.entity.TipoUbicacion;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.TipoUbicacionRepository;
@@ -24,7 +27,7 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 	@Override
 	public TipoUbicacionDTO create(TipoUbicacionDTO tipoUbicacionDTO) {
 		TipoUbicacion tipoUbicacion = mapearDTO(tipoUbicacionDTO);
-		TipoUbicacion exist = tipoUbicRepo.findByNombre(tipoUbicacion.getNombre());
+		TipoUbicacion exist = tipoUbicRepo.findByNombreAndEmpresa(tipoUbicacion.getNombre(), tipoUbicacionDTO.getEmpresa());
 		
 		if(exist != null) {
 			tipoUbicRepo.save(tipoUbicacion);
@@ -36,15 +39,15 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 	}
 
 	@Override
-	public List<TipoUbicacionDTO> list() {
-		List<TipoUbicacion> lista = tipoUbicRepo.findAll();
+	public List<TipoUbicacionDTO> list(Empresa empresa) {
+		List<TipoUbicacion> lista = tipoUbicRepo.findByEmpresa(empresa);
 		
 		return lista.stream().map(tipo -> mapearEntidad(tipo)).collect(Collectors.toList());
 	}
 
 	@Override
-	public TipoUbicacionDTO getTipoMov(Long id) {
-		TipoUbicacion tipoUbicacion = tipoUbicRepo.findById(id)
+	public TipoUbicacionDTO getTipoMov(Long id, Empresa empresa) {
+		TipoUbicacion tipoUbicacion = tipoUbicRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Tipo de ubicacion", "id", id));
 		
 		return mapearEntidad(tipoUbicacion);
@@ -52,7 +55,7 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 
 	@Override
 	public TipoUbicacionDTO update(Long id, TipoUbicacionDTO tipoUbicacionDTO) {
-		TipoUbicacion tipoUbicacion = tipoUbicRepo.findById(id)
+		TipoUbicacion tipoUbicacion = tipoUbicRepo.findByIdAndEmpresa(id, tipoUbicacionDTO.getEmpresa())
 				.orElseThrow(() -> new ResourceNotFoundException("Tipo de ubicacion", "id", id));
 		
 		tipoUbicacion.setNombre(tipoUbicacionDTO.getNombre());
@@ -63,12 +66,26 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 	}
 
 	@Override
-	public void delete(Long id) {
-		TipoUbicacion tipoUbicacion = tipoUbicRepo.findById(id)
+	public void delete(Long id, Empresa empresa) {
+		TipoUbicacion tipoUbicacion = tipoUbicRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Tipo de ubicacion", "id", id));
+		
+		if(tipoUbicacion.getUbicaciones().size() > 0) {
+			throw new IllegalAccessError("El tipo de empresa no se puede eliminar, tiene ubicaciones asociadas");
+		}
 		
 		tipoUbicRepo.delete(tipoUbicacion);
 
+	}
+	
+	@Override
+	public void unable(Long id, Empresa empresa) {
+		TipoUbicacion tipoUbicacion = tipoUbicRepo.findByIdAndEmpresa(id, empresa)
+				.orElseThrow(() -> new ResourceNotFoundException("Tipo de ubicacion", "id", id));
+		
+		tipoUbicacion.setEstaActivo(false);
+		tipoUbicRepo.save(tipoUbicacion);
+		
 	}
 	
 	public TipoUbicacionDTO mapearEntidad(TipoUbicacion tipoUbicacion) {
@@ -77,6 +94,12 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 	
 	public TipoUbicacion mapearDTO(TipoUbicacionDTO tipoUbicacionDTO) {
 		return modelMapper.map(tipoUbicacionDTO, TipoUbicacion.class);
+	}
+	
+	@Override
+	public List<TipoUbicacionDTO> findByNombreAndEmpresaAndEstaActivo(String letras, Empresa empresa, Boolean estaActivo) {
+		List<TipoUbicacion> tiposMov = tipoUbicRepo.findByNombreContainsAndEmpresaAndEstaActivo(letras, empresa, estaActivo);
+		return tiposMov.stream().map(tipo -> mapearEntidad(tipo)).collect(Collectors.toList());
 	}
 
 }

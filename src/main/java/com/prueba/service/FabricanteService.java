@@ -11,15 +11,15 @@ public interface FabricanteService {
 	
 	public List<FabricanteDTO> list(Empresa empresa);
 	
-	public FabricanteDTO getFabricante(Long id);
+	public FabricanteDTO getFabricante(Long id, Empresa empresa);
 	
 	public FabricanteDTO update(Long id, FabricanteDTO fabricanteDTO);
 	
-	public void delete(Long id);
+	public void delete(Long id, Empresa empresa);
 	
 	//List<FabricanteDTO> findByNameAndEstaActivo(String nombre);
 
-	public void unable(Long id);
+	public void unable(Long id, Empresa empresa);
 
 	public List<FabricanteDTO> findByNameAndEmpresaAndEstaActivo(String letras, Empresa empresa, Boolean estaActivo);
 

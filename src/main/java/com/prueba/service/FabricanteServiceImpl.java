@@ -26,7 +26,7 @@ public class FabricanteServiceImpl implements FabricanteService {
 	@Override
 	public FabricanteDTO create(FabricanteDTO fabricanteDTO) {
 		Fabricante fabricante = mapearDTO(fabricanteDTO);
-		Optional<Fabricante> exist = fabricanteRepo.findById(fabricante.getNit());
+		Optional<Fabricante> exist = fabricanteRepo.findByNitAndEmpresa(fabricante.getNit(), fabricanteDTO.getEmpresa());
 		if(exist == null) {
 			fabricanteRepo.save(fabricante);
 		}else {
@@ -46,8 +46,8 @@ public class FabricanteServiceImpl implements FabricanteService {
 	}
 
 	@Override
-	public FabricanteDTO getFabricante(Long id) {
-		Fabricante fabricante = fabricanteRepo.findById(id)
+	public FabricanteDTO getFabricante(Long id, Empresa empresa) {
+		Fabricante fabricante = fabricanteRepo.findByNitAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "id", id));
 		
 		return mapearEntidad(fabricante);
@@ -55,7 +55,7 @@ public class FabricanteServiceImpl implements FabricanteService {
 
 	@Override
 	public FabricanteDTO update(Long id, FabricanteDTO fabricanteDTO) {
-		Fabricante fabricante = fabricanteRepo.findById(id)
+		Fabricante fabricante = fabricanteRepo.findByNitAndEmpresa(id, fabricanteDTO.getEmpresa())
 				.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "id", id));
 		
 		//fabricante.setDescripcion(fabricanteDTO.getDescripcion());
@@ -66,20 +66,20 @@ public class FabricanteServiceImpl implements FabricanteService {
 	}
 
 	@Override
-	public void delete(Long id) {
-		Fabricante fabricante = fabricanteRepo.findById(id)
+	public void delete(Long id, Empresa empresa) {
+		Fabricante fabricante = fabricanteRepo.findByNitAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "id", id));
 		
 		if(fabricante.getProductos().size() > 0) {
-			throw new IllegalAccessError("El fabricante no se puede elliminar, tiene productos asociados");
+			throw new IllegalAccessError("El fabricante no se puede eliminar, tiene productos asociados");
 		}
 		
 		fabricanteRepo.delete(fabricante);
 	}
 	
 	@Override
-	public void unable(Long id) {
-		Fabricante fabricante = fabricanteRepo.findById(id)
+	public void unable(Long id, Empresa empresa) {
+		Fabricante fabricante = fabricanteRepo.findByNitAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "id", id));
 		
 		fabricante.setEstaActivo(false);

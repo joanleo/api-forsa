@@ -23,7 +23,7 @@ import com.prueba.security.entity.Usuario;
 @Entity
 @Table(name = "m_empresas")
 public class Empresa {
-	
+	@JsonIgnore
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dfecha")
 	private Date fecha;

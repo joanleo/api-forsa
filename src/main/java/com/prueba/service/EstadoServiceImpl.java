@@ -25,7 +25,7 @@ public class EstadoServiceImpl implements EstadoService {
 	@Override
 	public EstadoDTO create(EstadoDTO estadoDTO) {
 		Estado estado = mapearDTO(estadoDTO);
-		Estado exist = estadoRepo.findByTipo(estado.getTipo());
+		Estado exist = estadoRepo.findByTipoAndEmpresa(estadoDTO.getTipo(), estadoDTO.getEmpresa());
 		if(exist == null) {
 			estadoRepo.save(estado);
 		}else {
@@ -43,8 +43,8 @@ public class EstadoServiceImpl implements EstadoService {
 	}
 
 	@Override
-	public EstadoDTO getEstado(Long id) {
-		Estado estado = estadoRepo.findById(id)
+	public EstadoDTO getEstado(Long id, Empresa empresa) {
+		Estado estado = estadoRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Estado", "id", id));
 		
 		return mapearEntidad(estado);
@@ -52,28 +52,28 @@ public class EstadoServiceImpl implements EstadoService {
 
 	@Override
 	public EstadoDTO update(Long id, EstadoDTO estadoDTO) {
-		Estado estado = estadoRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("EStado", "id", id));
+		Estado estado = estadoRepo.findByIdAndEmpresa(id, estadoDTO.getEmpresa())
+				.orElseThrow(() -> new ResourceNotFoundException("Estado", "id", id));
 		
 		//estado.setDescripcion(estadoDTO.getDescripcion());
 		estado.setTipo(estadoDTO.getTipo());
-		
+		estadoRepo.save(estado);
 		
 		return mapearEntidad(estado);
 	}
 
 	@Override
-	public void delete(Long id) {
-		Estado estado = estadoRepo.findById(id)
+	public void delete(Long id, Empresa empresa) {
+		Estado estado = estadoRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("EStado", "id", id));
 		
 		estadoRepo.delete(estado);
 	}
 	
 	@Override
-	public void unable(Long id) {
-		Estado estado = estadoRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("EStado", "id", id));
+	public void unable(Long id, Empresa empresa) {
+		Estado estado = estadoRepo.findByIdAndEmpresa(id, empresa)
+				.orElseThrow(() -> new ResourceNotFoundException("Estado", "id", id));
 		
 		estado.setEstaActivo(false);
 		estadoRepo.save(estado);
@@ -91,7 +91,7 @@ public class EstadoServiceImpl implements EstadoService {
 
 	@Override
 	public List<EstadoDTO> findByTipoAndEmpresaAndEstaActivo(String tipo, Empresa empresa, Boolean estaActivo) {
-		List<Estado> listEstados = estadoRepo.findByTipoContainsAndEstaActivo(tipo, estaActivo);
+		List<Estado> listEstados = estadoRepo.findByTipoContainsAndEmpresaAndEstaActivo(tipo, empresa, estaActivo);
 		
 		return listEstados.stream().map(estado -> mapearEntidad(estado)).collect(Collectors.toList());
 	}

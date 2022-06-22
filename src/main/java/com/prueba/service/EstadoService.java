@@ -12,14 +12,14 @@ public interface EstadoService {
 	
 	public List<EstadoDTO> list(Empresa empresa);
 	
-	public EstadoDTO getEstado(Long id);
+	public EstadoDTO getEstado(Long id, Empresa empresa);
 	
 	public EstadoDTO update(Long id, EstadoDTO estadoDTO);
 	
-	public void delete(Long id);
+	public void delete(Long id, Empresa empresa);
 	
 	public List<EstadoDTO> findByTipoAndEmpresaAndEstaActivo(String tipo, Empresa empresa, Boolean estaActivo);
 
-	public void unable(Long id);
+	public void unable(Long id, Empresa empresa);
 
 }

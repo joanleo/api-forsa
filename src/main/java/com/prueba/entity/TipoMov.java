@@ -1,5 +1,8 @@
 package com.prueba.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,10 +33,8 @@ public class TipoMov {
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
 
-
-
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
-	private Boolean estaActibo;
+	private Boolean estaActivo;
 	
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
@@ -54,12 +56,12 @@ public class TipoMov {
 		this.nombre = nombre;
 	}
 
-	public Boolean getEstaActibo() {
-		return estaActibo;
+	public Boolean getEstaActivo() {
+		return estaActivo;
 	}
 
-	public void setEstaActibo(Boolean estaActibo) {
-		this.estaActibo = estaActibo;
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
 	}
 
 	public Empresa getEmpresa() {
@@ -75,7 +77,7 @@ public class TipoMov {
 		this.id = id;
 		this.nombre = nombre;
 		this.empresa = empresa;
-		this.estaActibo = estaActibo;
+		this.estaActivo = estaActibo;
 	}
 
 	public TipoMov() {

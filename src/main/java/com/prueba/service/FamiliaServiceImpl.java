@@ -42,8 +42,8 @@ public class FamiliaServiceImpl implements FamiliaService {
 	}
 
 	@Override
-	public FamiliaDTO getFamilia(Long id) {
-		Familia familia = familiaRepo.findById(id)
+	public FamiliaDTO getFamilia(Long id, Empresa empresa) {
+		Familia familia = familiaRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Familia", "id", id));
 		
 		return mapearEntidad(familia);
@@ -51,7 +51,7 @@ public class FamiliaServiceImpl implements FamiliaService {
 
 	@Override
 	public FamiliaDTO update(Long id, FamiliaDTO familiaDTO) {
-		Familia familia = familiaRepo.findById(id)
+		Familia familia = familiaRepo.findByIdAndEmpresa(id, familiaDTO.getEmpresa())
 				.orElseThrow(() -> new ResourceNotFoundException("Familia", "id", id));
 
 		if(familiaDTO.getNombre() != null) {
@@ -68,8 +68,8 @@ public class FamiliaServiceImpl implements FamiliaService {
 	}
 
 	@Override
-	public void delete(Long id) {
-		Familia familia = familiaRepo.findById(id)
+	public void delete(Long id, Empresa empresa) {
+		Familia familia = familiaRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Familia", "id", id));
 		if(familia.getProductos().size() > 0) {
 			throw new IllegalAccessError("No se pude eliminar la empresa tiene usuarios y/o productos asociados");
@@ -79,8 +79,8 @@ public class FamiliaServiceImpl implements FamiliaService {
 	}
 	
 	@Override
-	public void unable(Long id) {
-		Familia familia = familiaRepo.findById(id)
+	public void unable(Long id, Empresa empresa) {
+		Familia familia = familiaRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Familia", "id", id));
 		familia.setEstaActiva(false);
 		familiaRepo.save(familia);
@@ -103,8 +103,8 @@ public class FamiliaServiceImpl implements FamiliaService {
 
 
 	@Override
-	public List<FamiliaDTO> findByNameAndEmpreaAndEstaActiva(String letters, Empresa empresa, Boolean estaActiva) {
-		List<Familia> listFamilias = familiaRepo.findByNombreContainsAndEmpresaAndEstaActiva(letters, empresa, estaActiva);
+	public List<FamiliaDTO> findByNameAndEmpreaAndEstaActiva(String letras, Empresa empresa, Boolean estaActiva) {
+		List<Familia> listFamilias = familiaRepo.findByNombreContainsAndEmpresaAndEstaActiva(letras, empresa, estaActiva);
 		return listFamilias.stream().map(familia -> mapearEntidad(familia)).collect(Collectors.toList());
 	}
 

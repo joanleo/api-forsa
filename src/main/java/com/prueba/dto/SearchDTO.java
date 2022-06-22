@@ -4,6 +4,7 @@ import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
 import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
+import com.prueba.entity.Producto_id;
 import com.prueba.entity.Ubicacion;
 
 public class SearchDTO {
@@ -31,6 +32,8 @@ public class SearchDTO {
 	private Boolean estaActivo;
 	
 	private String motivoIngreso;
+	
+	private Producto_id idProducto = new Producto_id(empresa.getNit(), codigoPieza);
 	
 
 	public SearchDTO() {
@@ -133,12 +136,14 @@ public class SearchDTO {
 		this.motivoIngreso = motivoIngreso;
 	}
 
-	@Override
-	public String toString() {
-		return "SearchDTO [codigoPieza=" + codigoPieza + ", descripcion=" + descripcion + ", area=" + area + ", orden="
-				+ orden + ", fabricante=" + fabricante + ", familia=" + familia + ", estado=" + estado + ", empresa="
-				+ empresa + ", ubicacion=" + ubicacion + ", verificado=" + verificado + ", estaActivo=" + estaActivo
-				+ "]";
+	public Producto_id getIdProducto() {
+		return idProducto;
 	}
+
+	public void setIdProducto(Producto_id idProducto) {
+		this.idProducto = idProducto;
+	}
+
+
 
 }

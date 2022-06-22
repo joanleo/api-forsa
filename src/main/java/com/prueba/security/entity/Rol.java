@@ -2,6 +2,7 @@ package com.prueba.security.entity;
 
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,7 +30,7 @@ public class Rol {
     @Column(name = "vcdescripcion", length = 100)
     private String descripcion;
     
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "role")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "role", cascade = CascadeType.ALL)
     private Collection<PoliRol> poliRoles;
     
     @ManyToOne(fetch = FetchType.LAZY)

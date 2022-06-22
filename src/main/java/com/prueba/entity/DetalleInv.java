@@ -36,7 +36,7 @@ public class DetalleInv {
 
 	public DetalleInv(MovInventario movimiento, Producto producto) {
 		super();
-		this.id = new DetalleInv_id(movimiento.getId(), producto.getCodigoPieza());
+		this.id = new DetalleInv_id(movimiento.getId(), producto.getIdProducto().getCodigoPieza());
 		this.movimiento = movimiento;
 		this.producto = producto;
 	}

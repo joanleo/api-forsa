@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.prueba.dto.EstadoDTO;
 import com.prueba.dto.FamiliaDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.security.dto.ResDTO;
@@ -69,10 +71,19 @@ public class FamiliaController {
 		return new ResponseEntity<FamiliaDTO>(familiaService.create(familiaDTO, empresa), HttpStatus.CREATED);
 	}
 	
+	@PutMapping("/{id}")
+	@ApiOperation(value = "Actualiza una familia", notes = "Actualiza los datos de una familia")
+	public ResponseEntity<FamiliaDTO> update(@Valid @RequestBody FamiliaDTO familiaDTO,
+											@PathVariable Long id){
+		FamiliaDTO actualizada = familiaService.update(id, familiaDTO);
+		
+		return new ResponseEntity<>(actualizada, HttpStatus.OK);
+	}
+	
 	
 	@GetMapping
 	@ApiOperation(value = "Encuentra las familias", notes = "Retorna las familias que en su nombre contengan las letrtas indicadas, retorna todas las familias si no se indica ninguna letra")
-	public List<FamiliaDTO> list(@RequestParam(required=false) String letters,
+	public List<FamiliaDTO> list(@RequestParam(required=false) String letras,
 								 @RequestParam(required=false) Long nit){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -83,30 +94,65 @@ public class FamiliaController {
 		}else {
 			empresa = usuario.getEmpresa();			
 		}
-		if(letters != null) {
-			return familiaService.findByNameAndEmpreaAndEstaActiva(letters, empresa, true);
+		if(letras != null) {
+			return familiaService.findByNameAndEmpreaAndEstaActiva(letras, empresa, true);
 		}else {
 			return familiaService.list(empresa);			
 		}
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{id},{nit}")
 	@ApiOperation(value = "Encuentra una familia", notes = "Retorna una familia por el id")
-	public ResponseEntity<FamiliaDTO> get(@PathVariable(name = "id") Long id) {
-		return ResponseEntity.ok(familiaService.getFamilia(id));
+	public ResponseEntity<FamiliaDTO> get(@PathVariable(name = "id") Long id,
+			 							  @PathVariable(required=false) Long nit){
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		
+		if(nit != null) {
+		empresa = util.obtenerEmpresa(nit);
+		}else {
+		empresa = usuario.getEmpresa();			
+		}
+		return ResponseEntity.ok(familiaService.getFamilia(id, empresa));
 	}
 	
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "Elimina un estado", notes = "Elimina un estado por su id")
-	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id){
-		familiaService.delete(id);
+	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
+					 					 @PathVariable(required=false) Long nit){
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		
+		if(nit != null) {
+		empresa = util.obtenerEmpresa(nit);
+		}else {
+		empresa = usuario.getEmpresa();			
+		}
+		
+		familiaService.delete(id, empresa);
 		return new ResponseEntity<ResDTO>(new ResDTO("Estado eliminada con exito"), HttpStatus.OK);
 	}
 	
 	@PatchMapping("/{id}")
 	@ApiOperation(value = "Inhabilita un estado", notes = "Inhabilita un estado por su id")
-	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id){
-		familiaService.unable(id);
+	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
+					 					 @PathVariable(required=false) Long nit){
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		
+		if(nit != null) {
+		empresa = util.obtenerEmpresa(nit);
+		}else {
+		empresa = usuario.getEmpresa();			
+		}
+		
+		familiaService.unable(id, empresa);
 		return new ResponseEntity<ResDTO>(new ResDTO("Estado inhabilitada con exito"), HttpStatus.OK);
 	}
 	

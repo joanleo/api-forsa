@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto_id;
+import com.prueba.security.entity.Usuario;
 
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
@@ -47,7 +48,11 @@ public class ProductoDTO {
 	
 	private String motivoIngreso ="Compra";
 	
-	private Producto_id producto_id = new Producto_id(empresa.getNit(), codigoPieza);
+	private Producto_id idProducto = new Producto_id(empresa.getNit(), codigoPieza);
+	
+	private String medidas;
+	
+	private Usuario reviso;
 
 	public String getCodigoPieza() {
 		return codigoPieza;
@@ -153,16 +158,56 @@ public class ProductoDTO {
 		this.motivoIngreso = motivoIngreso;
 	}
 
-	public Producto_id getProducto_id() {
-		return producto_id;
+	public Producto_id getIdProducto() {
+		return idProducto;
 	}
 
-	public void setProducto_id(Producto_id producto_id) {
-		this.producto_id = producto_id;
+	public void setIdProducto(Producto_id idProducto) {
+		this.idProducto = idProducto;
+	}
+
+	public String getMedidas() {
+		return medidas;
+	}
+
+	public void setMedidas(String medidas) {
+		this.medidas = medidas;
+	}
+
+	public Usuario getReviso() {
+		return reviso;
+	}
+
+	public void setReviso(Usuario reviso) {
+		this.reviso = reviso;
 	}
 
 	public ProductoDTO() {
+	}
+
+	public ProductoDTO(@NotNull(message = "Este campo no puede ser nulo") String codigoPieza,
+			@NotBlank(message = "Este campo no puede ser nulo") String descripcion,
+			@NotNull(message = "Este campo no puede ser nulo") Float area,
+			@NotBlank(message = "Este campo no puede ser nulo") String orden,
+			@NotNull(message = "Este campo no puede ser nulo") FabricanteDTO fabricante,
+			@NotNull(message = "Este campo no puede ser nulo") FamiliaDTO familia,
+			@NotNull(message = "Este campo no puede ser nulo") EstadoDTO estado, Empresa empresa, Boolean verificado,
+			@NotNull(message = "Este campo no puede ser nulo") UbicacionDTO ubicacion, Boolean estaActivo,
+			String nconfirmacion, String motivoIngreso, Producto_id idProducto) {
 		super();
+		this.descripcion = descripcion;
+		this.area = area;
+		this.orden = orden;
+		this.fabricante = fabricante;
+		this.familia = familia;
+		this.estado = estado;
+		this.empresa = empresa;
+		this.verificado = verificado;
+		this.ubicacion = ubicacion;
+		this.estaActivo = estaActivo;
+		this.nconfirmacion = nconfirmacion;
+		this.motivoIngreso = motivoIngreso;
+		this.idProducto = idProducto;
 	}
 
 	

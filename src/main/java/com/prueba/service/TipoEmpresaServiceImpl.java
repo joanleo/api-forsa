@@ -66,6 +66,10 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 		TipoEmpresa tipoEmpresa = tipoEmpresaRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Tipo de empresa", "id", id));
 		
+		if(tipoEmpresa.getEmpresas().size() > 0) {
+			throw new IllegalAccessError("El tipo de empresa no se puede eliminar, tiene empresas asociadas");
+		}
+		
 		tipoEmpresaRepo.delete(tipoEmpresa);
 
 	}

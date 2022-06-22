@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,14 +56,14 @@ public class EstadoController {
 	
 	
 	@PostMapping
-	@ApiOperation(value = "Crea un estado para los activos", notes = "Crea un nuevo estado para los activos")
+	@ApiOperation(value = "Crea un estado para los activos de una empresa", notes = "Crea un nuevo estado para los activos")
 	public ResponseEntity<EstadoDTO> create(@Valid @RequestBody EstadoDTO estadoDTO){
 		return new ResponseEntity<EstadoDTO>(estadoService.create(estadoDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	@ApiOperation(value = "Encuentra los estados de los activos", notes = "Retorna los estados que pueden tomar los activos que en su nombre contengan las letras indicadas, retorna todos los estados si no se especifica ninguna letra")
-	public List<EstadoDTO> list(@RequestParam(required=false) String letters,
+	@ApiOperation(value = "Encuentra los estados de los activos de una empresa", notes = "Retorna los estados que pueden tomar los activos que en su nombre contengan las letras indicadas, retorna todos los estados si no se especifica ninguna letra")
+	public List<EstadoDTO> list(@RequestParam(required=false) String letras,
 								@RequestParam(required=false) Long nit){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -75,30 +76,72 @@ public class EstadoController {
 			empresa = usuario.getEmpresa();			
 		}
 		
-		if(letters != null) {
-			return estadoService.findByTipoAndEmpresaAndEstaActivo(letters, empresa, true);
+		if(letras != null) {
+			return estadoService.findByTipoAndEmpresaAndEstaActivo(letras, empresa, true);
 		}else {
 			return estadoService.list(empresa);			
 		}
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{id},{nit}")
 	@ApiOperation(value = "Encuentra un estado", notes = "Retorna un estado segun su id")
-	public ResponseEntity<EstadoDTO> get(@PathVariable(name = "id") Long id){
-		return ResponseEntity.ok(estadoService.getEstado(id));
+	public ResponseEntity<EstadoDTO> get(@PathVariable(name = "id") Long id,
+										 @PathVariable(required=false) Long nit){
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		return ResponseEntity.ok(estadoService.getEstado(id, empresa));
+	}
+	
+	@PutMapping("/{id}")
+	@ApiOperation(value = "Actualiza el estado de una empresa", notes = "Actualiza los datos de un estado")
+	public ResponseEntity<EstadoDTO> update(@Valid @RequestBody EstadoDTO estadoDTO,
+											@PathVariable Long id){
+		EstadoDTO actualizado = estadoService.update(id, estadoDTO);
+		
+		return new ResponseEntity<>(actualizado, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
-	@ApiOperation(value = "Elimina un estado", notes = "Elimina un estado por su id")
-	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id){
-		estadoService.delete(id);
+	@ApiOperation(value = "Elimina un estado de una empresa", notes = "Elimina un estado por su id")
+ 	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
+										 @PathVariable(required=false) Long nit){
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		
+		if(nit != null) {
+		empresa = util.obtenerEmpresa(nit);
+		}else {
+		empresa = usuario.getEmpresa();			
+		}
+		estadoService.delete(id, empresa);
 		return new ResponseEntity<ResDTO>(new ResDTO("Estado eliminada con exito"), HttpStatus.OK);
 	}
 	
 	@PatchMapping("/{id}")
 	@ApiOperation(value = "Inhabilita un estado", notes = "Inhabilita un estado por su id")
-	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id){
-		estadoService.unable(id);
+	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
+	 									@PathVariable(required=false) Long nit){
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		
+		if(nit != null) {
+		empresa = util.obtenerEmpresa(nit);
+		}else {
+		empresa = usuario.getEmpresa();			
+		}
+		estadoService.unable(id, empresa);
 		return new ResponseEntity<ResDTO>(new ResDTO("Estado inhabilitada con exito"), HttpStatus.OK);
 	}
 	

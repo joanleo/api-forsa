@@ -7,33 +7,31 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.prueba.security.entity.Usuario;
 
-@JsonIdentityInfo(
+/*@JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "codigoPieza")
+		  property = "codigoPieza")*/
 @Entity
 @Table(name = "mov_activos")
 public class Producto{
 	
-	@EmbeddedId
-	private Producto_id producto_id;
-	
 	/*@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long id;*/
 	
+	private static final long serialVersionUID = 1L;
+	
+	@EmbeddedId
+	private Producto_id idProducto;
+	
+	/*
     @Column(name = "vccodigopieza", length = 20)
     private String codigoPieza;*/
 
@@ -235,7 +233,21 @@ public class Producto{
 
 	public void setMedidas(String medidas) {
 		this.medidas = medidas;
+	}		
+
+	public Producto_id getIdProducto() {
+		return idProducto;
 	}
+
+	public void setIdProducto(Producto_id idProducto) {
+		this.idProducto = idProducto;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	
 	
 
 	public Producto(Long nitEmpresa, String codigoPieza, String descripcion, Float area, String orden, Familia familia,
@@ -243,7 +255,7 @@ public class Producto{
 			Fabricante fabricante, Empresa empresa, Estado estado, Ubicacion ubicacion, Boolean importado,
 			Usuario reviso, String medidas) {
 		super();
-		this.producto_id = new Producto_id(nitEmpresa, codigoPieza);
+		this.idProducto = new Producto_id(nitEmpresa, codigoPieza);
 		this.descripcion = descripcion;
 		this.area = area;
 		this.orden = orden;
@@ -269,7 +281,7 @@ public class Producto{
 	public Producto(Producto_id producto_id, String descripcion, Float area, String orden, Familia familia,
 			Fabricante fabricante, Empresa empresa) {
 		super();
-		this.producto_id = producto_id;
+		this.idProducto = producto_id;
 		this.descripcion = descripcion;
 		this.area = area;
 		this.orden = orden;

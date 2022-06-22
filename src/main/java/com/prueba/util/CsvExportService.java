@@ -15,6 +15,9 @@ import com.prueba.dto.EmpresaDTO;
 import com.prueba.dto.EstadoDTO;
 import com.prueba.dto.FabricanteDTO;
 import com.prueba.dto.FamiliaDTO;
+import com.prueba.dto.TipoMovDTO;
+import com.prueba.dto.TipoUbicacionDTO;
+import com.prueba.dto.UbicacionDTO;
 import com.prueba.entity.Producto;
 
 
@@ -23,11 +26,11 @@ public class CsvExportService {
 
 	private static final Logger log = LoggerFactory.getLogger(CsvExportService.class);
 
-    public void writeEmployeesToCsv(Writer writer, List<Producto> productos) {
+    public void writeProductsToCsv(Writer writer, List<Producto> productos) {
 
         try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
             for (Producto producto : productos) {
-                csvPrinter.printRecord(producto.getCodigoPieza(), producto.getDescripcion(), producto.getArea(),
+                csvPrinter.printRecord(producto.getIdProducto().getCodigoPieza(), producto.getDescripcion(), producto.getArea(),
                 		producto.getEmpresa().getNombre(), producto.getEstado() == null ? "" : producto.getEstado().getTipo(), producto.getFabricante().getNombre(), 
                 		producto.getFamilia().getNombre(), producto.getOrden(), producto.getUbicacion() == null ? "":producto.getUbicacion().getNombre());
             }
@@ -74,5 +77,39 @@ public class CsvExportService {
 	    }catch (IOException e) {
 	        log.error("Error en la generacion del CSV  ", e);
 	    }
+	}
+
+	public void writeTiposMovToCsv(PrintWriter writer, List<TipoMovDTO> tiposMov) {
+		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+    		for(TipoMovDTO tipoMov: tiposMov) {
+    			csvPrinter.printRecord(tipoMov.getId(), tipoMov.getNombre());    			
+    		}
+	    }catch (IOException e) {
+	        log.error("Error en la generacion del CSV  ", e);
+	    }
+		
+	}
+
+	public void writeTiposUbiToCsv(PrintWriter writer, List<TipoUbicacionDTO> tiposUbic) {
+		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+    		for(TipoUbicacionDTO tipoMov: tiposUbic) {
+    			csvPrinter.printRecord(tipoMov.getId(), tipoMov.getNombre());    			
+    		}
+	    }catch (IOException e) {
+	        log.error("Error en la generacion del CSV  ", e);
+	    }
+		
+	}
+
+	public void writeUbicacionesToCsv(PrintWriter writer, List<UbicacionDTO> ubicaciones) {
+		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+    		for(UbicacionDTO ubicacion: ubicaciones) {
+    			csvPrinter.printRecord(ubicacion.getId(), ubicacion.getNombre(), ubicacion.getCiudad(),
+    								   ubicacion.getDireccion(), ubicacion.getTipo());    			
+    		}
+	    }catch (IOException e) {
+	        log.error("Error en la generacion del CSV  ", e);
+	    }
+		
 	}
 }

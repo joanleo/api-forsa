@@ -1,10 +1,14 @@
 package com.prueba.dto;
 
+import com.prueba.entity.Empresa;
+
 public class TipoUbicacionDTO {
 	
 	private Long id;
 
 	private String nombre;
+	
+	private Empresa empresa;
 
 	public Long getId() {
 		return id;
@@ -20,6 +24,14 @@ public class TipoUbicacionDTO {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 
 }

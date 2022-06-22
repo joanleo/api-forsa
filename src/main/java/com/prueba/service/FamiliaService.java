@@ -11,16 +11,16 @@ public interface FamiliaService {
 	
 	public List<FamiliaDTO> list(Empresa empresa);
 	
-	public FamiliaDTO getFamilia(Long id);
+	public FamiliaDTO getFamilia(Long id, Empresa empresa);
 	
 	public FamiliaDTO update(Long id, FamiliaDTO familiaDTO);
 	
-	public void delete(Long id);
+	public void delete(Long id, Empresa empresa);
 	
 	public List<FamiliaDTO> findByNameAndEmpresa(String name, Empresa empresa);
 
-	public void unable(Long id);
+	public void unable(Long id, Empresa empresa);
 
-	public List<FamiliaDTO> findByNameAndEmpreaAndEstaActiva(String letters, Empresa empresa, Boolean estaActiva);
+	public List<FamiliaDTO> findByNameAndEmpreaAndEstaActiva(String letras, Empresa empresa, Boolean estaActiva);
 
 }
