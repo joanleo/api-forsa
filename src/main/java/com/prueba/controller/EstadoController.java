@@ -48,7 +48,7 @@ public class EstadoController {
 	@Autowired
 	private CsvExportService csvService;
 	
-	@Autowired
+	@Autowired 
 	private UsuarioRepository usuarioRepo;
 	
 	@Autowired

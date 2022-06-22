@@ -1,8 +1,5 @@
 package com.prueba.entity;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,10 +41,6 @@ public class Ubicacion {
 	
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
 	private Boolean estaActivo;
-	
-	@JsonIgnore
-	@OneToMany(mappedBy = "ubicacion", cascade = CascadeType.ALL)
-	private List<Producto> productos;
 
 	public Empresa getEmpresa() {
 		return empresa;
@@ -104,14 +96,6 @@ public class Ubicacion {
 
 	public void setEstaActivo(Boolean estaActivo) {
 		this.estaActivo = estaActivo;
-	}	
-
-	public List<Producto> getProductos() {
-		return productos;
-	}
-
-	public void setProductos(List<Producto> productos) {
-		this.productos = productos;
 	}
 	
 	
