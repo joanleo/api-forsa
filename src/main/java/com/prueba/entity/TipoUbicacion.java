@@ -36,8 +36,7 @@ public class TipoUbicacion {
 	private Boolean estaActivo;
 	
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "nidubicacion")
+	@OneToMany(mappedBy = "tipo")
 	private List<Ubicacion> ubicaciones;
 
 	public Long getId() {
