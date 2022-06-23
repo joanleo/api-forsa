@@ -43,7 +43,7 @@ public class ReportesController {
 		System.out.println("Controller filtro " + filtro);
 		Page<Producto> reporte = productoService.getVerificacion(orden, filtro, pagina, items);
 		
-		return reporte;//new ResponseEntity<ReporteVerificacionDTO>(reporte, HttpStatus.OK);
+		return reporte;
 	}
 	
 	@GetMapping("/verificacion/descarga")
