@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,11 +28,15 @@ import org.springframework.web.multipart.MultipartFile;
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.ProductoDTO;
 import com.prueba.dto.SearchDTO;
+import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.repository.ProductoRepository;
 import com.prueba.security.dto.ResDTO;
+import com.prueba.security.entity.Usuario;
+import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.service.ProductoService;
 import com.prueba.util.CsvExportService;
+import com.prueba.util.UtilitiesApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,6 +55,12 @@ public class ProductoController {
 	@Autowired
 	private ProductoRepository productoRepo;
 	
+	@Autowired
+	private UsuarioRepository usuarioRepo;
+	
+	@Autowired
+	private UtilitiesApi util;
+	
 	@PostMapping
 	@ApiOperation(value = "Crea un activo", notes = "Crea un nuevo activo")
 	public ResponseEntity<ProductoDTO> create(@Valid @RequestBody ProductoDTO productoDTO){
@@ -57,13 +69,32 @@ public class ProductoController {
 	
 	@PostMapping("/indexados")
 	@ApiOperation(value = "Encuentra los activos", notes = "Encuentra los activos que concuerden con las especificaciones enviadas en el Json, se puede indicar o no los parametros de la paginacion")
-	public ApiResponse<Page<Producto>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+	public ApiResponse<Page<Producto>> listSearchDTO(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 											@RequestParam(required=false, defaultValue = "0") Integer items, 
+											@RequestParam(required=false) Long nit,
 											@RequestBody(required=false) SearchDTO searchDTO){
-		System.out.println("Controller busqueda por letras 2 "+ items);
-		System.out.println(searchDTO);
-		Page<Producto> productos =  productoService.searchProducts(searchDTO, pagina, items);
-		return new ApiResponse<>(productos.getSize(), productos);
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println("Items por pagina "+items);
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		if(searchDTO != null) {
+			System.out.println("nombre de la empresa "+searchDTO);
+			Page<Producto> productos =  productoService.searchProducts(searchDTO, pagina, items);
+			return new ApiResponse<>(productos.getSize(), productos);
+		}else {
+			System.out.println(empresa.getNombre());
+			Page<Producto> productos = productoService.list(pagina, items);
+			return new ApiResponse<>(productos.getSize(), productos);
+		}
+		
+		
 	}
 	
 	@GetMapping
