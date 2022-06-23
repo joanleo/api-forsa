@@ -71,10 +71,10 @@ public class ProductoController {
 	
 	@PostMapping("/indexados")
 	@ApiOperation(value = "Encuentra los activos", notes = "Encuentra los activos que concuerden con las especificaciones enviadas en el Json, se puede indicar o no los parametros de la paginacion")
-	public ApiResponse<Page<Producto>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+	public ApiResponse<Page<Producto>> listSearchDTO(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 											@RequestParam(required=false, defaultValue = "0") Integer items, 
-											@RequestBody(required=false) SearchDTO searchDTO,
-											@RequestParam(required=false) Long nit){
+											@RequestParam(required=false) Long nit,
+											@RequestBody(required=false) SearchDTO searchDTO){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		System.out.println(items);
@@ -87,9 +87,11 @@ public class ProductoController {
 		}
 		
 		if(searchDTO != null) {
+			System.out.println(searchDTO);
 			Page<Producto> productos =  productoService.searchProducts(empresa, searchDTO, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);
 		}else {
+			System.out.println(empresa.getNombre());
 			Page<Producto> productos = productoService.list(empresa, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);
 		}
