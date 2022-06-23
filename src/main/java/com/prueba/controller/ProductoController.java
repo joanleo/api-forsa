@@ -69,7 +69,7 @@ public class ProductoController {
 		return new ResponseEntity<ProductoDTO>(productoService.create(productoDTO), HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/indexados")
+	@PostMapping("/indexados")
 	@ApiOperation(value = "Encuentra los activos", notes = "Encuentra los activos que concuerden con las especificaciones enviadas en el Json, se puede indicar o no los parametros de la paginacion")
 	public ApiResponse<Page<Producto>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 											@RequestParam(required=false, defaultValue = "0") Integer items, 
