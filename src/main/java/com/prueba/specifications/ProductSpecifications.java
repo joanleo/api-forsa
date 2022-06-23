@@ -81,7 +81,7 @@ public class ProductSpecifications {
 			List<Predicate> predicates = new ArrayList<>();
 			
 			predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+letras+ "%"));
-			//Root<Producto> activo = query.from(Producto.class);
+
 			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
 			
 			
@@ -99,17 +99,17 @@ public class ProductSpecifications {
 				predicates.add(criteryBuilder.equal(root.get("orden"), orden));				
 			}
 			if(filtro != null && filtro.equalsIgnoreCase("faltantes")) {
-				System.out.println("Filtro 1 " + filtro);
+				
 				predicates.add(criteryBuilder.isTrue(root.get("importado").as(Boolean.class)));
 				predicates.add(criteryBuilder.isFalse(root.get("verificado").as(Boolean.class)));
 			}
 			if(filtro != null && filtro.equalsIgnoreCase("sobrantes" )) {
-				System.out.println("Filtro 2 " + filtro);
+
 				predicates.add(criteryBuilder.isFalse(root.get("importado").as(Boolean.class)));
 				predicates.add(criteryBuilder.isTrue(root.get("verificado").as(Boolean.class)));
 			}
 			if(filtro != null && filtro.equalsIgnoreCase("ok" )) {
-				System.out.println("Filtro 2 " + filtro);
+
 				predicates.add(criteryBuilder.isTrue(root.get("importado").as(Boolean.class)));
 				predicates.add(criteryBuilder.isTrue(root.get("verificado").as(Boolean.class)));
 			}

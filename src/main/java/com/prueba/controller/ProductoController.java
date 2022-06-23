@@ -69,7 +69,7 @@ public class ProductoController {
 		return new ResponseEntity<ProductoDTO>(productoService.create(productoDTO), HttpStatus.CREATED);
 	}
 	
-	@PostMapping("/indexados")
+	@GetMapping("/indexados")
 	@ApiOperation(value = "Encuentra los activos", notes = "Encuentra los activos que concuerden con las especificaciones enviadas en el Json, se puede indicar o no los parametros de la paginacion")
 	public ApiResponse<Page<Producto>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 											@RequestParam(required=false, defaultValue = "0") Integer items, 
@@ -85,10 +85,16 @@ public class ProductoController {
 		}else {
 			empresa = usuario.getEmpresa();			
 		}
-		System.out.println("Controller busqueda por letras 2 "+ items);
-		System.out.println(searchDTO);
-		Page<Producto> productos =  productoService.searchProducts(empresa, searchDTO, pagina, items);
-		return new ApiResponse<>(productos.getSize(), productos);
+		
+		if(searchDTO != null) {
+			Page<Producto> productos =  productoService.searchProducts(empresa, searchDTO, pagina, items);
+			return new ApiResponse<>(productos.getSize(), productos);
+		}else {
+			Page<Producto> productos = productoService.list(empresa, pagina, items);
+			return new ApiResponse<>(productos.getSize(), productos);
+		}
+		
+		
 	}
 	
 	@GetMapping
@@ -155,10 +161,8 @@ public class ProductoController {
 		try {
 			productoService.loadFile(file, webRequest);
 		} catch (Exception e) {
-			// TODO: handle exception
+			return new ResponseEntity<ResDTO>(new ResDTO("Error en la carga del archivo "+ e), HttpStatus.OK);
 		}
-		//System.out.println(list);
-		//productoService.load(list);
 		
 		return new ResponseEntity<ResDTO>(new ResDTO("Se ha cargado la lista con exito"), HttpStatus.OK);
 	}
@@ -194,8 +198,6 @@ public class ProductoController {
         servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "productos.csv" + "\"");
         
         
-        //List<Producto> productos = productoRepo.findAllByEstaActivoTrue();
-        System.out.println("Descarga de activos en csv");
 		if (searchDTO != null) {
 			System.out.println("Se envio SearchDTO");
 			List<Producto> productos =  productoService.searchProducts(searchDTO);
