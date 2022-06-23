@@ -539,38 +539,6 @@ public class ProductoServiceImpl implements ProductoService {
 		}
 		Page<Producto> listProducts = productoRepo.findAll(productSpec.getVerificacion(orden, filtro), PageRequest.of(offset, pageSize));		
 		return listProducts;
-		
-		/*String currentUserName = "";
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if ((authentication != null)) {
-		    currentUserName = authentication.getName();
-		}
-		Usuario usuario = usuarioRepo.findByUsername(authentication.getName()).get();
-		System.out.println(currentUserName);
-		List<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro));
-		/*List<Producto> faltantes = new ArrayList<Producto>();
-		List<Producto> sobrantes = new ArrayList<Producto>();
-		for(Producto producto: productos) {
-			if(producto != null && !producto.getImportado() && producto.getVerificado()) {
-				sobrantes.add(producto);
-			}
-			if(producto != null && producto.getImportado() && !producto.getVerificado()) {
-				faltantes.add(producto);
-			}
-		}
-		ReporteVerificacionDTO reporte = new ReporteVerificacionDTO();
-		reporte.setOrden(orden);
-		reporte.setFiltro(filtro);
-		reporte.setActivos(productos);
-		if(!faltantes.isEmpty()) {
-			reporte.setFaltantes(faltantes);			
-		}
-		if(!sobrantes.isEmpty()) {
-			reporte.setSobrantes(sobrantes);
-		}
-		reporte.setRealizo(usuario);
-		
-		return reporte;*/
 	}
 
 
