@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.prueba.dto.UbicacionDTO;
 import com.prueba.entity.Empresa;
-import com.prueba.entity.Estado;
 import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.UbicacionRepository;

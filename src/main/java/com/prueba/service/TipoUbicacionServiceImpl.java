@@ -7,10 +7,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.prueba.dto.TipoMovDTO;
 import com.prueba.dto.TipoUbicacionDTO;
 import com.prueba.entity.Empresa;
-import com.prueba.entity.TipoMov;
 import com.prueba.entity.TipoUbicacion;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.TipoUbicacionRepository;
