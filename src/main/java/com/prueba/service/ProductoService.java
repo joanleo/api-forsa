@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.prueba.dto.ProductoDTO;
 import com.prueba.dto.SearchDTO;
+import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 
 
@@ -25,7 +26,7 @@ public interface ProductoService {
 	
 	public ProductoDTO receive(String id, ProductoDTO productoDTO);
 	
-	public Page<Producto> searchProducts(SearchDTO searchDTO, int offset, int pageSize);
+	public Page<Producto> searchProducts(Empresa empresa, SearchDTO searchDTO, int offset, int pageSize);
 	
 	public List<Producto> searchProducts(SearchDTO searchDTO);
 	

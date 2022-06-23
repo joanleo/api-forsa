@@ -86,7 +86,7 @@ public class ProductoController {
 		
 		if(searchDTO != null) {
 			System.out.println("nombre de la empresa "+searchDTO);
-			Page<Producto> productos =  productoService.searchProducts(searchDTO, pagina, items);
+			Page<Producto> productos =  productoService.searchProducts(empresa, searchDTO, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);
 		}else {
 			System.out.println(empresa.getNombre());

@@ -93,7 +93,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	
 	@Override
-	public Page<Producto> searchProducts(SearchDTO searchDTO, int offset, int pageSize) {
+	public Page<Producto> searchProducts(Empresa empresa, SearchDTO searchDTO, int offset, int pageSize) {
 		if(pageSize == 0) {
 			Page<Producto> productos = productoRepo.findAll(productSpec.getProductos(searchDTO),PageRequest.of(0, 10));
 			return productos;
