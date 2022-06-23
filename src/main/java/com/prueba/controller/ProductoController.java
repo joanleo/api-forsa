@@ -69,7 +69,7 @@ public class ProductoController {
 		return new ResponseEntity<ProductoDTO>(productoService.create(productoDTO), HttpStatus.CREATED);
 	}
 	
-	@PostMapping("/indexados")
+	@GetMapping("/indexados")
 	@ApiOperation(value = "Encuentra los activos", notes = "Encuentra los activos que concuerden con las especificaciones enviadas en el Json, se puede indicar o no los parametros de la paginacion")
 	public ApiResponse<Page<Producto>> listSearchDTO(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 											@RequestParam(required=false, defaultValue = "0") Integer items, 
@@ -77,7 +77,7 @@ public class ProductoController {
 											@RequestBody(required=false) SearchDTO searchDTO){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		System.out.println(items);
+		System.out.println("Items por pagina "+items);
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(nit != null) {
@@ -87,7 +87,7 @@ public class ProductoController {
 		}
 		
 		if(searchDTO != null) {
-			System.out.println(searchDTO);
+			System.out.println("nombre de la empresa "+searchDTO);
 			Page<Producto> productos =  productoService.searchProducts(empresa, searchDTO, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);
 		}else {
