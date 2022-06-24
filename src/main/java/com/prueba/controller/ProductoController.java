@@ -79,7 +79,7 @@ public class ProductoController {
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
-		
+				
 		if(nit != null) {
 			empresa = util.obtenerEmpresa(nit);
 		}else {
@@ -90,6 +90,7 @@ public class ProductoController {
 			Page<Producto> productos = productoService.list(empresa, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);			
 		}else {
+			System.out.println("Controller searchDTO no nulo");
 			Page<Producto> productos =  productoService.searchProducts(empresa, searchDTO, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);
 		}
@@ -197,7 +198,7 @@ public class ProductoController {
         
         
 		if (searchDTO != null) {
-			List<Producto> productos =  productoService.searchProducts(searchDTO);
+			List<Producto> productos =  productoService.searchProducts(searchDTO, empresa);
 			csvService.writeProductsToCsv(servletResponse.getWriter(), productos);
 		}else if(letras != null){
 			List<Producto> productos = productoService.searchProducts(letras, empresa);

@@ -100,11 +100,12 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Override
 	public Page<Producto> searchProducts(Empresa empresa, SearchDTO searchDTO, int offset, int pageSize) {
+		System.out.println("Servicio");
 		if(pageSize == 0) {
-			Page<Producto> productos = productoRepo.findAll(productSpec.getProductos(searchDTO),PageRequest.of(0, 10));
+			Page<Producto> productos = productoRepo.findAll(productSpec.getProductos(searchDTO, empresa),PageRequest.of(0, 10));
 			return productos;
 		}
-		Page<Producto> listProducts = productoRepo.findAll(productSpec.getProductos(searchDTO), PageRequest.of(offset, pageSize));		
+		Page<Producto> listProducts = productoRepo.findAll(productSpec.getProductos(searchDTO, empresa), PageRequest.of(offset, pageSize));		
 		return listProducts;
 	}
 
@@ -516,9 +517,8 @@ public class ProductoServiceImpl implements ProductoService {
 
 
 	@Override
-	public List<Producto> searchProducts(SearchDTO searchDTO) {
-		
-		List<Producto> listProducts = productoRepo.findAll(productSpec.getProductos(searchDTO));		
+	public List<Producto> searchProducts(SearchDTO searchDTO, Empresa empresa) {
+		List<Producto> listProducts = productoRepo.findAll(productSpec.getProductos(searchDTO, empresa));		
 		return listProducts;
 	}
 
@@ -531,20 +531,20 @@ public class ProductoServiceImpl implements ProductoService {
 
 
 	@Override
-	public Page<Producto> getVerificacion(String orden, String filtro, int offset, int pageSize) {
+	public Page<Producto> getVerificacion(String orden, String filtro, Empresa empresa, int offset, int pageSize) {
 		
 		if(pageSize == 0) {
-			Page<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro),PageRequest.of(0, 10));
+			Page<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro, empresa),PageRequest.of(0, 10));
 			return productos;
 		}
-		Page<Producto> listProducts = productoRepo.findAll(productSpec.getVerificacion(orden, filtro), PageRequest.of(offset, pageSize));		
+		Page<Producto> listProducts = productoRepo.findAll(productSpec.getVerificacion(orden, filtro, empresa), PageRequest.of(offset, pageSize));		
 		return listProducts;
 	}
 
 
 	@Override
-	public List<Producto> getVerificacion(String orden, String filtro){
-		List<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro));
+	public List<Producto> getVerificacion(String orden, String filtro, Empresa empresa){
+		List<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro, empresa));
 		return productos;
 	}
 	

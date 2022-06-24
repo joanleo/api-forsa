@@ -29,7 +29,7 @@ public interface ProductoService {
 	
 	public Page<Producto> searchProducts(Empresa empresa, SearchDTO searchDTO, int offset, int pageSize);
 	
-	public List<Producto> searchProducts(SearchDTO searchDTO);
+	public List<Producto> searchProducts(SearchDTO searchDTO, Empresa empresa);
 	
 	public Page<Producto> searchProducts(Empresa empresa, String letra, int offset, int pageSize);
 	
@@ -39,7 +39,7 @@ public interface ProductoService {
 	
 	public String loadFile(MultipartFile file, WebRequest webRequest);
 
-	public Page<Producto> getVerificacion(String orden, String filtro, int offset, int pageSize);
+	public Page<Producto> getVerificacion(String orden, String filtro, Empresa empresa, int offset, int pageSize);
 
-	public List<Producto> getVerificacion(String orden, String filtro);
+	public List<Producto> getVerificacion(String orden, String filtro, Empresa empresa);
 }

@@ -17,9 +17,12 @@ import com.prueba.entity.Producto_id;
 public class ProductSpecifications {
 
 
-	public Specification<Producto> getProductos(SearchDTO searchDTO){
+	public Specification<Producto> getProductos(SearchDTO searchDTO, Empresa empresa){
 		return (root, query, criteryBuilder) ->{
 			
+			if(searchDTO.getEmpresa() == null) {
+				searchDTO.setEmpresa(empresa);
+			}
 			
 			List<Predicate> predicates = new ArrayList<>();
 			
@@ -80,6 +83,7 @@ public class ProductSpecifications {
 	public Specification<Producto> getProductosActivos(String letras, Empresa empresa){
 		return (root, query, criteryBuilder) ->{
 			List<Predicate> predicates = new ArrayList<>();
+			System.out.println("Specification "+letras);
 			predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+letras+ "%"));
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
@@ -91,7 +95,7 @@ public class ProductSpecifications {
 		};
 	}
 
-	public Specification<Producto> getVerificacion(String orden, String filtro) {
+	public Specification<Producto> getVerificacion(String orden, String filtro, Empresa empresa) {
 		return (root, query, criteryBuilder) ->{
 			
 			List<Predicate> predicates = new ArrayList<>();
@@ -101,17 +105,17 @@ public class ProductSpecifications {
 				predicates.add(criteryBuilder.equal(root.get("orden"), orden));				
 			}
 			if(filtro != null && filtro.equalsIgnoreCase("faltantes")) {
-				
+				predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 				predicates.add(criteryBuilder.isTrue(root.get("importado").as(Boolean.class)));
 				predicates.add(criteryBuilder.isFalse(root.get("verificado").as(Boolean.class)));
 			}
 			if(filtro != null && filtro.equalsIgnoreCase("sobrantes" )) {
-
+				predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 				predicates.add(criteryBuilder.isFalse(root.get("importado").as(Boolean.class)));
 				predicates.add(criteryBuilder.isTrue(root.get("verificado").as(Boolean.class)));
 			}
 			if(filtro != null && filtro.equalsIgnoreCase("ok" )) {
-
+				predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 				predicates.add(criteryBuilder.isTrue(root.get("importado").as(Boolean.class)));
 				predicates.add(criteryBuilder.isTrue(root.get("verificado").as(Boolean.class)));
 			}
