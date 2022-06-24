@@ -95,6 +95,8 @@ public class Producto{
     @Column(name = "vcmedidas")
     private String medidas;
     
+    @Column(name = "benviado", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
+    private Boolean enviado;
 	/*public Long getId() {
 		return id;
 	}
@@ -247,6 +249,22 @@ public class Producto{
 		this.idProducto = idProducto;
 	}
 
+	public TipoActivo getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoActivo tipo) {
+		this.tipo = tipo;
+	}
+
+	public Boolean getEnviado() {
+		return enviado;
+	}
+
+	public void setEnviado(Boolean enviado) {
+		this.enviado = enviado;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -257,7 +275,7 @@ public class Producto{
 	public Producto(Long nitEmpresa, String codigoPieza, String descripcion, Float area, String orden, Familia familia,
 			String nconfirmacion, Boolean verificado, Boolean estaActivo, String motivoIngreso, Date fechaActualizacion,
 			Fabricante fabricante, Empresa empresa, Estado estado, Ubicacion ubicacion, Boolean importado,
-			Usuario reviso, String medidas) {
+			Usuario reviso, String medidas, Boolean enviado) {
 		super();
 		this.idProducto = new Producto_id(nitEmpresa, codigoPieza);
 		this.descripcion = descripcion;
@@ -276,12 +294,27 @@ public class Producto{
 		this.importado = importado;
 		this.reviso = reviso;
 		this.medidas = medidas;
+		this.enviado = enviado;
 	}
 
 	public Producto() {
 		super();
 	}
 
+	public Producto(Producto_id producto_id, String descripcion, Float area, String orden, Familia familia,
+			Fabricante fabricante, Empresa empresa, TipoActivo tipo, String medidas) {
+		super();
+		this.idProducto = producto_id;
+		this.descripcion = descripcion;
+		this.area = area;
+		this.orden = orden;
+		this.familia = familia;
+		this.fabricante = fabricante;
+		this.empresa = empresa;
+		this.tipo = tipo;
+		this.medidas = medidas;
+	}
+	
 	public Producto(Producto_id producto_id, String descripcion, Float area, String orden, Familia familia,
 			Fabricante fabricante, Empresa empresa) {
 		super();
@@ -292,6 +325,7 @@ public class Producto{
 		this.familia = familia;
 		this.fabricante = fabricante;
 		this.empresa = empresa;
+
 	}
 
 
