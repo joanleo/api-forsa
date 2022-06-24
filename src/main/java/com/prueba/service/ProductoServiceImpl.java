@@ -233,10 +233,10 @@ public class ProductoServiceImpl implements ProductoService {
 	public Page<Producto> searchProducts(Empresa empresa, String letra, int offset, int pageSize) {
 		
 		if(pageSize == 0) {
-			Page<Producto> productos = productoRepo.findAll(productSpec.getProductosActivos(letra),PageRequest.of(0, 10));
+			Page<Producto> productos = productoRepo.findAll(productSpec.getProductosActivos(letra, empresa),PageRequest.of(0, 10));
 			return productos;
 		}
-		Page<Producto> listProducts = productoRepo.findAll(productSpec.getProductosActivos(letra), PageRequest.of(offset, pageSize));		
+		Page<Producto> listProducts = productoRepo.findAll(productSpec.getProductosActivos(letra, empresa), PageRequest.of(offset, pageSize));		
 		return listProducts;
 	}
 	
@@ -524,8 +524,8 @@ public class ProductoServiceImpl implements ProductoService {
 
 
 	@Override
-	public List<Producto> searchProducts(String letra) {
-		List<Producto> listProducts = productoRepo.findAll(productSpec.getProductosActivos(letra));		
+	public List<Producto> searchProducts(String letras, Empresa empresa) {
+		List<Producto> listProducts = productoRepo.findAll(productSpec.getProductosActivos(letras, empresa));		
 		return listProducts;
 	}
 

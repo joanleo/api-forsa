@@ -33,7 +33,7 @@ public interface ProductoService {
 	
 	public Page<Producto> searchProducts(Empresa empresa, String letra, int offset, int pageSize);
 	
-	public List<Producto> searchProducts(String letra);
+	public List<Producto> searchProducts(String letras, Empresa empresa);
 	
 	public void load(List<ProductoDTO> listProductoDTO);
 	

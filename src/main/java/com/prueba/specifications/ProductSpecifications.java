@@ -9,7 +9,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import com.prueba.dto.SearchDTO;
+import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
+import com.prueba.entity.Producto_id;
 
 @Component
 public class ProductSpecifications {
@@ -18,16 +20,15 @@ public class ProductSpecifications {
 	public Specification<Producto> getProductos(SearchDTO searchDTO){
 		return (root, query, criteryBuilder) ->{
 			
-			System.out.println(searchDTO);
 			
 			List<Predicate> predicates = new ArrayList<>();
 			
 			if(searchDTO.getArea() != null && !searchDTO.getArea().isEmpty()) {
-				System.out.println(searchDTO.getArea().toString());
 				predicates.add(criteryBuilder.like(root.get("area").as(String.class), "%"+searchDTO.getArea().toString()+"%"));
 			}
 			if(searchDTO.getCodigoPieza() != null) {
-				predicates.add(criteryBuilder.equal(root.get("idProducto"), searchDTO.getIdProducto()));
+				Producto_id idProducto= new Producto_id(searchDTO.getEmpresa().getNit(),searchDTO.getCodigoPieza());
+				predicates.add(criteryBuilder.equal(root.get("idProducto"), idProducto));
 			}
 			if(searchDTO.getDescripcion() != null && !searchDTO.getDescripcion().isEmpty()) {
 				predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+searchDTO.getDescripcion()+"%"));
@@ -70,17 +71,18 @@ public class ProductSpecifications {
 			
 			
 			
-			query.orderBy(criteryBuilder.desc(root.get("codigoPieza")));
+			query.orderBy(criteryBuilder.desc(root.get("descripcion")));
 			
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
 	}
 		
-	public Specification<Producto> getProductosActivos(String letras){
+	public Specification<Producto> getProductosActivos(String letras, Empresa empresa){
 		return (root, query, criteryBuilder) ->{
 			List<Predicate> predicates = new ArrayList<>();
-			
 			predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+letras+ "%"));
+			
+			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 
 			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
 			

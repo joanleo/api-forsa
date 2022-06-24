@@ -3,6 +3,7 @@ package com.prueba.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -77,7 +78,6 @@ public class ProductoController {
 											@RequestBody(required=false) SearchDTO searchDTO){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		System.out.println("Items por pagina "+items);
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(nit != null) {
@@ -86,13 +86,11 @@ public class ProductoController {
 			empresa = usuario.getEmpresa();			
 		}
 		
-		if(searchDTO != null) {
-			System.out.println("nombre de la empresa "+searchDTO);
-			Page<Producto> productos =  productoService.searchProducts(empresa, searchDTO, pagina, items);
-			return new ApiResponse<>(productos.getSize(), productos);
-		}else {
-			System.out.println(empresa.getNombre());
+		if(Objects.isNull(searchDTO)) {
 			Page<Producto> productos = productoService.list(empresa, pagina, items);
+			return new ApiResponse<>(productos.getSize(), productos);			
+		}else {
+			Page<Producto> productos =  productoService.searchProducts(empresa, searchDTO, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);
 		}
 		
@@ -115,12 +113,10 @@ public class ProductoController {
 			empresa = usuario.getEmpresa();			
 		}
 		
-		System.out.println("Letras digitadas");
 		if(letras != null) {
 			Page<Producto> productos = productoService.searchProducts(empresa, letras, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);
 		}else {
-			System.out.println("Controller busqueda por letras 3");
 			Page<Producto> productos = productoService.list(empresa, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);
 		}
@@ -201,15 +197,12 @@ public class ProductoController {
         
         
 		if (searchDTO != null) {
-			System.out.println("Se envio SearchDTO");
 			List<Producto> productos =  productoService.searchProducts(searchDTO);
 			csvService.writeProductsToCsv(servletResponse.getWriter(), productos);
 		}else if(letras != null){
-			System.out.println("Controller busqueda por letras");
-			List<Producto> productos = productoService.searchProducts(letras);
+			List<Producto> productos = productoService.searchProducts(letras, empresa);
 			csvService.writeProductsToCsv(servletResponse.getWriter(), productos);
 		}else{
-			System.out.println("Controller busqueda vacia");
 			List<Producto> productos = productoRepo.findAllByEmpresaAndEstaActivoTrue(empresa);
 			csvService.writeProductsToCsv(servletResponse.getWriter(), productos);
 		}

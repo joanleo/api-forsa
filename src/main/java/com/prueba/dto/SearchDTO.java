@@ -4,7 +4,6 @@ import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
 import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
-import com.prueba.entity.Producto_id;
 import com.prueba.entity.Ubicacion;
 
 public class SearchDTO {
@@ -33,7 +32,8 @@ public class SearchDTO {
 	
 	private String motivoIngreso;
 	
-	private Producto_id idProducto = new Producto_id(empresa.getNit(), codigoPieza);
+	
+	//private Producto_id idProducto = new Producto_id(empresa.getNit(), codigoPieza);
 	
 
 	public SearchDTO() {
@@ -135,7 +135,7 @@ public class SearchDTO {
 	public void setMotivoIngreso(String motivoIngreso) {
 		this.motivoIngreso = motivoIngreso;
 	}
-
+/*
 	public Producto_id getIdProducto() {
 		return idProducto;
 	}
@@ -143,7 +143,7 @@ public class SearchDTO {
 	public void setIdProducto(Producto_id idProducto) {
 		this.idProducto = idProducto;
 	}
-
+*/
 
 
 }
