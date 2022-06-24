@@ -102,9 +102,20 @@ public class Familia {
 		super();
 	}
 
-	public Familia(String nombre) {
+	public Familia(String nombre, Empresa empresa) {
 		super();
 		this.nombre = nombre;
-	}    
+		this.empresa = empresa;
+	}
+
+	public Familia(String nombre, String sigla, Empresa empresa) {
+		super();
+		this.nombre = nombre;
+		this.sigla = sigla;
+		this.empresa = empresa;
+	}
+
+
+	
 }
 

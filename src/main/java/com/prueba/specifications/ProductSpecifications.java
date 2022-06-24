@@ -26,9 +26,6 @@ public class ProductSpecifications {
 			
 			List<Predicate> predicates = new ArrayList<>();
 			
-			if(searchDTO.getArea() != null && !searchDTO.getArea().isEmpty()) {
-				predicates.add(criteryBuilder.like(root.get("area").as(String.class), "%"+searchDTO.getArea().toString()+"%"));
-			}
 			if(searchDTO.getCodigoPieza() != null) {
 				Producto_id idProducto= new Producto_id(searchDTO.getEmpresa().getNit(),searchDTO.getCodigoPieza());
 				predicates.add(criteryBuilder.equal(root.get("idProducto"), idProducto));
@@ -36,11 +33,11 @@ public class ProductSpecifications {
 			if(searchDTO.getDescripcion() != null && !searchDTO.getDescripcion().isEmpty()) {
 				predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+searchDTO.getDescripcion()+"%"));
 			}
-			if(searchDTO.getEmpresa() != null) {
-				predicates.add(criteryBuilder.equal(root.get("empresa"), searchDTO.getEmpresa()));
+			if(searchDTO.getArea() != null && !searchDTO.getArea().isEmpty()) {
+				predicates.add(criteryBuilder.like(root.get("area").as(String.class), "%"+searchDTO.getArea().toString()+"%"));
 			}
-			if(searchDTO.getEstado() != null) {				
-				predicates.add(criteryBuilder.equal(root.get("estado"), searchDTO.getEstado()));
+			if(searchDTO.getOrden() != null) {
+				predicates.add(criteryBuilder.like(root.get("orden"), "%"+searchDTO.getOrden()+"%"));
 			}
 			if(searchDTO.getFabricante() != null) {
 				predicates.add(criteryBuilder.equal(root.get("fabricante"), searchDTO.getFabricante()));
@@ -48,8 +45,14 @@ public class ProductSpecifications {
 			if(searchDTO.getFamilia() != null) {
 				predicates.add(criteryBuilder.equal(root.get("familia"), searchDTO.getFamilia()));
 			}
-			if(searchDTO.getOrden() != null) {
-				predicates.add(criteryBuilder.like(root.get("orden"), "%"+searchDTO.getOrden()+"%"));
+			if(searchDTO.getTipo() != null) {
+				predicates.add(criteryBuilder.equal(root.get("tipo"), searchDTO.getTipo()));
+			}
+			if(searchDTO.getEstado() != null) {				
+				predicates.add(criteryBuilder.equal(root.get("estado"), searchDTO.getEstado()));
+			}
+			if(searchDTO.getEmpresa() != null) {
+				predicates.add(criteryBuilder.equal(root.get("empresa"), searchDTO.getEmpresa()));
 			}
 			if(searchDTO.getUbicacion() != null) {
 				predicates.add(criteryBuilder.equal(root.get("ubicacion"), searchDTO.getUbicacion()));
@@ -70,6 +73,12 @@ public class ProductSpecifications {
 			}
 			if(searchDTO.getMotivoIngreso() != null) {
 				predicates.add(criteryBuilder.like(root.get("motivoIngreso"), "%"+searchDTO.getMotivoIngreso()+"%"));
+			}
+			if(searchDTO.getMedidas() != null && !searchDTO.getMedidas().isEmpty()) {
+				predicates.add(criteryBuilder.like(root.get("medidas"), "%"+searchDTO.getMedidas()+"%"));
+			}
+			if(searchDTO.getReviso() != null) {
+				predicates.add(criteryBuilder.equal(root.get("reviso"), searchDTO.getReviso()));
 			}
 			
 			

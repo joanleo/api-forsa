@@ -47,6 +47,10 @@ public class Producto{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "nidfamilia", nullable = false)
     private Familia familia;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "nidtipo", nullable = false)
+    private TipoActivo tipo;
 
     @Column(name = "vcnconfirmacion", length = 8)
     private String nconfirmacion;

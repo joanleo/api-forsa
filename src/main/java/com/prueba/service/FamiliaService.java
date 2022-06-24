@@ -13,7 +13,7 @@ public interface FamiliaService {
 	
 	public FamiliaDTO getFamilia(Long id, Empresa empresa);
 	
-	public FamiliaDTO update(Long id, FamiliaDTO familiaDTO);
+	public FamiliaDTO update(Long id, FamiliaDTO familiaDTO, Empresa empresa);
 	
 	public void delete(Long id, Empresa empresa);
 	

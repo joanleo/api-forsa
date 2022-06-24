@@ -30,7 +30,7 @@ public class FamiliaServiceImpl implements FamiliaService {
 		if(exist == null) {
 			familiaRepo.save(familia);
 		}else {
-			throw new IllegalAccessError("La familia que esta tratando de crear ya existe " + familia.getNombre() + "Descripcio: " + familia.getNombre());
+			throw new IllegalAccessError("La familia "+ familia.getNombre() +" que esta tratando de crear ya existe en empresa " + empresa);
 		}
 		return mapearEntidad(familia);
 	}
@@ -50,7 +50,10 @@ public class FamiliaServiceImpl implements FamiliaService {
 	}
 
 	@Override
-	public FamiliaDTO update(Long id, FamiliaDTO familiaDTO) {
+	public FamiliaDTO update(Long id, FamiliaDTO familiaDTO, Empresa empresa) {
+		if(familiaDTO.getEmpresa() == null) {
+			familiaDTO.setEmpresa(empresa);
+		}
 		Familia familia = familiaRepo.findByIdAndEmpresa(id, familiaDTO.getEmpresa())
 				.orElseThrow(() -> new ResourceNotFoundException("Familia", "id", id));
 
@@ -72,7 +75,7 @@ public class FamiliaServiceImpl implements FamiliaService {
 		Familia familia = familiaRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Familia", "id", id));
 		if(familia.getProductos().size() > 0) {
-			throw new IllegalAccessError("No se pude eliminar la empresa tiene usuarios y/o productos asociados");
+			throw new IllegalAccessError("No se pude eliminar la familia tiene activoss asociados");
 		}
 		familiaRepo.delete(familia);
 

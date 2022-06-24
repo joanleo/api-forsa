@@ -11,6 +11,7 @@ public class EstadoDTO {
 	@NotBlank(message = "Este campo no puede ser nulo")
 	private String tipo;
 	
+	@NotBlank(message = "Este campo no puede ser nulo")
 	private Empresa empresa;
 
 	public EstadoDTO() {

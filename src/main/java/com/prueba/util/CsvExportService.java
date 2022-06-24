@@ -19,6 +19,7 @@ import com.prueba.dto.TipoMovDTO;
 import com.prueba.dto.TipoUbicacionDTO;
 import com.prueba.dto.UbicacionDTO;
 import com.prueba.entity.Producto;
+import com.prueba.entity.TipoActivo;
 
 
 @Service
@@ -106,6 +107,17 @@ public class CsvExportService {
     		for(UbicacionDTO ubicacion: ubicaciones) {
     			csvPrinter.printRecord(ubicacion.getId(), ubicacion.getNombre(), ubicacion.getCiudad(),
     								   ubicacion.getDireccion(), ubicacion.getTipo());    			
+    		}
+	    }catch (IOException e) {
+	        log.error("Error en la generacion del CSV  ", e);
+	    }
+		
+	}
+
+	public void writeTiposActivoToCsv(PrintWriter writer, List<TipoActivo> tiposActivos) {
+		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+    		for(TipoActivo tipoActivo: tiposActivos) {
+    			csvPrinter.printRecord(tipoActivo.getId(), tipoActivo.getNombre());    			
     		}
 	    }catch (IOException e) {
 	        log.error("Error en la generacion del CSV  ", e);

@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,12 +24,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prueba.dto.FamiliaDTO;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.TipoActivo;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
-import com.prueba.service.FamiliaService;
+import com.prueba.service.TipoActivoService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
@@ -38,12 +37,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/familias")
-@Api(tags = "Familias", description = "Operaciones referentes a las familias")
-public class FamiliaController {
-
-	@Autowired
-	private FamiliaService familiaService;
+@RequestMapping("/tipos")
+@Api(tags = "Tipos", description = "Operaciones referentes a los tipos de activos")
+public class TipoController {
+	
+	private TipoActivoService tipoActivoService;
 	
 	@Autowired
 	private CsvExportService csvService;
@@ -55,45 +53,23 @@ public class FamiliaController {
 	private UtilitiesApi util;
 	
 	@PostMapping
-	@ApiOperation(value = "Crea una familia", notes = "Crea una nueva familia")
-	public ResponseEntity<FamiliaDTO> create(@Valid @RequestBody FamiliaDTO familiaDTO,
-			 								 @RequestParam(required=false) Long nit){
+	@ApiOperation(value = "Crea un tipo de activo", notes = "Crea un nuevo tipo de activo")
+	public ResponseEntity<TipoActivo> create(@RequestBody TipoActivo tipoActivo,
+					 						 @RequestParam(required=false) Long nit){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(nit != null) {
-			empresa = util.obtenerEmpresa(nit);
+		empresa = util.obtenerEmpresa(nit);
 		}else {
-			empresa = usuario.getEmpresa();			
+		empresa = usuario.getEmpresa();			
 		}
-		return new ResponseEntity<FamiliaDTO>(familiaService.create(familiaDTO, empresa), HttpStatus.CREATED);
+		return new ResponseEntity<TipoActivo>(tipoActivoService.create(tipoActivo, empresa), HttpStatus.CREATED);
 	}
-	
-	@PutMapping("/{id}")
-	@ApiOperation(value = "Actualiza una familia", notes = "Actualiza los datos de una familia")
-	public ResponseEntity<FamiliaDTO> update(@Valid @RequestBody FamiliaDTO familiaDTO,
-											 @PathVariable Long id,
-			 								 @RequestParam(required=false) Long nit){
-		Empresa empresa;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
-		
-		if(nit != null) {
-			empresa = util.obtenerEmpresa(nit);
-		}else {
-			empresa = usuario.getEmpresa();			
-		}
-		
-		FamiliaDTO actualizada = familiaService.update(id, familiaDTO, empresa);
-		
-		return new ResponseEntity<>(actualizada, HttpStatus.OK);
-	}
-	
 	
 	@GetMapping
-	@ApiOperation(value = "Encuentra las familias", notes = "Retorna las familias que en su nombre contengan las letrtas indicadas, retorna todas las familias si no se indica ninguna letra")
-	public List<FamiliaDTO> list(@RequestParam(required=false) String letras,
+	public List<TipoActivo> list(@RequestParam(required=false) String letras,
 								 @RequestParam(required=false) Long nit){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -105,15 +81,15 @@ public class FamiliaController {
 			empresa = usuario.getEmpresa();			
 		}
 		if(letras != null) {
-			return familiaService.findByNameAndEmpreaAndEstaActiva(letras, empresa, true);
+			return tipoActivoService.findByNameAndEmpreaAndEstaActiva(letras, empresa, true);
 		}else {
-			return familiaService.list(empresa);			
+			return tipoActivoService.list(empresa);			
 		}
 	}
 	
 	@GetMapping("/{id},{nit}")
-	@ApiOperation(value = "Encuentra una familia", notes = "Retorna una familia por el id")
-	public ResponseEntity<FamiliaDTO> get(@PathVariable(name = "id") Long id,
+	@ApiOperation(value = "Encuentra una tipo de activo", notes = "Retorna una tipo de activo por el id")
+	public ResponseEntity<TipoActivo> get(@PathVariable(name = "id") Long id,
 			 							  @PathVariable(required=false) Long nit){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -121,15 +97,35 @@ public class FamiliaController {
 		
 		
 		if(nit != null) {
-		empresa = util.obtenerEmpresa(nit);
+			empresa = util.obtenerEmpresa(nit);
 		}else {
-		empresa = usuario.getEmpresa();			
+			empresa = usuario.getEmpresa();			
 		}
-		return ResponseEntity.ok(familiaService.getFamilia(id, empresa));
+		return ResponseEntity.ok(tipoActivoService.getFamilia(id, empresa));
 	}
 	
+	@PutMapping("/{id}")
+	@ApiOperation(value = "Actualiza una familia", notes = "Actualiza los datos de una familia")
+	public ResponseEntity<TipoActivo> update(@RequestBody TipoActivo tipoActivo,
+											 @PathVariable Long id,
+											 @RequestParam(required=false) Long nit){
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		TipoActivo actualizada = tipoActivoService.update(id, tipoActivo, empresa);
+		
+		return new ResponseEntity<>(actualizada, HttpStatus.OK);
+	}
+
 	@DeleteMapping("/{id}")
-	@ApiOperation(value = "Elimina una familia", notes = "Elimina una familia por su id")
+	@ApiOperation(value = "Elimina un tipo de activo", notes = "Elimina un tipo de activo por su id")
 	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
 					 					 @PathVariable(required=false) Long nit){
 		Empresa empresa;
@@ -138,17 +134,17 @@ public class FamiliaController {
 		
 		
 		if(nit != null) {
-		empresa = util.obtenerEmpresa(nit);
+			empresa = util.obtenerEmpresa(nit);
 		}else {
-		empresa = usuario.getEmpresa();			
+			empresa = usuario.getEmpresa();			
 		}
 		
-		familiaService.delete(id, empresa);
-		return new ResponseEntity<ResDTO>(new ResDTO("familia eliminada con exito"), HttpStatus.OK);
+		tipoActivoService.delete(id, empresa);
+		return new ResponseEntity<ResDTO>(new ResDTO("Tipo de activo eliminada con exito"), HttpStatus.OK);
 	}
 	
 	@PatchMapping("/{id}")
-	@ApiOperation(value = "Inhabilita una familia", notes = "Inhabilita una familia por su id")
+	@ApiOperation(value = "Inhabilita un tipo de activo", notes = "Inhabilita un tipo de activo por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
 					 					 @PathVariable(required=false) Long nit){
 		Empresa empresa;
@@ -157,13 +153,13 @@ public class FamiliaController {
 		
 		
 		if(nit != null) {
-		empresa = util.obtenerEmpresa(nit);
+			empresa = util.obtenerEmpresa(nit);
 		}else {
-		empresa = usuario.getEmpresa();			
+			empresa = usuario.getEmpresa();			
 		}
 		
-		familiaService.unable(id, empresa);
-		return new ResponseEntity<ResDTO>(new ResDTO("Estado inhabilitada con exito"), HttpStatus.OK);
+		tipoActivoService.unable(id, empresa);
+		return new ResponseEntity<ResDTO>(new ResDTO("Tipo de activo inhabilitada con exito"), HttpStatus.OK);
 	}
 	
 	@PostMapping("/descarga")
@@ -189,13 +185,14 @@ public class FamiliaController {
 		}
       		
         if(letras != null){
-			List<FamiliaDTO> familias =  familiaService.findByNameAndEmpreaAndEstaActiva(letras, empresa, true);
-			csvService.writeFamiliasToCsv(servletResponse.getWriter(), familias);
+			List<TipoActivo> tiposActivos =  tipoActivoService.findByNameAndEmpreaAndEstaActiva(letras, empresa, true);
+			csvService.writeTiposActivoToCsv(servletResponse.getWriter(), tiposActivos);
 		}else{
-			List<FamiliaDTO> familias = familiaService.list(empresa);
-			csvService.writeFamiliasToCsv(servletResponse.getWriter(), familias);
+			List<TipoActivo> tiposActivos = tipoActivoService.list(empresa);
+			csvService.writeTiposActivoToCsv(servletResponse.getWriter(), tiposActivos);
 		}
 		        
 	}
-}
+	
 
+}

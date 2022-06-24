@@ -190,7 +190,7 @@ public class ProductoServiceImpl implements ProductoService {
 			}
 
 			//Capturar datos de la empresa del usuario		
-			Empresa empresa = empresaRepo.findByNitOrderByFecha(producto.getEmpresa().getNit());
+			Empresa empresa = empresaRepo.findByNit(producto.getEmpresa().getNit());
 			
 			String[] nconfirmacion = new String[2];
 			Integer numero = 0;

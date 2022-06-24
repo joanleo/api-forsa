@@ -11,6 +11,7 @@ public class FamiliaDTO {
 	@NotBlank(message = "Este campo no puede ser nulo")
     private String nombre;
 	
+	@NotBlank(message = "Este campo no puede ser nulo")
 	private Empresa empresa;
 
 	public FamiliaDTO() {

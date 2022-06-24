@@ -14,6 +14,6 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
 	
 	//public Empresa findTopByOrderByFechaDesc(Long nit);
 	
-	public Empresa findByNitOrderByFecha(Long nit);
+	//public Empresa findByNitOrderByFecha(Long nit);
 
 }
