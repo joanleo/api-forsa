@@ -109,7 +109,7 @@ public class EmpresaController {
 		String currentDateTime = dateFormatter.format(new Date());
 		
 		servletResponse.setContentType("application/x-download");
-        servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "Tipo_empresa_"+currentDateTime+".csv" + "\"");
+        servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "empresas_"+currentDateTime+".csv" + "\"");
         
         
         if(letras != null) {
@@ -121,30 +121,5 @@ public class EmpresaController {
 		}
 	}    
 	
-	@PostMapping("/descarga")
-	@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de empresas de la busqueda realizada en formato csv")
-	public void getCsvEmpresas(HttpServletResponse servletResponse,
-								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
-								@RequestParam(required=false, defaultValue = "0") Integer items,
-								@RequestParam(required=false) String letras) throws IOException {
-		servletResponse.setContentType("application/x-download");
-		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-		String currentDateTime = dateFormatter.format(new Date());
-        servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "empresas"+ "_" + currentDateTime + ".csv" + "\"");
-        
-        
-		
-        if(letras != null){
-			List<EmpresaDTO> empresas =  empresaService.findByNameAndEstaActiva(letras, true);
-			csvService.writeEmpresasToCsv(servletResponse.getWriter(), empresas);
-		}else{
-			System.out.println("Controller busqueda vacia");
-			List<EmpresaDTO> empresas = empresaService.list();
-			csvService.writeEmpresasToCsv(servletResponse.getWriter(), empresas);
-		}
-		
-		
-        	}
-
 }
 

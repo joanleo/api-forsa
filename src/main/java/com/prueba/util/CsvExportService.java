@@ -89,6 +89,8 @@ public class CsvExportService {
     
     public void writeFabricantesToCsv(Writer writer, List<FabricanteDTO> fabricantes) {
     	try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+    		csvPrinter.printRecord(
+        			"Nit", "Nombre");
     		for(FabricanteDTO fabricante: fabricantes) {
     			csvPrinter.printRecord(fabricante.getNit(), fabricante.getNombre());    			
     		}
@@ -99,6 +101,8 @@ public class CsvExportService {
 
 	public void writeEstadosToCsv(PrintWriter writer, List<EstadoDTO> estados) {
 		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			csvPrinter.printRecord(
+        			"Id", "Estado");
     		for(EstadoDTO estado: estados) {
     			csvPrinter.printRecord(estado.getId(), estado.getTipo());    			
     		}
@@ -109,6 +113,8 @@ public class CsvExportService {
 	
 	public void writeFamiliasToCsv(PrintWriter writer, List<FamiliaDTO> familias) {
 		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			csvPrinter.printRecord(
+        			"Id", "Familia");
     		for(FamiliaDTO familia: familias) {
     			csvPrinter.printRecord(familia.getId(), familia.getNombre());    			
     		}

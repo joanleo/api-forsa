@@ -1,11 +1,14 @@
 package com.prueba.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.FabricanteDTO;
@@ -13,6 +16,8 @@ import com.prueba.entity.Empresa;
 import com.prueba.entity.Fabricante;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.FabricanteRepository;
+import com.prueba.security.entity.Usuario;
+import com.prueba.security.repository.UsuarioRepository;
 
 @Service
 public class FabricanteServiceImpl implements FabricanteService {
@@ -21,20 +26,52 @@ public class FabricanteServiceImpl implements FabricanteService {
 	private FabricanteRepository fabricanteRepo;
 	
 	@Autowired
+	private UsuarioRepository usuarioRepo;
+	
+	@Autowired
 	private ModelMapper modelMapper;
 
 	@Override
 	public FabricanteDTO create(FabricanteDTO fabricanteDTO) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(fabricanteDTO.getEmpresa() == null) {
+			fabricanteDTO.setEmpresa(usuario.getEmpresa());
+		}
+		
 		Fabricante fabricante = mapearDTO(fabricanteDTO);
-		Optional<Fabricante> exist = fabricanteRepo.findByNitAndEmpresa(fabricante.getNit(), fabricanteDTO.getEmpresa());
+		Fabricante exist = fabricanteRepo.findByNitAndEmpresaAndEstaActivoTrue(fabricanteDTO.getNit(), fabricanteDTO.getEmpresa());
+		
 		if(exist == null) {
 			fabricanteRepo.save(fabricante);
 		}else {
 			throw new IllegalAccessError("El fabricante que esta tratando de crear ya existe"
-					+ fabricante.getNit() + " " + fabricante.getNombre() );
+					+ fabricanteDTO.getNit() + " " + fabricanteDTO.getNombre() );
 		}
 		
 		return mapearEntidad(fabricante);
+	}
+	
+	@Override
+	public Page<Fabricante> searchFabricantes(String letras, Empresa empresa, Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<Fabricante> fabricantes = fabricanteRepo.findByNombreContainsAndEmpresaAndEstaActivoTrue(letras, empresa, PageRequest.of(0, 10));
+			return fabricantes;
+		}
+		Page<Fabricante> fabricantes = fabricanteRepo.findByNombreContainsAndEmpresaAndEstaActivoTrue(letras, empresa, PageRequest.of(pagina, items));		
+		return fabricantes;
+	}
+	
+	@Override
+	public Page<Fabricante> searchFabricantes(Empresa empresa, Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<Fabricante> fabricantes = fabricanteRepo.findByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(0, 10));
+			return fabricantes;
+		}
+		Page<Fabricante> fabricantes = fabricanteRepo.findByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(pagina, items));		
+		return fabricantes;
 	}
 
 	@Override
@@ -91,7 +128,11 @@ public class FabricanteServiceImpl implements FabricanteService {
 	}
 	
 	public Fabricante mapearDTO(FabricanteDTO fabricanteDTO) {
-		return modelMapper.map(fabricanteRepo, Fabricante.class);
+		
+		System.out.println("entra a mapear "+ fabricanteDTO.getNombre());
+		Fabricante fabricante = modelMapper.map(fabricanteDTO, Fabricante.class);
+		System.out.println("Salida al mapear "+ fabricante.getNombre());
+		return fabricante;
 	}
 
 	@Override
@@ -100,6 +141,10 @@ public class FabricanteServiceImpl implements FabricanteService {
 		
 		return listFabricante.stream().map(fabricante -> mapearEntidad(fabricante)).collect(Collectors.toList());
 	}
+
+	
+
+	
 
 	
 

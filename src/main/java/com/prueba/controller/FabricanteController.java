@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,8 +26,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.prueba.dto.ApiResponse;
 import com.prueba.dto.FabricanteDTO;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Fabricante;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
@@ -62,8 +65,12 @@ public class FabricanteController {
 	
 	@GetMapping
 	@ApiOperation(value = "Encuenta los fabricantes", notes = "Retorna los fabricantes que en su nombre contengan las letrtas indicadas, retorna todos los fabricantes si no se indica ninguna letra")
-	public List<FabricanteDTO> list(@RequestParam(required = false) String letras,
-									@RequestParam(required=false) Long nit){
+	public ApiResponse<Page<Fabricante>> paginationlist(
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
+			@RequestParam(required=false) String letras,
+			@RequestParam(required=false) Long nit){
+		
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
@@ -75,14 +82,16 @@ public class FabricanteController {
 		}
 		
 		if(letras != null) {
-			return fabricanteService.findByNameAndEmpresaAndEstaActivo(letras, empresa, true);			
+			Page<Fabricante> fabricantes = fabricanteService.searchFabricantes(letras, empresa, pagina, items);
+			return new ApiResponse<>(fabricantes.getSize(), fabricantes);
 		}else {
-			return fabricanteService.list(empresa);
+			Page<Fabricante> fabricantes = fabricanteService.searchFabricantes(empresa, pagina, items);
+			return new ApiResponse<>(fabricantes.getSize(), fabricantes);
 		}
 	}
 	
 	@GetMapping("/{id},{nit}")
-	@ApiOperation(value = "Encuentra un fabricante", notes = "Retorna un fabricante por el id")
+	@ApiOperation(value = "Encuentra un fabricante", notes = "Retorna un fabricante por el id y la empresa a la que pertenece")
 	public FabricanteDTO get(@PathVariable(name = "id") Long id,
 			 				 @PathVariable(required=false) Long nit){
 		Empresa empresa;
@@ -98,7 +107,7 @@ public class FabricanteController {
 		return fabricanteService.getFabricante(id, empresa);
 	}
 	
-	@PutMapping("/{ni}")
+	@PutMapping("/{nit}")
 	@ApiOperation(value = "Actualiza un fabricante", notes = "Actualiza los datos de un fabricante")
 	public ResponseEntity<FabricanteDTO> update(@Valid @RequestBody FabricanteDTO fabricanteDTO,
 												@PathVariable Long nit){
@@ -144,7 +153,7 @@ public class FabricanteController {
 		return new ResponseEntity<ResDTO>(new ResDTO("Fabricante eliminado con exito"), HttpStatus.OK);
 	}
 	
-	@PostMapping("/descarga")
+	@GetMapping("/descarga")
 	@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de fabricantes de la busqueda realizada en formato csv")
 	public void getCsvEmpresas(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
