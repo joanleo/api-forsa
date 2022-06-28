@@ -10,6 +10,8 @@ public class EmpresaDTO {
 	
 	@NotBlank(message = "Este campo no puede ser nulo")
 	private String nombre;
+	
+	private Boolean estaActivo=true;
 
 	public Long getNit() {
 		return nit;
@@ -25,6 +27,14 @@ public class EmpresaDTO {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
 	}
 
 }

@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.EmpresaDTO;
@@ -33,10 +35,37 @@ public class EmpresaServiceImpl implements EmpresaService {
 		}
 		return mapearEntidad(empresa);
 	}
+	
+	@Override
+	public Page<Empresa> searchEmpresas(String letras, Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<Empresa> empresas = empresaRepo.findByNombreContainsAndEstaActivoTrue(letras,PageRequest.of(0, 10));
+			return empresas;
+		}
+		Page<Empresa> empresas = empresaRepo.findByNombreContainsAndEstaActivoTrue(letras, PageRequest.of(pagina, items));		
+		return empresas;
+	}
+	
+	@Override
+	public Page<Empresa> searchEmpresas(Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<Empresa> tiposEmpresa = empresaRepo.findByEstaActivoTrue(PageRequest.of(0, 10));
+			return tiposEmpresa;
+		}
+		Page<Empresa> tiposEmpresa = empresaRepo.findByEstaActivoTrue(PageRequest.of(pagina, items));		
+		return tiposEmpresa;
+	}
 
 	@Override
+	public List<EmpresaDTO> list(String letras) {
+		List<Empresa> empresas = empresaRepo.findByNombreContainsAndEstaActivoTrue(letras);
+		
+		return empresas.stream().map(empresa -> mapearEntidad(empresa)).collect(Collectors.toList());
+	}
+	
+	@Override
 	public List<EmpresaDTO> list() {
-		List<Empresa> empresas = empresaRepo.findAll();
+		List<Empresa> empresas = empresaRepo.findByEstaActivoTrue();
 		
 		return empresas.stream().map(empresa -> mapearEntidad(empresa)).collect(Collectors.toList());
 	}
@@ -65,9 +94,24 @@ public class EmpresaServiceImpl implements EmpresaService {
 		Empresa empresa = empresaRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Empresa", "id", id));
 		
+		if(empresa.getUsuarios().size() > 0 || empresa.getProductos().size() > 0) {
+			throw new IllegalAccessError("no se puede eliminar la empresa, existen productos y/o usuarios asociados");
+		}
+		
 		empresaRepo.delete(empresa);
 
 	}
+	
+	@Override
+	public void unable(Long id) {
+		Empresa empresa = empresaRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Empresa", "id", id));
+		
+		empresa.setEstaActivo(false);
+		empresaRepo.save(empresa);
+		
+	}
+
 
 	public EmpresaDTO mapearEntidad(Empresa Empresa) {
 		return modelMapper.map(Empresa, EmpresaDTO.class);
@@ -77,10 +121,6 @@ public class EmpresaServiceImpl implements EmpresaService {
 		return modelMapper.map(EmpresaDTO, Empresa.class);
 	}
 
-	@Override
-	public List<EmpresaDTO> findByName(String name) {
-		List<Empresa> listEmpresas = empresaRepo.findByNombreContains(name);
-		
-		return listEmpresas.stream().map(empresa -> mapearEntidad(empresa)).collect(Collectors.toList());
-	}
+	
+
 }

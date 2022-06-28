@@ -33,6 +33,7 @@ import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.ErorRepository;
+import com.prueba.repository.FabricanteRepository;
 import com.prueba.repository.FamiliaRepository;
 import com.prueba.repository.ProductoRepository;
 import com.prueba.specifications.ProductSpecifications;
@@ -42,6 +43,9 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Autowired
 	private ProductoRepository productoRepo;
+	
+	@Autowired
+	private FabricanteRepository fabricanteRepo;
 	
 	@Autowired
 	private EmpresaRepository empresaRepo;
@@ -378,11 +382,16 @@ public class ProductoServiceImpl implements ProductoService {
 						}
 						
 						if(!erroresCiclo) {
-							Familia familiaAdd = familiaRepo.findByNombre(familia);
-							System.out.println(familiaAdd.getNombre());
-							Fabricante fabricanteAdd = new Fabricante(new Long(fabricante));
-							System.out.println(fabricanteAdd.getNombre());
 							Empresa empresaAdd = new Empresa(new Long(empresa));
+							
+							Familia familiaAdd = familiaRepo.findBySiglaAndEmpresa(familia, empresaAdd);
+							System.out.println(familiaAdd.getNombre());
+							
+							Long nuevoFabricante = new Long(fabricante);
+							Fabricante fabricanteAdd = fabricanteRepo.findByNitAndEmpresa(nuevoFabricante, empresaAdd)
+									.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "nit", nuevoFabricante));
+							System.out.println(fabricanteAdd.getNombre());
+							
 							Producto product = new Producto(codigoPieza,nombre,area,orden,familiaAdd,fabricanteAdd,empresaAdd);
 							listProductos.add(product);
 						}else {

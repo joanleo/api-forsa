@@ -9,7 +9,7 @@ private Long id;
 	@NotBlank(message="este campo no puede ser nulo")
 	private String tipo;
 	
-	private String descripcion;
+	private Boolean estaActivo=true;
 
 	public Long getId() {
 		return id;
@@ -27,12 +27,12 @@ private Long id;
 		this.tipo = tipo;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public Boolean getEstaActivo() {
+		return estaActivo;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
 	}
 
 }

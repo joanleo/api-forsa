@@ -141,8 +141,6 @@ public class ProductoController {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		//System.out.println(list);
-		//productoService.load(list);
 		
 		return new ResponseEntity<ResDTO>(new ResDTO("Se ha cargado la lista con exito"), HttpStatus.OK);
 	}

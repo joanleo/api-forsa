@@ -57,6 +57,9 @@ public class Empresa {
 	@JsonIgnore
 	@OneToMany(mappedBy = "empresa")
 	private List<Familia> familias;
+	
+	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+	private Boolean estaActivo=true;
 
 	public List<Familia> getFamilias() {
 		return familias;
@@ -120,6 +123,14 @@ public class Empresa {
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
+	}
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
 	}
 
 	public Empresa() {

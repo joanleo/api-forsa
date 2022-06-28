@@ -34,6 +34,9 @@ public class Familia {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
+    
+    @Column(name = "vcsigla", length = 3)
+    private String sigla;
 
 	public Empresa getEmpresa() {
 		return empresa;
@@ -71,8 +74,16 @@ public class Familia {
 		super();
 		this.id = id;
 	}
+	
+		public String getSigla() {
+		return sigla;
+	}
 
-	public Familia() {
+	public void setSigla(String sigla) {
+		this.sigla = sigla;
+	}
+
+		public Familia() {
 		super();
 	}
 

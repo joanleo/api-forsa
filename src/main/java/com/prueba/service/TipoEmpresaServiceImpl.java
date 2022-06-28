@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.TipoEmpresaDTO;
@@ -36,7 +38,13 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 
 	@Override
 	public List<TipoEmpresaDTO> list() {
-		List<TipoEmpresa> listTipos = tipoEmpresaRepo.findAll();
+		List<TipoEmpresa> listTipos = tipoEmpresaRepo.findByEstaActivoTrue();
+		
+		return listTipos.stream().map(tipo -> mapearEntidad(tipo)).collect(Collectors.toList());
+	}
+	
+	public List<TipoEmpresaDTO> list(String letras) {
+		List<TipoEmpresa> listTipos = tipoEmpresaRepo.findByTipoContainsAndEstaActivoTrue(letras);
 		
 		return listTipos.stream().map(tipo -> mapearEntidad(tipo)).collect(Collectors.toList());
 	}
@@ -66,8 +74,22 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 		TipoEmpresa tipoEmpresa = tipoEmpresaRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Tipo de empresa", "id", id));
 		
+		if(tipoEmpresa.getEmpresas().size() > 0) {
+			throw new IllegalAccessError("no se puede eliminar el tipo de empresa, existen empresas de este tipo");
+		}
+				
 		tipoEmpresaRepo.delete(tipoEmpresa);
 
+	}
+	
+	@Override
+	public void unable(Long id) {
+		TipoEmpresa tipoEmpresa = tipoEmpresaRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Tipo de empresa", "id", id));
+		
+		tipoEmpresa.setEstaActivo(false);
+		tipoEmpresaRepo.save(tipoEmpresa);
+		
 	}
 
 	public TipoEmpresaDTO mapearEntidad(TipoEmpresa tipoEmpresa) {
@@ -78,4 +100,25 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 		return modelMapper.map(tipoEmpresaDTO, TipoEmpresa.class);
 	}
 
+	@Override
+	public Page<TipoEmpresa> searchTiposEmpresa(String letras, Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<TipoEmpresa> tiposEmpresa = tipoEmpresaRepo.findByTipoContainsAndEstaActivoTrue(letras,PageRequest.of(0, 10));
+			return tiposEmpresa;
+		}
+		Page<TipoEmpresa> tiposEmpresa = tipoEmpresaRepo.findByTipoContainsAndEstaActivoTrue(letras, PageRequest.of(pagina, items));		
+		return tiposEmpresa;
+	}
+
+	@Override
+	public Page<TipoEmpresa> searchTiposEmpresa(Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<TipoEmpresa> tiposEmpresa = tipoEmpresaRepo.findByEstaActivoTrue(PageRequest.of(0, 10));
+			return tiposEmpresa;
+		}
+		Page<TipoEmpresa> tiposEmpresa = tipoEmpresaRepo.findByEstaActivoTrue(PageRequest.of(pagina, items));		
+		return tiposEmpresa;
+	}
+
+	
 }
