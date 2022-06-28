@@ -8,6 +8,7 @@ import com.prueba.entity.Empresa;
 import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
 import com.prueba.entity.Producto;
+import com.prueba.entity.Producto_id;
 
 public class ProductoItemProcessor implements ItemProcessor<Producto, Producto> {
 
@@ -15,7 +16,7 @@ public class ProductoItemProcessor implements ItemProcessor<Producto, Producto> 
 	
 	@Override
 	public Producto process(Producto item) throws Exception {
-		String codigoPieza = item.getCodigoPieza();
+		Producto_id producto_id = item.getIdProducto();
         String descripcion = item.getDescripcion();
         Float area = item.getArea();
         String orden = item.getOrden();
@@ -25,7 +26,7 @@ public class ProductoItemProcessor implements ItemProcessor<Producto, Producto> 
 
         
 
-        Producto transformedProduct = new Producto(codigoPieza, descripcion, area, orden, familia, fabricante, empresa);
+        Producto transformedProduct = new Producto(producto_id,descripcion,area,orden,familia,fabricante,empresa);
         LOGGER.info("Converting ( {} ) into ( {} )", item, transformedProduct);
 
         return transformedProduct;

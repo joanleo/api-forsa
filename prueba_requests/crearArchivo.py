@@ -4,7 +4,7 @@ import string
 def createFile():
     with open("archivo.txt", "w") as file:
         lista = string.ascii_uppercase #+ "[!@#$%&*()_+=|<>?{}\\[\\]~-]"
-        for row in range(50):
+        for row in range(5000):
             codigopieza = randint(10000,99999)
 
             nom = ''.join((str(letra) for letra in sample(lista, 8)))

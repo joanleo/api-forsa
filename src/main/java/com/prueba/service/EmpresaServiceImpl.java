@@ -112,6 +112,8 @@ public class EmpresaServiceImpl implements EmpresaService {
 		
 	}
 
+	
+	
 
 	public EmpresaDTO mapearEntidad(Empresa Empresa) {
 		return modelMapper.map(Empresa, EmpresaDTO.class);
@@ -122,5 +124,11 @@ public class EmpresaServiceImpl implements EmpresaService {
 	}
 
 	
+	@Override
+	public List<EmpresaDTO> findByNameAndEstaActiva(String name, Boolean estaActiva) {
+		List<Empresa> listEmpresas = empresaRepo.findByNombreContainsAndEstaActivoTrue(name);
+		
+		return listEmpresas.stream().map(empresa -> mapearEntidad(empresa)).collect(Collectors.toList());
+	}
 
 }

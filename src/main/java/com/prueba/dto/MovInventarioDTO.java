@@ -2,6 +2,7 @@ package com.prueba.dto;
 
 import java.util.List;
 
+import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Ubicacion;
 import com.prueba.security.entity.Usuario;
@@ -15,6 +16,8 @@ public class MovInventarioDTO {
 	private List<Producto> productos;
 	
 	private Usuario realizo;
+	
+	private Empresa empresa;
 
 	public Usuario getRealizo() {
 		return realizo;
@@ -46,6 +49,14 @@ public class MovInventarioDTO {
 
 	public void setProductos(List<Producto> productos) {
 		this.productos = productos;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 
 	public MovInventarioDTO() {

@@ -2,31 +2,38 @@ package com.prueba.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.prueba.security.entity.Usuario;
 
-@JsonIdentityInfo(
+/*@JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "codigoPieza")
+		  property = "codigoPieza")*/
 @Entity
 @Table(name = "mov_activos")
-public class Producto {
+public class Producto{
 	
-	@Id
+	/*@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;*/
+	
+	private static final long serialVersionUID = 1L;
+	
+	@EmbeddedId
+	private Producto_id idProducto;
+	
+	/*
     @Column(name = "vccodigopieza", length = 20)
-    private String codigoPieza;
+    private String codigoPieza;*/
 
 	@Column(name = "vcnombre", length = 60)
     private String descripcion;
@@ -40,6 +47,10 @@ public class Producto {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "nidfamilia", nullable = false)
     private Familia familia;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "nidtipo", nullable = false)
+    private TipoActivo tipo;
 
     @Column(name = "vcnconfirmacion", length = 8)
     private String nconfirmacion;
@@ -47,7 +58,7 @@ public class Producto {
     @Column(name = "bverificado", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
     private Boolean verificado = false;
     
-    @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
+    @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
     private Boolean estaActivo = true;
     
     
@@ -62,36 +73,60 @@ public class Producto {
     @JoinColumn(name = "vcnitfabricante")
     private Fabricante fabricante;
     
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "vcnitempresa")
+    @ManyToOne(fetch = FetchType.EAGER, cascade= CascadeType.ALL)
+    @JoinColumn(name = "vcnitempresa", insertable=false, updatable=false)
     private Empresa empresa;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "nidestado")
     private Estado estado;
     
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Cascade(CascadeType.SAVE_UPDATE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade= CascadeType.ALL)
     @JoinColumn(name = "nidubicacion")
     private Ubicacion ubicacion;
     
     @Column(name = "bimportado", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
     private Boolean importado = true;
     
-	public Boolean getImportado() {
-		return importado;
+    @ManyToOne(fetch = FetchType.EAGER, cascade= CascadeType.ALL)
+    @JoinColumn(name = "nidusuario")
+    private Usuario reviso;
+    
+    @Column(name = "vcmedidas")
+    private String medidas;
+    
+    @Column(name = "benviado", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
+    private Boolean enviado;
+	/*public Long getId() {
+		return id;
 	}
 
-	public void setImportado(Boolean importado) {
-		this.importado = importado;
+	public void setId(Long id) {
+		this.id = id;
 	}
-
+	
 	public String getCodigoPieza() {
 		return codigoPieza;
 	}
 
 	public void setCodigoPieza(String codigoPieza) {
 		this.codigoPieza = codigoPieza;
+	}*/
+
+	public Usuario getReviso() {
+		return reviso;
+	}
+
+	public void setReviso(Usuario reviso) {
+		this.reviso = reviso;
+	}
+
+	public Boolean getImportado() {
+		return importado;
+	}
+
+	public void setImportado(Boolean importado) {
+		this.importado = importado;
 	}
 
 	public String getDescripcion() {
@@ -197,51 +232,107 @@ public class Producto {
 	public void setFechaActualizacion(Date fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
 	}
+	
+	public String getMedidas() {
+		return medidas;
+	}
+
+	public void setMedidas(String medidas) {
+		this.medidas = medidas;
+	}		
+
+	public Producto_id getIdProducto() {
+		return idProducto;
+	}
+
+	public void setIdProducto(Producto_id idProducto) {
+		this.idProducto = idProducto;
+	}
+
+	public TipoActivo getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoActivo tipo) {
+		this.tipo = tipo;
+	}
+
+	public Boolean getEnviado() {
+		return enviado;
+	}
+
+	public void setEnviado(Boolean enviado) {
+		this.enviado = enviado;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	
+	
+
+	public Producto(Long nitEmpresa, String codigoPieza, String descripcion, Float area, String orden, Familia familia,
+			String nconfirmacion, Boolean verificado, Boolean estaActivo, String motivoIngreso, Date fechaActualizacion,
+			Fabricante fabricante, Empresa empresa, Estado estado, Ubicacion ubicacion, Boolean importado,
+			Usuario reviso, String medidas, Boolean enviado) {
+		super();
+		this.idProducto = new Producto_id(nitEmpresa, codigoPieza);
+		this.descripcion = descripcion;
+		this.area = area;
+		this.orden = orden;
+		this.familia = familia;
+		this.nconfirmacion = nconfirmacion;
+		this.verificado = verificado;
+		this.estaActivo = estaActivo;
+		this.motivoIngreso = motivoIngreso;
+		this.fechaActualizacion = fechaActualizacion;
+		this.fabricante = fabricante;
+		this.empresa = empresa;
+		this.estado = estado;
+		this.ubicacion = ubicacion;
+		this.importado = importado;
+		this.reviso = reviso;
+		this.medidas = medidas;
+		this.enviado = enviado;
+	}
 
 	public Producto() {
 		super();
 	}
 
-
-	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
-			Fabricante fabricante, Empresa empresa, Estado estado, Ubicacion ubicacion, String nconfirmacion,
-			String motivoIngreso) {
+	public Producto(Producto_id producto_id, String descripcion, Float area, String orden, Familia familia,
+			Fabricante fabricante, Empresa empresa, TipoActivo tipo, String medidas) {
 		super();
-		this.codigoPieza = codigoPieza;
+		this.idProducto = producto_id;
 		this.descripcion = descripcion;
 		this.area = area;
 		this.orden = orden;
 		this.familia = familia;
 		this.fabricante = fabricante;
 		this.empresa = empresa;
-		this.estado = estado;
-		this.ubicacion = ubicacion;
-		this.nconfirmacion = nconfirmacion;
-		this.motivoIngreso = motivoIngreso;
+		this.tipo = tipo;
+		this.medidas = medidas;
 	}
-
-	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
+	
+	public Producto(Producto_id producto_id, String descripcion, Float area, String orden, Familia familia,
 			Fabricante fabricante, Empresa empresa) {
 		super();
-		this.codigoPieza = codigoPieza;
+		this.idProducto = producto_id;
 		this.descripcion = descripcion;
 		this.area = area;
 		this.orden = orden;
 		this.familia = familia;
 		this.fabricante = fabricante;
 		this.empresa = empresa;
+
 	}
 
-	public Producto(String codigoPieza) {
-		super();
-		this.codigoPieza = codigoPieza;
-	}
 
-	@Override
-	public String toString() {
-		return codigoPieza + "," + descripcion + "," + area + ","
-				+ orden + "," + familia.getId() + "," + fabricante.getNit() + "," + empresa.getNit();
-	}
+
+
+
+
     
     
 }

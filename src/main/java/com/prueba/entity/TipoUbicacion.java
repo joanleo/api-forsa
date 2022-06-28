@@ -1,5 +1,7 @@
 package com.prueba.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,6 +31,13 @@ public class TipoUbicacion {
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
+	
+	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+	private Boolean estaActivo;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "tipo")
+	private List<Ubicacion> ubicaciones;
 
 	public Long getId() {
 		return id;
@@ -53,8 +63,36 @@ public class TipoUbicacion {
 		this.empresa = empresa;
 	}
 
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
+	}	
+
+	public List<Ubicacion> getUbicaciones() {
+		return ubicaciones;
+	}
+
+	public void setUbicaciones(List<Ubicacion> ubicaciones) {
+		this.ubicaciones = ubicaciones;
+	}
+
+	
+	
+	
+	
 	public TipoUbicacion() {
 		super();
+	}
+
+	public TipoUbicacion(Long id, String nombre, Empresa empresa, Boolean estaActivo) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.empresa = empresa;
+		this.estaActivo = estaActivo;
 	}
 
 	

@@ -1,5 +1,6 @@
 package com.prueba.entity;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,10 +30,9 @@ public class TipoMov {
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
 
-	public Empresa getEmpresa() {
-		return empresa;
-	}
-
+	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+	private Boolean estaActivo;
+	
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
@@ -52,4 +52,34 @@ public class TipoMov {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+	
+	
+	
+	
+
+	public TipoMov(Long id, String nombre, Empresa empresa, Boolean estaActibo) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.empresa = empresa;
+		this.estaActivo = estaActibo;
+	}
+
+	public TipoMov() {
+		super();
+	}
+	
+	
 }

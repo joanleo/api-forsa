@@ -9,34 +9,35 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import com.prueba.dto.SearchDTO;
+import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
+import com.prueba.entity.Producto_id;
 
 @Component
 public class ProductSpecifications {
 
 
-	public Specification<Producto> getProductos(SearchDTO searchDTO){
+	public Specification<Producto> getProductos(SearchDTO searchDTO, Empresa empresa){
 		return (root, query, criteryBuilder) ->{
 			
-			System.out.println(searchDTO);
+			if(searchDTO.getEmpresa() == null) {
+				searchDTO.setEmpresa(empresa);
+			}
 			
 			List<Predicate> predicates = new ArrayList<>();
 			
-			if(searchDTO.getArea() != null && !searchDTO.getArea().isEmpty()) {
-				System.out.println(searchDTO.getArea().toString());
-				predicates.add(criteryBuilder.like(root.get("area").as(String.class), "%"+searchDTO.getArea().toString()+"%"));
-			}
 			if(searchDTO.getCodigoPieza() != null) {
-				predicates.add(criteryBuilder.like(root.get("codigoPieza"), "%"+searchDTO.getCodigoPieza()+"%"));
+				Producto_id idProducto= new Producto_id(searchDTO.getEmpresa().getNit(),searchDTO.getCodigoPieza());
+				predicates.add(criteryBuilder.equal(root.get("idProducto"), idProducto));
 			}
 			if(searchDTO.getDescripcion() != null && !searchDTO.getDescripcion().isEmpty()) {
 				predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+searchDTO.getDescripcion()+"%"));
 			}
-			if(searchDTO.getEmpresa() != null) {
-				predicates.add(criteryBuilder.equal(root.get("empresa"), searchDTO.getEmpresa()));
+			if(searchDTO.getArea() != null && !searchDTO.getArea().isEmpty()) {
+				predicates.add(criteryBuilder.like(root.get("area").as(String.class), "%"+searchDTO.getArea().toString()+"%"));
 			}
-			if(searchDTO.getEstado() != null) {				
-				predicates.add(criteryBuilder.equal(root.get("estado"), searchDTO.getEstado()));
+			if(searchDTO.getOrden() != null) {
+				predicates.add(criteryBuilder.like(root.get("orden"), "%"+searchDTO.getOrden()+"%"));
 			}
 			if(searchDTO.getFabricante() != null) {
 				predicates.add(criteryBuilder.equal(root.get("fabricante"), searchDTO.getFabricante()));
@@ -44,8 +45,14 @@ public class ProductSpecifications {
 			if(searchDTO.getFamilia() != null) {
 				predicates.add(criteryBuilder.equal(root.get("familia"), searchDTO.getFamilia()));
 			}
-			if(searchDTO.getOrden() != null) {
-				predicates.add(criteryBuilder.like(root.get("orden"), "%"+searchDTO.getOrden()+"%"));
+			if(searchDTO.getTipo() != null) {
+				predicates.add(criteryBuilder.equal(root.get("tipo"), searchDTO.getTipo()));
+			}
+			if(searchDTO.getEstado() != null) {				
+				predicates.add(criteryBuilder.equal(root.get("estado"), searchDTO.getEstado()));
+			}
+			if(searchDTO.getEmpresa() != null) {
+				predicates.add(criteryBuilder.equal(root.get("empresa"), searchDTO.getEmpresa()));
 			}
 			if(searchDTO.getUbicacion() != null) {
 				predicates.add(criteryBuilder.equal(root.get("ubicacion"), searchDTO.getUbicacion()));
@@ -67,21 +74,29 @@ public class ProductSpecifications {
 			if(searchDTO.getMotivoIngreso() != null) {
 				predicates.add(criteryBuilder.like(root.get("motivoIngreso"), "%"+searchDTO.getMotivoIngreso()+"%"));
 			}
+			if(searchDTO.getMedidas() != null && !searchDTO.getMedidas().isEmpty()) {
+				predicates.add(criteryBuilder.like(root.get("medidas"), "%"+searchDTO.getMedidas()+"%"));
+			}
+			if(searchDTO.getReviso() != null) {
+				predicates.add(criteryBuilder.equal(root.get("reviso"), searchDTO.getReviso()));
+			}
 			
 			
 			
-			query.orderBy(criteryBuilder.desc(root.get("codigoPieza")));
+			query.orderBy(criteryBuilder.desc(root.get("descripcion")));
 			
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
 	}
 		
-	public Specification<Producto> getProductosActivos(String letras){
+	public Specification<Producto> getProductosActivos(String letras, Empresa empresa){
 		return (root, query, criteryBuilder) ->{
 			List<Predicate> predicates = new ArrayList<>();
-			
+			System.out.println("Specification "+letras);
 			predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+letras+ "%"));
-			//Root<Producto> activo = query.from(Producto.class);
+			
+			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
+
 			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
 			
 			
@@ -89,7 +104,7 @@ public class ProductSpecifications {
 		};
 	}
 
-	public Specification<Producto> getVerificacion(String orden, String filtro) {
+	public Specification<Producto> getVerificacion(String orden, String filtro, Empresa empresa) {
 		return (root, query, criteryBuilder) ->{
 			
 			List<Predicate> predicates = new ArrayList<>();
@@ -99,17 +114,17 @@ public class ProductSpecifications {
 				predicates.add(criteryBuilder.equal(root.get("orden"), orden));				
 			}
 			if(filtro != null && filtro.equalsIgnoreCase("faltantes")) {
-				System.out.println("Filtro 1 " + filtro);
+				predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 				predicates.add(criteryBuilder.isTrue(root.get("importado").as(Boolean.class)));
 				predicates.add(criteryBuilder.isFalse(root.get("verificado").as(Boolean.class)));
 			}
 			if(filtro != null && filtro.equalsIgnoreCase("sobrantes" )) {
-				System.out.println("Filtro 2 " + filtro);
+				predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 				predicates.add(criteryBuilder.isFalse(root.get("importado").as(Boolean.class)));
 				predicates.add(criteryBuilder.isTrue(root.get("verificado").as(Boolean.class)));
 			}
 			if(filtro != null && filtro.equalsIgnoreCase("ok" )) {
-				System.out.println("Filtro 2 " + filtro);
+				predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 				predicates.add(criteryBuilder.isTrue(root.get("importado").as(Boolean.class)));
 				predicates.add(criteryBuilder.isTrue(root.get("verificado").as(Boolean.class)));
 			}

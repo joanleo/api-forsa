@@ -30,7 +30,8 @@ public class TipoEmpresa {
 	@JsonIgnore
 	@OneToMany(mappedBy = "tipoEmpresa")
 	private List<Empresa> empresas;
-
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -61,7 +62,12 @@ public class TipoEmpresa {
 
 	public void setEmpresas(List<Empresa> empresas) {
 		this.empresas = empresas;
-	}
+	}	
+
+	
+	
+	
+	
 
 	public TipoEmpresa() {
 		super();

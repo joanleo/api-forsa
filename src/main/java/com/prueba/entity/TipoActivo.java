@@ -2,7 +2,6 @@ package com.prueba.entity;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,48 +15,47 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
-
 @Entity
-@Table(name = "m_fabricantes")
-public class Fabricante {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "vcnitfabricante", length = 12)
-    private Long nit;
-    
-    @Column(name = "vcnombre",length = 48)
-    private String nombre;
-    
-    @JsonIgnore
-    @OneToMany(mappedBy = "fabricante", cascade = CascadeType.ALL, orphanRemoval = true)
+@Table(name = "m_tipos")
+public class TipoActivo {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="nidtipo")
+	private Long id;
+	
+	@Column(name="vcnombre")
+	private String nombre;
+	
+	@JsonIgnore
+    @OneToMany(mappedBy = "familia")
     private List<Producto> productos;
-    
-    @JsonIgnore
+	
+	@JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
-    
-    @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+	
+	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
     private Boolean estaActivo;
-    
-    
-    
-    
-	public Empresa getEmpresa() {
-		return empresa;
+
+
+	public TipoActivo() {
+		super();
 	}
 
-	public void setEmpresa(Empresa empresa) {
+	public TipoActivo(String nombre, Empresa empresa) {
+		super();
+		this.nombre = nombre;
 		this.empresa = empresa;
 	}
 
-	public Long getNit() {
-		return nit;
+	public Long getId() {
+		return id;
 	}
 
-	public void setNit(Long nit) {
-		this.nit = nit;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getNombre() {
@@ -74,8 +72,16 @@ public class Fabricante {
 
 	public void setProductos(List<Producto> productos) {
 		this.productos = productos;
-	}	
-	
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
 	public Boolean getEstaActivo() {
 		return estaActivo;
 	}
@@ -84,15 +90,4 @@ public class Fabricante {
 		this.estaActivo = estaActivo;
 	}
 
-	
-	
-	
-	public Fabricante(Long nit) {
-		super();
-		this.nit = nit;
-	}
-
-	public Fabricante() {
-		super();
-	}    
 }

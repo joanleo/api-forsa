@@ -27,7 +27,7 @@ public class DetalleInv {
 	private MovInventario movimiento;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@MapsId("codigoPieza")
+	@MapsId("id")
 	private Producto producto;
 
 	public DetalleInv() {
@@ -36,7 +36,7 @@ public class DetalleInv {
 
 	public DetalleInv(MovInventario movimiento, Producto producto) {
 		super();
-		this.id = new DetalleInv_id(movimiento.getId(), producto.getCodigoPieza());
+		this.id = new DetalleInv_id(movimiento.getId(), producto.getIdProducto().getCodigoPieza());
 		this.movimiento = movimiento;
 		this.producto = producto;
 	}

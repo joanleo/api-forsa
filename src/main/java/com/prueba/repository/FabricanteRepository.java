@@ -10,10 +10,18 @@ import com.prueba.entity.Fabricante;
 
 public interface FabricanteRepository extends JpaRepository<Fabricante, Long>{
 	
-	List<Fabricante> findByNombreContains(String nombre);
-	
 	//List<Fabricante> findByEmpresaAndEstaActivo(Empresa empresa, boolean b);
+
+	//List<Fabricante> findByNombreContains(String nombre);
 	
+	//Fabricante findByNit(Long nit);
+
+	//List<Fabricante> findByNombreContainsAndEstaActivo(String nombre, Boolean estaActivo);
+
+	List<Fabricante> findByNombreContainsAndEmpresaAndEstaActivo(String letras, Empresa empresa, Boolean estaActivo);
+
+	List<Fabricante> findByEmpresaAndEstaActivo(Empresa empresa, boolean b);
+
 	Optional<Fabricante> findByNitAndEmpresa(Long nit, Empresa empresa);
 
 }

@@ -29,6 +29,7 @@ import com.prueba.entity.Estado;
 import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
 import com.prueba.entity.Producto;
+import com.prueba.entity.Producto_id;
 import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
@@ -36,6 +37,8 @@ import com.prueba.repository.ErorRepository;
 import com.prueba.repository.FabricanteRepository;
 import com.prueba.repository.FamiliaRepository;
 import com.prueba.repository.ProductoRepository;
+import com.prueba.security.entity.Usuario;
+import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.ProductSpecifications;
 
 @Service
@@ -62,23 +65,19 @@ public class ProductoServiceImpl implements ProductoService {
 	@Autowired
 	private FamiliaRepository familiaRepo;
 	
+	@Autowired
+	private UsuarioRepository usuarioRepo;
+	
 	
 	@Override
 	public ProductoDTO create(ProductoDTO productoDTO) {
 		Producto producto = mapearDTO(productoDTO);
-		Producto exist = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
-		//Empresa empresa = empresaRepo.findByNitOrderByFecha(productoDTO.getEmpresa().getNit());
-		
-		/*if(empresa != null) {
-			System.out.println(empresa.getNconfimacion());			
-		}else {
-			System.out.println("error en la consulta de empresa");
-		}*/
+		Producto exist = productoRepo.findByIdProducto(productoDTO.getIdProducto());
+
 		if(exist == null) {
-			//System.out.println(producto.toString());
 			productoRepo.save(producto);
 		}else {
-			throw new IllegalAccessError("El producto con id "+ producto.getCodigoPieza() + " que trata de crear ya existe");
+			throw new IllegalAccessError("El producto con id "+ productoDTO.getCodigoPieza() + " que trata de crear ya existe en la empresa "+productoDTO.getEmpresa().getNit());
 		}
 		
 		return mapearEntidad(producto);
@@ -86,43 +85,50 @@ public class ProductoServiceImpl implements ProductoService {
 
 	
 	@Override
-	public Page<Producto> list(Integer offset, Integer pageSize) {
+	public Page<Producto> list(Empresa empresa, Integer offset, Integer pageSize) {
+
 		if(pageSize == 0) {
-			Page<Producto> productos = productoRepo.findAllByEstaActivoTrue(PageRequest.of(0, 10));
+			System.out.println("Pagina 0 "+ empresa.getNit());
+			Page<Producto> productos = productoRepo.findAllByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(0, 10));
 			return productos;
 		}
-		Page<Producto> productos = productoRepo.findAllByEstaActivoTrue(PageRequest.of(offset, pageSize));
+		System.out.println("Pagina valor");
+		Page<Producto> productos = productoRepo.findAllByEmpresaAndEstaActivoTrue(empresa,  PageRequest.of(offset, pageSize));
 		return productos;
 	}
 
 	
 	@Override
 	public Page<Producto> searchProducts(Empresa empresa, SearchDTO searchDTO, int offset, int pageSize) {
+
 		if(pageSize == 0) {
-			Page<Producto> productos = productoRepo.findAll(productSpec.getProductos(searchDTO),PageRequest.of(0, 10));
+			Page<Producto> productos = productoRepo.findAll(productSpec.getProductos(searchDTO, empresa),PageRequest.of(0, 10));
 			return productos;
 		}
-		Page<Producto> listProducts = productoRepo.findAll(productSpec.getProductos(searchDTO), PageRequest.of(offset, pageSize));		
-		return listProducts;//listProducts.stream().map(producto -> mapearEntidad(producto)).collect(Collectors.toList());
+		Page<Producto> listProducts = productoRepo.findAll(productSpec.getProductos(searchDTO, empresa), PageRequest.of(offset, pageSize));		
+		return listProducts;
 	}
 
 	
 	@Override
-	public ProductoDTO getProducto(String codigoPieza) {
+	public Producto getProducto(Producto_id id) {
 				
-		Producto exist = productoRepo.findByCodigoPieza(codigoPieza);
+		Producto exist = productoRepo.findByIdProducto(id);
+		
 		
 		if(exist == null) {
-			throw new IllegalAccessError("El producto con codigo de pieza "+ codigoPieza + " no existe");
+			throw new IllegalAccessError("El producto con codigo de pieza "+ id.getCodigoPieza() + " no existe, para la empresa "+ id.getNitEmpresa());
 		}
 		
-		return mapearEntidad(exist);
+		System.out.println("producto: "+exist.getDescripcion());
+		
+		return exist;
 	}
 
 	
 	@Override
-	public ProductoDTO update(String codigoPieza, ProductoDTO productoDTO) {
-		Producto exist = productoRepo.findByCodigoPieza(codigoPieza);
+	public Producto update(String codigoPieza, ProductoDTO productoDTO) {
+		Producto exist = productoRepo.findByIdProducto(productoDTO.getIdProducto());
 		
 		if(exist == null) {
 			throw new IllegalAccessError("El producto con codigo de pieza "+ codigoPieza + " no existe");
@@ -132,16 +138,16 @@ public class ProductoServiceImpl implements ProductoService {
 		exist.setOrden(productoDTO.getOrden());
 		exist.setDescripcion(productoDTO.getDescripcion());
 		
-		return mapearEntidad(exist);
+		return exist;
 	}
 
 	
 	@Override
-	public void delete(String id) {
-		Producto producto = productoRepo.findByCodigoPieza(id);
+	public void delete(Producto_id id) {
+		Producto producto = productoRepo.findByIdProducto(id);
 		
 		if(producto == null) {
-			throw new ResourceNotFoundException("Producto", "No existe", id);
+			throw new ResourceNotFoundException("Producto", "No existe", id.getCodigoPieza());
 		}
 		
 		if(!producto.getVerificado() && producto.getEstaActivo()) {
@@ -166,16 +172,25 @@ public class ProductoServiceImpl implements ProductoService {
 
 	
 	@Override
-	public ProductoDTO receive(String id, ProductoDTO productoDTO) {
+	public Producto receive(String id, ProductoDTO productoDTO) throws IllegalAccessException {
 		
-		Producto producto = productoRepo.findByCodigoPieza(id);		
+		Producto producto = productoRepo.findByIdProducto(productoDTO.getIdProducto());		
 		if(producto == null) {
 			throw new ResourceNotFoundException("Producto", "No existe", id);
 		}
 		
 		if(!producto.getVerificado() && producto.getEstaActivo()) {
+			
+			Usuario usuario = null;
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if(authentication != null) {
+			    usuario = usuarioRepo.findByUsername(authentication.getName()).get();
+			}else {
+				throw new IllegalAccessException("Debe estar logueado para realizar esta accion");
+			}
+
 			//Capturar datos de la empresa del usuario		
-			Empresa empresa = empresaRepo.findByNitOrderByFecha(producto.getEmpresa().getNit());
+			Empresa empresa = empresaRepo.findByNit(producto.getEmpresa().getNit());
 			
 			String[] nconfirmacion = new String[2];
 			Integer numero = 0;
@@ -197,6 +212,7 @@ public class ProductoServiceImpl implements ProductoService {
 			producto.setEstado(nuevoEstado);
 			producto.setVerificado(true);
 			producto.setEstaActivo(true);
+			producto.setReviso(usuario);
 			productoRepo.save(producto);
 			
 			empresa.setNconfimacion(nconf);
@@ -210,18 +226,18 @@ public class ProductoServiceImpl implements ProductoService {
 			throw new IllegalAccessError("No se puede realizar esta accion el activo no esta activo");
 		}
 		
-		return mapearEntidad(producto);
+		return producto;
 	}
 	
 
 	@Override
-	public Page<Producto> searchProducts(String letra, int offset, int pageSize) {
+	public Page<Producto> searchProducts(Empresa empresa, String letra, int offset, int pageSize) {
 		
 		if(pageSize == 0) {
-			Page<Producto> productos = productoRepo.findAll(/*productSpec.getProductosActivos(letra),*/PageRequest.of(0, 10));
+			Page<Producto> productos = productoRepo.findAll(productSpec.getProductosActivos(letra, empresa),PageRequest.of(0, 10));
 			return productos;
 		}
-		Page<Producto> listProducts = productoRepo.findAll(/*productSpec.getProductosActivos(letra),*/ PageRequest.of(offset, pageSize));		
+		Page<Producto> listProducts = productoRepo.findAll(productSpec.getProductosActivos(letra, empresa), PageRequest.of(offset, pageSize));		
 		return listProducts;
 	}
 	
@@ -236,6 +252,13 @@ public class ProductoServiceImpl implements ProductoService {
 	@SuppressWarnings("removal")
 	@Override
 	public String loadFile(MultipartFile file, WebRequest webRequest) {
+		
+		Float area = 0.0f;
+		//Integer familia = 0;
+		String familia = "";
+		Integer fabricante = 0;
+		Integer empresa = 0;
+		
 		try {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			String currentUserName = "";
@@ -263,6 +286,8 @@ public class ProductoServiceImpl implements ProductoService {
 				List<String> errores = new ArrayList<String>();
 				List<Producto> listProductos = new ArrayList<Producto>();
 				
+				
+				
 				try {
 					Pattern special = Pattern.compile("[!@#$%&*()_+=|<>?{}\\\\[\\\\]~]", Pattern.CASE_INSENSITIVE);
 					String lineError, codigoPiezaError, nombreError, areaError, ordenError, familiaError, fabricanteError, empresaError = "";
@@ -275,11 +300,7 @@ public class ProductoServiceImpl implements ProductoService {
 						String[] producto = line.split("\\|");
 						lineError = "El tamaño del arreglo esta errado linea " + count;
 						
-						Float area = 0.0f;
-						//Integer familia = 0;
-						String familia = "";
-						Integer fabricante = 0;
-						Integer empresa = 0;
+						
 						
 						if(producto.length > 7) {
 							error = true;
@@ -301,7 +322,7 @@ public class ProductoServiceImpl implements ProductoService {
 						
 						//System.out.println("Nombre " + producto[1] + " Tipo " + ((Object)producto[1]).getClass().getSimpleName());
 						String nombre = producto[1];
-						System.out.println(nombre);
+						//System.out.println(nombre);
 						matcher = special.matcher(producto[1]);
 						boolean nombreconstainsSymbols = matcher.find();
 						if(nombreconstainsSymbols) {
@@ -347,7 +368,7 @@ public class ProductoServiceImpl implements ProductoService {
 						}*/
 						
 						familia = producto[4];
-						System.out.println(familia);
+						//System.out.println(familia);
 						matcher = special.matcher(producto[4]);
 						boolean familiaconstainsSymbols = matcher.find();
 						if(familiaconstainsSymbols) {
@@ -386,13 +407,16 @@ public class ProductoServiceImpl implements ProductoService {
 							
 							Familia familiaAdd = familiaRepo.findBySiglaAndEmpresa(familia, empresaAdd);
 							System.out.println(familiaAdd.getNombre());
+
+
 							
 							Long nuevoFabricante = new Long(fabricante);
 							Fabricante fabricanteAdd = fabricanteRepo.findByNitAndEmpresa(nuevoFabricante, empresaAdd)
 									.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "nit", nuevoFabricante));
 							System.out.println(fabricanteAdd.getNombre());
 							
-							Producto product = new Producto(codigoPieza,nombre,area,orden,familiaAdd,fabricanteAdd,empresaAdd);
+							
+							Producto product = new Producto(new Producto_id(empresaAdd.getNit(), codigoPieza),nombre,area,orden,familiaAdd,fabricanteAdd,empresaAdd);
 							listProductos.add(product);
 						}else {
 							System.out.println("Error");
@@ -423,7 +447,7 @@ public class ProductoServiceImpl implements ProductoService {
 				stream.close();
 			    channel.close();*/
 				
-				productoRepo.saveAll(listProductos);
+				productoRepo.saveAllAndFlush(listProductos);
 				
 				//productoRepo.bulkLoadData();
 				Long endProducts = System.currentTimeMillis();
@@ -492,67 +516,34 @@ public class ProductoServiceImpl implements ProductoService {
 
 
 	@Override
-	public List<Producto> searchProducts(SearchDTO searchDTO) {
-		
-		List<Producto> listProducts = productoRepo.findAll(productSpec.getProductos(searchDTO));		
+	public List<Producto> searchProducts(SearchDTO searchDTO, Empresa empresa) {
+		List<Producto> listProducts = productoRepo.findAll(productSpec.getProductos(searchDTO, empresa));		
 		return listProducts;
 	}
 
 
 	@Override
-	public List<Producto> searchProducts(String letra) {
-		List<Producto> listProducts = productoRepo.findAll(productSpec.getProductosActivos(letra));		
+	public List<Producto> searchProducts(String letras, Empresa empresa) {
+		List<Producto> listProducts = productoRepo.findAll(productSpec.getProductosActivos(letras, empresa));		
 		return listProducts;
 	}
 
 
 	@Override
-	public Page<Producto> getVerificacion(String orden, String filtro, int offset, int pageSize) {
+	public Page<Producto> getVerificacion(String orden, String filtro, Empresa empresa, int offset, int pageSize) {
 		
 		if(pageSize == 0) {
-			Page<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro),PageRequest.of(0, 10));
+			Page<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro, empresa),PageRequest.of(0, 10));
 			return productos;
 		}
-		Page<Producto> listProducts = productoRepo.findAll(productSpec.getVerificacion(orden, filtro), PageRequest.of(offset, pageSize));		
+		Page<Producto> listProducts = productoRepo.findAll(productSpec.getVerificacion(orden, filtro, empresa), PageRequest.of(offset, pageSize));		
 		return listProducts;
-		
-		/*String currentUserName = "";
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if ((authentication != null)) {
-		    currentUserName = authentication.getName();
-		}
-		Usuario usuario = usuarioRepo.findByUsername(authentication.getName()).get();
-		System.out.println(currentUserName);
-		List<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro));
-		/*List<Producto> faltantes = new ArrayList<Producto>();
-		List<Producto> sobrantes = new ArrayList<Producto>();
-		for(Producto producto: productos) {
-			if(producto != null && !producto.getImportado() && producto.getVerificado()) {
-				sobrantes.add(producto);
-			}
-			if(producto != null && producto.getImportado() && !producto.getVerificado()) {
-				faltantes.add(producto);
-			}
-		}
-		ReporteVerificacionDTO reporte = new ReporteVerificacionDTO();
-		reporte.setOrden(orden);
-		reporte.setFiltro(filtro);
-		reporte.setActivos(productos);
-		if(!faltantes.isEmpty()) {
-			reporte.setFaltantes(faltantes);			
-		}
-		if(!sobrantes.isEmpty()) {
-			reporte.setSobrantes(sobrantes);
-		}
-		reporte.setRealizo(usuario);
-		
-		return reporte;*/
 	}
 
 
 	@Override
-	public List<Producto> getVerificacion(String orden, String filtro){
-		List<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro));
+	public List<Producto> getVerificacion(String orden, String filtro, Empresa empresa){
+		List<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro, empresa));
 		return productos;
 	}
 	

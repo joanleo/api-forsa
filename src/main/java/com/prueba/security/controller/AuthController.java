@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.prueba.entity.Empresa;
 import com.prueba.security.dto.JWTAuthResonseDTO;
 import com.prueba.security.dto.LoginDTO;
 import com.prueba.security.dto.RegistroDTO;
@@ -25,6 +26,7 @@ import com.prueba.security.entity.Usuario;
 import com.prueba.security.jwt.JwtTokenProvider;
 import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.UsuarioRepository;
+import com.prueba.util.UtilitiesApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -48,6 +50,9 @@ public class AuthController {
 	
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
+	
+	@Autowired
+	private UtilitiesApi util;
 	
 	@PostMapping("/login")
 	@ApiOperation(value = "Autenticacion de usuarios")
@@ -73,6 +78,23 @@ public class AuthController {
 	@PostMapping("/register")
 	@ApiOperation(value = "Registro de usuarios")
 	public ResponseEntity<?> registrarUsuario(@RequestBody RegistroDTO registroDTO){
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		if(authentication.getName() == "anonymousUser") {
+			throw new IllegalAccessError("Debe estar logueado para realizar el registro");
+		}
+		Usuario usuarioActual = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		System.out.println(usuarioActual);
+		if(usuarioActual == null) {
+			System.out.println("Debe estar loguado");
+		}
+		
+		if(registroDTO.getNitEmpresa() != null) {
+			empresa = util.obtenerEmpresa(registroDTO.getNitEmpresa());
+		}else {
+			empresa = usuarioActual.getEmpresa();			
+		}
 		if(usuarioRepo.existsByUsername(registroDTO.getUsername())) {
 			return new ResponseEntity<>("Ese nombre de usuario ya existe",HttpStatus.BAD_REQUEST);
 		}
@@ -82,6 +104,7 @@ public class AuthController {
 		}
 		
 		Usuario usuario = new Usuario();
+		usuario.setEmpresa(empresa);
 		usuario.setNombre(registroDTO.getNombre());
 		usuario.setUsername(registroDTO.getUsername());
 		usuario.setEmail(registroDTO.getEmail());

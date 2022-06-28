@@ -1,5 +1,7 @@
 package com.prueba.dto;
 
+import com.prueba.entity.Empresa;
+
 public class TipoMovDTO {
 	
 	private Long id;
@@ -7,6 +9,8 @@ public class TipoMovDTO {
 	private String nombre;
 	
 	public String descripcion;
+	
+	public Empresa empresa;
 
 	public Long getId() {
 		return id;
@@ -30,6 +34,14 @@ public class TipoMovDTO {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 
 	public TipoMovDTO() {

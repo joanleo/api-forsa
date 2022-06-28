@@ -26,11 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lowagie.text.DocumentException;
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.MovInventarioDTO;
+import com.prueba.entity.Empresa;
 import com.prueba.entity.MovInventario;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.service.MovInventarioService;
 import com.prueba.util.ReporteInventarioPDF;
+import com.prueba.util.UtilitiesApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,6 +47,9 @@ public class MovInvController {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepo;
+	
+	@Autowired
+	private UtilitiesApi util;
 	
 	@PostMapping
 	@ApiOperation(value = "Crea un inventario", notes = "Crea un nuevo inventario")
@@ -65,16 +70,27 @@ public class MovInvController {
 	public ApiResponse<Page<MovInventario>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 												 @RequestParam(required=false, defaultValue = "10") Integer items,
 												 @RequestParam(required=false) String letras,
+												 @RequestParam(required=false) Long nit,
 												 @RequestParam(required=false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date  desde,
 												 @RequestParam(required=false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date  hasta)throws ParseException{
 		
-				
-		if(letras != null) {
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		if(letras != null && desde != null) {
 			System.out.println("letras "+letras);
-			Page<MovInventario> inventarios = movInvService.searchInv(letras, pagina, items);
+			Page<MovInventario> inventarios = movInvService.searchInv(letras, empresa, pagina, items);
 			return new ApiResponse<>(inventarios.getSize(), inventarios);
 		}else {
-			Page<MovInventario> inventarios = movInvService.list(pagina, items);
+			System.out.println("entra");
+			Page<MovInventario> inventarios = movInvService.list(empresa, pagina, items);
 			return new ApiResponse<>(inventarios.getSize(), inventarios);
 		}
 		
@@ -94,7 +110,7 @@ public class MovInvController {
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
 		String headerKey = "Content-Disposition";
-		String headerValue = "attachment; filename=reporteVerificacion_" + id + "_" + currentDateTime + ".pdf";
+		String headerValue = "attachment; filename=reporteInventario_" + id + "_" + currentDateTime + ".pdf";
 		response.setHeader(headerKey, headerValue);
 		
 		MovInventario inventario = movInvService.getInventario(id);

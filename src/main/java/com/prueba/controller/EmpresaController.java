@@ -51,6 +51,15 @@ public class EmpresaController {
 		return new ResponseEntity<EmpresaDTO>(empresaService.create(empresaDTO), HttpStatus.CREATED);
 	}
 	
+	@PutMapping("/{nit}")
+	@ApiOperation(value = "Actualiza una empresa", notes = "Actualiza los datos de una empresa")
+	public ResponseEntity<EmpresaDTO> update(@Valid @RequestBody EmpresaDTO empresaDTO,
+											 @PathVariable Long nit){
+		EmpresaDTO actualizada = empresaService.update(nit, empresaDTO);
+		
+		return new ResponseEntity<>(actualizada, HttpStatus.OK);
+	}
+	
 	@GetMapping
 	@ApiOperation(value = "Encuentra las empresas", notes = "Retorna las empresas que en su nombre contengan las letrtas indicadas, retorna todas las empresas si no se indica ninguna letra")
 	public ApiResponse<Page<Empresa>> paginationList(
@@ -66,25 +75,16 @@ public class EmpresaController {
 			return new ApiResponse<>(empresas.getSize(), empresas);			
 		}
 	}
-	
+
 	@GetMapping("/{id}")
 	@ApiOperation(value = "Encuentra una empresa", notes = "Retorna una empresa por el id")
 	public ResponseEntity<EmpresaDTO> get(@PathVariable(name = "id") Long id){
 		return ResponseEntity.ok(empresaService.getEmpresa(id));
 	}
-	
-	@PutMapping("/{id}")
-	@ApiOperation(value = "Actualiza una empresa", notes = "Actualiza los datos de una empresa")
-	public ResponseEntity<EmpresaDTO> update(
-			@Valid @RequestBody EmpresaDTO empresaDTO,
-			@PathVariable Long id){
-		EmpresaDTO actualizado = empresaService.update(id, empresaDTO);
-		
-		return new ResponseEntity<EmpresaDTO>(actualizado, HttpStatus.OK);
-	}
+
 	
 	@DeleteMapping("/{id}")
-	@ApiOperation(value = "Elimina una empresa", notes = "Elimina una empresa por su id")
+	@ApiOperation(value = "Elimina una empresa", notes = "Elimina un empresa por su id")
 	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id){
 		empresaService.delete(id);
 		return new ResponseEntity<ResDTO>(new ResDTO("Empresa eliminada con exito"), HttpStatus.OK);
@@ -119,8 +119,32 @@ public class EmpresaController {
 			List<EmpresaDTO> empresas = empresaService.list();
 			csvService.writeEmpresasToCsv(servletResponse.getWriter(), empresas);
 		}
-		        
-	}
+	}    
+	
+	@PostMapping("/descarga")
+	@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de empresas de la busqueda realizada en formato csv")
+	public void getCsvEmpresas(HttpServletResponse servletResponse,
+								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+								@RequestParam(required=false, defaultValue = "0") Integer items,
+								@RequestParam(required=false) String letras) throws IOException {
+		servletResponse.setContentType("application/x-download");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+        servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "empresas"+ "_" + currentDateTime + ".csv" + "\"");
+        
+        
+		
+        if(letras != null){
+			List<EmpresaDTO> empresas =  empresaService.findByNameAndEstaActiva(letras, true);
+			csvService.writeEmpresasToCsv(servletResponse.getWriter(), empresas);
+		}else{
+			System.out.println("Controller busqueda vacia");
+			List<EmpresaDTO> empresas = empresaService.list();
+			csvService.writeEmpresasToCsv(servletResponse.getWriter(), empresas);
+		}
+		
+		
+        	}
 
 }
 

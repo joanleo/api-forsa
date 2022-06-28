@@ -6,6 +6,7 @@ public class RegistroDTO {
 	private String username;
 	private String email;
 	private String password;
+	private Long nitEmpresa;
 
 	public RegistroDTO() {
 		super();
@@ -41,6 +42,14 @@ public class RegistroDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Long getNitEmpresa() {
+		return nitEmpresa;
+	}
+
+	public void setNitEmpresa(Long nitEmpresa) {  
+		this.nitEmpresa = nitEmpresa;
 	}
 }
 

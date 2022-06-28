@@ -4,7 +4,9 @@ import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
 import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
+import com.prueba.entity.TipoActivo;
 import com.prueba.entity.Ubicacion;
+import com.prueba.security.entity.Usuario;
 
 public class SearchDTO {
 	
@@ -20,6 +22,8 @@ public class SearchDTO {
 	
 	private Familia familia;
 	
+	private TipoActivo tipo;
+	
 	private Estado estado;
 	
 	private Empresa empresa;
@@ -31,6 +35,12 @@ public class SearchDTO {
 	private Boolean estaActivo;
 	
 	private String motivoIngreso;
+	
+	private String medidas;
+	
+	private Usuario reviso;
+	
+	//private Producto_id idProducto = new Producto_id(empresa.getNit(), codigoPieza);
 	
 
 	public SearchDTO() {
@@ -85,6 +95,14 @@ public class SearchDTO {
 		this.familia = familia;
 	}
 
+	public TipoActivo getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoActivo tipo) {
+		this.tipo = tipo;
+	}
+
 	public Estado getEstado() {
 		return estado;
 	}
@@ -132,13 +150,31 @@ public class SearchDTO {
 	public void setMotivoIngreso(String motivoIngreso) {
 		this.motivoIngreso = motivoIngreso;
 	}
-
-	@Override
-	public String toString() {
-		return "SearchDTO [codigoPieza=" + codigoPieza + ", descripcion=" + descripcion + ", area=" + area + ", orden="
-				+ orden + ", fabricante=" + fabricante + ", familia=" + familia + ", estado=" + estado + ", empresa="
-				+ empresa + ", ubicacion=" + ubicacion + ", verificado=" + verificado + ", estaActivo=" + estaActivo
-				+ "]";
+/*
+	public Producto_id getIdProducto() {
+		return idProducto;
 	}
+
+	public void setIdProducto(Producto_id idProducto) {
+		this.idProducto = idProducto;
+	}
+*/
+
+	public String getMedidas() {
+		return medidas;
+	}
+
+	public void setMedidas(String medidas) {
+		this.medidas = medidas;
+	}
+
+	public Usuario getReviso() {
+		return reviso;
+	}
+
+	public void setReviso(Usuario reviso) {
+		this.reviso = reviso;
+	}
+
 
 }

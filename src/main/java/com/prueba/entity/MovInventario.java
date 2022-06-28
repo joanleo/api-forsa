@@ -8,7 +8,10 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -16,6 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.prueba.security.entity.Usuario;
@@ -49,7 +53,14 @@ public class MovInventario {
 	
 	@OneToOne(targetEntity = Usuario.class, cascade = CascadeType.ALL)
 	private Usuario realizo;
+	
+	@JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "vcnitempresa")
+    private Empresa empresa;
 
+	
+	
 	public Usuario getRealizo() {
 		return realizo;
 	}
@@ -92,6 +103,14 @@ public class MovInventario {
 
 	public void setDetalles(List<DetalleInv> detalles) {
 		this.detalles = detalles;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 
 	public void addActivo(Producto producto) {

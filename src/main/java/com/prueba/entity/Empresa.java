@@ -4,6 +4,7 @@ package com.prueba.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,7 +23,7 @@ import com.prueba.security.entity.Usuario;
 @Entity
 @Table(name = "m_empresas")
 public class Empresa {
-	
+	@JsonIgnore
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dfecha")
 	private Date fecha;
@@ -47,7 +48,7 @@ public class Empresa {
 	private TipoEmpresa tipoEmpresa;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "empresa")
+	@OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL)
 	private List<Producto> productos;
 	
 	@JsonIgnore
@@ -57,10 +58,14 @@ public class Empresa {
 	@JsonIgnore
 	@OneToMany(mappedBy = "empresa")
 	private List<Familia> familias;
-	
+
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
 	private Boolean estaActivo=true;
 
+
+	
+	
+	
 	public List<Familia> getFamilias() {
 		return familias;
 	}
@@ -123,11 +128,12 @@ public class Empresa {
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
-	}
+	}	
 
-	public Boolean getEstaActivo() {
+	public Boolean getEstaActiva() {
 		return estaActivo;
 	}
+
 
 	public void setEstaActivo(Boolean estaActivo) {
 		this.estaActivo = estaActivo;

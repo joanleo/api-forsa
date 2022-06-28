@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+###Archivos de prueba
+*.txt
+*.pdf
+*.csv
+*.py
+/prueba_requests/

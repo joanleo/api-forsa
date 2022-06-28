@@ -23,7 +23,7 @@ public class Familia {
     @Column(name = "nidfamilia", length = 3)
     private Long id;
     
-    @Column(name = "vcnombre", length = 20)
+    @Column(name = "vcnombre", length = 80)
     private String nombre;
 
     @JsonIgnore
@@ -37,6 +37,10 @@ public class Familia {
     
     @Column(name = "vcsigla", length = 3)
     private String sigla;
+    
+    @Column(name = "bestaActiva", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+    private Boolean estaActiva;
+    
 
 	public Empresa getEmpresa() {
 		return empresa;
@@ -70,6 +74,17 @@ public class Familia {
 		this.productos = productos;
 	}
 
+	public Boolean getEstaActiva() {
+		return estaActiva;
+	}
+
+	public void setEstaActiva(Boolean estaActiva) {
+		this.estaActiva = estaActiva;
+	}
+
+	
+	
+	
 	public Familia(Long id) {
 		super();
 		this.id = id;
@@ -87,9 +102,20 @@ public class Familia {
 		super();
 	}
 
-	public Familia(String nombre) {
+	public Familia(String nombre, Empresa empresa) {
 		super();
 		this.nombre = nombre;
-	}    
+		this.empresa = empresa;
+	}
+
+	public Familia(String nombre, String sigla, Empresa empresa) {
+		super();
+		this.nombre = nombre;
+		this.sigla = sigla;
+		this.empresa = empresa;
+	}
+
+
+	
 }
 

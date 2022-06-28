@@ -77,7 +77,6 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 		if(tipoEmpresa.getEmpresas().size() > 0) {
 			throw new IllegalAccessError("no se puede eliminar el tipo de empresa, existen empresas de este tipo");
 		}
-				
 		tipoEmpresaRepo.delete(tipoEmpresa);
 
 	}
