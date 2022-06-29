@@ -116,9 +116,6 @@ public class EmpresaServiceImpl implements EmpresaService {
 		
 	}
 
-	
-	
-
 	public EmpresaDTO mapearEntidad(Empresa Empresa) {
 		return modelMapper.map(Empresa, EmpresaDTO.class);
 	}
@@ -133,6 +130,12 @@ public class EmpresaServiceImpl implements EmpresaService {
 		List<Empresa> listEmpresas = empresaRepo.findByNombreContainsAndEstaActivoTrue(name);
 		
 		return listEmpresas.stream().map(empresa -> mapearEntidad(empresa)).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<EmpresaDTO> list(EmpresaDTO empresaDTO) {
+		List<Empresa> empresas = empresaRepo.findAll(empresaSpec.getEmpresa(empresaDTO));
+		return empresas.stream().map(empresa -> mapearEntidad(empresa)).collect(Collectors.toList());
 	}
 
 }

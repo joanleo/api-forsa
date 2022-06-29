@@ -123,5 +123,11 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 		return tiposEmpresa;
 	}
 
+	@Override
+	public List<TipoEmpresaDTO> list(TipoEmpresaDTO tipoEmpresaDTO) {
+		List<TipoEmpresa> empresas = tipoEmpresaRepo.findAll(tipoEmpresaSpec.getTipoEmpresa(tipoEmpresaDTO));
+		return empresas.stream().map(empresa -> mapearEntidad(empresa)).collect(Collectors.toList());
+	}
+
 	
 }

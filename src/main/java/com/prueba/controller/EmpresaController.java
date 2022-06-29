@@ -99,12 +99,12 @@ public class EmpresaController {
 		return new ResponseEntity<>(new ResDTO("Empresa inhabilidata con exito"), HttpStatus.OK);
 	}
 	
-	@GetMapping("/descarga")
+	@PostMapping("/descarga")
 	@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de activos de la busqueda realizada en formato csv")
 	public void getCsvEmpresa(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,
-								@RequestParam(required=false) String letras) throws IOException{
+								@RequestBody(required=false) EmpresaDTO empresaDTO) throws IOException{
 		
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
@@ -113,11 +113,11 @@ public class EmpresaController {
         servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "empresas_"+currentDateTime+".csv" + "\"");
         
         
-        if(letras != null) {
-			List<EmpresaDTO> empresas = empresaService.list(letras);
-			csvService.writeEmpresasToCsv(servletResponse.getWriter(), empresas);
+        if(Objects.isNull(empresaDTO)) {
+        	List<EmpresaDTO> empresas = empresaService.list();
+        	csvService.writeEmpresasToCsv(servletResponse.getWriter(), empresas);
 		}else {
-			List<EmpresaDTO> empresas = empresaService.list();
+			List<EmpresaDTO> empresas = empresaService.list(empresaDTO);
 			csvService.writeEmpresasToCsv(servletResponse.getWriter(), empresas);
 		}
 	}    

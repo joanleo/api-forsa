@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -63,12 +64,12 @@ public class FabricanteController {
 		return new ResponseEntity<FabricanteDTO>(fabricanteService.create(fabricanteDTO), HttpStatus.CREATED);
 	}
 	
-	@GetMapping
+	@PostMapping("/indexados")
 	@ApiOperation(value = "Encuenta los fabricantes", notes = "Retorna los fabricantes que en su nombre contengan las letrtas indicadas, retorna todos los fabricantes si no se indica ninguna letra")
 	public ApiResponse<Page<Fabricante>> paginationlist(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
-			@RequestParam(required=false) String letras,
+			@RequestBody(required=false) FabricanteDTO fabricanteDTO,
 			@RequestParam(required=false) Long nit){
 		
 		Empresa empresa;
@@ -81,11 +82,11 @@ public class FabricanteController {
 			empresa = usuario.getEmpresa();			
 		}
 		
-		if(letras != null) {
-			Page<Fabricante> fabricantes = fabricanteService.searchFabricantes(letras, empresa, pagina, items);
+		if(Objects.isNull(fabricanteDTO)) {
+			Page<Fabricante> fabricantes = fabricanteService.searchFabricantes(empresa, pagina, items);
 			return new ApiResponse<>(fabricantes.getSize(), fabricantes);
 		}else {
-			Page<Fabricante> fabricantes = fabricanteService.searchFabricantes(empresa, pagina, items);
+			Page<Fabricante> fabricantes = fabricanteService.searchFabricantes(fabricanteDTO, empresa, pagina, items);
 			return new ApiResponse<>(fabricantes.getSize(), fabricantes);
 		}
 	}
@@ -153,12 +154,12 @@ public class FabricanteController {
 		return new ResponseEntity<ResDTO>(new ResDTO("Fabricante eliminado con exito"), HttpStatus.OK);
 	}
 	
-	@GetMapping("/descarga")
+	@PostMapping("/descarga")
 	@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de fabricantes de la busqueda realizada en formato csv")
 	public void getCsvEmpresas(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,
-								@RequestParam(required=false) String letras,
+								@RequestBody(required=false) FabricanteDTO fabricanteDTO,
 								@RequestParam(required=false) Long nit) throws IOException {
 		servletResponse.setContentType("application/x-download");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -175,11 +176,11 @@ public class FabricanteController {
 			empresa = usuario.getEmpresa();			
 		}
         		
-        if(letras != null){
-			List<FabricanteDTO> fabricantes =  fabricanteService.findByNameAndEmpresaAndEstaActivo(letras, empresa, true);
-			csvService.writeFabricantesToCsv(servletResponse.getWriter(), fabricantes);
+        if(Objects.isNull(fabricanteDTO)){
+        	List<FabricanteDTO> fabricantes = fabricanteService.list(empresa);
+        	csvService.writeFabricantesToCsv(servletResponse.getWriter(), fabricantes);
 		}else{
-			List<FabricanteDTO> fabricantes = fabricanteService.list(empresa);
+			List<FabricanteDTO> fabricantes =  fabricanteService.listFabricantes(fabricanteDTO, empresa);
 			csvService.writeFabricantesToCsv(servletResponse.getWriter(), fabricantes);
 		}
 		

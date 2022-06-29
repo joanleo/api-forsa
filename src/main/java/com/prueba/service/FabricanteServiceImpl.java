@@ -18,6 +18,7 @@ import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.FabricanteRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
+import com.prueba.specifications.FabricanteSpecificatios;
 
 @Service
 public class FabricanteServiceImpl implements FabricanteService {
@@ -30,6 +31,9 @@ public class FabricanteServiceImpl implements FabricanteService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private FabricanteSpecificatios fabricanteSpec;
 
 	@Override
 	public FabricanteDTO create(FabricanteDTO fabricanteDTO) {
@@ -55,12 +59,12 @@ public class FabricanteServiceImpl implements FabricanteService {
 	}
 	
 	@Override
-	public Page<Fabricante> searchFabricantes(String letras, Empresa empresa, Integer pagina, Integer items) {
+	public Page<Fabricante> searchFabricantes(FabricanteDTO fabricanteDTO, Empresa empresa, Integer pagina, Integer items) {
 		if(items == 0) {
-			Page<Fabricante> fabricantes = fabricanteRepo.findByNombreContainsAndEmpresaAndEstaActivoTrue(letras, empresa, PageRequest.of(0, 10));
+			Page<Fabricante> fabricantes = fabricanteRepo.findAll(fabricanteSpec.getFabricante(fabricanteDTO, empresa), PageRequest.of(0, 10));
 			return fabricantes;
 		}
-		Page<Fabricante> fabricantes = fabricanteRepo.findByNombreContainsAndEmpresaAndEstaActivoTrue(letras, empresa, PageRequest.of(pagina, items));		
+		Page<Fabricante> fabricantes = fabricanteRepo.findAll(fabricanteSpec.getFabricante(fabricanteDTO, empresa), PageRequest.of(pagina, items));		
 		return fabricantes;
 	}
 	
@@ -140,6 +144,12 @@ public class FabricanteServiceImpl implements FabricanteService {
 		List<Fabricante> listFabricante = fabricanteRepo.findByNombreContainsAndEmpresaAndEstaActivo(letras, empresa, true);
 		
 		return listFabricante.stream().map(fabricante -> mapearEntidad(fabricante)).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<FabricanteDTO> listFabricantes(FabricanteDTO fabricanteDTO, Empresa empresa) {
+		List<Fabricante> fabricantes = fabricanteRepo.findAll(fabricanteSpec.getFabricante(fabricanteDTO, empresa));
+		return fabricantes.stream().map(fabricante -> mapearEntidad(fabricante)).collect(Collectors.toList());
 	}
 
 	

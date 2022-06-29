@@ -26,4 +26,6 @@ public interface TipoEmpresaService {
 	public Page<TipoEmpresa> searchTiposEmpresa(Integer pagina, Integer items);
 
 	public void unable(Long id);
+
+	public List<TipoEmpresaDTO> list(TipoEmpresaDTO tipoEmpresaDTO);
 }

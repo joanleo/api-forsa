@@ -29,5 +29,7 @@ public interface EmpresaService {
 
 	public List<EmpresaDTO> findByNameAndEstaActiva(String name, Boolean estaActiva);
 
+	public List<EmpresaDTO> list(EmpresaDTO empresaDTO);
+
 
 }
