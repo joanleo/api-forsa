@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,8 +26,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.prueba.dto.ApiResponse;
 import com.prueba.dto.EstadoDTO;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Estado;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
@@ -63,8 +66,11 @@ public class EstadoController {
 	
 	@GetMapping
 	@ApiOperation(value = "Encuentra los estados de los activos de una empresa", notes = "Retorna los estados que pueden tomar los activos que en su nombre contengan las letras indicadas, retorna todos los estados si no se especifica ninguna letra")
-	public List<EstadoDTO> list(@RequestParam(required=false) String letras,
-								@RequestParam(required=false) Long nit){
+	public ApiResponse<Page<Estado>> paginationlist(
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
+			@RequestParam(required=false) String letras,
+			@RequestParam(required=false) Long nit){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
@@ -77,9 +83,11 @@ public class EstadoController {
 		}
 		
 		if(letras != null) {
-			return estadoService.findByTipoAndEmpresaAndEstaActivo(letras, empresa, true);
+			Page<Estado> fabricantes = estadoService.searchEstado(letras, empresa, pagina, items);
+			return new ApiResponse<>(fabricantes.getSize(), fabricantes);
 		}else {
-			return estadoService.list(empresa);			
+			Page<Estado> fabricantes = estadoService.searchEstado(empresa, pagina, items);
+			return new ApiResponse<>(fabricantes.getSize(), fabricantes);		
 		}
 	}
 	

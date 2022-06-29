@@ -61,6 +61,7 @@ public class MovInvController {
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
 		System.out.println(usuario);
 		movInventarioDto.setRealizo(usuario);
+		System.out.println(movInventarioDto.getEmpresa());
 		return new ResponseEntity<MovInventarioDTO>(movInvService.create(movInventarioDto), HttpStatus.CREATED);
 	}
 	

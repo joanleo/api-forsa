@@ -3,6 +3,8 @@ package com.prueba.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.prueba.entity.Empresa;
@@ -19,5 +21,9 @@ public interface EstadoRepository extends JpaRepository<Estado, Long>{
 	public List<Estado> findByTipoContainsAndEmpresaAndEstaActivo(String tipo, Empresa empresa, Boolean estaActivo);
 
 	public Optional<Estado> findByIdAndEmpresa(Long id, Empresa empresa);
+
+	public Page<Estado> findByTipoContainsAndEmpresaAndEstaActivoTrue(String letras, Empresa empresa, Pageable page);
+
+	public Page<Estado> findByEmpresaAndEstaActivoTrue(Empresa empresa, Pageable page);
 
 }

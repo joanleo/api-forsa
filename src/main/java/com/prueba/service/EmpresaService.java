@@ -21,7 +21,7 @@ public interface EmpresaService {
 	
 	public void delete(Long id);
 	
-	public Page<Empresa> searchEmpresas(String letras, Integer pagina, Integer items);
+	public Page<Empresa> searchEmpresas(EmpresaDTO empresaDTO, Integer pagina, Integer items);
 
 	public Page<Empresa> searchEmpresas(Integer pagina, Integer items);
 

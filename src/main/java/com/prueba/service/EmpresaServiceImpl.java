@@ -13,6 +13,7 @@ import com.prueba.dto.EmpresaDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
+import com.prueba.specifications.EmpresaSpecifications;
 
 @Service
 public class EmpresaServiceImpl implements EmpresaService {
@@ -22,6 +23,9 @@ public class EmpresaServiceImpl implements EmpresaService {
 
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private EmpresaSpecifications empresaSpec;
 
 	@Override
 	public EmpresaDTO create(EmpresaDTO empresaDTO) {
@@ -37,12 +41,12 @@ public class EmpresaServiceImpl implements EmpresaService {
 	}
 	
 	@Override
-	public Page<Empresa> searchEmpresas(String letras, Integer pagina, Integer items) {
+	public Page<Empresa> searchEmpresas(EmpresaDTO empresaDTO, Integer pagina, Integer items) {
 		if(items == 0) {
-			Page<Empresa> empresas = empresaRepo.findByNombreContainsAndEstaActivoTrue(letras,PageRequest.of(0, 10));
+			Page<Empresa> empresas = empresaRepo.findAll(empresaSpec.getEmpresa(empresaDTO),PageRequest.of(0, 10));
 			return empresas;
 		}
-		Page<Empresa> empresas = empresaRepo.findByNombreContainsAndEstaActivoTrue(letras, PageRequest.of(pagina, items));		
+		Page<Empresa> empresas = empresaRepo.findAll(empresaSpec.getEmpresa(empresaDTO), PageRequest.of(pagina, items));		
 		return empresas;
 	}
 	

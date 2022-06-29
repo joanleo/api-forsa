@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -60,19 +61,19 @@ public class EmpresaController {
 		return new ResponseEntity<>(actualizada, HttpStatus.OK);
 	}
 	
-	@GetMapping
+	@PostMapping("/indexados")
 	@ApiOperation(value = "Encuentra las empresas", notes = "Retorna las empresas que en su nombre contengan las letrtas indicadas, retorna todas las empresas si no se indica ninguna letra")
 	public ApiResponse<Page<Empresa>> paginationList(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
-			@RequestParam(required=false) String letras){
+			@RequestBody(required=false) EmpresaDTO empresaDTO){
 		
-		if(letras != null) {
-			Page<Empresa> empresas = empresaService.searchEmpresas(letras, pagina, items);
-			return new ApiResponse<>(empresas.getSize(), empresas);
-		}else {
+		if(Objects.isNull(empresaDTO)) {
 			Page<Empresa> empresas = empresaService.searchEmpresas(pagina, items);
 			return new ApiResponse<>(empresas.getSize(), empresas);			
+		}else {
+			Page<Empresa> empresas = empresaService.searchEmpresas(empresaDTO, pagina, items);
+			return new ApiResponse<>(empresas.getSize(), empresas);
 		}
 	}
 

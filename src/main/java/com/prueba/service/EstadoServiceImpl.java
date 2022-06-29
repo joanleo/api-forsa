@@ -5,6 +5,10 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.EstadoDTO;
@@ -12,6 +16,8 @@ import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EstadoRepository;
+import com.prueba.security.entity.Usuario;
+import com.prueba.security.repository.UsuarioRepository;
 
 @Service
 public class EstadoServiceImpl implements EstadoService {
@@ -20,10 +26,19 @@ public class EstadoServiceImpl implements EstadoService {
 	private EstadoRepository estadoRepo;
 	
 	@Autowired
+	private UsuarioRepository usuarioRepo;
+	
+	@Autowired
 	private ModelMapper modelmapper;
 
 	@Override
 	public EstadoDTO create(EstadoDTO estadoDTO) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(estadoDTO.getEmpresa() == null) {
+			estadoDTO.setEmpresa(usuario.getEmpresa());
+		}
 		Estado estado = mapearDTO(estadoDTO);
 		Estado exist = estadoRepo.findByTipoAndEmpresa(estadoDTO.getTipo(), estadoDTO.getEmpresa());
 		if(exist == null) {
@@ -34,6 +49,27 @@ public class EstadoServiceImpl implements EstadoService {
 		
 		return mapearEntidad(estado);
 	}
+	
+	@Override
+	public Page<Estado> searchEstado(String letras, Empresa empresa, Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<Estado> estados = estadoRepo.findByTipoContainsAndEmpresaAndEstaActivoTrue(letras, empresa, PageRequest.of(0, 10));
+			return estados;
+		}
+		Page<Estado> estados = estadoRepo.findByTipoContainsAndEmpresaAndEstaActivoTrue(letras, empresa, PageRequest.of(pagina, items));		
+		return estados;
+	}
+	
+	@Override
+	public Page<Estado> searchEstado(Empresa empresa, Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<Estado> estados = estadoRepo.findByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(0, 10));
+			return estados;
+		}
+		Page<Estado> estados = estadoRepo.findByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(pagina, items));		
+		return estados;
+	}
+	
 
 	@Override
 	public List<EstadoDTO> list(Empresa empresa) {

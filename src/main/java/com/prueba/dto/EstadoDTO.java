@@ -13,6 +13,8 @@ public class EstadoDTO {
 	
 	@NotBlank(message = "Este campo no puede ser nulo")
 	private Empresa empresa;
+	
+	private Boolean estaActivo=true;
 
 	public EstadoDTO() {
 		super();
@@ -40,6 +42,14 @@ public class EstadoDTO {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
 	}
 	
 }

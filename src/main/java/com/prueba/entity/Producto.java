@@ -328,11 +328,23 @@ public class Producto{
 
 	}
 
+	public Producto(Long nitEmpresa, String codigoPieza) {
+		super();
+		this.idProducto = new Producto_id(nitEmpresa, codigoPieza);
+	}
 
+	public Producto(Long nitEmpresa, String codigoPieza, String descripcion, Float area, String orden, Familia familia,
+			Fabricante fabricante, Empresa empresa, Estado estado) {
+		super();
+		this.idProducto = new Producto_id(nitEmpresa, codigoPieza);
+		this.descripcion = descripcion;
+		this.area = area;
+		this.orden = orden;
+		this.familia = familia;
+		this.fabricante = fabricante;
+		this.empresa = empresa;
+		this.estado = estado;
+	}
 
-
-
-
-    
-    
+     
 }

@@ -115,6 +115,7 @@ public class ProductoDTO {
 	}
 
 	public void setEmpresa(Empresa empresa) {
+		System.out.println("Creando empresa "+empresa);
 		this.empresa = empresa;
 	}
 

@@ -1,4 +1,4 @@
-package com.prueba.service;
+ package com.prueba.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,9 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.MovInventarioDTO;
+import com.prueba.dto.ProductoDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.MovInventario;
 import com.prueba.entity.Producto;
+import com.prueba.entity.Producto_id;
 import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.MovInventarioRepository;
@@ -47,12 +49,14 @@ public class MovInventarioServiceImp implements MovInventarioService {
 			List<Producto> productos = movInventarioDto.getProductos();
 			
 			for(Producto producto: productos) {
-				Producto actualizar = productoRepo.findByIdProducto(producto.getIdProducto());
+				System.out.println(producto);
+				//Producto_id id = new Producto_id(producto.getEmpresa(), producto.get);
+				/*Producto actualizar = productoRepo.findByIdProducto(producto.getIdProducto());
 				if(actualizar != null) {
 					inventario.addActivo(actualizar);
 				}else {
 					throw new IllegalAccessError("El activo con codigo de pieza " + producto.getIdProducto().getCodigoPieza() + " no existe");
-				}
+				}*/
 				
 			}			
 			movInvRepo.save(inventario);
