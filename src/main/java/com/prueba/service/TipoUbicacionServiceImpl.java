@@ -5,6 +5,10 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.TipoUbicacionDTO;
@@ -12,6 +16,9 @@ import com.prueba.entity.Empresa;
 import com.prueba.entity.TipoUbicacion;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.TipoUbicacionRepository;
+import com.prueba.security.entity.Usuario;
+import com.prueba.security.repository.UsuarioRepository;
+import com.prueba.specifications.TipoUbicacionSpecifications;
 
 @Service
 public class TipoUbicacionServiceImpl implements TipoUbicacionService {
@@ -20,17 +27,30 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 	private TipoUbicacionRepository tipoUbicRepo;
 	
 	@Autowired
+	private UsuarioRepository usuarioRepo;
+	
+	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private TipoUbicacionSpecifications tipoUbicacionSpec;
 
 	@Override
 	public TipoUbicacionDTO create(TipoUbicacionDTO tipoUbicacionDTO) {
-		TipoUbicacion tipoUbicacion = mapearDTO(tipoUbicacionDTO);
-		TipoUbicacion exist = tipoUbicRepo.findByNombreAndEmpresa(tipoUbicacion.getNombre(), tipoUbicacionDTO.getEmpresa());
 		
-		if(exist != null) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(tipoUbicacionDTO.getEmpresa() == null) {
+			tipoUbicacionDTO.setEmpresa(usuario.getEmpresa());
+		}
+		
+		TipoUbicacion tipoUbicacion = mapearDTO(tipoUbicacionDTO);
+		TipoUbicacion exist = tipoUbicRepo.findByNombreAndEmpresaAndEstaActivoTrue(tipoUbicacion.getNombre(), tipoUbicacionDTO.getEmpresa());
+		if(exist == null) {
 			tipoUbicRepo.save(tipoUbicacion);
 		}else {
-			throw new IllegalAccessError("El tipo de movimiento que desea crear ya existe");
+			throw new IllegalAccessError("El tipo de ubicacion que desea crear ya existe");
 		}
 		
 		return mapearEntidad(tipoUbicacion);
@@ -38,7 +58,7 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 
 	@Override
 	public List<TipoUbicacionDTO> list(Empresa empresa) {
-		List<TipoUbicacion> lista = tipoUbicRepo.findByEmpresa(empresa);
+		List<TipoUbicacion> lista = tipoUbicRepo.findByEmpresaAndEstaActivoTrue(empresa);
 		
 		return lista.stream().map(tipo -> mapearEntidad(tipo)).collect(Collectors.toList());
 	}
@@ -99,5 +119,34 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 		List<TipoUbicacion> tiposMov = tipoUbicRepo.findByNombreContainsAndEmpresaAndEstaActivo(letras, empresa, estaActivo);
 		return tiposMov.stream().map(tipo -> mapearEntidad(tipo)).collect(Collectors.toList());
 	}
+
+	@Override
+	public Page<TipoUbicacion> searchTipoUbicacion(TipoUbicacionDTO tipoUbicacionDTO, Empresa empresa, Integer pagina,
+			Integer items) {
+		if(items == 0) {
+			Page<TipoUbicacion> tiposUbicacion = tipoUbicRepo.findAll(tipoUbicacionSpec.getTipoUbibcacion(tipoUbicacionDTO, empresa), PageRequest.of(0, 10));
+			return tiposUbicacion;
+		}
+		Page<TipoUbicacion> tiposUbicacion = tipoUbicRepo.findAll(tipoUbicacionSpec.getTipoUbibcacion(tipoUbicacionDTO, empresa), PageRequest.of(pagina, items));		
+		return tiposUbicacion;
+	}
+
+	@Override
+	public Page<TipoUbicacion> searchTipoUbicacion(Empresa empresa, Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<TipoUbicacion> tiposUbicacion = tipoUbicRepo.findByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(0, 10));
+			return tiposUbicacion;
+		}
+		Page<TipoUbicacion> tiposUbicacion = tipoUbicRepo.findByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(pagina, items));		
+		return tiposUbicacion;
+	}
+
+	@Override
+	public List<TipoUbicacionDTO> listTipoUbicacion(TipoUbicacionDTO tipoUbicacionDTO, Empresa empresa, boolean b) {
+		List<TipoUbicacion> fabricantes = tipoUbicRepo.findAll(tipoUbicacionSpec.getTipoUbibcacion(tipoUbicacionDTO, empresa));
+		return fabricantes.stream().map(fabricante -> mapearEntidad(fabricante)).collect(Collectors.toList());
+	}
+
+
 
 }

@@ -5,11 +5,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,8 +27,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.prueba.dto.ApiResponse;
 import com.prueba.dto.TipoUbicacionDTO;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.TipoUbicacion;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
@@ -60,10 +64,13 @@ public class TipoUbicacionController {
 		return new ResponseEntity<TipoUbicacionDTO>(tipoUbicService.create(tipoUbicacionDTO), HttpStatus.CREATED); 
 	}
 	
-	@GetMapping
+	@PostMapping("/indexados")
 	@ApiOperation(value = "Encuentra los tipos de ubicacion", notes = "Retorna todos los tipos de ubicacion")
-	public List<TipoUbicacionDTO> getTiposUbic(@RequestParam(required=false) String letras,
-											   @RequestParam(required=false) Long nit){
+	public ApiResponse<Page<TipoUbicacion>> paginationlist(
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
+			@RequestBody(required=false) TipoUbicacionDTO tipoUbicacionDTO,
+			@RequestParam(required=false) Long nit){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
@@ -75,15 +82,17 @@ public class TipoUbicacionController {
 		empresa = usuario.getEmpresa();			
 		}
 		
-		if(letras != null) {
-			return tipoUbicService.findByNombreAndEmpresaAndEstaActivo(letras, empresa, true);
+		if(Objects.isNull(tipoUbicacionDTO)) {
+			Page<TipoUbicacion> tipoUbicacion = tipoUbicService.searchTipoUbicacion(empresa, pagina, items);
+			return new ApiResponse<>(tipoUbicacion.getSize(), tipoUbicacion);
 		}else {
-			return tipoUbicService.list(empresa);
+			Page<TipoUbicacion> tipoUbicacion = tipoUbicService.searchTipoUbicacion(tipoUbicacionDTO, empresa, pagina, items);
+			return new ApiResponse<>(tipoUbicacion.getSize(), tipoUbicacion);
 		}
 	}
 
-	@GetMapping("/{id}")
-	@ApiOperation(value = "Encuentra un tipo de ubicacion", notes = "Retorna un tipo de ubicacion segun su id")
+	@GetMapping("/{id},{nit}")
+	@ApiOperation(value = "Encuentra un tipo de ubicacion", notes = "Retorna un tipo de ubicacion segun su id y empresa")
 	public ResponseEntity<TipoUbicacionDTO> getTipoUbic(@PathVariable(name="id") Long id,
 					 									@PathVariable(required=false) Long nit){
 		Empresa empresa;
@@ -108,7 +117,7 @@ public class TipoUbicacionController {
 		return new ResponseEntity<>(actualizado, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id},{nit}")
 	@ApiOperation(value = "Elimina un tipo de ubicacion", notes = "Elimina un tipo de ubicacion por su id")
  	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
 										 @PathVariable(required=false) Long nit){
@@ -126,7 +135,7 @@ public class TipoUbicacionController {
 		return new ResponseEntity<ResDTO>(new ResDTO("Tipo de ubicacion eliminada con exito"), HttpStatus.OK);
 	}
 	
-	@PatchMapping("/{id}")
+	@PatchMapping("/{id},{nit}")
 	@ApiOperation(value = "Inhabilita un tipo de ubicacion", notes = "Inhabilita un tipo de ubicacion por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
 	 									@PathVariable(required=false) Long nit){
@@ -149,22 +158,29 @@ public class TipoUbicacionController {
 	public void getCsvEmpresas(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,
-								@RequestParam(required=false) String letras) throws IOException {
+								@RequestBody(required=false) TipoUbicacionDTO tipoUbicacionDTO,
+								@RequestParam(required=false) Long nit) throws IOException {
 		servletResponse.setContentType("application/x-download");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
         servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "estados"+ "_" + currentDateTime + ".csv" + "\"");
         
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    	Usuario usuario = usuarioRepo.findByUsername(authentication.getName()).get();
-    	Empresa empresa = usuario.getEmpresa();
+        Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
       		
-        if(letras != null){
-			List<TipoUbicacionDTO> tiposUbic =  tipoUbicService.findByNombreAndEmpresaAndEstaActivo(letras, empresa, true);
-			csvService.writeTiposUbiToCsv(servletResponse.getWriter(), tiposUbic);
+        if(Objects.isNull(tipoUbicacionDTO)){
+        	System.out.println("Controller busqueda vacia");
+        	List<TipoUbicacionDTO> tiposUbic = tipoUbicService.list(empresa);
+        	csvService.writeTiposUbiToCsv(servletResponse.getWriter(), tiposUbic);
 		}else{
-			System.out.println("Controller busqueda vacia");
-			List<TipoUbicacionDTO> tiposUbic = tipoUbicService.list(empresa);
+			List<TipoUbicacionDTO> tiposUbic =  tipoUbicService.listTipoUbicacion(tipoUbicacionDTO, empresa, true);
 			csvService.writeTiposUbiToCsv(servletResponse.getWriter(), tiposUbic);
 		}
 		        

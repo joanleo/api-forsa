@@ -2,8 +2,11 @@ package com.prueba.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.prueba.dto.TipoUbicacionDTO;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.TipoUbicacion;
 
 
 public interface TipoUbicacionService {
@@ -27,5 +30,13 @@ public TipoUbicacionDTO create(TipoUbicacionDTO tipoUbicacionDTO);
 	List<TipoUbicacionDTO> list(Empresa empresa);
 
 	List<TipoUbicacionDTO> findByNombreAndEmpresaAndEstaActivo(String letras, Empresa empresa, Boolean estaActivo);
+
+	public Page<TipoUbicacion> searchTipoUbicacion(TipoUbicacionDTO tipoUbicacionDTO, Empresa empresa, Integer pagina,
+			Integer items);
+
+	public Page<TipoUbicacion> searchTipoUbicacion(Empresa empresa, Integer pagina, Integer items);
+
+	public List<TipoUbicacionDTO> listTipoUbicacion(TipoUbicacionDTO tipoUbicacionDTO, Empresa empresa, boolean b);
+
 
 }

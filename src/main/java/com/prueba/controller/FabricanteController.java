@@ -118,7 +118,7 @@ public class FabricanteController {
 	}
 	
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id},{nit}")
 	@ApiOperation(value = "Elimina un fabricante", notes = "Elimina un fabricante por su id")
 	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
 			 							 @PathVariable(required=false) Long nit){
@@ -136,7 +136,7 @@ public class FabricanteController {
 		return new ResponseEntity<ResDTO>(new ResDTO("Fabricante eliminado con exito"), HttpStatus.OK);
 	}
 	
-	@PatchMapping("/{id}")
+	@PatchMapping("/{id},{nit}")
 	@ApiOperation(value = "Inhabilita un fabricante", notes = "Inhabilita un fabricante por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
 				@PathVariable(required=false) Long nit){
@@ -151,7 +151,7 @@ public class FabricanteController {
 		empresa = usuario.getEmpresa();			
 		}
 		fabricanteService.unable(id, empresa);
-		return new ResponseEntity<ResDTO>(new ResDTO("Fabricante eliminado con exito"), HttpStatus.OK);
+		return new ResponseEntity<ResDTO>(new ResDTO("Fabricante inhabilitado con exito"), HttpStatus.OK);
 	}
 	
 	@PostMapping("/descarga")

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.prueba.dto.FamiliaDTO;
 import com.prueba.entity.Empresa;
-import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.FamiliaRepository;

@@ -28,10 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.ApiResponse;
-import com.prueba.dto.FabricanteDTO;
 import com.prueba.dto.FamiliaDTO;
 import com.prueba.entity.Empresa;
-import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;

@@ -77,16 +77,6 @@ public class CsvExportService {
         }
 	}
     
-    public void writeEmpresasToCsv(Writer writer, List<EmpresaDTO> empresas) {
-    	try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
-    		for(EmpresaDTO empresa: empresas) {
-    			csvPrinter.printRecord(empresa.getNit(), empresa.getNombre());    			
-    		}
-	    }catch (IOException e) {
-	        log.error("Error en la generacion del CSV V ", e);
-	    }
-    }
-    
     public void writeFabricantesToCsv(Writer writer, List<FabricanteDTO> fabricantes) {
     	try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
     		csvPrinter.printRecord(
@@ -125,6 +115,8 @@ public class CsvExportService {
 
 	public void writeTiposMovToCsv(PrintWriter writer, List<TipoMovDTO> tiposMov) {
 		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			csvPrinter.printRecord(
+        			"Id", "Nombre");
     		for(TipoMovDTO tipoMov: tiposMov) {
     			csvPrinter.printRecord(tipoMov.getId(), tipoMov.getNombre());    			
     		}
@@ -136,6 +128,8 @@ public class CsvExportService {
 
 	public void writeTiposUbiToCsv(PrintWriter writer, List<TipoUbicacionDTO> tiposUbic) {
 		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			csvPrinter.printRecord(
+        			"Id", "Nombre");
     		for(TipoUbicacionDTO tipoMov: tiposUbic) {
     			csvPrinter.printRecord(tipoMov.getId(), tipoMov.getNombre());    			
     		}
@@ -147,6 +141,8 @@ public class CsvExportService {
 
 	public void writeUbicacionesToCsv(PrintWriter writer, List<UbicacionDTO> ubicaciones) {
 		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			csvPrinter.printRecord(
+        			"Id", "Nombre", "Ciudad", "Direccion", "Tipo");
     		for(UbicacionDTO ubicacion: ubicaciones) {
     			csvPrinter.printRecord(ubicacion.getId(), ubicacion.getNombre(), ubicacion.getCiudad(),
     								   ubicacion.getDireccion(), ubicacion.getTipo());    			
