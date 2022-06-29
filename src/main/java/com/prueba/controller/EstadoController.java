@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -28,8 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.EstadoDTO;
+import com.prueba.dto.FabricanteDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
+import com.prueba.entity.Fabricante;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
@@ -64,12 +67,12 @@ public class EstadoController {
 		return new ResponseEntity<EstadoDTO>(estadoService.create(estadoDTO), HttpStatus.CREATED);
 	}
 	
-	@GetMapping
+	@PostMapping("/indexados")
 	@ApiOperation(value = "Encuentra los estados de los activos de una empresa", notes = "Retorna los estados que pueden tomar los activos que en su nombre contengan las letras indicadas, retorna todos los estados si no se especifica ninguna letra")
 	public ApiResponse<Page<Estado>> paginationlist(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
-			@RequestParam(required=false) String letras,
+			@RequestBody(required=false) EstadoDTO estadoDTO,
 			@RequestParam(required=false) Long nit){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -82,12 +85,12 @@ public class EstadoController {
 			empresa = usuario.getEmpresa();			
 		}
 		
-		if(letras != null) {
-			Page<Estado> fabricantes = estadoService.searchEstado(letras, empresa, pagina, items);
-			return new ApiResponse<>(fabricantes.getSize(), fabricantes);
+		if(Objects.isNull(estadoDTO)) {
+			Page<Estado> estados = estadoService.searchEstados(empresa, pagina, items);
+			return new ApiResponse<>(estados.getSize(), estados);
 		}else {
-			Page<Estado> fabricantes = estadoService.searchEstado(empresa, pagina, items);
-			return new ApiResponse<>(fabricantes.getSize(), fabricantes);		
+			Page<Estado> estados = estadoService.searchEstados(estadoDTO, empresa, pagina, items);
+			return new ApiResponse<>(estados.getSize(), estados);
 		}
 	}
 	
@@ -158,22 +161,29 @@ public class EstadoController {
 	public void getCsvEmpresas(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,
-								@RequestParam(required=false) String letras) throws IOException {
+								@RequestBody(required=false)EstadoDTO estadoDTO,
+								@RequestParam(required=false) Long nit) throws IOException {
 		servletResponse.setContentType("application/x-download");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
         servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "estados"+ "_" + currentDateTime + ".csv" + "\"");
         
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    	Usuario usuario = usuarioRepo.findByUsername(authentication.getName()).get();
-    	Empresa empresa = usuario.getEmpresa();
+        Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
       		
-        if(letras != null){
-			List<EstadoDTO> estados =  estadoService.findByTipoAndEmpresaAndEstaActivo(letras, empresa, true);
-			csvService.writeEstadosToCsv(servletResponse.getWriter(), estados);
+        if(Objects.isNull(estadoDTO)){
+        	System.out.println("Controller busqueda vacia");
+        	List<EstadoDTO> estados = estadoService.list(empresa);
+        	csvService.writeEstadosToCsv(servletResponse.getWriter(), estados);
 		}else{
-			System.out.println("Controller busqueda vacia");
-			List<EstadoDTO> estados = estadoService.list(empresa);
+			List<EstadoDTO> estados =  estadoService.listEstados(estadoDTO, empresa);
 			csvService.writeEstadosToCsv(servletResponse.getWriter(), estados);
 		}
 		        

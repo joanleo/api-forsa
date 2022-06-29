@@ -132,10 +132,7 @@ public class FabricanteServiceImpl implements FabricanteService {
 	}
 	
 	public Fabricante mapearDTO(FabricanteDTO fabricanteDTO) {
-		
-		System.out.println("entra a mapear "+ fabricanteDTO.getNombre());
 		Fabricante fabricante = modelMapper.map(fabricanteDTO, Fabricante.class);
-		System.out.println("Salida al mapear "+ fabricante.getNombre());
 		return fabricante;
 	}
 

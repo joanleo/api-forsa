@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import com.prueba.dto.EstadoDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
+import com.prueba.entity.Fabricante;
 
 
 public interface EstadoService {
@@ -28,5 +29,11 @@ public interface EstadoService {
 	Page<Estado> searchEstado(String letras, Empresa empresa, Integer pagina, Integer items);
 
 	Page<Estado> searchEstado(Empresa empresa, Integer pagina, Integer items);
+
+	public Page<Estado> searchEstados(EstadoDTO estadoDTO, Empresa empresa, Integer pagina, Integer items);
+
+	public Page<Estado> searchEstados(Empresa empresa, Integer pagina, Integer items);
+
+	public List<EstadoDTO> listEstados(EstadoDTO estadoDTO, Empresa empresa);
 
 }

@@ -14,10 +14,12 @@ import org.springframework.stereotype.Service;
 import com.prueba.dto.EstadoDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
+import com.prueba.entity.Fabricante;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EstadoRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
+import com.prueba.specifications.EstadoSpec;
 
 @Service
 public class EstadoServiceImpl implements EstadoService {
@@ -30,6 +32,9 @@ public class EstadoServiceImpl implements EstadoService {
 	
 	@Autowired
 	private ModelMapper modelmapper;
+	
+	@Autowired
+	private EstadoSpec estadoSpec;
 
 	@Override
 	public EstadoDTO create(EstadoDTO estadoDTO) {
@@ -130,6 +135,32 @@ public class EstadoServiceImpl implements EstadoService {
 		List<Estado> listEstados = estadoRepo.findByTipoContainsAndEmpresaAndEstaActivo(tipo, empresa, estaActivo);
 		
 		return listEstados.stream().map(estado -> mapearEntidad(estado)).collect(Collectors.toList());
+	}
+
+	@Override
+	public Page<Estado> searchEstados(EstadoDTO estadoDTO, Empresa empresa, Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<Estado> estados = estadoRepo.findAll(estadoSpec.getEstado(estadoDTO, empresa), PageRequest.of(0, 10));
+			return estados;
+		}
+		Page<Estado> estados = estadoRepo.findAll(estadoSpec.getEstado(estadoDTO, empresa), PageRequest.of(pagina, items));		
+		return estados;
+	}
+
+	@Override
+	public Page<Estado> searchEstados(Empresa empresa, Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<Estado> estados = estadoRepo.findByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(0, 10));
+			return estados;
+		}
+		Page<Estado> estados = estadoRepo.findByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(pagina, items));		
+		return estados;
+	}
+
+	@Override
+	public List<EstadoDTO> listEstados(EstadoDTO estadoDTO, Empresa empresa) {
+		List<Estado> estados = estadoRepo.findAll(estadoSpec.getEstado(estadoDTO, empresa));
+		return estados.stream().map(estado -> mapearEntidad(estado)).collect(Collectors.toList());
 	}
 
 
