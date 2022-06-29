@@ -21,7 +21,7 @@ public interface TipoEmpresaService {
 
 	public void delete(Long id);
 
-	public Page<TipoEmpresa> searchTiposEmpresa(String letras, Integer pagina, Integer items);
+	public Page<TipoEmpresa> searchTiposEmpresa(TipoEmpresaDTO tipoEmpresaDTO, Integer pagina, Integer items);
 
 	public Page<TipoEmpresa> searchTiposEmpresa(Integer pagina, Integer items);
 

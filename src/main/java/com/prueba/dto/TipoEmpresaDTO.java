@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 public class TipoEmpresaDTO {
 	
-private Long id;
+	private Long id;
 	
 	@NotBlank(message="este campo no puede ser nulo")
 	private String tipo;

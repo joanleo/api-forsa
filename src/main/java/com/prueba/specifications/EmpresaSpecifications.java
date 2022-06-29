@@ -18,10 +18,12 @@ public class EmpresaSpecifications {
 		return (root, query, criteryBuilder) ->{
 			List<Predicate> predicates = new ArrayList<>();
 			
+			if(empresaDTO.getNit() != null) {
 			predicates.add(criteryBuilder.like(root.get("nit").as(String.class), "%"+empresaDTO.getNit()+ "%"));
-			
+			}
+			if(empresaDTO.getNombre() != null) {
 			predicates.add(criteryBuilder.equal(root.get("nombre"), empresaDTO.getNombre()));
-			
+			}
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
 	}

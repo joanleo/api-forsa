@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -51,19 +52,19 @@ public class TipoEmpresaController {
 		return new ResponseEntity<TipoEmpresaDTO>(tipoEmpresaService.create(tipoEmpresaDTO), HttpStatus.CREATED);
 	}
 	
-	@GetMapping
+	@PostMapping("/indexados")
 	@ApiOperation(value = "Encuentra los tipos de empresas", notes = "Retorna todos los tipos de empresas segun las letras indicadas, si no se digita ninguna retorna todos los tipos de empresas activos")
 	public ApiResponse<Page<TipoEmpresa>> paginationList(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
-			@RequestParam(required=false) String letras){
+			@RequestBody(required=false) TipoEmpresaDTO tipoEmpresaDTO){
 		
 		
-		if(letras != null) {
-			Page<TipoEmpresa> tiposEmpresa = tipoEmpresaService.searchTiposEmpresa(letras, pagina, items);
+		if(Objects.isNull(tipoEmpresaDTO)) {
+			Page<TipoEmpresa> tiposEmpresa = tipoEmpresaService.searchTiposEmpresa(pagina, items);
 			return new ApiResponse<>(tiposEmpresa.getSize(), tiposEmpresa);
 		}else {
-			Page<TipoEmpresa> tiposEmpresa = tipoEmpresaService.searchTiposEmpresa(pagina, items);
+			Page<TipoEmpresa> tiposEmpresa = tipoEmpresaService.searchTiposEmpresa(tipoEmpresaDTO, pagina, items);
 			return new ApiResponse<>(tiposEmpresa.getSize(), tiposEmpresa);
 		}
 		

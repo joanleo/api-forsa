@@ -77,21 +77,21 @@ public class EmpresaController {
 		}
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/{nit}")
 	@ApiOperation(value = "Encuentra una empresa", notes = "Retorna una empresa por el id")
 	public ResponseEntity<EmpresaDTO> get(@PathVariable(name = "id") Long id){
 		return ResponseEntity.ok(empresaService.getEmpresa(id));
 	}
 
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{nit}")
 	@ApiOperation(value = "Elimina una empresa", notes = "Elimina un empresa por su id")
 	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id){
 		empresaService.delete(id);
 		return new ResponseEntity<ResDTO>(new ResDTO("Empresa eliminada con exito"), HttpStatus.OK);
 	}
 	
-	@PatchMapping("/{id}")
+	@PatchMapping("/{nit}")
 	@ApiOperation(value = "Inhabilita una empresa", notes = "Inhabilita una empresa por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id){
 		empresaService.unable(id);

@@ -13,6 +13,7 @@ import com.prueba.dto.TipoEmpresaDTO;
 import com.prueba.entity.TipoEmpresa;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.TipoEmpresaRepository;
+import com.prueba.specifications.TipoEmpresaSpecifications;
 
 @Service
 public class TipoEmpresaServiceImpl implements TipoEmpresaService {
@@ -22,6 +23,9 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private TipoEmpresaSpecifications tipoEmpresaSpec;
 
 	@Override
 	public TipoEmpresaDTO create(TipoEmpresaDTO tipoEmpresaDTO) {
@@ -100,12 +104,12 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 	}
 
 	@Override
-	public Page<TipoEmpresa> searchTiposEmpresa(String letras, Integer pagina, Integer items) {
+	public Page<TipoEmpresa> searchTiposEmpresa(TipoEmpresaDTO tipoEmpresaDTO, Integer pagina, Integer items) {
 		if(items == 0) {
-			Page<TipoEmpresa> tiposEmpresa = tipoEmpresaRepo.findByTipoContainsAndEstaActivoTrue(letras,PageRequest.of(0, 10));
+			Page<TipoEmpresa> tiposEmpresa = tipoEmpresaRepo.findAll(tipoEmpresaSpec.getTipoEmpresa(tipoEmpresaDTO),PageRequest.of(0, 10));
 			return tiposEmpresa;
 		}
-		Page<TipoEmpresa> tiposEmpresa = tipoEmpresaRepo.findByTipoContainsAndEstaActivoTrue(letras, PageRequest.of(pagina, items));		
+		Page<TipoEmpresa> tiposEmpresa = tipoEmpresaRepo.findAll(tipoEmpresaSpec.getTipoEmpresa(tipoEmpresaDTO), PageRequest.of(pagina, items));		
 		return tiposEmpresa;
 	}
 
