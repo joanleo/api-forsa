@@ -5,11 +5,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,8 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.prueba.dto.ApiResponse;
+import com.prueba.dto.FabricanteDTO;
 import com.prueba.dto.FamiliaDTO;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Fabricante;
+import com.prueba.entity.Familia;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
@@ -91,10 +97,14 @@ public class FamiliaController {
 	}
 	
 	
-	@GetMapping
+	@PostMapping("/indexados")
 	@ApiOperation(value = "Encuentra las familias", notes = "Retorna las familias que en su nombre contengan las letrtas indicadas, retorna todas las familias si no se indica ninguna letra")
-	public List<FamiliaDTO> list(@RequestParam(required=false) String letras,
-								 @RequestParam(required=false) Long nit){
+	public ApiResponse<Page<Familia>> paginationlist(
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
+			@RequestBody(required=false) FamiliaDTO familiaDTO,
+			@RequestParam(required=false) Long nit){
+		
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
@@ -104,10 +114,13 @@ public class FamiliaController {
 		}else {
 			empresa = usuario.getEmpresa();			
 		}
-		if(letras != null) {
-			return familiaService.findByNameAndEmpreaAndEstaActiva(letras, empresa, true);
+		
+		if(Objects.isNull(familiaDTO)) {
+			Page<Familia> familias = familiaService.searchFabricantes(empresa, pagina, items);
+			return new ApiResponse<>(familias.getSize(), familias);
 		}else {
-			return familiaService.list(empresa);			
+			Page<Familia> familias = familiaService.searchFabricantes(familiaDTO, empresa, pagina, items);
+			return new ApiResponse<>(familias.getSize(), familias);
 		}
 	}
 	
@@ -171,7 +184,7 @@ public class FamiliaController {
 	public void getCsvEmpresas(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,
-								@RequestParam(required=false) String letras,
+								@RequestBody(required=false) FamiliaDTO familiaDTO,
 								@RequestParam(required=false) Long nit) throws IOException {
 		servletResponse.setContentType("application/x-download");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -188,11 +201,11 @@ public class FamiliaController {
 			empresa = usuario.getEmpresa();			
 		}
       		
-        if(letras != null){
-			List<FamiliaDTO> familias =  familiaService.findByNameAndEmpreaAndEstaActiva(letras, empresa, true);
-			csvService.writeFamiliasToCsv(servletResponse.getWriter(), familias);
+        if(Objects.isNull(familiaDTO)){
+        	List<FamiliaDTO> familias = familiaService.list(empresa);
+        	csvService.writeFamiliasToCsv(servletResponse.getWriter(), familias);
 		}else{
-			List<FamiliaDTO> familias = familiaService.list(empresa);
+			List<FamiliaDTO> familias =  familiaService.listFamilias(familiaDTO, empresa);
 			csvService.writeFamiliasToCsv(servletResponse.getWriter(), familias);
 		}
 		        

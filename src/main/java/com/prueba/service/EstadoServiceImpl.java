@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.prueba.dto.EstadoDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
-import com.prueba.entity.Fabricante;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EstadoRepository;
 import com.prueba.security.entity.Usuario;

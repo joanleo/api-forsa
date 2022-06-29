@@ -7,8 +7,6 @@ import org.springframework.data.domain.Page;
 import com.prueba.dto.EstadoDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
-import com.prueba.entity.Fabricante;
-
 
 public interface EstadoService {
 	

@@ -2,8 +2,11 @@ package com.prueba.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.prueba.dto.FamiliaDTO;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Familia;
 
 public interface FamiliaService {
 
@@ -22,5 +25,11 @@ public interface FamiliaService {
 	public void unable(Long id, Empresa empresa);
 
 	public List<FamiliaDTO> findByNameAndEmpreaAndEstaActiva(String letras, Empresa empresa, Boolean estaActiva);
+
+	public Page<Familia> searchFabricantes(FamiliaDTO familiaDTO, Empresa empresa, Integer pagina, Integer items);
+
+	public Page<Familia> searchFabricantes(Empresa empresa, Integer pagina, Integer items);
+
+	public List<FamiliaDTO> listFamilias(FamiliaDTO familiaDTO, Empresa empresa);
 
 }

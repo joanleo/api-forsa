@@ -5,13 +5,17 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.FamiliaDTO;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.FamiliaRepository;
+import com.prueba.specifications.FamiliaSpecifications;
 
 
 @Service
@@ -22,6 +26,9 @@ public class FamiliaServiceImpl implements FamiliaService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private FamiliaSpecifications familiaSpec;
 
 	@Override
 	public FamiliaDTO create(FamiliaDTO familiaDto, Empresa empresa) {
@@ -37,7 +44,7 @@ public class FamiliaServiceImpl implements FamiliaService {
 
 	@Override
 	public List<FamiliaDTO> list(Empresa empresa) {
-		List<Familia> listaFamilias = familiaRepo.findByEmpresa(empresa);
+		List<Familia> listaFamilias = familiaRepo.findByEmpresaAndEstaActivaTrue(empresa);
 		return listaFamilias.stream().map(familia -> mapearEntidad(familia)).collect(Collectors.toList());
 	}
 
@@ -109,6 +116,32 @@ public class FamiliaServiceImpl implements FamiliaService {
 	public List<FamiliaDTO> findByNameAndEmpreaAndEstaActiva(String letras, Empresa empresa, Boolean estaActiva) {
 		List<Familia> listFamilias = familiaRepo.findByNombreContainsAndEmpresaAndEstaActiva(letras, empresa, estaActiva);
 		return listFamilias.stream().map(familia -> mapearEntidad(familia)).collect(Collectors.toList());
+	}
+
+	@Override
+	public Page<Familia> searchFabricantes(FamiliaDTO familiaDTO, Empresa empresa, Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<Familia> familias = familiaRepo.findAll(familiaSpec.getFamilia(familiaDTO, empresa), PageRequest.of(0, 10));
+			return familias;
+		}
+		Page<Familia> familias = familiaRepo.findAll(familiaSpec.getFamilia(familiaDTO, empresa), PageRequest.of(pagina, items));		
+		return familias;
+	}
+
+	@Override
+	public Page<Familia> searchFabricantes(Empresa empresa, Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<Familia> familias = familiaRepo.findByEmpresaAndEstaActivaTrue(empresa, PageRequest.of(0, 10));
+			return familias;
+		}
+		Page<Familia> familias = familiaRepo.findByEmpresaAndEstaActivaTrue(empresa, PageRequest.of(pagina, items));		
+		return familias;
+	}
+
+	@Override
+	public List<FamiliaDTO> listFamilias(FamiliaDTO familiaDTO, Empresa empresa) {
+		List<Familia> fabricantes = familiaRepo.findAll(familiaSpec.getFamilia(familiaDTO, empresa));
+		return fabricantes.stream().map(fabricante -> mapearEntidad(fabricante)).collect(Collectors.toList());
 	}
 
 	

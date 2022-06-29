@@ -3,12 +3,16 @@ package com.prueba.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Familia;
 
-public interface FamiliaRepository extends JpaRepository<Familia, Long>{
+public interface FamiliaRepository extends JpaRepository<Familia, Long>, JpaSpecificationExecutor<Familia>{
 	
 	public Familia findBySiglaAndEmpresa(String sigla, Empresa empresa);
 
@@ -25,4 +29,8 @@ public interface FamiliaRepository extends JpaRepository<Familia, Long>{
 	public Familia findByNombreAndEmpresa(String nombre, Empresa empresa);
 
 	public Optional<Familia> findByIdAndEmpresa(Long id, Empresa empresa);
+
+	public Page<Familia> findByEmpresaAndEstaActivaTrue(Empresa empresa, Pageable page);
+
+	public List<Familia> findByEmpresaAndEstaActivaTrue(Empresa empresa);
 }
