@@ -130,10 +130,10 @@ public class Empresa {
 		this.fecha = fecha;
 	}	
 
-	public Boolean getEstaActiva() {
+
+	public Boolean getEstaActivo() {
 		return estaActivo;
 	}
-
 
 	public void setEstaActivo(Boolean estaActivo) {
 		this.estaActivo = estaActivo;

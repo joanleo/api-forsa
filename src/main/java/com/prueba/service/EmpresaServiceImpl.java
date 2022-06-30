@@ -53,11 +53,11 @@ public class EmpresaServiceImpl implements EmpresaService {
 	@Override
 	public Page<Empresa> searchEmpresas(Integer pagina, Integer items) {
 		if(items == 0) {
-			Page<Empresa> tiposEmpresa = empresaRepo.findByEstaActivoTrue(PageRequest.of(0, 10));
-			return tiposEmpresa;
+			Page<Empresa> empresas = empresaRepo.findByEstaActivoTrue(PageRequest.of(0, 10));
+			return empresas;
 		}
-		Page<Empresa> tiposEmpresa = empresaRepo.findByEstaActivoTrue(PageRequest.of(pagina, items));		
-		return tiposEmpresa;
+		Page<Empresa> empresas = empresaRepo.findByEstaActivoTrue(PageRequest.of(pagina, items));		
+		return empresas;
 	}
 
 	@Override

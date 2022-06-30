@@ -20,9 +20,11 @@ import com.prueba.security.service.RutaService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/rutas")
+@ApiIgnore
 @Api(tags = "Rutas", description = "Operaciones referentes a las rutas")
 public class RutaController {
 
