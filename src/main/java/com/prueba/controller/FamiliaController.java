@@ -122,34 +122,34 @@ public class FamiliaController {
 		}
 	}
 	
-	@GetMapping("/{id},{nit}")
+	@GetMapping("/{id},{nitEmpresa}")
 	@ApiOperation(value = "Encuentra una familia", notes = "Retorna una familia por el id")
 	public ResponseEntity<FamiliaDTO> get(@PathVariable(name = "id") Long id,
-			 							  @PathVariable(required=false) Long nit){
+			 							  @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
-		if(nit != null) {
-		empresa = util.obtenerEmpresa(nit);
+		if(nitEmpresa != null) {
+		empresa = util.obtenerEmpresa(nitEmpresa);
 		}else {
 		empresa = usuario.getEmpresa();			
 		}
 		return ResponseEntity.ok(familiaService.getFamilia(id, empresa));
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id},{nitEmpresa}")
 	@ApiOperation(value = "Elimina una familia", notes = "Elimina una familia por su id")
 	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
-					 					 @PathVariable(required=false) Long nit){
+					 					 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
-		if(nit != null) {
-		empresa = util.obtenerEmpresa(nit);
+		if(nitEmpresa != null) {
+		empresa = util.obtenerEmpresa(nitEmpresa);
 		}else {
 		empresa = usuario.getEmpresa();			
 		}
@@ -158,17 +158,17 @@ public class FamiliaController {
 		return new ResponseEntity<ResDTO>(new ResDTO("familia eliminada con exito"), HttpStatus.OK);
 	}
 	
-	@PatchMapping("/{id}")
+	@PatchMapping("/{id},{nitEmpresa}")
 	@ApiOperation(value = "Inhabilita una familia", notes = "Inhabilita una familia por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
-					 					 @PathVariable(required=false) Long nit){
+					 					 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
-		if(nit != null) {
-		empresa = util.obtenerEmpresa(nit);
+		if(nitEmpresa != null) {
+		empresa = util.obtenerEmpresa(nitEmpresa);
 		}else {
 		empresa = usuario.getEmpresa();			
 		}
