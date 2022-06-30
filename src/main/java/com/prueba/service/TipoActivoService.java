@@ -9,7 +9,7 @@ public interface TipoActivoService {
 
 	TipoActivo create(TipoActivo tipoActivo, Empresa empresa);
 
-	List<TipoActivo> findByNameAndEmpreaAndEstaActiva(String letras, Empresa empresa, Boolean estaActivo);
+	List<TipoActivo> findByNameAndEmpreaAndEstaActivo(String letras, Empresa empresa, Boolean estaActivo);
 
 	List<TipoActivo> list(Empresa empresa);
 

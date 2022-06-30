@@ -24,7 +24,7 @@ public interface FamiliaService {
 
 	public void unable(Long id, Empresa empresa);
 
-	public List<FamiliaDTO> findByNameAndEmpreaAndEstaActiva(String letras, Empresa empresa, Boolean estaActiva);
+	public List<FamiliaDTO> findByNameAndEmpreaAndEstaActivo(String letras, Empresa empresa);
 
 	public Page<Familia> searchFabricantes(FamiliaDTO familiaDTO, Empresa empresa, Integer pagina, Integer items);
 

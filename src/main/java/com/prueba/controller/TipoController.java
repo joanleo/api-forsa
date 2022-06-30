@@ -81,7 +81,7 @@ public class TipoController {
 			empresa = usuario.getEmpresa();			
 		}
 		if(letras != null) {
-			return tipoActivoService.findByNameAndEmpreaAndEstaActiva(letras, empresa, true);
+			return tipoActivoService.findByNameAndEmpreaAndEstaActivo(letras, empresa, true);
 		}else {
 			return tipoActivoService.list(empresa);			
 		}
@@ -185,7 +185,7 @@ public class TipoController {
 		}
       		
         if(letras != null){
-			List<TipoActivo> tiposActivos =  tipoActivoService.findByNameAndEmpreaAndEstaActiva(letras, empresa, true);
+			List<TipoActivo> tiposActivos =  tipoActivoService.findByNameAndEmpreaAndEstaActivo(letras, empresa, true);
 			csvService.writeTiposActivoToCsv(servletResponse.getWriter(), tiposActivos);
 		}else{
 			List<TipoActivo> tiposActivos = tipoActivoService.list(empresa);

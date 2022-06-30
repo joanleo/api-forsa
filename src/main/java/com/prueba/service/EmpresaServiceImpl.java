@@ -127,7 +127,7 @@ public class EmpresaServiceImpl implements EmpresaService {
 
 	
 	@Override
-	public List<EmpresaDTO> findByNameAndEstaActiva(String name, Boolean estaActiva) {
+	public List<EmpresaDTO> findByNameAndEstaActivo(String name) {
 		List<Empresa> listEmpresas = empresaRepo.findByNombreContainsAndEstaActivoTrue(name);
 		
 		return listEmpresas.stream().map(empresa -> mapearEntidad(empresa)).collect(Collectors.toList());

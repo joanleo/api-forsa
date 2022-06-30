@@ -28,7 +28,7 @@ public class FamiliaSpecifications {
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 			
-			predicates.add(criteryBuilder.isTrue(root.get("estaActiva").as(Boolean.class)));
+			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
 			
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};

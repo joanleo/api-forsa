@@ -38,8 +38,8 @@ public class Familia {
     @Column(name = "vcsigla", length = 3)
     private String sigla;
     
-    @Column(name = "bestaActiva", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
-    private Boolean estaActiva=true;
+    @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+    private Boolean estaActivo=true;
     
 
 	public Empresa getEmpresa() {
@@ -74,12 +74,12 @@ public class Familia {
 		this.productos = productos;
 	}
 
-	public Boolean getEstaActiva() {
-		return estaActiva;
+	public Boolean getEstaActivo() {
+		return estaActivo;
 	}
 
-	public void setEstaActiva(Boolean estaActiva) {
-		this.estaActiva = estaActiva;
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
 	}
 
 	

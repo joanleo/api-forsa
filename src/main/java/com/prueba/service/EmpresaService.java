@@ -27,7 +27,7 @@ public interface EmpresaService {
 
 	public void unable(Long id);
 
-	public List<EmpresaDTO> findByNameAndEstaActiva(String name, Boolean estaActiva);
+	public List<EmpresaDTO> findByNameAndEstaActivo(String name);
 
 	public List<EmpresaDTO> list(EmpresaDTO empresaDTO);
 

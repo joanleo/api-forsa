@@ -43,7 +43,7 @@ public class FamiliaServiceImpl implements FamiliaService {
 
 	@Override
 	public List<FamiliaDTO> list(Empresa empresa) {
-		List<Familia> listaFamilias = familiaRepo.findByEmpresaAndEstaActivaTrue(empresa);
+		List<Familia> listaFamilias = familiaRepo.findByEmpresaAndEstaActivoTrue(empresa);
 		return listaFamilias.stream().map(familia -> mapearEntidad(familia)).collect(Collectors.toList());
 	}
 
@@ -91,7 +91,7 @@ public class FamiliaServiceImpl implements FamiliaService {
 	public void unable(Long id, Empresa empresa) {
 		Familia familia = familiaRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Familia", "id", id));
-		familia.setEstaActiva(false);
+		familia.setEstaActivo(false);
 		familiaRepo.save(familia);
 		
 	}
@@ -112,8 +112,8 @@ public class FamiliaServiceImpl implements FamiliaService {
 
 
 	@Override
-	public List<FamiliaDTO> findByNameAndEmpreaAndEstaActiva(String letras, Empresa empresa, Boolean estaActiva) {
-		List<Familia> listFamilias = familiaRepo.findByNombreContainsAndEmpresaAndEstaActiva(letras, empresa, estaActiva);
+	public List<FamiliaDTO> findByNameAndEmpreaAndEstaActivo(String letras, Empresa empresa) {
+		List<Familia> listFamilias = familiaRepo.findByNombreContainsAndEmpresaAndEstaActivoTrue(letras, empresa);
 		return listFamilias.stream().map(familia -> mapearEntidad(familia)).collect(Collectors.toList());
 	}
 
@@ -130,10 +130,10 @@ public class FamiliaServiceImpl implements FamiliaService {
 	@Override
 	public Page<Familia> searchFabricantes(Empresa empresa, Integer pagina, Integer items) {
 		if(items == 0) {
-			Page<Familia> familias = familiaRepo.findByEmpresaAndEstaActivaTrue(empresa, PageRequest.of(0, 10));
+			Page<Familia> familias = familiaRepo.findByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(0, 10));
 			return familias;
 		}
-		Page<Familia> familias = familiaRepo.findByEmpresaAndEstaActivaTrue(empresa, PageRequest.of(pagina, items));		
+		Page<Familia> familias = familiaRepo.findByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(pagina, items));		
 		return familias;
 	}
 

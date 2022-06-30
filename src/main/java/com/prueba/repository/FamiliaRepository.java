@@ -19,7 +19,7 @@ public interface FamiliaRepository extends JpaRepository<Familia, Long>, JpaSpec
 	
 	//public List<Familia> findByNombreContains(String nombre);
 
-	public List<Familia> findByNombreContainsAndEmpresaAndEstaActiva(String letras, Empresa empresa, Boolean estaActiva);
+	public List<Familia> findByNombreContainsAndEmpresaAndEstaActivoTrue(String letras, Empresa empresa);
 
 	public List<Familia> findByNombreContainsAndEmpresa(String name, Empresa empresa);
 
@@ -29,7 +29,7 @@ public interface FamiliaRepository extends JpaRepository<Familia, Long>, JpaSpec
 
 	public Optional<Familia> findByIdAndEmpresa(Long id, Empresa empresa);
 
-	public Page<Familia> findByEmpresaAndEstaActivaTrue(Empresa empresa, Pageable page);
+	public Page<Familia> findByEmpresaAndEstaActivoTrue(Empresa empresa, Pageable page);
 
-	public List<Familia> findByEmpresaAndEstaActivaTrue(Empresa empresa);
+	public List<Familia> findByEmpresaAndEstaActivoTrue(Empresa empresa);
 }
