@@ -75,15 +75,11 @@ public class TipoEmpresa {
 		super();
 	}
 
-	public TipoEmpresa(Long id, String tipo) {
+	public TipoEmpresa(Long id, String tipo, String descripcion) {
 		super();
 		this.id = id;
 		this.tipo = tipo;
 
-	}
-
-	public TipoEmpresa(String tipo) {
-		this.tipo = tipo;
 	}
 	
 }
