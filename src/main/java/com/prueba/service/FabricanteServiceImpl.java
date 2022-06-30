@@ -102,7 +102,7 @@ public class FabricanteServiceImpl implements FabricanteService {
 		//fabricante.setDescripcion(fabricanteDTO.getDescripcion());
 		fabricante.setNit(fabricanteDTO.getNit());
 		fabricante.setNombre(fabricanteDTO.getNombre());
-		
+		fabricanteRepo.save(fabricante);
 		return mapearEntidad(fabricante);
 	}
 

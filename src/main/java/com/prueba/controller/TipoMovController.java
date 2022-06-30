@@ -36,10 +36,12 @@ import com.prueba.util.UtilitiesApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/tiposmovimientos")
 @Api(tags = "Tipos Movimiento", description = "operaciones referentes a los tipos de movimiento")
+@ApiIgnore
 public class TipoMovController {
 	
 	@Autowired

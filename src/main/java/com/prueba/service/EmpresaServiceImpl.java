@@ -90,6 +90,7 @@ public class EmpresaServiceImpl implements EmpresaService {
 		empresa.setNit(empresaDTO.getNit());
 		empresa.setNombre(empresaDTO.getNombre());
 		
+		empresaRepo.save(empresa);
 		return mapearEntidad(empresa);
 	}
 

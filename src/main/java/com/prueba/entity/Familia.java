@@ -39,7 +39,7 @@ public class Familia {
     private String sigla;
     
     @Column(name = "bestaActiva", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
-    private Boolean estaActiva;
+    private Boolean estaActiva=true;
     
 
 	public Empresa getEmpresa() {

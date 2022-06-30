@@ -23,10 +23,12 @@ import com.prueba.service.TrasladoService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/traslados")
 @Api(tags = "Traslados", description = "Operaciones referentes a los traslados")
+@ApiIgnore
 public class TrasladoController {
 	
 	@Autowired

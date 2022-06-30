@@ -49,7 +49,7 @@ public class Producto{
     private Familia familia;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "nidtipo", nullable = false)
+    @JoinColumn(name = "nidtipo")
     private TipoActivo tipo;
 
     @Column(name = "vcnconfirmacion", length = 8)

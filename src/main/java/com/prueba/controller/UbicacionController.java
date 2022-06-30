@@ -5,11 +5,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,8 +27,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.prueba.dto.ApiResponse;
 import com.prueba.dto.UbicacionDTO;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Ubicacion;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
@@ -60,10 +64,14 @@ public class UbicacionController {
 		return new ResponseEntity<UbicacionDTO>(ubicacionService.create(ubicacionDTO), HttpStatus.CREATED);
 	}
 	
-	@GetMapping
+	@PostMapping("/indexados")
 	@ApiOperation(value = "Encuentra las ubicaciones", notes = "Retorna las ubicaciones que en su nombre contenga las letras indicadas, retorna todas las ubicaciones si no se especifica ninguna letra")
-	public List<UbicacionDTO> list(@RequestParam(required=false) String letras,
-								   @RequestParam(required=false) Long nit){
+	public ApiResponse<Page<Ubicacion>> paginationList(
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
+			@RequestBody(required=false) UbicacionDTO ubicacionDTO,
+			@RequestParam(required=false) Long nit){
+		
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
@@ -75,10 +83,12 @@ public class UbicacionController {
 		empresa = usuario.getEmpresa();			
 		}
 		
-		if(letras != null) {
-			return ubicacionService.findByName(letras, empresa, true);
+		if(Objects.isNull(ubicacionDTO)) {
+			Page<Ubicacion> ubicaciones = ubicacionService.searchUbicaciones(empresa, pagina, items);
+			return new ApiResponse<>(ubicaciones.getSize(), ubicaciones);
 		}else {
-			return ubicacionService.list(empresa);			
+			Page<Ubicacion> ubicaciones = ubicacionService.searchUbicaciones(ubicacionDTO, empresa, pagina, items);
+			return new ApiResponse<>(ubicaciones.getSize(), ubicaciones);
 		}
 		
 	}
@@ -151,24 +161,30 @@ public class UbicacionController {
 	@PostMapping("/descarga")
 	@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de activos de la busqueda realizada en formato csv")
 	public void getCsvUbicaciones(HttpServletResponse servletResponse,
-								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
-								@RequestParam(required=false, defaultValue = "0") Integer items,
-								@RequestParam(required=false) String letras) throws IOException {
+				@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+				@RequestParam(required=false, defaultValue = "0") Integer items,
+				@RequestBody(required=false) UbicacionDTO ubicacionDTO,
+				@RequestParam(required=false) Long nit) throws IOException {
 		servletResponse.setContentType("application/x-download");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
         servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "estados"+ "_" + currentDateTime + ".csv" + "\"");
         
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    	Usuario usuario = usuarioRepo.findByUsername(authentication.getName()).get();
-    	Empresa empresa = usuario.getEmpresa();
+        Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
       		
-        if(letras != null){
-			List<UbicacionDTO> ubicaciones =  ubicacionService.findByName(letras, empresa, true);
-			csvService.writeUbicacionesToCsv(servletResponse.getWriter(), ubicaciones);
+        if(Objects.isNull(ubicacionDTO)){
+        	List<UbicacionDTO> ubicaciones = ubicacionService.list(empresa);
+        	csvService.writeUbicacionesToCsv(servletResponse.getWriter(), ubicaciones);
 		}else{
-			System.out.println("Controller busqueda vacia");
-			List<UbicacionDTO> ubicaciones = ubicacionService.list(empresa);
+			List<UbicacionDTO> ubicaciones =  ubicacionService.listUbicaciones(ubicacionDTO, empresa); 
 			csvService.writeUbicacionesToCsv(servletResponse.getWriter(), ubicaciones);
 		}
 		        
