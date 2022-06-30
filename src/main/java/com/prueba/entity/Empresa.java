@@ -45,7 +45,7 @@ public class Empresa {
 	
 	@ManyToOne()
 	@JoinColumn(name = "nidtipo_empresa")
-	private TipoEmpresa tipoEmpresa;
+	private TipoEmpresa tipoEmpresa = new TipoEmpresa("Cliente");
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL)

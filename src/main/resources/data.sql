@@ -21,7 +21,7 @@ INSERT INTO m_tipos_ubicacion
 `vcnombre`,
 `vcnitempresa`)
 VALUES
-(1, 'Obra', '1111');
+(1, 'Obra', '2222');
 
 INSERT INTO m_ubicaciones
 (`nidubicacion`,
@@ -32,8 +32,8 @@ INSERT INTO m_ubicaciones
 `vcnitempresa`
 )
 VALUES
-(1, 'Cali', 'Calle Cra', 'Las flores 1', 1, '1111'),
-(2, 'Cali', 'Calle Cra', 'Las avenidas 1', 1, '1111');
+(1, 'Cali', 'Calle Cra', 'Las flores 1', 1, '2222'),
+(2, 'Cali', 'Calle Cra', 'Las avenidas 1', 1, '2222');
 
 INSERT INTO m_familias
 (`nidfamilia`,
@@ -55,17 +55,17 @@ INSERT INTO m_fabricantes
 `vcnitempresa`
 )
 VALUES
-('11111','Fabricante prueba', '1111'),
-('12345', 'Formaletas XX', '1111');
+('11111','Fabricante prueba', '2222'),
+('12345', 'Formaletas XX', '2222');
 
 INSERT INTO m_estados
 (`nidestado`,
 `vcnombre`,
 `vcnitempresa`)
 VALUES
-(1,'Bueno', '1111'),
-(2,'Regular', '1111'),
-(3,'Malo', '1111');
+(1,'Bueno', '2222'),
+(2,'Regular', '2222'),
+(3,'Malo', '2222');
 
 INSERT INTO mov_activos
 (`vccodigopieza`,
@@ -78,11 +78,11 @@ INSERT INTO mov_activos
 `nidfamilia`,
 `nidubicacion`)
 VALUES
-('1111', 22.4, 'prueba', 'OR1', '1111', 1, '11111', 1, 1),
+('1111', 22.4, 'prueba', 'OR1', '2222', 1, '11111', 1, 1),
 ('1112', 74.55, 'prueba', 'OR1', '23456', 1, '12345', 1, 1),
-('1113', 97, 'prueba', 'OR1', '1111', 1, '11111', 1, 1),
+('1113', 97, 'prueba', 'OR1', '2222', 1, '11111', 1, 1),
 ('1114', 99, 'prueba', 'OR5', '23456', 1, '12345', 1, 1),
-('1115', 223, 'prueba', 'OR6', '1111', 1, '11111', 1, 1),
+('1115', 223, 'prueba', 'OR6', '2222', 1, '11111', 1, 1),
 ('8484', 22.12, 'prueba', 'OR4', '23456', 1, '12345', 1, 1),
 ('64785', 74.2, 'prueba', 'OR3', '1111', 1, '11111', 1, 1),
 ('37585', 9.7, 'prueba', 'OR2', '23456', 1, '11111', 1, 1),
