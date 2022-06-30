@@ -91,17 +91,17 @@ public class TipoUbicacionController {
 		}
 	}
 
-	@GetMapping("/{id},{nit}")
+	@GetMapping("/{id},{nitEmpresa}")
 	@ApiOperation(value = "Encuentra un tipo de ubicacion", notes = "Retorna un tipo de ubicacion segun su id y empresa")
 	public ResponseEntity<TipoUbicacionDTO> getTipoUbic(@PathVariable(name="id") Long id,
-					 									@PathVariable(required=false) Long nit){
+					 									@PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
-		if(nit != null) {
-		empresa = util.obtenerEmpresa(nit);
+		if(nitEmpresa != null) {
+		empresa = util.obtenerEmpresa(nitEmpresa);
 		}else {
 		empresa = usuario.getEmpresa();			
 		}
@@ -117,17 +117,17 @@ public class TipoUbicacionController {
 		return new ResponseEntity<>(actualizado, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id},{nit}")
+	@DeleteMapping("/{id},{nitEmpresa}")
 	@ApiOperation(value = "Elimina un tipo de ubicacion", notes = "Elimina un tipo de ubicacion por su id")
  	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
-										 @PathVariable(required=false) Long nit){
+										 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
-		if(nit != null) {
-		empresa = util.obtenerEmpresa(nit);
+		if(nitEmpresa != null) {
+		empresa = util.obtenerEmpresa(nitEmpresa);
 		}else {
 		empresa = usuario.getEmpresa();			
 		}
@@ -135,17 +135,17 @@ public class TipoUbicacionController {
 		return new ResponseEntity<ResDTO>(new ResDTO("Tipo de ubicacion eliminada con exito"), HttpStatus.OK);
 	}
 	
-	@PatchMapping("/{id},{nit}")
+	@PatchMapping("/{id},{nitEmpresa}")
 	@ApiOperation(value = "Inhabilita un tipo de ubicacion", notes = "Inhabilita un tipo de ubicacion por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
-	 									@PathVariable(required=false) Long nit){
+	 									@PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
-		if(nit != null) {
-		empresa = util.obtenerEmpresa(nit);
+		if(nitEmpresa != null) {
+		empresa = util.obtenerEmpresa(nitEmpresa);
 		}else {
 		empresa = usuario.getEmpresa();			
 		}
