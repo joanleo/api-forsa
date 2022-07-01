@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.ApiResponse;
+import com.prueba.dto.EmpresaDTO;
 import com.prueba.dto.FabricanteDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Fabricante;
@@ -62,6 +63,24 @@ public class FabricanteController {
 	@ApiOperation(value = "Crea un fabricante", notes = "Crea un nuevo fabricante")
 	public ResponseEntity<FabricanteDTO> create(@Valid @RequestBody FabricanteDTO fabricanteDTO){
 		return new ResponseEntity<FabricanteDTO>(fabricanteService.create(fabricanteDTO), HttpStatus.CREATED);
+	}
+	
+	@GetMapping
+	@ApiOperation(value="Encuentra las empresas")
+	public List<FabricanteDTO> get(
+			@RequestParam(required=false)String letras,
+			@RequestParam(required=false) Long nit){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();
+		}
+		return  fabricanteService.findByNameAndEmpresaAndEstaActivo(letras, empresa);
 	}
 	
 	@PostMapping("/indexados")

@@ -21,9 +21,9 @@ public interface FabricanteRepository extends JpaRepository<Fabricante, Long>, J
 
 	//List<Fabricante> findByNombreContainsAndEstaActivo(String nombre, Boolean estaActivo);
 
-	List<Fabricante> findByNombreContainsAndEmpresaAndEstaActivo(String letras, Empresa empresa, Boolean estaActivo);
+	List<Fabricante> findByNombreContainsAndEmpresaAndEstaActivoTrue(String letras, Empresa empresa);
 
-	List<Fabricante> findByEmpresaAndEstaActivo(Empresa empresa, boolean b);
+	List<Fabricante> findByEmpresaAndEstaActivoTrue(Empresa empresa);
 
 	Optional<Fabricante> findByNitAndEmpresa(Long nit, Empresa empresa);
 	

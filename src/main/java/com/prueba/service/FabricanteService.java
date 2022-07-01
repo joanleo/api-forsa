@@ -24,7 +24,7 @@ public interface FabricanteService {
 
 	public void unable(Long id, Empresa empresa);
 
-	public List<FabricanteDTO> findByNameAndEmpresaAndEstaActivo(String letras, Empresa empresa, Boolean estaActivo);
+	public List<FabricanteDTO> findByNameAndEmpresaAndEstaActivo(String letras, Empresa empresa);
 
 	public Page<Fabricante> searchFabricantes(FabricanteDTO fabricanteDTO, Empresa empresa, Integer pagina, Integer items);
 

@@ -80,7 +80,7 @@ public class FabricanteServiceImpl implements FabricanteService {
 
 	@Override
 	public List<FabricanteDTO> list(Empresa empresa) {
-		List<Fabricante> fabricantes = fabricanteRepo.findByEmpresaAndEstaActivo(empresa, true);
+		List<Fabricante> fabricantes = fabricanteRepo.findByEmpresaAndEstaActivoTrue(empresa);
 		
 		return fabricantes.stream().map(fabricante -> mapearEntidad(fabricante)).collect(Collectors.toList());
 		
@@ -137,8 +137,8 @@ public class FabricanteServiceImpl implements FabricanteService {
 	}
 
 	@Override
-	public List<FabricanteDTO> findByNameAndEmpresaAndEstaActivo(String letras, Empresa empresa, Boolean estaActivo) {
-		List<Fabricante> listFabricante = fabricanteRepo.findByNombreContainsAndEmpresaAndEstaActivo(letras, empresa, true);
+	public List<FabricanteDTO> findByNameAndEmpresaAndEstaActivo(String letras, Empresa empresa) {
+		List<Fabricante> listFabricante = fabricanteRepo.findByNombreContainsAndEmpresaAndEstaActivoTrue(letras, empresa);
 		
 		return listFabricante.stream().map(fabricante -> mapearEntidad(fabricante)).collect(Collectors.toList());
 	}
