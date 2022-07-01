@@ -24,6 +24,9 @@ public class EmpresaSpecifications {
 			if(empresaDTO.getNombre() != null) {
 			predicates.add(criteryBuilder.equal(root.get("nombre"), empresaDTO.getNombre()));
 			}
+			
+			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
+			
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
 	}
