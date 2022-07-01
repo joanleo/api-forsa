@@ -13,7 +13,7 @@ import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
 
 @Component
-public class EstadoSpec {
+public class EstadoSpecifications {
 
 	public Specification<Estado> getEstado(EstadoDTO estadoDTO, Empresa empresa) {
 		return (root, query, criteryBuilder) ->{

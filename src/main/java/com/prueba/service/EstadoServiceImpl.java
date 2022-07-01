@@ -18,7 +18,7 @@ import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EstadoRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
-import com.prueba.specifications.EstadoSpec;
+import com.prueba.specifications.EstadoSpecifications;
 
 @Service
 public class EstadoServiceImpl implements EstadoService {
@@ -33,7 +33,7 @@ public class EstadoServiceImpl implements EstadoService {
 	private ModelMapper modelmapper;
 	
 	@Autowired
-	private EstadoSpec estadoSpec;
+	private EstadoSpecifications estadoSpec;
 
 	@Override
 	public EstadoDTO create(EstadoDTO estadoDTO) {

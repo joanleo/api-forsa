@@ -74,11 +74,8 @@ public class EmpresaController {
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
 			@RequestBody(required=false) EmpresaDTO empresaDTO){
-		System.out.println(empresaDTO.getNombre());
-		System.out.println(empresaDTO.getNit());
-		System.out.println(empresaDTO.getEstaActivo());
+
 		if(Objects.isNull(empresaDTO)) {
-			System.out.println("objeto nulo");
 			Page<Empresa> empresas = empresaService.searchEmpresas(pagina, items);
 			return new ApiResponse<>(empresas.getSize(), empresas);			
 		}else {
