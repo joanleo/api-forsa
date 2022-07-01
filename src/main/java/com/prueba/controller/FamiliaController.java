@@ -74,6 +74,24 @@ public class FamiliaController {
 		return new ResponseEntity<FamiliaDTO>(familiaService.create(familiaDTO, empresa), HttpStatus.CREATED);
 	}
 	
+	@GetMapping
+	@ApiOperation(value="Encuentra las familias")
+	public List<FamiliaDTO> get(
+			@RequestParam(required=false)String letras,
+			@RequestParam(required=false) Long nit){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();
+		}
+		return  familiaService.findByNameAndEmpresaAndEstaActivo(letras, empresa);
+	}
+	
 	@PutMapping("/{id}")
 	@ApiOperation(value = "Actualiza una familia", notes = "Actualiza los datos de una familia")
 	public ResponseEntity<FamiliaDTO> update(@Valid @RequestBody FamiliaDTO familiaDTO,

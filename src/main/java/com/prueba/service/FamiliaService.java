@@ -23,8 +23,8 @@ public interface FamiliaService {
 	public List<FamiliaDTO> findByNameAndEmpresa(String name, Empresa empresa);
 
 	public void unable(Long id, Empresa empresa);
-
-	public List<FamiliaDTO> findByNameAndEmpreaAndEstaActivo(String letras, Empresa empresa);
+	
+	public List<FamiliaDTO> findByNameAndEmpresaAndEstaActivo(String letras, Empresa empresa);
 
 	public Page<Familia> searchFabricantes(FamiliaDTO familiaDTO, Empresa empresa, Integer pagina, Integer items);
 

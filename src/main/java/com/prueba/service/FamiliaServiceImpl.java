@@ -112,7 +112,7 @@ public class FamiliaServiceImpl implements FamiliaService {
 
 
 	@Override
-	public List<FamiliaDTO> findByNameAndEmpreaAndEstaActivo(String letras, Empresa empresa) {
+	public List<FamiliaDTO> findByNameAndEmpresaAndEstaActivo(String letras, Empresa empresa) {
 		List<Familia> listFamilias = familiaRepo.findByNombreContainsAndEmpresaAndEstaActivoTrue(letras, empresa);
 		return listFamilias.stream().map(familia -> mapearEntidad(familia)).collect(Collectors.toList());
 	}

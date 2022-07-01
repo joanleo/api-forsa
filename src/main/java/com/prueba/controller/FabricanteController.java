@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.ApiResponse;
-import com.prueba.dto.EmpresaDTO;
 import com.prueba.dto.FabricanteDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Fabricante;
@@ -66,7 +65,7 @@ public class FabricanteController {
 	}
 	
 	@GetMapping
-	@ApiOperation(value="Encuentra las empresas")
+	@ApiOperation(value="Encuentra los fabricantes")
 	public List<FabricanteDTO> get(
 			@RequestParam(required=false)String letras,
 			@RequestParam(required=false) Long nit){
