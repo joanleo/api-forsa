@@ -118,8 +118,8 @@ public class UbicacionServiceImpl implements UbicacionService {
 	}
 
 	@Override
-	public List<UbicacionDTO> findByName(String name, Empresa empresa, Boolean estaActivo) {
-		List<Ubicacion> ubicaciones = ubicacionRepo.findByNombreContainsAndEmpresaAndEstaActivo(name, empresa, estaActivo);
+	public List<UbicacionDTO> findByName(String name, Empresa empresa) {
+		List<Ubicacion> ubicaciones = ubicacionRepo.findByNombreContainsAndEmpresaAndEstaActivoTrue(name, empresa);
 		return ubicaciones.stream().map(ubicacion -> mapearEntidad(ubicacion)).collect(Collectors.toList());
 	}
 

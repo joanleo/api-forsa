@@ -64,6 +64,24 @@ public class UbicacionController {
 		return new ResponseEntity<UbicacionDTO>(ubicacionService.create(ubicacionDTO), HttpStatus.CREATED);
 	}
 	
+	@GetMapping
+	@ApiOperation(value="Encuentra las ubicaciones")
+	public List<UbicacionDTO> get(
+			@RequestParam(required=false)String letras,
+			@RequestParam(required=false) Long nit){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();
+		}
+		return  ubicacionService.findByName(letras, empresa);
+	}
+	
 	@PostMapping("/indexados")
 	@ApiOperation(value = "Encuentra las ubicaciones", notes = "Retorna las ubicaciones que en su nombre contenga las letras indicadas, retorna todas las ubicaciones si no se especifica ninguna letra")
 	public ApiResponse<Page<Ubicacion>> paginationList(

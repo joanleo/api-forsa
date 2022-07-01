@@ -30,7 +30,7 @@ public interface UbicacionService {
 
 	void unable(Long id, Empresa empresa);
 
-	List<UbicacionDTO> findByName(String name, Empresa empresa, Boolean estaActivo);
+	List<UbicacionDTO> findByName(String name, Empresa empresa);
 
 	public Page<Ubicacion> searchUbicaciones(UbicacionDTO ubicacionDTO, Empresa empresa, Integer pagina, Integer items);
 

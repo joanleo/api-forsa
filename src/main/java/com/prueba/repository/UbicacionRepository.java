@@ -21,10 +21,10 @@ public interface UbicacionRepository extends JpaRepository<Ubicacion, Long>, Jpa
 
 	public List<Ubicacion> findByEmpresaAndEstaActivo(Empresa empresa, Boolean estaActivo);
 
-	public List<Ubicacion> findByNombreContainsAndEmpresaAndEstaActivo(String name, Empresa empresa,
-			Boolean estaActivo);
+	public List<Ubicacion> findByNombreContainsAndEmpresaAndEstaActivoTrue(String name, Empresa empresa);
 
 	public Optional<Ubicacion> findByIdAndEmpresa(Long id, Empresa empresa);
 
-	public Page<Ubicacion> findByEmpresaAndEstaActivoTrue(Empresa empresa, Pageable page); 
+	public Page<Ubicacion> findByEmpresaAndEstaActivoTrue(Empresa empresa, Pageable page);
+
 }
