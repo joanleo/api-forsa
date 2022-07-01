@@ -69,6 +69,9 @@ public class FamiliaServiceImpl implements FamiliaService {
 		if(familiaDTO.getId() != null) {
 			familia.setId(familiaDTO.getId());			
 		}
+		if(familiaDTO.getSigla() != null) {
+			familia.setSigla(familiaDTO.getSigla());			
+		}
 		if(familiaDTO.getEmpresa() != null) {
 			familia.setEmpresa(familiaDTO.getEmpresa());			
 		}

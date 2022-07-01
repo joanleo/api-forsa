@@ -14,6 +14,8 @@ public class FamiliaDTO {
 	
 	@NotNull(message = "Este campo no puede ser nulo")
 	private Empresa empresa;
+	
+	private String sigla;
 
 	public FamiliaDTO() {
 		super();
@@ -33,6 +35,14 @@ public class FamiliaDTO {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public String getSigla() {
+		return sigla;
+	}
+
+	public void setSigla(String sigla) {
+		this.sigla = sigla;
 	}
 
 	public Empresa getEmpresa() {
