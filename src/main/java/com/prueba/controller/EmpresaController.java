@@ -52,6 +52,13 @@ public class EmpresaController {
 		return new ResponseEntity<EmpresaDTO>(empresaService.create(empresaDTO), HttpStatus.CREATED);
 	}
 	
+	@GetMapping
+	@ApiOperation(value="Encuentra las empresas")
+	public List<EmpresaDTO> get(@RequestParam(required=false)String letras){
+		
+		return  empresaService.findByNameAndEstaActivo(letras);
+	}
+	
 	@PutMapping("/{nit}")
 	@ApiOperation(value = "Actualiza una empresa", notes = "Actualiza los datos de una empresa")
 	public ResponseEntity<EmpresaDTO> update(@Valid @RequestBody EmpresaDTO empresaDTO,
