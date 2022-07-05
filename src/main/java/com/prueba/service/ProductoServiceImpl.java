@@ -29,7 +29,6 @@ import com.prueba.entity.Estado;
 import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
 import com.prueba.entity.Producto;
-import com.prueba.entity.Producto_id;
 import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
@@ -72,9 +71,10 @@ public class ProductoServiceImpl implements ProductoService {
 	@Override
 	public ProductoDTO create(ProductoDTO productoDTO) {
 		Producto producto = mapearDTO(productoDTO);
-		Producto exist = productoRepo.findByIdProducto(productoDTO.getIdProducto());
-
+		Producto exist = productoRepo.findByCodigoPieza(productoDTO.getCodigoPieza());
+		System.out.println("Servicio");
 		if(exist == null) {
+			System.out.println("Activo no existe, se procede a crear");
 			productoRepo.save(producto);
 		}else {
 			throw new IllegalAccessError("El producto con id "+ productoDTO.getCodigoPieza() + " que trata de crear ya existe en la empresa "+productoDTO.getEmpresa().getNit());
@@ -111,13 +111,13 @@ public class ProductoServiceImpl implements ProductoService {
 
 	
 	@Override
-	public Producto getProducto(Producto_id id) {
+	public Producto getProducto(String codigoPieza) {
 				
-		Producto exist = productoRepo.findByIdProducto(id);
+		Producto exist = productoRepo.findByCodigoPieza(codigoPieza);
 		
 		
 		if(exist == null) {
-			throw new IllegalAccessError("El producto con codigo de pieza "+ id.getCodigoPieza() + " no existe, para la empresa "+ id.getNitEmpresa());
+			throw new IllegalAccessError("El producto con codigo de pieza "+ codigoPieza + " no existe");
 		}
 		
 		System.out.println("producto: "+exist.getDescripcion());
@@ -128,7 +128,7 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Override
 	public Producto update(String codigoPieza, ProductoDTO productoDTO) {
-		Producto exist = productoRepo.findByIdProducto(productoDTO.getIdProducto());
+		Producto exist = productoRepo.findByCodigoPieza(productoDTO.getCodigoPieza());
 		
 		if(exist == null) {
 			throw new IllegalAccessError("El producto con codigo de pieza "+ codigoPieza + " no existe");
@@ -143,11 +143,11 @@ public class ProductoServiceImpl implements ProductoService {
 
 	
 	@Override
-	public void delete(Producto_id id) {
-		Producto producto = productoRepo.findByIdProducto(id);
+	public void delete(String codigoPieza) {
+		Producto producto = productoRepo.findByCodigoPieza(codigoPieza);
 		
 		if(producto == null) {
-			throw new ResourceNotFoundException("Producto", "No existe", id.getCodigoPieza());
+			throw new ResourceNotFoundException("Producto", "No existe", codigoPieza);
 		}
 		
 		if(!producto.getVerificado() && producto.getEstaActivo()) {
@@ -172,11 +172,11 @@ public class ProductoServiceImpl implements ProductoService {
 
 	
 	@Override
-	public Producto receive(String id, ProductoDTO productoDTO) throws IllegalAccessException {
+	public Producto receive(String codigoPieza, ProductoDTO productoDTO) throws IllegalAccessException {
 		
-		Producto producto = productoRepo.findByIdProducto(productoDTO.getIdProducto());		
+		Producto producto = productoRepo.findByCodigoPieza(codigoPieza);		
 		if(producto == null) {
-			throw new ResourceNotFoundException("Producto", "No existe", id);
+			throw new ResourceNotFoundException("Producto", "No existe", codigoPieza);
 		}
 		
 		if(!producto.getVerificado() && producto.getEstaActivo()) {
@@ -416,7 +416,7 @@ public class ProductoServiceImpl implements ProductoService {
 							System.out.println(fabricanteAdd.getNombre());
 							
 							
-							Producto product = new Producto(new Producto_id(empresaAdd.getNit(), codigoPieza),nombre,area,orden,familiaAdd,fabricanteAdd,empresaAdd);
+							Producto product = new Producto(codigoPieza,nombre,area,orden,familiaAdd,fabricanteAdd,empresaAdd);
 							listProductos.add(product);
 						}else {
 							System.out.println("Error");

@@ -4,36 +4,39 @@ import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.prueba.security.entity.Usuario;
 
-/*@JsonIdentityInfo(
+@JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "codigoPieza")*/
+		  property = "codigoPieza")
 @Entity
 @Table(name = "mov_activos")
 public class Producto{
 	
-	/*@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;*/
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
 	
-	private static final long serialVersionUID = 1L;
-	
-	@EmbeddedId
-	private Producto_id idProducto;
-	
+	//private static final long serialVersionUID = 1L;
 	/*
+	@EmbeddedId
+	private Producto_id idProducto;*/
+
     @Column(name = "vccodigopieza", length = 20)
-    private String codigoPieza;*/
+    private String codigoPieza;
 
 	@Column(name = "vcnombre", length = 60)
     private String descripcion;
@@ -103,7 +106,7 @@ public class Producto{
 
 	public void setId(Long id) {
 		this.id = id;
-	}
+	}*/
 	
 	public String getCodigoPieza() {
 		return codigoPieza;
@@ -111,7 +114,7 @@ public class Producto{
 
 	public void setCodigoPieza(String codigoPieza) {
 		this.codigoPieza = codigoPieza;
-	}*/
+	}
 
 	public Usuario getReviso() {
 		return reviso;
@@ -240,14 +243,14 @@ public class Producto{
 	public void setMedidas(String medidas) {
 		this.medidas = medidas;
 	}		
-
+/*
 	public Producto_id getIdProducto() {
 		return idProducto;
 	}
 
 	public void setIdProducto(Producto_id idProducto) {
 		this.idProducto = idProducto;
-	}
+	}*/
 
 	public TipoActivo getTipo() {
 		return tipo;
@@ -265,14 +268,11 @@ public class Producto{
 		this.enviado = enviado;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
+
 	
 	
 
-	public Producto(Long nitEmpresa, String codigoPieza, String descripcion, Float area, String orden, Familia familia,
+	/*public Producto(Long nitEmpresa, String codigoPieza, String descripcion, Float area, String orden, Familia familia,
 			String nconfirmacion, Boolean verificado, Boolean estaActivo, String motivoIngreso, Date fechaActualizacion,
 			Fabricante fabricante, Empresa empresa, Estado estado, Ubicacion ubicacion, Boolean importado,
 			Usuario reviso, String medidas, Boolean enviado) {
@@ -295,16 +295,16 @@ public class Producto{
 		this.reviso = reviso;
 		this.medidas = medidas;
 		this.enviado = enviado;
-	}
+	}*/
 
 	public Producto() {
 		super();
 	}
 
-	public Producto(Producto_id producto_id, String descripcion, Float area, String orden, Familia familia,
+	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
 			Fabricante fabricante, Empresa empresa, TipoActivo tipo, String medidas) {
 		super();
-		this.idProducto = producto_id;
+		this.codigoPieza = codigoPieza;
 		this.descripcion = descripcion;
 		this.area = area;
 		this.orden = orden;
@@ -315,10 +315,10 @@ public class Producto{
 		this.medidas = medidas;
 	}
 	
-	public Producto(Producto_id producto_id, String descripcion, Float area, String orden, Familia familia,
+	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
 			Fabricante fabricante, Empresa empresa) {
 		super();
-		this.idProducto = producto_id;
+		this.codigoPieza = codigoPieza;
 		this.descripcion = descripcion;
 		this.area = area;
 		this.orden = orden;
@@ -327,16 +327,16 @@ public class Producto{
 		this.empresa = empresa;
 
 	}
-
+/*
 	public Producto(Long nitEmpresa, String codigoPieza) {
 		super();
 		this.idProducto = new Producto_id(nitEmpresa, codigoPieza);
-	}
+	}*/
 
 	public Producto(Long nitEmpresa, String codigoPieza, String descripcion, Float area, String orden, Familia familia,
 			Fabricante fabricante, Empresa empresa, Estado estado) {
 		super();
-		this.idProducto = new Producto_id(nitEmpresa, codigoPieza);
+		this.codigoPieza = codigoPieza;
 		this.descripcion = descripcion;
 		this.area = area;
 		this.orden = orden;

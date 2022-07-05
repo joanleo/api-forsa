@@ -35,11 +35,11 @@ public class TrasladoServiceImpl implements TrasladoService {
 		
 		List<Producto> productos = trasladoDTO.getProductos();		
 		for(Producto producto: productos) {
-			Producto nuevo = productoRepo.findByIdProducto(producto.getIdProducto());
+			Producto nuevo = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
 			if(nuevo != null) {
 				traslado.addActivo(nuevo);				
 			}else {
-				throw new IllegalAccessError("El producto con codigo de pieza " + producto.getIdProducto().getCodigoPieza() + " no existe");
+				throw new IllegalAccessError("El producto con codigo de pieza " + producto.getCodigoPieza() + " no existe");
 			}
 		}
 		trasladoRepo.save(traslado);

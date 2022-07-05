@@ -37,7 +37,7 @@ public class CsvExportService {
         			"Fabricante", "Familia", "No Orden", "Ubicacion");
         	
             for (Producto producto : productos) {
-                csvPrinter.printRecord(producto.getIdProducto().getCodigoPieza(), producto.getDescripcion(), producto.getArea(),
+                csvPrinter.printRecord(producto.getCodigoPieza(), producto.getDescripcion(), producto.getArea(),
                 		producto.getEmpresa().getNombre(), producto.getEstado() == null ? "" : producto.getEstado().getTipo(), producto.getFabricante().getNombre(), 
                 		producto.getFamilia().getNombre(), producto.getOrden(), producto.getUbicacion() == null ? "":producto.getUbicacion().getNombre());
             }

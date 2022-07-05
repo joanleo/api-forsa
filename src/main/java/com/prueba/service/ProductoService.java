@@ -10,7 +10,6 @@ import com.prueba.dto.ProductoDTO;
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
-import com.prueba.entity.Producto_id;
 
 
 public interface ProductoService {
@@ -19,11 +18,11 @@ public interface ProductoService {
 	
 	public Page<Producto> list(Empresa empresa, Integer offset, Integer pageSize);
 	
-	public Producto getProducto(Producto_id id);
+	public Producto getProducto(String codigoPieza);
 	
 	public Producto update(String id, ProductoDTO productoDTO);
 	
-	public void delete(Producto_id id);
+	public void delete(String codigoPieza);
 	
 	public Producto receive(String id, ProductoDTO productoDTO) throws IllegalAccessException;
 	

@@ -36,7 +36,7 @@ public class DetalleTrasl {
 		super();
 		this.traslado = traslado;
 		this.producto = producto;
-		this.id = new DetalleTrasl_id(traslado.getId(), producto.getIdProducto().getCodigoPieza());
+		this.id = new DetalleTrasl_id(traslado.getId(), producto.getCodigoPieza());
 
 	}
 

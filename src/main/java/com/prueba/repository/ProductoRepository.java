@@ -9,9 +9,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
-import com.prueba.entity.Producto_id;
 
-public interface ProductoRepository extends JpaRepository<Producto, Producto_id>, JpaSpecificationExecutor<Producto>{
+public interface ProductoRepository extends JpaRepository<Producto, String>, JpaSpecificationExecutor<Producto>{
 		
 	public Page<Producto> findAllByEmpresaAndEstaActivoTrue(Empresa empresa, Pageable page);
 	
@@ -21,10 +20,10 @@ public interface ProductoRepository extends JpaRepository<Producto, Producto_id>
 	
 	public List<Producto> findByFabricanteLike(Long fabricante);
 	
-	//public Producto findByCodigoPieza(String codigoPieza);
+	public Producto findByCodigoPieza(String codigoPieza);
 	
 	public Page<Producto> findByDescripcion(String letra, Boolean activo, Pageable pageable);
 	
-	public Producto findByIdProducto(Producto_id producto_id);
+	//public Producto findByIdProducto(Producto_id producto_id);
 	
 }

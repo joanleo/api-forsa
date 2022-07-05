@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.prueba.entity.Empresa;
-import com.prueba.entity.Producto_id;
 import com.prueba.security.entity.Usuario;
 
 @JsonIdentityInfo(
@@ -48,7 +47,7 @@ public class ProductoDTO {
 	
 	private String motivoIngreso ="Compra";
 	
-	private Producto_id idProducto = new Producto_id(empresa.getNit(), codigoPieza);
+//	private Producto_id idProducto = new Producto_id(empresa.getNit(), codigoPieza);
 	
 	private String medidas;
 	
@@ -158,7 +157,7 @@ public class ProductoDTO {
 	public void setMotivoIngreso(String motivoIngreso) {
 		this.motivoIngreso = motivoIngreso;
 	}
-
+/*
 	public Producto_id getIdProducto() {
 		return idProducto;
 	}
@@ -166,7 +165,7 @@ public class ProductoDTO {
 	public void setIdProducto(Producto_id idProducto) {
 		this.idProducto = idProducto;
 	}
-
+*/
 	public String getMedidas() {
 		return medidas;
 	}
@@ -194,7 +193,7 @@ public class ProductoDTO {
 			@NotNull(message = "Este campo no puede ser nulo") FamiliaDTO familia,
 			@NotNull(message = "Este campo no puede ser nulo") EstadoDTO estado, Empresa empresa, Boolean verificado,
 			@NotNull(message = "Este campo no puede ser nulo") UbicacionDTO ubicacion, Boolean estaActivo,
-			String nconfirmacion, String motivoIngreso, Producto_id idProducto) {
+			String nconfirmacion, String motivoIngreso/* Producto_id idProducto*/) {
 		super();
 		this.descripcion = descripcion;
 		this.area = area;
@@ -208,7 +207,7 @@ public class ProductoDTO {
 		this.estaActivo = estaActivo;
 		this.nconfirmacion = nconfirmacion;
 		this.motivoIngreso = motivoIngreso;
-		this.idProducto = idProducto;
+		//this.idProducto = idProducto;
 	}
 
 	

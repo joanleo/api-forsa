@@ -101,7 +101,7 @@ public class ReporteInventarioPDF {
 			cell.setVerticalAlignment(Element.ALIGN_CENTER);			
 			table.addCell(cell);
 			
-			phrase = new Phrase(producto.getIdProducto().getCodigoPieza(), font);
+			phrase = new Phrase(producto.getCodigoPieza(), font);
 			cell = new PdfPCell(phrase);
 			table.addCell(cell);
 			

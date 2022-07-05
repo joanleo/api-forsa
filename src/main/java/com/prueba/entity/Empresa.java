@@ -145,6 +145,8 @@ public class Empresa {
 
 	public Empresa(Long nit) {
 		super();
+		TipoEmpresa tipo = new TipoEmpresa(Long.valueOf(3));
+		this.tipoEmpresa = tipo;
 		this.nit = nit;
 	}
 

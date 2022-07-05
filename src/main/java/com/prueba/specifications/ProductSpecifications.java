@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
-import com.prueba.entity.Producto_id;
 
 @Component
 public class ProductSpecifications {
@@ -27,8 +26,7 @@ public class ProductSpecifications {
 			List<Predicate> predicates = new ArrayList<>();
 			
 			if(searchDTO.getCodigoPieza() != null) {
-				Producto_id idProducto= new Producto_id(searchDTO.getEmpresa().getNit(),searchDTO.getCodigoPieza());
-				predicates.add(criteryBuilder.equal(root.get("idProducto"), idProducto));
+				predicates.add(criteryBuilder.equal(root.get("codigoPieza"), searchDTO.getCodigoPieza()));
 			}
 			if(searchDTO.getDescripcion() != null && !searchDTO.getDescripcion().isEmpty()) {
 				predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+searchDTO.getDescripcion()+"%"));

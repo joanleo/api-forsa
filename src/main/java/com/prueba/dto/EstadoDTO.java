@@ -1,6 +1,7 @@
 package com.prueba.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.prueba.entity.Empresa;
 
@@ -11,7 +12,7 @@ public class EstadoDTO {
 	@NotBlank(message = "Este campo no puede ser nulo")
 	private String tipo;
 	
-	@NotBlank(message = "Este campo no puede ser nulo")
+	@NotNull(message = "Este campo no puede ser nulo")
 	private Empresa empresa;
 	
 	private Boolean estaActivo=true;

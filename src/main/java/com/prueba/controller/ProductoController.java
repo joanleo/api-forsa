@@ -32,7 +32,6 @@ import com.prueba.dto.ProductoDTO;
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
-import com.prueba.entity.Producto_id;
 import com.prueba.repository.ProductoRepository;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;
@@ -67,6 +66,7 @@ public class ProductoController {
 	@PostMapping
 	@ApiOperation(value = "Crea un activo", notes = "Crea un nuevo activo")
 	public ResponseEntity<ProductoDTO> create(@Valid @RequestBody ProductoDTO productoDTO){
+		System.out.println("Controller activos: Creando activo");
 		return new ResponseEntity<ProductoDTO>(productoService.create(productoDTO), HttpStatus.CREATED);
 	}
 	
@@ -126,13 +126,13 @@ public class ProductoController {
 	
 	@GetMapping("/{id},{nit}")
 	@ApiOperation(value = "Encuentra un activo", notes = "Retorna un activo por el id")
-	public ResponseEntity<Producto> get(@PathVariable(name = "id") String id,
+	public ResponseEntity<Producto> get(@PathVariable(name = "id") String codigoPieza,
 										@PathVariable(name = "nit") Long nit){
 		
-		System.out.println("Id: "+id);
+		System.out.println("Id: "+codigoPieza);
 		System.out.println(("Nit: "+ nit));
-		Producto_id producto_id = new Producto_id(nit, id);
-		return ResponseEntity.ok(productoService.getProducto(producto_id));
+		//Producto_id producto_id = new Producto_id(nit, id);
+		return ResponseEntity.ok(productoService.getProducto(codigoPieza));
 	}
 	
 	@PutMapping("/{id}")
@@ -169,10 +169,10 @@ public class ProductoController {
 	
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "Elimina un activo", notes = "Elimina un activo por su id")
-	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")String id,
+	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")String codigoPieza,
 										 @PathVariable(name = "nit") Long nit){
-		Producto_id producto_id = new Producto_id(nit, id);
-		productoService.delete(producto_id);
+		//Producto_id producto_id = new Producto_id(nit, id);
+		productoService.delete(codigoPieza);
 		
 		return new ResponseEntity<ResDTO>(new ResDTO("Item eliminado con exito"), HttpStatus.OK);
 	}

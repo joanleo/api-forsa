@@ -9,11 +9,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.MovInventarioDTO;
-import com.prueba.dto.ProductoDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.MovInventario;
 import com.prueba.entity.Producto;
-import com.prueba.entity.Producto_id;
 import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.MovInventarioRepository;

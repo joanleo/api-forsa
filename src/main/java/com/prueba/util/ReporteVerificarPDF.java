@@ -102,7 +102,7 @@ public class ReporteVerificarPDF {
 				
 				table.addCell(cell);
 				
-				table.addCell(producto.getIdProducto().getCodigoPieza());
+				table.addCell(producto.getCodigoPieza());
 				
 				table.addCell(producto.getDescripcion());
 				

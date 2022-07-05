@@ -74,6 +74,11 @@ public class TipoEmpresa {
 		super();
 	}
 
+	public TipoEmpresa(Long id) {
+		super();
+		this.id = id;
+	}
+
 	public TipoEmpresa(Long id, String tipo, String descripcion) {
 		super();
 		this.id = id;

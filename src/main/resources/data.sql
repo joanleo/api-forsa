@@ -38,16 +38,17 @@ VALUES
 INSERT INTO m_familias
 (`nidfamilia`,
 `vcnombre`,
+`vcsigla`,
 `vcnitempresa`
 )
 VALUES
-(1, 'Formaletas para muro', '2222'),
-(2, 'Formaleta unión muro losa', '2222'),
-(3, 'Formaletas para losas', '2222'),
-(4, 'Formaletas para Culata', '2222'),
-(5, 'Formaletas para escalera', '2222'),
-(6, 'Formaletas para punto fijo', '2222'),
-(10, 'Accesorios', '2222');
+(1, 'Formaletas para muro', 'FM', '2222'),
+(2, 'Formaleta unión muro losa', 'UM', '2222'),
+(3, 'Formaletas para losas', 'FL', '2222'),
+(4, 'Formaletas para Culata', 'CL', '2222'),
+(5, 'Formaletas para escalera', 'SC', '2222'),
+(6, 'Formaletas para punto fijo', 'FP', '2222'),
+(10, 'Accesorios', 'AC', '2222');
 
 INSERT INTO m_fabricantes
 (`vcnitfabricante`,
