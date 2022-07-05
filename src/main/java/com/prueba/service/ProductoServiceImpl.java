@@ -75,6 +75,8 @@ public class ProductoServiceImpl implements ProductoService {
 		System.out.println("Servicio");
 		if(exist == null) {
 			System.out.println("Activo no existe, se procede a crear");
+			Empresa empresa = empresaRepo.findByNit(productoDTO.getEmpresa().getNit());
+			producto.setEmpresa(empresa);
 			productoRepo.save(producto);
 		}else {
 			throw new IllegalAccessError("El producto con id "+ productoDTO.getCodigoPieza() + " que trata de crear ya existe en la empresa "+productoDTO.getEmpresa().getNit());

@@ -129,5 +129,5 @@ public class ProductSpecifications {
 						
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
-	}
+	} 
 }

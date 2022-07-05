@@ -88,3 +88,12 @@ VALUES
 ('64785', 74.2, 'prueba', 'OR3', '1111', 1, '11111', 1, 1),
 ('37585', 9.7, 'prueba', 'OR2', '23456', 1, '11111', 1, 1),
 ('14256', 8.3, 'prueba', 'OR2', '1111', 1, '12345', 1, 1);
+
+INSERT INTO m_usuarios
+(`vcemail`,
+`vcnombre`,
+`vcpassword`,
+`vcusername`,
+`vcnitempresa`)
+VALUES
+('jleon@metrolinkeu.com', 'Joan David Leon', '$2a$10$wTWky7f3N.ASn.Q1VN0u/e3q2.cIo/5A4C8XHFFUM7oiZLNbmF9GO', 'joan1', '2222')

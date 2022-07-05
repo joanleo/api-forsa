@@ -6,8 +6,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -27,14 +25,6 @@ import com.prueba.security.entity.Usuario;
 public class Producto{
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long id;
-	
-	//private static final long serialVersionUID = 1L;
-	/*
-	@EmbeddedId
-	private Producto_id idProducto;*/
-
     @Column(name = "vccodigopieza", length = 20)
     private String codigoPieza;
 
@@ -77,7 +67,7 @@ public class Producto{
     private Fabricante fabricante;
     
     @ManyToOne(fetch = FetchType.EAGER, cascade= CascadeType.ALL)
-    @JoinColumn(name = "vcnitempresa", insertable=false, updatable=false)
+    @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
     
     @ManyToOne(fetch = FetchType.EAGER)
@@ -89,7 +79,7 @@ public class Producto{
     private Ubicacion ubicacion;
     
     @Column(name = "bimportado", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
-    private Boolean importado = true;
+    private Boolean importado = false;
     
     @ManyToOne(fetch = FetchType.EAGER, cascade= CascadeType.ALL)
     @JoinColumn(name = "nidusuario")
@@ -99,14 +89,9 @@ public class Producto{
     private String medidas;
     
     @Column(name = "benviado", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
-    private Boolean enviado;
-	/*public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}*/
+    private Boolean enviado = false;
+    
+    
 	
 	public String getCodigoPieza() {
 		return codigoPieza;
@@ -243,14 +228,6 @@ public class Producto{
 	public void setMedidas(String medidas) {
 		this.medidas = medidas;
 	}		
-/*
-	public Producto_id getIdProducto() {
-		return idProducto;
-	}
-
-	public void setIdProducto(Producto_id idProducto) {
-		this.idProducto = idProducto;
-	}*/
 
 	public TipoActivo getTipo() {
 		return tipo;
@@ -271,31 +248,6 @@ public class Producto{
 
 	
 	
-
-	/*public Producto(Long nitEmpresa, String codigoPieza, String descripcion, Float area, String orden, Familia familia,
-			String nconfirmacion, Boolean verificado, Boolean estaActivo, String motivoIngreso, Date fechaActualizacion,
-			Fabricante fabricante, Empresa empresa, Estado estado, Ubicacion ubicacion, Boolean importado,
-			Usuario reviso, String medidas, Boolean enviado) {
-		super();
-		this.idProducto = new Producto_id(nitEmpresa, codigoPieza);
-		this.descripcion = descripcion;
-		this.area = area;
-		this.orden = orden;
-		this.familia = familia;
-		this.nconfirmacion = nconfirmacion;
-		this.verificado = verificado;
-		this.estaActivo = estaActivo;
-		this.motivoIngreso = motivoIngreso;
-		this.fechaActualizacion = fechaActualizacion;
-		this.fabricante = fabricante;
-		this.empresa = empresa;
-		this.estado = estado;
-		this.ubicacion = ubicacion;
-		this.importado = importado;
-		this.reviso = reviso;
-		this.medidas = medidas;
-		this.enviado = enviado;
-	}*/
 
 	public Producto() {
 		super();
@@ -327,24 +279,95 @@ public class Producto{
 		this.empresa = empresa;
 
 	}
-/*
-	public Producto(Long nitEmpresa, String codigoPieza) {
-		super();
-		this.idProducto = new Producto_id(nitEmpresa, codigoPieza);
-	}*/
 
-	public Producto(Long nitEmpresa, String codigoPieza, String descripcion, Float area, String orden, Familia familia,
-			Fabricante fabricante, Empresa empresa, Estado estado) {
+	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
+			String nconfirmacion, Boolean verificado, Boolean estaActivo, String motivoIngreso, Fabricante fabricante,
+			Empresa empresa, Estado estado, Ubicacion ubicacion) {
 		super();
 		this.codigoPieza = codigoPieza;
 		this.descripcion = descripcion;
 		this.area = area;
 		this.orden = orden;
 		this.familia = familia;
+		this.nconfirmacion = nconfirmacion;
+		this.verificado = verificado;
+		this.estaActivo = estaActivo;
+		this.motivoIngreso = motivoIngreso;
 		this.fabricante = fabricante;
 		this.empresa = empresa;
 		this.estado = estado;
+		this.ubicacion = ubicacion;
 	}
 
-     
+	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia, TipoActivo tipo,
+			String motivoIngreso, Fabricante fabricante, Empresa empresa, Estado estado, Ubicacion ubicacion,
+			Usuario reviso, String medidas) {
+		super();
+		this.codigoPieza = codigoPieza;
+		this.descripcion = descripcion;
+		this.area = area;
+		this.orden = orden;
+		this.familia = familia;
+		this.tipo = tipo;
+		this.motivoIngreso = motivoIngreso;
+		this.fabricante = fabricante;
+		this.empresa = empresa;
+		this.estado = estado;
+		this.ubicacion = ubicacion;
+		this.reviso = reviso;
+		this.medidas = medidas;
+	}
+
+	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia, TipoActivo tipo,
+			Boolean verificado, Boolean estaActivo, String motivoIngreso, Date fechaActualizacion,
+			Fabricante fabricante, Empresa empresa, Estado estado, Ubicacion ubicacion, Boolean importado,
+			Usuario reviso, String medidas, Boolean enviado) {
+		super();
+		this.codigoPieza = codigoPieza;
+		this.descripcion = descripcion;
+		this.area = area;
+		this.orden = orden;
+		this.familia = familia;
+		this.tipo = tipo;
+		this.verificado = verificado;
+		this.estaActivo = estaActivo;
+		this.motivoIngreso = motivoIngreso;
+		this.fechaActualizacion = fechaActualizacion;
+		this.fabricante = fabricante;
+		this.empresa = empresa;
+		this.estado = estado;
+		this.ubicacion = ubicacion;
+		this.importado = importado;
+		this.reviso = reviso;
+		this.medidas = medidas;
+		this.enviado = enviado;
+	}
+
+	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia, TipoActivo tipo,
+			String nconfirmacion, Boolean verificado, Boolean estaActivo, String motivoIngreso, Date fechaActualizacion,
+			Fabricante fabricante, Empresa empresa, Estado estado, Ubicacion ubicacion, Boolean importado,
+			Usuario reviso, String medidas, Boolean enviado) {
+		super();
+		this.codigoPieza = codigoPieza;
+		this.descripcion = descripcion;
+		this.area = area;
+		this.orden = orden;
+		this.familia = familia;
+		this.tipo = tipo;
+		this.nconfirmacion = nconfirmacion;
+		this.verificado = verificado;
+		this.estaActivo = estaActivo;
+		this.motivoIngreso = motivoIngreso;
+		this.fechaActualizacion = fechaActualizacion;
+		this.fabricante = fabricante;
+		this.empresa = empresa;
+		this.estado = estado;
+		this.ubicacion = ubicacion;
+		this.importado = importado;
+		this.reviso = reviso;
+		this.medidas = medidas;
+		this.enviado = enviado;
+	}
+
+	    
 }

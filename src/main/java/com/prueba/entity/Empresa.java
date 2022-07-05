@@ -40,7 +40,7 @@ public class Empresa {
 	@Column(name = "vcnombre", length = 48, nullable = false)
 	private String nombre;
 	
-	@Column(name = "nconfirmacion", length = 8)
+	@Column(name = "nconfirmacion", length = 8, columnDefinition="varchar(8) default 'D-0'")
 	private String nconfimacion = "D-0";
 	
 	@ManyToOne()
@@ -145,8 +145,13 @@ public class Empresa {
 
 	public Empresa(Long nit) {
 		super();
-		TipoEmpresa tipo = new TipoEmpresa(Long.valueOf(3));
-		this.tipoEmpresa = tipo;
+		this.nit = nit;
+	}
+
+	public Empresa(Long nit, int tipo) {
+		super();
+		TipoEmpresa tipoE = new TipoEmpresa(Long.valueOf(3));
+		this.tipoEmpresa = tipoE;
 		this.nit = nit;
 	}
 
