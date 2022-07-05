@@ -75,7 +75,7 @@ public class ProductoController {
 	public ApiResponse<Page<Producto>> listSearchDTO(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 											@RequestParam(required=false, defaultValue = "0") Integer items, 
 											@RequestParam(required=false) Long nit,
-											@RequestBody(required=false) SearchDTO searchDTO){
+											@Valid@RequestBody(required=false) SearchDTO searchDTO){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		System.out.println("Items por pagina "+items);

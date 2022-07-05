@@ -77,4 +77,10 @@ public class Estado {
 		this.id = id;
 	}
 
+	public Estado(String tipo, Empresa empresa) {
+		super();
+		this.tipo = tipo;
+		this.empresa = empresa;
+	}
+
 }
