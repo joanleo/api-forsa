@@ -1,5 +1,8 @@
 package com.prueba.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.prueba.entity.Empresa;
 import com.prueba.entity.TipoUbicacion;
 
@@ -7,14 +10,19 @@ public class UbicacionDTO {
 	
 	private Long id;
 	
+	@NotBlank(message = "Este campo no puede ser nulo")
 	private String direccion;
 	
+	@NotBlank(message = "Este campo no puede ser nulo")
 	private String ciudad;
 	
+	@NotBlank(message = "Este campo no puede ser nulo")
 	private String nombre;
 	
+	@NotNull(message = "Este campo no puede ser nulo")
 	private TipoUbicacion tipo;
 	
+	@NotNull(message = "Este campo no puede ser nulo")
 	private Empresa empresa;
 
 	public Long getId() {

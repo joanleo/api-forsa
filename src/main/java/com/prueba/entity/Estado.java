@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name = "m_estados")
@@ -23,6 +25,7 @@ public class Estado {
 	@Column(name = "vcnombre", length = 20)
     private String tipo="";
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;

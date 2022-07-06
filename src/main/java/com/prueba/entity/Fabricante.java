@@ -30,7 +30,7 @@ public class Fabricante {
     @OneToMany(mappedBy = "fabricante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Producto> productos;
     
-    
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;

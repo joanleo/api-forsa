@@ -10,7 +10,7 @@ public class FabricanteDTO {
 	@NotNull(message = "Este campo no puede ser nulo")
 	private Long nit;
 	
-	@NotBlank(message = "Este campo no puede ser nulo")
+	//@NotBlank(message = "Este campo no puede ser nulo")
     private String nombre;
 	
 	//@NotBlank(message = "Este campo no puede ser nulo")

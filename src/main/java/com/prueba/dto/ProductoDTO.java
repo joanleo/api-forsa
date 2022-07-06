@@ -6,6 +6,9 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Fabricante;
+import com.prueba.entity.Familia;
+import com.prueba.entity.Ubicacion;
 import com.prueba.security.entity.Usuario;
 
 @JsonIdentityInfo(
@@ -26,10 +29,10 @@ public class ProductoDTO {
 	private String orden;
 	
 	@NotNull(message = "Este campo no puede ser nulo")
-	private FabricanteDTO fabricante;
+	private Fabricante fabricante;
 	
 	@NotNull(message = "Este campo no puede ser nulo")
-	private FamiliaDTO familia;
+	private Familia familia;
 	
 	@NotNull(message = "Este campo no puede ser nulo")
 	private EstadoDTO estado;
@@ -39,7 +42,7 @@ public class ProductoDTO {
 	private Boolean verificado = true;
 	
 	@NotNull(message = "Este campo no puede ser nulo")
-	private UbicacionDTO ubicacion;
+	private Ubicacion ubicacion;
 	
 	private Boolean estaActivo = true;
 	
@@ -85,19 +88,19 @@ public class ProductoDTO {
 		this.orden = orden;
 	}
 
-	public FabricanteDTO getFabricante() {
+	public Fabricante getFabricante() {
 		return fabricante;
 	}
 
-	public void setFabricante(FabricanteDTO fabricante) {
+	public void setFabricante(Fabricante fabricante) {
 		this.fabricante = fabricante;
 	}
 
-	public FamiliaDTO getFamilia() {
+	public Familia getFamilia() {
 		return familia;
 	}
 
-	public void setFamilia(FamiliaDTO familia) {
+	public void setFamilia(Familia familia) {
 		this.familia = familia;
 	}
 
@@ -126,11 +129,11 @@ public class ProductoDTO {
 		this.verificado = verificado;
 	}
 
-	public UbicacionDTO getUbicacion() {
+	public Ubicacion getUbicacion() {
 		return ubicacion;
 	}
 
-	public void setUbicacion(UbicacionDTO ubicacion) {
+	public void setUbicacion(Ubicacion ubicacion) {
 		this.ubicacion = ubicacion;
 	}
 
@@ -189,10 +192,10 @@ public class ProductoDTO {
 			@NotBlank(message = "Este campo no puede ser nulo") String descripcion,
 			@NotNull(message = "Este campo no puede ser nulo") Float area,
 			@NotBlank(message = "Este campo no puede ser nulo") String orden,
-			@NotNull(message = "Este campo no puede ser nulo") FabricanteDTO fabricante,
-			@NotNull(message = "Este campo no puede ser nulo") FamiliaDTO familia,
+			@NotNull(message = "Este campo no puede ser nulo") Fabricante fabricante,
+			@NotNull(message = "Este campo no puede ser nulo") Familia familia,
 			@NotNull(message = "Este campo no puede ser nulo") EstadoDTO estado, Empresa empresa, Boolean verificado,
-			@NotNull(message = "Este campo no puede ser nulo") UbicacionDTO ubicacion, Boolean estaActivo,
+			@NotNull(message = "Este campo no puede ser nulo") Ubicacion ubicacion, Boolean estaActivo,
 			String nconfirmacion, String motivoIngreso/* Producto_id idProducto*/) {
 		super();
 		this.descripcion = descripcion;

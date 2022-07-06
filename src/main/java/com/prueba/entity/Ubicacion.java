@@ -38,6 +38,7 @@ public class Ubicacion {
 	@JoinColumn(name = "nidtipo_ubicacion")
 	private TipoUbicacion tipo;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
