@@ -6,6 +6,6 @@ import com.prueba.security.entity.Ruta;
 
 public interface RutaRepository extends JpaRepository<Ruta, Long>{
 
-	public Ruta findByRuta(String ruta);
+	public Ruta findByRutaAndMetodo(String ruta, String metodo);
 
 }

@@ -130,8 +130,8 @@ public class EstadoServiceImpl implements EstadoService {
 	}
 
 	@Override
-	public List<EstadoDTO> findByTipoAndEmpresaAndEstaActivo(String tipo, Empresa empresa, Boolean estaActivo) {
-		List<Estado> listEstados = estadoRepo.findByTipoContainsAndEmpresaAndEstaActivo(tipo, empresa, estaActivo);
+	public List<EstadoDTO> findByTipoAndEmpresaAndEstaActivo(String tipo, Empresa empresa) {
+		List<Estado> listEstados = estadoRepo.findByTipoContainsAndEmpresaAndEstaActivoTrue(tipo, empresa);
 		
 		return listEstados.stream().map(estado -> mapearEntidad(estado)).collect(Collectors.toList());
 	}
@@ -160,6 +160,12 @@ public class EstadoServiceImpl implements EstadoService {
 	public List<EstadoDTO> listEstados(EstadoDTO estadoDTO, Empresa empresa) {
 		List<Estado> estados = estadoRepo.findAll(estadoSpec.getEstado(estadoDTO, empresa));
 		return estados.stream().map(estado -> mapearEntidad(estado)).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<EstadoDTO> findByNameAndEmpresaAndEstaActivo(String letras, Empresa empresa) {
+		List<Estado> listEstados = estadoRepo.findByTipoContainsAndEmpresaAndEstaActivoTrue(letras, empresa);
+		return listEstados.stream().map(estado -> mapearEntidad(estado)).collect(Collectors.toList());
 	}
 
 

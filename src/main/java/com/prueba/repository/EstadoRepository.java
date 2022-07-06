@@ -19,7 +19,7 @@ public interface EstadoRepository extends JpaRepository<Estado, Long>, JpaSpecif
 	
 	public List<Estado> findByTipoContainsAndEmpresa(String tipo, Empresa empresa);
 
-	public List<Estado> findByTipoContainsAndEmpresaAndEstaActivo(String tipo, Empresa empresa, Boolean estaActivo);
+	public List<Estado> findByTipoContainsAndEmpresaAndEstaActivoTrue(String tipo, Empresa empresa);
 
 	public Optional<Estado> findByIdAndEmpresa(Long id, Empresa empresa);
 

@@ -115,8 +115,8 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 	}
 	
 	@Override
-	public List<TipoUbicacionDTO> findByNombreAndEmpresaAndEstaActivo(String letras, Empresa empresa, Boolean estaActivo) {
-		List<TipoUbicacion> tiposMov = tipoUbicRepo.findByNombreContainsAndEmpresaAndEstaActivo(letras, empresa, estaActivo);
+	public List<TipoUbicacionDTO> findByNombreAndEmpresaAndEstaActivoTrue(String letras, Empresa empresa) {
+		List<TipoUbicacion> tiposMov = tipoUbicRepo.findByNombreContainsAndEmpresaAndEstaActivoTrue(letras, empresa);
 		return tiposMov.stream().map(tipo -> mapearEntidad(tipo)).collect(Collectors.toList());
 	}
 

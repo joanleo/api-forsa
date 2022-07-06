@@ -19,6 +19,9 @@ public class Ruta {
 
     @Column(name = "vcruta", length = 64, nullable = false)
     private String ruta;
+    
+    @Column(name = "vcmetodo")
+    private String metodo;
 
 	public Long getId() {
 		return id;
@@ -36,6 +39,14 @@ public class Ruta {
 		this.ruta = ruta;
 	}
 
+	public String getMetodo() {
+		return metodo;
+	}
+
+	public void setMetodo(String metodo) {
+		this.metodo = metodo;
+	}
+
 	public Ruta() {
 		super();
 	}
@@ -45,6 +56,12 @@ public class Ruta {
 		this.id = id;
 		this.ruta = ruta;
 
+	}
+
+	public Ruta(String ruta, String metodo) {
+		super();
+		this.ruta = ruta;
+		this.metodo = metodo;
 	}
     
     

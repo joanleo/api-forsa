@@ -21,12 +21,11 @@ public interface TipoUbicacionRepository extends JpaRepository<TipoUbicacion, Lo
 
 	//public TipoUbicacion findByNombreAndEmpresa(String nombre, Empresa empresa);
 
-	public List<TipoUbicacion> findByNombreContainsAndEmpresaAndEstaActivo(String letras, Empresa empresa,
-			Boolean estaActivo);
-
 	public Page<TipoUbicacion> findByEmpresaAndEstaActivoTrue(Empresa empresa, Pageable page);
 
 	public List<TipoUbicacion> findByEmpresaAndEstaActivoTrue(Empresa empresa);
 
 	public TipoUbicacion findByNombreAndEmpresaAndEstaActivoTrue(String nombre, Empresa empresa);
+
+	public List<TipoUbicacion> findByNombreContainsAndEmpresaAndEstaActivoTrue(String letras, Empresa empresa);
 }

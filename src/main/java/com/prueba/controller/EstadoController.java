@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.EstadoDTO;
+import com.prueba.dto.FabricanteDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
 import com.prueba.security.dto.ResDTO;
@@ -63,6 +64,24 @@ public class EstadoController {
 	@ApiOperation(value = "Crea un estado para los activos de una empresa", notes = "Crea un nuevo estado para los activos")
 	public ResponseEntity<EstadoDTO> create(@Valid @RequestBody EstadoDTO estadoDTO){
 		return new ResponseEntity<EstadoDTO>(estadoService.create(estadoDTO), HttpStatus.CREATED);
+	}
+	
+	@GetMapping
+	@ApiOperation("Encuentra los estados")
+	public List<EstadoDTO> get(
+			@RequestParam(required=false)String letras,
+			@RequestParam(required=false) Long nit){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();
+		}
+		return  estadoService.findByNameAndEmpresaAndEstaActivo(letras, empresa);
 	}
 	
 	@PostMapping("/indexados")

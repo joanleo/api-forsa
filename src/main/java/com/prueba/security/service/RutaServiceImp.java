@@ -25,7 +25,7 @@ public class RutaServiceImp implements RutaService {
 	@Override
 	public RutaDTO create(RutaDTO rutaDTO) {
 		Ruta ruta = mapearDTO(rutaDTO);
-		Ruta exist = rutaRepo.findByRuta(ruta.getRuta());
+		Ruta exist = rutaRepo.findByRutaAndMetodo(ruta.getRuta(), ruta.getMetodo());
 		if(exist == null) {
 			rutaRepo.save(ruta);
 		}else {

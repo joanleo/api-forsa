@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import com.prueba.dto.FabricanteDTO;
 import com.prueba.dto.TipoUbicacionDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.TipoUbicacion;
@@ -29,7 +30,7 @@ public TipoUbicacionDTO create(TipoUbicacionDTO tipoUbicacionDTO);
 
 	List<TipoUbicacionDTO> list(Empresa empresa);
 
-	List<TipoUbicacionDTO> findByNombreAndEmpresaAndEstaActivo(String letras, Empresa empresa, Boolean estaActivo);
+	List<TipoUbicacionDTO> findByNombreAndEmpresaAndEstaActivoTrue(String letras, Empresa empresa);
 
 	public Page<TipoUbicacion> searchTipoUbicacion(TipoUbicacionDTO tipoUbicacionDTO, Empresa empresa, Integer pagina,
 			Integer items);
@@ -37,6 +38,7 @@ public TipoUbicacionDTO create(TipoUbicacionDTO tipoUbicacionDTO);
 	public Page<TipoUbicacion> searchTipoUbicacion(Empresa empresa, Integer pagina, Integer items);
 
 	public List<TipoUbicacionDTO> listTipoUbicacion(TipoUbicacionDTO tipoUbicacionDTO, Empresa empresa, boolean b);
+
 
 
 }

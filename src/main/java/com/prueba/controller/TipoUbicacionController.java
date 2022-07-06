@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.ApiResponse;
+import com.prueba.dto.FabricanteDTO;
 import com.prueba.dto.TipoUbicacionDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.TipoUbicacion;
@@ -62,6 +63,24 @@ public class TipoUbicacionController {
 	@ApiOperation(value = "Crea un tipo de ubicacion", notes = "Crea un nuevo tipo de ubicacion")
 	public ResponseEntity<TipoUbicacionDTO> create(@Valid @RequestBody TipoUbicacionDTO tipoUbicacionDTO){
 		return new ResponseEntity<TipoUbicacionDTO>(tipoUbicService.create(tipoUbicacionDTO), HttpStatus.CREATED); 
+	}
+	
+	@GetMapping
+	@ApiOperation(value="Encuentra los tipos de ubicaciones")
+	public List<TipoUbicacionDTO> get(
+			@RequestParam(required=false)String letras,
+			@RequestParam(required=false) Long nit){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();
+		}
+		return  tipoUbicService.findByNombreAndEmpresaAndEstaActivoTrue(letras, empresa);
 	}
 	
 	@PostMapping("/indexados")

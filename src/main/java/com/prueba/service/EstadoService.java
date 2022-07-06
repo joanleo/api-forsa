@@ -20,7 +20,7 @@ public interface EstadoService {
 	
 	public void delete(Long id, Empresa empresa);
 	
-	public List<EstadoDTO> findByTipoAndEmpresaAndEstaActivo(String tipo, Empresa empresa, Boolean estaActivo);
+	public List<EstadoDTO> findByTipoAndEmpresaAndEstaActivo(String tipo, Empresa empresa);
 
 	public void unable(Long id, Empresa empresa);
 
@@ -33,5 +33,7 @@ public interface EstadoService {
 	public Page<Estado> searchEstados(Empresa empresa, Integer pagina, Integer items);
 
 	public List<EstadoDTO> listEstados(EstadoDTO estadoDTO, Empresa empresa);
+
+	public List<EstadoDTO> findByNameAndEmpresaAndEstaActivo(String letras, Empresa empresa);
 
 }
