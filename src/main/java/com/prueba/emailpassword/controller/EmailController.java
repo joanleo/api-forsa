@@ -27,6 +27,7 @@ import io.swagger.annotations.ApiOperation;
 import net.bytebuddy.utility.RandomString;
 import springfox.documentation.annotations.ApiIgnore;
 
+@ApiIgnore
 @RestController
 @RequestMapping("/email")
 @Api(tags = "Email", description = "Recuperacion de nombre de usuario y/o contraseña")
