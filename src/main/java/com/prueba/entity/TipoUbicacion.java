@@ -27,7 +27,6 @@ public class TipoUbicacion {
 	@Column(name = "vcnombre")
 	private String nombre;
 	
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;

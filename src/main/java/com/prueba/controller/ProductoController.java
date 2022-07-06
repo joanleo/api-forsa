@@ -66,7 +66,6 @@ public class ProductoController {
 	@PostMapping
 	@ApiOperation(value = "Crea un activo", notes = "Crea un nuevo activo")
 	public ResponseEntity<ProductoDTO> create(@Valid @RequestBody ProductoDTO productoDTO){
-		System.out.println("Controller activos: Creando activo");
 		return new ResponseEntity<ProductoDTO>(productoService.create(productoDTO), HttpStatus.CREATED);
 	}
 	
@@ -78,7 +77,6 @@ public class ProductoController {
 											@Valid@RequestBody(required=false) SearchDTO searchDTO){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		System.out.println("Items por pagina "+items);
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(nit != null) {
@@ -91,7 +89,6 @@ public class ProductoController {
 			Page<Producto> productos = productoService.list(empresa, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);			
 		}else {
-			System.out.println("Controller searchDTO no nulo");
 			Page<Producto> productos =  productoService.searchProducts(empresa, searchDTO, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);
 		}
@@ -129,9 +126,6 @@ public class ProductoController {
 	public ResponseEntity<Producto> get(@PathVariable(name = "id") String codigoPieza,
 										@PathVariable(name = "nit") Long nit){
 		
-		System.out.println("Id: "+codigoPieza);
-		System.out.println(("Nit: "+ nit));
-		//Producto_id producto_id = new Producto_id(nit, id);
 		return ResponseEntity.ok(productoService.getProducto(codigoPieza));
 	}
 	
@@ -151,7 +145,6 @@ public class ProductoController {
 		if(productoDTO == null) {
 			throw new IllegalArgumentException("Falta informacion"); 
 		}
-		System.out.println("Controller "+productoDTO);
 		return new ResponseEntity<Producto>(productoService.receive(id, productoDTO), HttpStatus.ACCEPTED);
 	}
 	
