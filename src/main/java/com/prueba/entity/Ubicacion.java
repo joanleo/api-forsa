@@ -1,6 +1,8 @@
 package com.prueba.entity;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,15 +50,7 @@ public class Ubicacion {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "ubicacion", cascade = CascadeType.ALL)
-	private List<Producto> productos;
-
-	public Empresa getEmpresa() {
-		return empresa;
-	}
-
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
-	}
+	private Set<Producto> productos = new HashSet<>();;
 
 	public Long getId() {
 		return id;
@@ -98,24 +92,29 @@ public class Ubicacion {
 		this.tipo = tipo;
 	}
 
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
 	public Boolean getEstaActivo() {
 		return estaActivo;
 	}
 
 	public void setEstaActivo(Boolean estaActivo) {
 		this.estaActivo = estaActivo;
-	}	
+	}
 
-	public List<Producto> getProductos() {
+	public Set<Producto> getProductos() {
 		return productos;
 	}
 
-	public void setProductos(List<Producto> productos) {
+	public void setProductos(Set<Producto> productos) {
 		this.productos = productos;
 	}
-	
-	
-	
 
 	public Ubicacion() {
 		super();
@@ -125,5 +124,7 @@ public class Ubicacion {
 		super();
 		this.id = id;
 	}
+
+	
 
 }

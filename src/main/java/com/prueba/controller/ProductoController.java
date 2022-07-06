@@ -147,10 +147,11 @@ public class ProductoController {
 	@PatchMapping("/{id}")
 	@ApiOperation(value = "Verifica un activo", notes = "Actualiza un activo por su id")
 	public ResponseEntity<Producto> verify(@PathVariable(name = "id") String id,
-												@RequestBody(required=false) ProductoDTO productoDTO) throws IllegalAccessException{
+										   @RequestBody(required=false) ProductoDTO productoDTO) throws IllegalAccessException{
 		if(productoDTO == null) {
 			throw new IllegalArgumentException("Falta informacion"); 
 		}
+		System.out.println("Controller "+productoDTO);
 		return new ResponseEntity<Producto>(productoService.receive(id, productoDTO), HttpStatus.ACCEPTED);
 	}
 	

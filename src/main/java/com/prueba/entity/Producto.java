@@ -74,7 +74,7 @@ public class Producto{
     @JoinColumn(name = "nidestado")
     private Estado estado;
     
-    @ManyToOne(fetch = FetchType.EAGER, cascade= CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "nidubicacion")
     private Ubicacion ubicacion;
     

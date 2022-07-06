@@ -72,9 +72,7 @@ public class ProductoServiceImpl implements ProductoService {
 	public ProductoDTO create(ProductoDTO productoDTO) {
 		Producto producto = mapearDTO(productoDTO);
 		Producto exist = productoRepo.findByCodigoPieza(productoDTO.getCodigoPieza());
-		System.out.println("Servicio");
 		if(exist == null) {
-			System.out.println("Activo no existe, se procede a crear");
 			Empresa empresa = empresaRepo.findByNit(productoDTO.getEmpresa().getNit());
 			producto.setEmpresa(empresa);
 			productoRepo.save(producto);
@@ -90,11 +88,9 @@ public class ProductoServiceImpl implements ProductoService {
 	public Page<Producto> list(Empresa empresa, Integer offset, Integer pageSize) {
 
 		if(pageSize == 0) {
-			System.out.println("Pagina 0 "+ empresa.getNit());
 			Page<Producto> productos = productoRepo.findAllByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(0, 10));
 			return productos;
 		}
-		System.out.println("Pagina valor");
 		Page<Producto> productos = productoRepo.findAllByEmpresaAndEstaActivoTrue(empresa,  PageRequest.of(offset, pageSize));
 		return productos;
 	}
@@ -122,7 +118,6 @@ public class ProductoServiceImpl implements ProductoService {
 			throw new IllegalAccessError("El producto con codigo de pieza "+ codigoPieza + " no existe");
 		}
 		
-		System.out.println("producto: "+exist.getDescripcion());
 		
 		return exist;
 	}
@@ -180,20 +175,17 @@ public class ProductoServiceImpl implements ProductoService {
 		if(producto == null) {
 			throw new ResourceNotFoundException("Producto", "No existe", codigoPieza);
 		}
-		
 		if(!producto.getVerificado() && producto.getEstaActivo()) {
-			
 			Usuario usuario = null;
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			if(authentication != null) {
-			    usuario = usuarioRepo.findByUsername(authentication.getName()).get();
+			    usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
 			}else {
 				throw new IllegalAccessException("Debe estar logueado para realizar esta accion");
 			}
 
 			//Capturar datos de la empresa del usuario		
 			Empresa empresa = empresaRepo.findByNit(producto.getEmpresa().getNit());
-			
 			String[] nconfirmacion = new String[2];
 			Integer numero = 0;
 			if(empresa != null && empresa.getNconfimacion() != null) {
@@ -203,9 +195,7 @@ public class ProductoServiceImpl implements ProductoService {
 				nconfirmacion[0] = "D";
 				nconfirmacion[1] = "0";
 				numero++;
-				System.out.println(numero);
 			}
-			System.out.println("afuera"+numero);
 			String nconf = nconfirmacion[0] + "-" + numero.toString();
 			producto.setNconfirmacion(nconf);
 			Ubicacion nuevaUbicacion = new Ubicacion(productoDTO.getUbicacion().getId());
