@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import com.prueba.dto.FabricanteDTO;
 import com.prueba.dto.TipoUbicacionDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.TipoUbicacion;

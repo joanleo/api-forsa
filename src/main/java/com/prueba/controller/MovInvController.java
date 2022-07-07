@@ -76,7 +76,7 @@ public class MovInvController {
 			String currentDateTime = dateFormatter.format(new Date());
 			movInventarioDto.setId(Long.valueOf(currentDateTime));
 		}
-		System.out.println(movInventarioDto.getEmpresa());
+		System.out.println(movInventarioDto.getEmpresa().getNit());
 		return new ResponseEntity<MovInventarioDTO>(movInvService.create(movInventarioDto), HttpStatus.CREATED);
 	}
 	

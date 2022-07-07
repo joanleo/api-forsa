@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.EstadoDTO;
-import com.prueba.dto.FabricanteDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
 import com.prueba.security.dto.ResDTO;

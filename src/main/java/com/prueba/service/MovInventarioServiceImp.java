@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.MovInventarioDTO;
-import com.prueba.entity.DetalleInv;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.MovInventario;
 import com.prueba.entity.Producto;
@@ -50,7 +49,6 @@ public class MovInventarioServiceImp implements MovInventarioService {
 			
 			for(Producto producto: productos) {
 				System.out.println(producto);
-				DetalleInv id = new DetalleInv(inventario, producto);
 				Producto actualizar = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
 				if(actualizar != null) {
 					inventario.addActivo(actualizar);

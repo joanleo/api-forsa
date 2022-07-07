@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class PoliRol {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "nidPoli_Rol", length = 3)
 	private Long id;
 	
@@ -62,6 +62,14 @@ public class PoliRol {
 		this.id = id;
 	}
 
+	public Rol getRole() {
+		return role;
+	}
+
+	public void setRole(Rol role) {
+		this.role = role;
+	}
+	
 	public PoliRol() {
 		super();
 	}
@@ -69,6 +77,13 @@ public class PoliRol {
 	public PoliRol(String nombre) {
 		super();
 		this.nombre = nombre;
+	}
+
+	public PoliRol(String nombre, Rol role, Ruta ruta) {
+		super();
+		this.nombre = nombre;
+		this.role = role;
+		this.ruta = ruta;
 	}
 	
 

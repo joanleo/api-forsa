@@ -21,7 +21,7 @@ import com.prueba.entity.Empresa;
 
 
 @Entity
-@Table(name = "m_usuario", uniqueConstraints = { @UniqueConstraint(columnNames = { "vcusername", "vcemail" }) })
+@Table(name = "m_usuarios", uniqueConstraints = { @UniqueConstraint(columnNames = { "vcusername", "vcemail" }) })
 public class Usuario {
 
 	@Id

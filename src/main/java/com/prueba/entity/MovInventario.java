@@ -121,7 +121,9 @@ public class MovInventario implements Serializable{
 
 	public void addActivo(Producto producto) {
         DetalleInv detalle = new DetalleInv(this, producto);
+        System.out.println("Añadiento detalle "+producto.getCodigoPieza()+" Inventario: "+this.getIdMov());
         detalles.add(detalle);
+        System.out.println("Añadido");
     }
 	
 	public void removeActivo(Producto producto) {
@@ -137,5 +139,19 @@ public class MovInventario implements Serializable{
             }
         }
     }
+
+	public MovInventario(Long idMov, Date fecha, Ubicacion ubicacion, List<DetalleInv> detalles, Usuario realizo,
+			Empresa empresa) {
+		super();
+		this.idMov = idMov;
+		this.fecha = fecha;
+		this.ubicacion = ubicacion;
+		this.detalles = detalles;
+		this.realizo = realizo;
+		this.empresa = empresa;
+	}
+
+	
+	
 
 }
