@@ -1,5 +1,6 @@
 package com.prueba.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -29,11 +30,16 @@ import com.prueba.security.entity.Usuario;
 @Entity
 @Table(name = "mov_inventario", uniqueConstraints = { @UniqueConstraint(columnNames = { "nidmov" }) })
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
-public class MovInventario {
+public class MovInventario implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Column(name = "nidmov", length = 6)
-	private Long id;
+	private Long idMov;
 	
 	@Column(name = "dfecha")
 	private Date fecha;
@@ -81,12 +87,12 @@ public class MovInventario {
 		this.ubicacion = ubicacion;
 	}
 
-	public Long getId() {
-		return id;
+	public Long getIdMov() {
+		return idMov;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setIdMov(Long idMov) {
+		this.idMov = idMov;
 	}
 
 	public Date getFecha() {

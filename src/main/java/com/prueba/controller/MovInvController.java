@@ -53,14 +53,29 @@ public class MovInvController {
 	
 	@PostMapping
 	@ApiOperation(value = "Crea un inventario", notes = "Crea un nuevo inventario")
-	public ResponseEntity<MovInventarioDTO> create(@RequestBody MovInventarioDTO movInventarioDto){
+	public ResponseEntity<MovInventarioDTO> create(@RequestBody MovInventarioDTO movInventarioDto,
+													@RequestParam(required=false) Long nit){
 		System.out.println(movInventarioDto.getUbicacion().getId());
 
+		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
 		System.out.println(usuario);
 		movInventarioDto.setRealizo(usuario);
+		if(movInventarioDto.getEmpresa() == null) {
+			movInventarioDto.setEmpresa(empresa);
+		}
+		if(movInventarioDto.getId() == null) {
+			DateFormat dateFormatter = new SimpleDateFormat("yyyyMMddHHmmss");
+			String currentDateTime = dateFormatter.format(new Date());
+			movInventarioDto.setId(Long.valueOf(currentDateTime));
+		}
 		System.out.println(movInventarioDto.getEmpresa());
 		return new ResponseEntity<MovInventarioDTO>(movInvService.create(movInventarioDto), HttpStatus.CREATED);
 	}

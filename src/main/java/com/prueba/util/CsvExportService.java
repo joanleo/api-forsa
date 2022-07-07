@@ -145,7 +145,7 @@ public class CsvExportService {
         			"Id", "Nombre", "Ciudad", "Direccion", "Tipo");
     		for(UbicacionDTO ubicacion: ubicaciones) {
     			csvPrinter.printRecord(ubicacion.getId(), ubicacion.getNombre(), ubicacion.getCiudad(),
-    								   ubicacion.getDireccion(), ubicacion.getTipo());    			
+    								   ubicacion.getDireccion(), ubicacion.getTipo().getNombre());    			
     		}
 	    }catch (IOException e) {
 	        log.error("Error en la generacion del CSV  ", e);

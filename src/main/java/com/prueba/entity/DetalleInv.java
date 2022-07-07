@@ -1,5 +1,6 @@
 package com.prueba.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.EmbeddedId;
@@ -16,7 +17,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "detalle_mov")
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
-public class DetalleInv {
+public class DetalleInv implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
 	private DetalleInv_id id;
@@ -27,7 +33,7 @@ public class DetalleInv {
 	private MovInventario movimiento;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@MapsId("id")
+	@MapsId("codigoPieza")
 	private Producto producto;
 
 	public DetalleInv() {
@@ -36,7 +42,8 @@ public class DetalleInv {
 
 	public DetalleInv(MovInventario movimiento, Producto producto) {
 		super();
-		this.id = new DetalleInv_id(movimiento.getId(), producto.getCodigoPieza());
+		System.out.println(movimiento.getIdMov() +" "+ producto.getCodigoPieza());
+		this.id = new DetalleInv_id(movimiento.getIdMov(), producto.getCodigoPieza());
 		this.movimiento = movimiento;
 		this.producto = producto;
 	}

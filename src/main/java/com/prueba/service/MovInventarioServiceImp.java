@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.MovInventarioDTO;
+import com.prueba.entity.DetalleInv;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.MovInventario;
 import com.prueba.entity.Producto;
@@ -42,19 +43,20 @@ public class MovInventarioServiceImp implements MovInventarioService {
 			Ubicacion ubicacion = ubicacionRepo.findById(movInventarioDto.getUbicacion().getId())
 					.orElseThrow(() -> new ResourceNotFoundException("Ubicacion", "Id", movInventarioDto.getUbicacion().getId())); 
 			inventario.setUbicacion(ubicacion);
-			inventario.setId(movInventarioDto.getId());
+			inventario.setIdMov(movInventarioDto.getId());;
 			inventario.setRealizo(movInventarioDto.getRealizo());
+			inventario.setEmpresa(movInventarioDto.getEmpresa());
 			List<Producto> productos = movInventarioDto.getProductos();
 			
 			for(Producto producto: productos) {
 				System.out.println(producto);
-				//Producto_id id = new Producto_id(producto.getEmpresa(), producto.get);
-				/*Producto actualizar = productoRepo.findByIdProducto(producto.getIdProducto());
+				DetalleInv id = new DetalleInv(inventario, producto);
+				Producto actualizar = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
 				if(actualizar != null) {
 					inventario.addActivo(actualizar);
 				}else {
-					throw new IllegalAccessError("El activo con codigo de pieza " + producto.getIdProducto().getCodigoPieza() + " no existe");
-				}*/
+					throw new IllegalAccessError("El activo con codigo de pieza " + producto.getCodigoPieza() + " no existe");
+				}
 				
 			}			
 			movInvRepo.save(inventario);
@@ -76,6 +78,7 @@ public class MovInventarioServiceImp implements MovInventarioService {
 	@Override
 	public Page<MovInventario> list(Empresa empresa, Integer pagina, Integer items) {
 		System.out.println("servicio");
+		System.out.println(empresa.getNit());
 		Page<MovInventario> inventarios = movInvRepo.findByEmpresa(empresa, PageRequest.of(pagina, items));
 		return inventarios;
 	}
