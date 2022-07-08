@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.prueba.security.entity.PoliRol;
 import com.prueba.security.entity.Ruta;
 import com.prueba.security.repository.PoliRolRepository;
-import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.RutaRepository;
 
 @Service

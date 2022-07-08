@@ -164,8 +164,7 @@ public class ProductoController {
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "Elimina un activo", notes = "Elimina un activo por su id")
 	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")String codigoPieza,
-										 @PathVariable(name = "nit") Long nit){
-		//Producto_id producto_id = new Producto_id(nit, id);
+										 @PathVariable(required=false, name = "nit") Long nit){
 		productoService.delete(codigoPieza);
 		
 		return new ResponseEntity<ResDTO>(new ResDTO("Item eliminado con exito"), HttpStatus.OK);

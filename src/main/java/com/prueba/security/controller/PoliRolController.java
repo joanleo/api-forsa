@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +25,6 @@ public class PoliRolController {
 	@Autowired
 	private PoliRolService poliRolService;
 	
-	@PreAuthorize("hasAuthority'{}'")
 	@PostMapping
 	@ApiOperation(value = "Crear politicas de rol", notes = "Crea las politicas de un rol")
 	public ResponseEntity<PoliRol> create(@RequestBody PoliRol poliRol){
