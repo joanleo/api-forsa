@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import com.prueba.security.entity.Ruta;
 import com.prueba.security.repository.RutaRepository;
-
+/*
 @Configuration
 public class AnnotationDrivenEndpointsListener {
     
@@ -47,3 +47,4 @@ public class AnnotationDrivenEndpointsListener {
         isConfig = true;
     }
 }
+*/

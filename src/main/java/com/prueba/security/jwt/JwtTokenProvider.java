@@ -44,6 +44,7 @@ public class JwtTokenProvider {
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
 		String email = usuario.getEmail();
 		String empresa = String.valueOf(usuario.getEmpresa().getNombre());
+		String nit = String.valueOf(usuario.getEmpresa().getNit());
 		Date fechaActual = new Date();
 		Date fechaExpiracion = new Date(fechaActual.getTime() + jwtExpirationInMs);
 
@@ -51,6 +52,7 @@ public class JwtTokenProvider {
 		String token = Jwts.builder().setHeaderParam("typ", "JWT")
 									 .claim("nombre", nombre)
 									 .claim("empresa", empresa)
+									 .claim("nit", nit)
 									 .claim("email", email).setIssuedAt(new Date())
 									 .setIssuer("Metrolink SAS")
 									 .setNotBefore(fechaActual)

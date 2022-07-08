@@ -22,7 +22,7 @@ public interface ProductoService {
 	
 	public Producto update(String id, ProductoDTO productoDTO);
 	
-	public void delete(String codigoPieza);
+	public String delete(String codigoPieza);
 	
 	public Producto receive(String id, ProductoDTO productoDTO) throws IllegalAccessException;
 	

@@ -164,9 +164,9 @@ public class ProductoController {
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "Elimina un activo", notes = "Elimina un activo por su id")
 	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")String codigoPieza){
-		productoService.delete(codigoPieza);
 		
-		return new ResponseEntity<ResDTO>(new ResDTO("Item eliminado con exito"), HttpStatus.OK);
+		
+		return new ResponseEntity<ResDTO>(new ResDTO(productoService.delete(codigoPieza)), HttpStatus.OK);
 	}
 	
 	@PostMapping("/descarga")

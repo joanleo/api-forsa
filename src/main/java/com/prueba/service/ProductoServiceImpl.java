@@ -140,9 +140,9 @@ public class ProductoServiceImpl implements ProductoService {
 
 	
 	@Override
-	public void delete(String codigoPieza) {
+	public String delete(String codigoPieza) {
 		Producto producto = productoRepo.findByCodigoPieza(codigoPieza);
-		
+		boolean error = false;
 		if(producto == null) {
 			throw new ResourceNotFoundException("Producto", "No existe", codigoPieza);
 		}
@@ -150,10 +150,15 @@ public class ProductoServiceImpl implements ProductoService {
 		if(!producto.getVerificado() && producto.getEstaActivo()) {
 			producto.setEstaActivo(false);
 		}else {
-			throw new IllegalAccessError("No es posible realizar la accion solicitada");
+			error = true;
+			throw new IllegalAccessError("No es posible realizar la accion solicitada, el producto ha sido verificado verificado");
+			
 		}
 		
 		productoRepo.save(producto);
+		if(error) return "No es posible realizar la accion solicitada, el producto no esta verificado";
+		
+		return "Item eliminado con exito";
 
 	}
 
