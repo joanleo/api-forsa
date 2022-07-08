@@ -42,7 +42,7 @@ public class TipoEmpresaController {
 	
 	@Autowired
 	private TipoEmpresaService tipoEmpresaService;
-	
+		
 	@Autowired
 	private CsvExportService csvService;
 	
@@ -50,6 +50,12 @@ public class TipoEmpresaController {
 	@ApiOperation(value = "Crea un tipo de empresa", notes = "Crea un nuevo tipo de empresa")
 	public ResponseEntity<TipoEmpresaDTO> create(@Valid @RequestBody TipoEmpresaDTO tipoEmpresaDTO){
 		return new ResponseEntity<TipoEmpresaDTO>(tipoEmpresaService.create(tipoEmpresaDTO), HttpStatus.CREATED);
+	}
+	
+	@GetMapping
+	@ApiOperation(value = "Encuentra los tipos de empresa")
+	public List<TipoEmpresaDTO> list(){
+			return tipoEmpresaService.list();
 	}
 	
 	@PostMapping("/indexados")

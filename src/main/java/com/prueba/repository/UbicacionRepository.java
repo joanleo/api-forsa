@@ -19,7 +19,7 @@ public interface UbicacionRepository extends JpaRepository<Ubicacion, Long>, Jpa
 
 	public Ubicacion findByNombreAndEmpresa(String nombre, Empresa empresa);
 
-	public List<Ubicacion> findByEmpresaAndEstaActivo(Empresa empresa, Boolean estaActivo);
+	public List<Ubicacion> findByEmpresaAndEstaActivoTrue(Empresa empresa);
 
 	public List<Ubicacion> findByNombreContainsAndEmpresaAndEstaActivoTrue(String name, Empresa empresa);
 

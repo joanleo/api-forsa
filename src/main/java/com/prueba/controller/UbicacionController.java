@@ -69,7 +69,7 @@ public class UbicacionController {
 	public List<UbicacionDTO> get(
 			@RequestParam(required=false)String letras,
 			@RequestParam(required=false) Long nit){
-		
+		System.out.println("controller");
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
@@ -78,6 +78,9 @@ public class UbicacionController {
 			empresa = util.obtenerEmpresa(nit);
 		}else {
 			empresa = usuario.getEmpresa();
+		}
+		if(letras == null ) {
+			return ubicacionService.list(empresa);
 		}
 		return  ubicacionService.findByName(letras, empresa);
 	}

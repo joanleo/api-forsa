@@ -79,7 +79,7 @@ public class FamiliaController {
 	public List<FamiliaDTO> get(
 			@RequestParam(required=false)String letras,
 			@RequestParam(required=false) Long nit){
-		
+		System.out.println("controller");
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
@@ -88,6 +88,9 @@ public class FamiliaController {
 			empresa = util.obtenerEmpresa(nit);
 		}else {
 			empresa = usuario.getEmpresa();
+		}
+		if(letras == null ) {
+			return familiaService.list(empresa);
 		}
 		return  familiaService.findByNameAndEmpresaAndEstaActivo(letras, empresa);
 	}
