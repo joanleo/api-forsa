@@ -54,8 +54,11 @@ public class TipoEmpresaController {
 	
 	@GetMapping
 	@ApiOperation(value = "Encuentra los tipos de empresa")
-	public List<TipoEmpresaDTO> list(){
+	public List<TipoEmpresaDTO> list(@RequestParam(required=false)String letras){
+		if(letras == null) {
 			return tipoEmpresaService.list();
+		}
+			return tipoEmpresaService.list(letras);
 	}
 	
 	@PostMapping("/indexados")

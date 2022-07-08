@@ -55,7 +55,9 @@ public class EmpresaController {
 	@GetMapping
 	@ApiOperation(value="Encuentra las empresas")
 	public List<EmpresaDTO> get(@RequestParam(required=false)String letras){
-		
+		if(letras == null) {
+			empresaService.list();
+		}
 		return  empresaService.findByNameAndEstaActivo(letras);
 	}
 	
