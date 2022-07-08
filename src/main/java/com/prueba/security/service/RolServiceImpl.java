@@ -28,7 +28,7 @@ public class RolServiceImpl implements RolService{
 		if(exist == null) {
 			rolRepo.save(rol);
 		}else {
-			throw new IllegalAccessError("El Rol que desea crear ya existe: " + rol.getNombre() + "Descripcion :" + rol.getDescripcion());
+			throw new IllegalAccessError("El Rol que desea crear ya existe: " + rol.getNombre());
 		}
 		
 		return mapearEntidad(rol);
@@ -55,7 +55,6 @@ public class RolServiceImpl implements RolService{
 				.orElseThrow(() -> new ResourceNotFoundException("ROL", "id", id));
 		
 		rol.setNombre(rolDTO.getNombre());
-		rol.setDescripcion(rolDTO.getDescripcion());
 		
 		return mapearEntidad(rol);
 	}

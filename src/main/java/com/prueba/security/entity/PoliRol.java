@@ -11,9 +11,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
-@Table(name = "Poli_rol")
+@Table(name = "politica")
 public class PoliRol {
 	
 	@Id
@@ -24,35 +26,11 @@ public class PoliRol {
 	@Column(name = "vcnombre", length = 20)
 	private String nombre;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Rol role;
-	
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Ruta ruta;
 	
-	public Rol getRoles() {
-		return role;
-	}
-
-	public void setRoles(Rol roles) {
-		this.role = roles;
-	}
-
-	public Ruta getRuta() {
-		return ruta;
-	}
-
-	public void setRuta(Ruta ruta) {
-		this.ruta = ruta;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+	@Column(name = "vcmetodo", length = 20)
+	private String metodo;
 
 	public Long getId() {
 		return id;
@@ -62,16 +40,34 @@ public class PoliRol {
 		this.id = id;
 	}
 
-	public Rol getRole() {
-		return role;
+	public String getNombre() {
+		return nombre;
 	}
 
-	public void setRole(Rol role) {
-		this.role = role;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public Ruta getRuta() {
+		return ruta;
 	}
-	
-	public PoliRol() {
+
+	public void setRuta(Ruta ruta) {
+		this.ruta = ruta;
+	}
+
+	public String getMetodo() {
+		return metodo;
+	}
+
+	public void setMetodo(String metodo) {
+		this.metodo = metodo;
+	}
+
+	public PoliRol(Long id, String nombre, Rol role, Ruta ruta) {
 		super();
+		this.id = id;
+		this.nombre = nombre;		this.ruta = ruta;
 	}
 
 	public PoliRol(String nombre) {
@@ -79,12 +75,10 @@ public class PoliRol {
 		this.nombre = nombre;
 	}
 
-	public PoliRol(String nombre, Rol role, Ruta ruta) {
+	public PoliRol() {
 		super();
-		this.nombre = nombre;
-		this.role = role;
-		this.ruta = ruta;
 	}
+	
 	
 
 }

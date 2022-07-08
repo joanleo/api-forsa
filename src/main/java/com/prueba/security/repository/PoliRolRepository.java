@@ -8,4 +8,6 @@ public interface PoliRolRepository extends JpaRepository<PoliRol, Long> {
 	
 	public PoliRol findByNombre(String nombre);
 
+	public PoliRol findByNombreAndMetodo(String nombre, String metodo);
+
 }

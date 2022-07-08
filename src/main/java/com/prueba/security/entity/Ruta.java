@@ -51,6 +51,11 @@ public class Ruta {
 		super();
 	}
 
+	public Ruta(String ruta) {
+		super();
+		this.ruta = ruta;
+	}
+
 	public Ruta(Long id, String ruta, String descripcion) {
 		super();
 		this.id = id;

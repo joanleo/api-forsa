@@ -39,7 +39,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		
 		if(isConfig) return;
-		
+		System.out.println("Application Event inicial");
 		PoliRol readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");
 		PoliRol writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
 		
@@ -53,6 +53,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if ((authentication != null)) {
 		    currentUserName = authentication.getName();
+		    System.out.println(currentUserName);
 		}
 		
 		/*Rol adminRole = rolRepo.findByNombre("ROLE_ADMIN");
@@ -66,7 +67,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		
 		if(currentUserName != "") {
 			Rol userRole = rolRepo.findByNombre("ROLE_USER");
-			
+			System.out.println(authentication.getName());
 			Usuario usuario = usuarioRepo.findByUsername(authentication.getName()).get();
 			
 			usuario.setRoles(Arrays.asList(userRole));

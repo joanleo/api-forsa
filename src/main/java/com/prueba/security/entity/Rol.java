@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -20,7 +22,7 @@ import com.prueba.entity.Empresa;
 @Table(name = "Roles")
 public class Rol {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "nidrol", length = 2)
     private Long id;
     
@@ -30,7 +32,9 @@ public class Rol {
     @Column(name = "vcdescripcion", length = 100)
     private String descripcion;
     
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "role", cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "roles_poli", joinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "nidrol"),
+    inverseJoinColumns = @JoinColumn(name = "poli"))
     private Collection<PoliRol> poliRoles;
     
     @ManyToOne(fetch = FetchType.LAZY)
@@ -60,6 +64,7 @@ public class Rol {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
+
 
 	public Collection<PoliRol> getPoliRoles() {
 		return poliRoles;
