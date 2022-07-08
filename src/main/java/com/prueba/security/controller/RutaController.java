@@ -24,7 +24,6 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/rutas")
-@ApiIgnore
 @Api(tags = "Rutas", description = "Operaciones referentes a las rutas")
 public class RutaController {
 
