@@ -9,9 +9,8 @@ public class RutaDTO {
 	@NotBlank(message = "Este campo no puede ser nulo")
 	private String ruta;
 	
-	private String descripcion;
+	private String metodo;
 	
-
 	public Long getId() {
 		return id;
 	}
@@ -28,14 +27,14 @@ public class RutaDTO {
 		this.ruta = ruta;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+
+	public String getMetodo() {
+		return metodo;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setMetodo(String metodo) {
+		this.metodo = metodo;
 	}
-
 
 	public RutaDTO() {
 		super();
