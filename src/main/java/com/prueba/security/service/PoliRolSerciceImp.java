@@ -23,8 +23,8 @@ public class PoliRolSerciceImp implements PoliRolService {
 	@Override
 	public PoliRol create(PoliRol poliRol) {
 
-		PoliRol exist = poliRolRepo.findByNombreAndMetodo(poliRol.getNombre(), poliRol.getMetodo());
-		Ruta existRuta = rutaRepo.findByRutaAndMetodo(poliRol.getRuta().getRuta(), poliRol.getMetodo());
+		Ruta existRuta = rutaRepo.findByRutaAndMetodo(poliRol.getRuta().getRuta(), poliRol.getRuta().getMetodo());
+		PoliRol exist = poliRolRepo.findByRutaAndPermitidoTrue(poliRol.getRuta());
 
 		if(existRuta == null) {
 			throw new IllegalAccessError("La ruta a la que trata de crear la politica no existe");

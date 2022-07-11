@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 
@@ -13,7 +14,8 @@ import javax.persistence.Table;
 public class Ruta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RUTA_ID_SEQUENCE")
+    @SequenceGenerator(name = "RUTA_ID_SEQUENCE", sequenceName = "RUTA_ID_SEQUENCE", allocationSize = 1)
     @Column(name = "nidRuta", length = 3)
     private Long id;
 

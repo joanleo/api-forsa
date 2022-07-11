@@ -51,7 +51,7 @@ public class RolController {
 	@GetMapping
 	@ApiOperation(value = "Encuentra los roles", notes = "Retorna todos los roles existentes")
 	public List<RolDTO> list(@RequestParam(required=false)String letras,
-			@RequestParam(required=false) Long nit){
+							 @RequestParam(required=false) Long nit){
 		
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -62,6 +62,10 @@ public class RolController {
 		}else {
 			empresa = usuario.getEmpresa();
 		}
+		if(letras == null) {
+			return rolService.list(empresa);
+		}
+		System.out.println("controller, empresa: "+empresa.getNombre());
 		return rolService.list(letras, empresa);
 	}
 	
@@ -80,6 +84,7 @@ public class RolController {
 		}else {
 		empresa = usuario.getEmpresa();			
 		}
+		
 		return ResponseEntity.ok(rolService.getRol(id, empresa));
 	}
 	

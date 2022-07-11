@@ -28,7 +28,6 @@ public class PoliRolController {
 	@PostMapping
 	@ApiOperation(value = "Crear politicas de rol", notes = "Crea las politicas de un rol")
 	public ResponseEntity<PoliRol> create(@RequestBody PoliRol poliRol){
-		System.out.println(poliRol.getMetodo());
 		System.out.println(poliRol.getNombre());
 		System.out.println(poliRol.getRuta().getRuta());
 		return new ResponseEntity<PoliRol>(poliRolService.create(poliRol), HttpStatus.CREATED);

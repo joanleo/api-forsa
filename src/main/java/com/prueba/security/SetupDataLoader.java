@@ -1,11 +1,15 @@
 package com.prueba.security;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -50,6 +54,13 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 	@Transactional
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		
+		String currentUserName = "";
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if ((authentication != null)) {
+		    currentUserName = authentication.getName();
+		    System.out.println(currentUserName);
+		}
+		
 		if(isConfig) return;
 		System.out.println("Application Event inicial");
 		
@@ -59,16 +70,37 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
 
         Map<String, String> MetodoRuta = new HashMap<>();
-        map.forEach((key, value) ->{ 
-
+        List<Ruta> rutas = new ArrayList<Ruta>();
+        List<Ruta> nuevasRutas = new ArrayList<Ruta>();
+        map.forEach((key, value) ->{    
+        
         MetodoRuta.put(key.getDirectPaths().toString(), key.getMethodsCondition().toString());
         Ruta nuevaruta = new Ruta(key.getActivePatternsCondition().toString().replace("[", "").replace("]", ""), key.getMethodsCondition().toString().replace("[", "").replace("]", ""));
         Ruta exist = rutaRepo.findByRutaAndMetodo(nuevaruta.getRuta(), nuevaruta.getMetodo());
+        
         if(Objects.isNull(exist)) {
-        		rutaRepo.save(nuevaruta);        		
+        		System.out.println(nuevaruta.getId());
+        		rutas.add(nuevaruta);
         }
         });
-        
+        if(rutas.size() > 0) {
+        	rutaRepo.save(rutas);        	
+        }
+        nuevasRutas = rutaRepo.findAll();
+
+        List<PoliRol> politicas = new ArrayList<>();
+        for(Ruta ruta: nuevasRutas) {
+        	PoliRol politica = new PoliRol(ruta);
+        	PoliRol exist = poliRolRepo.findByRuta(ruta);
+        	if(Objects.isNull(exist)) {
+        		System.out.println("id: "+politica.getId());
+        		System.out.println("Ruta: "+politica.getRuta().getRuta());
+        		politicas.add(politica);        		
+        	}
+        }
+        if(politicas.size() > 0) {
+        	poliRolRepo.saveAndFlush(politicas);        	
+        }
         
 		PoliRol readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");
 		PoliRol writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
@@ -79,8 +111,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		List<PoliRol> rolePrivileges = Arrays.asList(readPrivilege);
 		createRoleIfNotFound("ROLE_USER", rolePrivileges);
 		
-		String currentUserName = "";
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
 		if ((authentication != null)) {
 		    currentUserName = authentication.getName();
 		    System.out.println(currentUserName);

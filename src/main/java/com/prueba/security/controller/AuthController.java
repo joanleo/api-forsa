@@ -87,7 +87,7 @@ public class AuthController {
 		Usuario usuarioActual = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
 		System.out.println(usuarioActual);
 		if(usuarioActual == null) {
-			System.out.println("Debe estar loguado");
+			System.out.println("Debe estar logueado para realizar el registro");
 		}
 		
 		if(registroDTO.getNitEmpresa() != null) {

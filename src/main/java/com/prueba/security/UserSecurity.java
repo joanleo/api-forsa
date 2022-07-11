@@ -30,7 +30,7 @@ public class UserSecurity {
 		System.out.println("Metodo: "+request.getServletPath());
 		System.out.println(authentication.getName());
 		Usuario usuario = UsuarioRepo.findByEmail(authentication.getName());
-		//if(usuario == null) return false;
+		if(usuario == null) return false;
 		Collection<Rol> roles = usuario.getRoles();
 		System.out.println(Arrays.asList(usuario.getRoles()));
 		

@@ -22,13 +22,13 @@ public class PoliRol {
 	private Long id;
 	
 	@Column(name = "vcnombre", length = 20)
-	private String nombre;
+	private String nombre ="prueba";
 	
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Ruta ruta;
-	
-	@Column(name = "vcmetodo", length = 20)
-	private String metodo;
+
+	@Column(name = "bpermitido", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
+    private Boolean permitido = false;
 
 	public Long getId() {
 		return id;
@@ -44,7 +44,7 @@ public class PoliRol {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
+	}
 
 	public Ruta getRuta() {
 		return ruta;
@@ -54,18 +54,21 @@ public class PoliRol {
 		this.ruta = ruta;
 	}
 
-	public String getMetodo() {
-		return metodo;
+	public Boolean getPermitido() {
+		return permitido;
 	}
 
-	public void setMetodo(String metodo) {
-		this.metodo = metodo;
+	public void setPermitido(Boolean permitido) {
+		this.permitido = permitido;
 	}
 
-	public PoliRol(Long id, String nombre, Rol role, Ruta ruta) {
+	public PoliRol() {
 		super();
-		this.id = id;
-		this.nombre = nombre;		this.ruta = ruta;
+	}
+
+	public PoliRol(Ruta ruta) {
+		super();
+		this.ruta = ruta;
 	}
 
 	public PoliRol(String nombre) {
@@ -73,9 +76,16 @@ public class PoliRol {
 		this.nombre = nombre;
 	}
 
-	public PoliRol() {
+	public PoliRol(Long id, String nombre, Ruta ruta, Boolean permitido) {
 		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.ruta = ruta;
+		this.permitido = permitido;
 	}
+
+	
+
 	
 	
 

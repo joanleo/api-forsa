@@ -52,6 +52,7 @@ public class RolServiceImpl implements RolService{
 
 	@Override
 	public List<RolDTO> list(String letras, Empresa empresa) {
+		System.out.println("Servicio: ");
 		List<Rol> roles = rolRepo.findByNombreContainsAndEmpresaAndEstaActivoTrue(letras, empresa);
 		
 		return roles.stream().map(rol -> mapearEntidad(rol)).collect(Collectors.toList());
@@ -89,6 +90,12 @@ public class RolServiceImpl implements RolService{
 	
 	public Rol mapearDTO(RolDTO rolDTO) {
 		return modelmapper.map(rolDTO, Rol.class);
+	}
+
+	@Override
+	public List<RolDTO> list(Empresa empresa) {
+		List<Rol> roles = rolRepo.findByEmpresaAndEstaActivoTrue(empresa);
+		return roles.stream().map(rol -> mapearEntidad(rol)).collect(Collectors.toList());
 	}
 
 }

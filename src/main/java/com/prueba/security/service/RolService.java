@@ -18,5 +18,7 @@ public interface RolService {
 	
 	public void delete(Long id);
 
+	public List<RolDTO> list(Empresa empresa);
+
 
 }
