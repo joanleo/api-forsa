@@ -56,10 +56,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.cors();
 		http.csrf().disable()
 		    .authorizeRequests()
+		    .antMatchers(AUTH_WHITELIST
+				    ).permitAll()
 		    //.antMatchers(HttpMethod.GET, "/**").permitAll()
 		    .antMatchers("/**").access("@userSecurity.hasPrivilege(authentication, request)")
-		    .antMatchers(AUTH_WHITELIST
-		    ).permitAll()
+		    
 		    .anyRequest()
 		    .authenticated()
 		    .and()
