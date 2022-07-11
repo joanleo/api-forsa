@@ -1,8 +1,12 @@
 package com.prueba.security;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,13 +23,16 @@ public class UserSecurity {
 	@Autowired
 	private UsuarioRepository UsuarioRepo;
 	
-	public boolean hasPrivilege(Authentication authentication, String ruta) {
+	public boolean hasPrivilege(Authentication authentication, ServletRequest  servletRequest) {
 		
+		var request = (HttpServletRequest) servletRequest;
+		System.out.println("Metodo: "+request.getMethod());
+		System.out.println("Metodo: "+request.getServletPath());
 		System.out.println(authentication.getName());
 		Usuario usuario = UsuarioRepo.findByEmail(authentication.getName());
 		if(usuario == null) return false;
 		Collection<Rol> roles = usuario.getRoles();
-		//Arrays.asList(usuario.getRoles());
+		System.out.println(Arrays.asList(usuario.getRoles()));
 		
 		List<String> privileges = new ArrayList<>();
         List<PoliRol> collection = new ArrayList<>();

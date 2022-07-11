@@ -3,6 +3,7 @@ package com.prueba.security.dto;
 import javax.validation.constraints.NotBlank;
 
 import com.prueba.dto.EmpresaDTO;
+import com.prueba.entity.Empresa;
 
 public class RolDTO {
 
@@ -10,10 +11,10 @@ public class RolDTO {
 	
 	@NotBlank(message = "Este campo no puede ser nulo")
 	private String nombre;
+		
+	private Empresa empresa;
 	
-	private String descripcion;
-	
-	private EmpresaDTO empresa;
+	private Boolean estaActivo=true;
 	
 	public Long getId() {
 		return id;
@@ -31,20 +32,20 @@ public class RolDTO {
 		this.nombre = nombre;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
-	public EmpresaDTO getEmpresa() {
+	public Empresa getEmpresa() {
 		return empresa;
 	}
 
-	public void setEmpresa(EmpresaDTO empresa) {
+	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
 	}
 
 	public RolDTO() {

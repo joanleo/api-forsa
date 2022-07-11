@@ -28,9 +28,6 @@ public class Rol {
     @Column(name = "vcnombre", length = 20, nullable = false)
     private String nombre;
     
-    @Column(name = "vcdescripcion", length = 100)
-    private String descripcion;
-    
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "roles_poli", joinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "nidrol"),
     inverseJoinColumns = @JoinColumn(name = "poli"))
@@ -39,6 +36,9 @@ public class Rol {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitEmpresa")
     private Empresa empresa;
+    
+    @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+    private Boolean estaActivo;
 
 	public Long getId() {
 		return id;
@@ -56,14 +56,6 @@ public class Rol {
 		this.nombre = nombre;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
 
 	public Collection<PoliRol> getPoliRoles() {
 		return poliRoles;
@@ -71,6 +63,22 @@ public class Rol {
 
 	public void setPoliRoles(Collection<PoliRol> poliRoles) {
 		this.poliRoles = poliRoles;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
 	}
 
 	public Rol() {
