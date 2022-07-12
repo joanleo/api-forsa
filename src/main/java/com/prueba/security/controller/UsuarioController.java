@@ -76,7 +76,7 @@ public class UsuarioController {
 	}
 	
 	
-	@GetMapping("/indexados")
+	@PostMapping("/indexados")
 	@ApiOperation(value = "Encuentra los usuarios", notes = "Retorna los usuarios de una empresa dada")
 	public ApiResponse<Page<Usuario>> paginationList(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 

@@ -12,6 +12,8 @@ import java.util.Objects;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -70,10 +72,37 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
 
         String aux="";
-        JSONObject obj = new JSONObject();
+        JSONObject jSonRutinas = new JSONObject();
+        JSONObject jSonrutina = new JSONObject();
+        JSONObject jSonmetodo = new JSONObject();
+        JSONArray  metodos = new JSONArray();
+
         for(Entry<RequestMappingInfo, HandlerMethod> rutaMetodo: map.entrySet()) {
-        	System.out.println(rutaMetodo.getKey().toString());
-        	System.out.println(rutaMetodo.getValue().toString());
+        	String rutina = rutaMetodo.getKey().getActivePatternsCondition().toString().replace("[", "").replace("]", "").split("\\/")[1];
+        	String ruta = rutaMetodo.getKey().getActivePatternsCondition().toString().replace("[", "").replace("]", "");
+        	String metodo = rutaMetodo.getKey().getMethodsCondition().toString().replace("[", "").replace("]", "");
+        	if(rutina != aux) {
+        		aux = ruta;
+        		try {
+					jSonrutina.put("nombre", aux);
+					jSonrutina.put("metodos", new JSONArray());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        	}
+        	try {
+        		jSonmetodo.put("nombre", aux);
+        		jSonmetodo.put("metodo", metodo);
+        		jSonmetodo.put("permitido", false);
+        		metodos.put(jSonmetodo.toJSONArray(metodos));
+        		//jSonrutina.put("metodos",)
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	System.out.println(jSonrutina);
+        	//System.out.println(rutaMetodo.getValue().toString());
         }
         
         /*Map<String, String> MetodoRuta = new HashMap<>();

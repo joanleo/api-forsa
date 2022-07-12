@@ -32,15 +32,15 @@ public class Usuario {
     @Column(name = "vcnombre", length = 48)
     private String nombre;
     
-    @JsonIgnore
+    
     @Column(name = "vcusername", length = 20)
     private String username;
     
-    @JsonIgnore
+    
     @Column(name = "vcemail", length = 48)
     private String email;
     
-    @JsonIgnore
+    
     @Column(name = "vcpassword")
     private String password;
     
