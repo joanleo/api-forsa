@@ -30,7 +30,7 @@ public class Rol {
     
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "roles_poli", joinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "nidrol"),
-    inverseJoinColumns = @JoinColumn(name = "poli"))
+    inverseJoinColumns = @JoinColumn(name = "politica_id"))
     private Collection<PoliRol> poliRoles;
     
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,7 +38,7 @@ public class Rol {
     private Empresa empresa;
     
     @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
-    private Boolean estaActivo;
+    private Boolean estaActivo=true;
 
 	public Long getId() {
 		return id;

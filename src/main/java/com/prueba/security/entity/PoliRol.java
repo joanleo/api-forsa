@@ -18,11 +18,11 @@ public class PoliRol {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name = "nidPoli_Rol", length = 3)
+	@Column(name = "nidPolitica", length = 3)
 	private Long id;
 	
-	@Column(name = "vcnombre", length = 20)
-	private String nombre ="prueba";
+	@Column(name = "vcnombre", length = 80)
+	private String nombre;
 	
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Ruta ruta;

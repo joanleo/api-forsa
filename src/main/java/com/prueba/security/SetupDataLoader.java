@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -72,19 +70,22 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Map<String, String> MetodoRuta = new HashMap<>();
         List<Ruta> rutas = new ArrayList<Ruta>();
         List<Ruta> nuevasRutas = new ArrayList<Ruta>();
+        
         map.forEach((key, value) ->{    
         
         MetodoRuta.put(key.getDirectPaths().toString(), key.getMethodsCondition().toString());
         Ruta nuevaruta = new Ruta(key.getActivePatternsCondition().toString().replace("[", "").replace("]", ""), key.getMethodsCondition().toString().replace("[", "").replace("]", ""));
         Ruta exist = rutaRepo.findByRutaAndMetodo(nuevaruta.getRuta(), nuevaruta.getMetodo());
-        
         if(Objects.isNull(exist)) {
-        		System.out.println(nuevaruta.getId());
+        	System.out.println("ruta no existe "+ nuevaruta.getRuta()+" "+nuevaruta.getMetodo());
+        		//rutaRepo.save(nuevaruta);
         		rutas.add(nuevaruta);
+        		//System.out.println(rutaRepo.findByRutaAndMetodo(nuevaruta.getRuta(), nuevaruta.getMetodo()));
         }
         });
         if(rutas.size() > 0) {
-        	rutaRepo.save(rutas);        	
+        	System.out.println(" Guardando nuevas rutas");
+        	rutaRepo.saveAll(rutas);        	
         }
         nuevasRutas = rutaRepo.findAll();
 
@@ -93,13 +94,30 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         	PoliRol politica = new PoliRol(ruta);
         	PoliRol exist = poliRolRepo.findByRuta(ruta);
         	if(Objects.isNull(exist)) {
-        		System.out.println("id: "+politica.getId());
-        		System.out.println("Ruta: "+politica.getRuta().getRuta());
+        		//System.out.println("Ruta: "+politica.getRuta().getRuta());
+        		String nombre = ruta.getRuta().toUpperCase().substring(1);
+        		String toRemove = StringUtils.substringBetween(nombre, "{", "}");
+        		nombre = StringUtils.remove(nombre, "{" + toRemove + "}");
+        		String toRemove1 = StringUtils.substringBetween(nombre, ",", "}");
+        		nombre = StringUtils.remove(nombre, "," + toRemove1 + "}");
+        		if(nombre.contains("/")) {
+        			nombre = nombre.replace("/", "_");
+        			System.out.println("contenia / " + nombre);
+        		}
+        		if(nombre.endsWith("_")){
+        			nombre = nombre + ruta.getMetodo() + "_" + "PRIVILEGE";
+        			System.out.println("contenia / al final y se cambio por _" + nombre);
+        		}else {
+        			nombre = nombre + "_" + ruta.getMetodo() + "_" + "PRIVILEGE";        			
+        			System.out.println("no contenia / al final " + nombre);
+        		}
+        		politica.setNombre(nombre);
         		politicas.add(politica);        		
         	}
         }
         if(politicas.size() > 0) {
-        	poliRolRepo.saveAndFlush(politicas);        	
+        	System.out.println("guardando politicas");
+        	poliRolRepo.saveAll(politicas);       	
         }
         
 		PoliRol readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");

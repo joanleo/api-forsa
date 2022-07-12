@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.UsuarioRepository;
+import com.prueba.specifications.RolSpecifications;
 
 @Service
 public class RolServiceImpl implements RolService{
@@ -29,6 +32,9 @@ public class RolServiceImpl implements RolService{
 	@Autowired
 	private UsuarioRepository usuarioRepo;
 
+	@Autowired
+	private RolSpecifications rolSpec;
+	
 	@Override
 	public RolDTO create(RolDTO rolDTO) {
 		
@@ -73,6 +79,8 @@ public class RolServiceImpl implements RolService{
 		
 		rol.setNombre(rolDTO.getNombre());
 		
+		rolRepo.save(rol);
+		
 		return mapearEntidad(rol);
 	}
 
@@ -96,6 +104,26 @@ public class RolServiceImpl implements RolService{
 	public List<RolDTO> list(Empresa empresa) {
 		List<Rol> roles = rolRepo.findByEmpresaAndEstaActivoTrue(empresa);
 		return roles.stream().map(rol -> mapearEntidad(rol)).collect(Collectors.toList());
+	}
+
+	@Override
+	public Page<Rol> searchRoles(Empresa empresa, Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<Rol> roles = rolRepo.findByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(0, 10));
+			return roles;
+		}
+		Page<Rol> roles = rolRepo.findByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(pagina, items));
+		return roles;
+	}
+
+	@Override
+	public Page<Rol> serachRoles(RolDTO rolDTO, Empresa empresa, Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<Rol> roles = rolRepo.findAll(rolSpec.getRoles(rolDTO, empresa), PageRequest.of(0, 10));
+			return roles;
+		}
+		Page<Rol> roles = rolRepo.findAll(rolSpec.getRoles(rolDTO, empresa), PageRequest.of(pagina, items));
+		return roles;
 	}
 
 }
