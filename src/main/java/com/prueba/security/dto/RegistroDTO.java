@@ -10,16 +10,22 @@ public class RegistroDTO {
 
 	@NotBlank
 	private String nombre;
+	
 	@NotBlank
 	private String username;
+	
 	@NotBlank
 	@Email
 	private String email;
+	
 	@NotBlank
 	@Size(min = 4, max = 15)
 	private String password;
+	
 	@NotEmpty
 	private Long nitEmpresa;
+	
+	private Boolean estaActivo;
 
 	public RegistroDTO() {
 		super();
@@ -63,6 +69,14 @@ public class RegistroDTO {
 
 	public void setNitEmpresa(Long nitEmpresa) {  
 		this.nitEmpresa = nitEmpresa;
+	}
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
 	}
 }
 
