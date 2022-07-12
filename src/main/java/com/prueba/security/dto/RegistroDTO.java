@@ -1,5 +1,6 @@
 package com.prueba.security.dto;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -11,9 +12,10 @@ public class RegistroDTO {
 	private String nombre;
 	@NotBlank
 	private String username;
-	@NotEmpty
+	@NotBlank
+	@Email
 	private String email;
-	@NotNull
+	@NotBlank
 	@Size(min = 4, max = 15)
 	private String password;
 	@NotEmpty

@@ -37,9 +37,6 @@ public class Fabricante {
     @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
     private Boolean estaActivo;
     
-    
-    
-    
 	public Empresa getEmpresa() {
 		return empresa;
 	}

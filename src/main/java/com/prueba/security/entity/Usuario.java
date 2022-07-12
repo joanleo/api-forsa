@@ -48,16 +48,19 @@ public class Usuario {
     @Column(name = "vctokenpassword")
     private String tokenPassword;
     
-    @JsonIgnore
+    
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "usuarios_roles", joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "nidusuario"), 
 	inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "nidrol"))
 	private Collection<Rol> roles;
 	
-    @JsonIgnore
+    
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
+	
+	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
+    private Boolean estaActivo;
 	
 	public Empresa getEmpresa() {
 		return empresa;
@@ -121,6 +124,23 @@ public class Usuario {
 
 	public void setTokenPassword(String tokenPassword) {
 		this.tokenPassword = tokenPassword;
+	}
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
+	}
+
+	public Usuario() {
+		super();
+	}
+
+	public Usuario(Long id) {
+		super();
+		this.id = id;
 	}
 	
 

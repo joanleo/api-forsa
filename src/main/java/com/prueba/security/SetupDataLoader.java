@@ -6,11 +6,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -67,7 +69,14 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
           .getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class);
         Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
 
-        Map<String, String> MetodoRuta = new HashMap<>();
+        String aux="";
+        JSONObject obj = new JSONObject();
+        for(Entry<RequestMappingInfo, HandlerMethod> rutaMetodo: map.entrySet()) {
+        	System.out.println(rutaMetodo.getKey().toString());
+        	System.out.println(rutaMetodo.getValue().toString());
+        }
+        
+        /*Map<String, String> MetodoRuta = new HashMap<>();
         List<Ruta> rutas = new ArrayList<Ruta>();
         List<Ruta> nuevasRutas = new ArrayList<Ruta>();
         
@@ -119,7 +128,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         	System.out.println("guardando politicas");
         	poliRolRepo.saveAll(politicas);       	
         }
-        
+        */
 		PoliRol readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");
 		PoliRol writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
 		
