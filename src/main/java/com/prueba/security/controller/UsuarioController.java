@@ -81,7 +81,7 @@ public class UsuarioController {
 	public ApiResponse<Page<Usuario>> paginationList(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
-			@Valid@RequestBody(required=false)RegistroDTO registroDTO,
+			@RequestBody(required=false)RegistroDTO registroDTO,
 			@RequestParam(required=false) Long nit){
 		
 		Empresa empresa;
