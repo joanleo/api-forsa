@@ -109,12 +109,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 				e.printStackTrace();
 			}
         	
-        	//System.out.println(rutaMetodo.getValue().toString());
         }
-        //System.out.println(arrRutinas);
         ArrayList<String> arr = new ArrayList<String>();
         for(String rut: arrRutinas) {
-        	String stringRuina = "{\"rutina\":{\"nombre\":\""+rut+"\",{\"rutas\":";
+        	String stringRuina = "{\"rutina\":{\"nombre\":\""+rut+"\",\"opciones\":[";
         	String rutaMethod = "";
 	        for(Entry<RequestMappingInfo, HandlerMethod> rutaMetodo: map.entrySet()) {
 	        	String rutina = rutaMetodo.getKey().getActivePatternsCondition().toString().replace("[", "").replace("]", "").split("/")[1];
@@ -122,13 +120,40 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 	        	String metodo = rutaMetodo.getKey().getMethodsCondition().toString().replace("[", "").replace("]", "");
 	        	
             	if(rut.equals(rutina)) {
-            		System.out.println("iguales "+rutina);
-            		String ejemplo = "{\"id\":46,\"nombre\":\"Miguel\",\"empresa\":\"Autentia\"}";
-            		rutaMethod += "\",{\"ruta\":"+ruta+"\",\"metodo\":"+metodo+"\"}";
+            		//String ejemplo = "{\"id\":46,\"nombre\":\"Miguel\",\"empresa\":\"Autentia\"}";
+            		if(metodo.equals("PUT")) {
+            			rutaMethod += "{\"url\":\""+ruta+"\",\"actualizar\":\"false},";            			
+            		}
+            		if(metodo.equals("DELETE")) {
+            			rutaMethod += "{\"url\":\""+ruta+"\",\"eliminar\":\"false},";            			
+            		}
+            		if(metodo.equals("PATCH")) {
+            			rutaMethod += "{\"url\":\""+ruta+"\",\"inhabilitar\":\"false},";            			
+            		}
+            		if(metodo.equals("GET") && (!ruta.contains("id") || !ruta.contains("nit"))) {
+            			rutaMethod += "{\"url\":\""+ruta+"\",\"leer\":\"false},";            			
+            		}
+            		if((ruta.contains("id") || ruta.contains("nit")) && metodo.equals("GET")){
+            			rutaMethod += "{\"url\":\""+ruta+"\",\"autocompletar\":\"false},"; 
+            		}
+            		if(metodo.equals("POST") && !ruta.contains("indexados") && !ruta.contains("descarga") && !ruta.contains("cargar")) {
+            			rutaMethod += "{\"url\":\""+ruta+"\",\"crear\":\"false},";
+            		}
+            		if(ruta.contains("indexados")) {
+        				rutaMethod += "{\"url\":\""+ruta+"\",\"listar\":\"false},";            				
+        			}
+            		if(ruta.contains("descarga")) {
+        				rutaMethod += "{\"url\":\""+ruta+"\",\"exportar\":\"false},";            				
+        			}
+            		if(ruta.contains("cargar")) {
+        				rutaMethod += "{\"url\":\""+ruta+"\",\"importar\":\"false},";            				
+        			}
+
             	}
-            	//arr.add(stringRuina);
 	        }
-	        stringRuina += rutaMethod;
+	        if(rutaMethod.length() > 0) {
+	        	stringRuina += rutaMethod.substring(0,rutaMethod.length()-1)+"]}";	        	
+	        }
 	        System.out.println(stringRuina);
 	        arr.add(stringRuina);
 	     }
