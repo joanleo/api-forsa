@@ -49,7 +49,7 @@ public class EmailController {
     @ApiOperation(value = "Envio de contraseña")
     public ResponseEntity<ResDTO> sendEmailPasswor(@RequestBody EmailDTO dto) {
     	
-    	Optional<Usuario> usuarioOpt = usuarioRepo.findByUsernameOrEmail(dto.getMailTo(), dto.getMailTo());
+    	Optional<Usuario> usuarioOpt = usuarioRepo.findByNombreUsuarioOrEmail(dto.getMailTo(), dto.getMailTo());
     	if(!usuarioOpt.isPresent()) {
     		return new ResponseEntity<ResDTO>(new ResDTO("Correo enviado con éxito"), HttpStatus.OK);
     	}
@@ -65,7 +65,7 @@ public class EmailController {
     	String newPassword = passwordEncoder.encode(tokenPassword);
     	dto.setTokenPassword(tokenPassword);
     	//usuario.setTokenPassword(tokenPassword);
-    	usuario.setPassword(newPassword);
+    	usuario.setContrasena(newPassword);
     	usuarioRepo.save(usuario);
         emailService.sendEmail(dto);
         return new ResponseEntity<ResDTO>(new ResDTO("Correo enviado con éxito"), HttpStatus.OK);
@@ -74,7 +74,7 @@ public class EmailController {
     @PostMapping("/username")
     @ApiOperation(value = "Envio de nombre de usuario")
     public ResponseEntity<ResDTO> sendEmailUsername(@RequestBody EmailDTO dto){
-    	Optional<Usuario> usuarioOpt = usuarioRepo.findByUsernameOrEmail(dto.getMailTo(), dto.getMailTo());
+    	Optional<Usuario> usuarioOpt = usuarioRepo.findByNombreUsuarioOrEmail(dto.getMailTo(), dto.getMailTo());
     	if(!usuarioOpt.isPresent()) {
     		return new ResponseEntity<ResDTO>(new ResDTO("Correo enviado con éxito"), HttpStatus.OK);
     	}
@@ -84,7 +84,7 @@ public class EmailController {
     	
     	dto.setSubject("Envio de credencial username");
     	dto.setUserName(usuario.getNombre());
-    	dto.setTokenPassword(usuario.getUsername());
+    	dto.setTokenPassword(usuario.getNombreUsuario());
     	
     	emailService.sendEmail(dto);
     	
@@ -103,7 +103,7 @@ public class EmailController {
             return new ResponseEntity<String>("No existe ningún usuario con esas credenciales", HttpStatus.NOT_FOUND);
         Usuario usuario = usuarioOpt.get();
         String newPassword = passwordEncoder.encode(dto.getPassword());
-        usuario.setPassword(newPassword);
+        usuario.setContrasena(newPassword);
         usuario.setTokenPassword(null);
         usuarioRepo.save(usuario);
         return new ResponseEntity<String>("Contraseña actualizada", HttpStatus.OK);

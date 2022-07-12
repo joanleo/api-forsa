@@ -34,7 +34,7 @@ public class Usuario {
     
     
     @Column(name = "vcusername", length = 20)
-    private String username;
+    private String nombreUsuario;
     
     
     @Column(name = "vcemail", length = 48)
@@ -42,7 +42,7 @@ public class Usuario {
     
     
     @Column(name = "vcpassword")
-    private String password;
+    private String contrasena;
     
     @JsonIgnore
     @Column(name = "vctokenpassword")
@@ -94,14 +94,6 @@ public class Usuario {
 		this.nombre = nombre;
 	}
 
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -110,12 +102,21 @@ public class Usuario {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
+
+	public String getNombreUsuario() {
+		return nombreUsuario;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+
+	public String getContrasena() {
+		return contrasena;
+	}
+
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
 	}
 
 	public String getTokenPassword() {

@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -72,38 +74,65 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
 
         String aux="";
-        JSONObject jSonRutinas = new JSONObject();
+        JSONArray jSonRutinas = new JSONArray();
         JSONObject jSonrutina = new JSONObject();
         JSONObject jSonmetodo = new JSONObject();
         JSONArray  metodos = new JSONArray();
+        
+        Set<String> arrRutinas = new HashSet<>();
 
         for(Entry<RequestMappingInfo, HandlerMethod> rutaMetodo: map.entrySet()) {
-        	String rutina = rutaMetodo.getKey().getActivePatternsCondition().toString().replace("[", "").replace("]", "").split("\\/")[1];
+        	String rutina = rutaMetodo.getKey().getActivePatternsCondition().toString().replace("[", "").replace("]", "").split("/")[1];
         	String ruta = rutaMetodo.getKey().getActivePatternsCondition().toString().replace("[", "").replace("]", "");
         	String metodo = rutaMetodo.getKey().getMethodsCondition().toString().replace("[", "").replace("]", "");
         	if(rutina != aux) {
-        		aux = ruta;
+        		aux = rutina;
+        		arrRutinas.add(aux);
         		try {
 					jSonrutina.put("nombre", aux);
-					jSonrutina.put("metodos", new JSONArray());
+					//System.out.println(aux);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
         	}
         	try {
-        		jSonmetodo.put("nombre", aux);
+        		jSonmetodo.put("nombre", ruta);
         		jSonmetodo.put("metodo", metodo);
         		jSonmetodo.put("permitido", false);
-        		metodos.put(jSonmetodo.toJSONArray(metodos));
+        		metodos.put(jSonmetodo);
+        		jSonrutina.put("metodos", metodos);
+        		jSonRutinas.put(jSonrutina);
         		//jSonrutina.put("metodos",)
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        	System.out.println(jSonrutina);
+        	
         	//System.out.println(rutaMetodo.getValue().toString());
         }
+        //System.out.println(arrRutinas);
+        ArrayList<String> arr = new ArrayList<String>();
+        for(String rut: arrRutinas) {
+        	String stringRuina = "{\"rutina\":{\"nombre\":\""+rut+"\",{\"rutas\":";
+        	String rutaMethod = "";
+	        for(Entry<RequestMappingInfo, HandlerMethod> rutaMetodo: map.entrySet()) {
+	        	String rutina = rutaMetodo.getKey().getActivePatternsCondition().toString().replace("[", "").replace("]", "").split("/")[1];
+	        	String ruta = rutaMetodo.getKey().getActivePatternsCondition().toString().replace("[", "").replace("]", "");
+	        	String metodo = rutaMetodo.getKey().getMethodsCondition().toString().replace("[", "").replace("]", "");
+	        	
+            	if(rut.equals(rutina)) {
+            		System.out.println("iguales "+rutina);
+            		String ejemplo = "{\"id\":46,\"nombre\":\"Miguel\",\"empresa\":\"Autentia\"}";
+            		rutaMethod += "\",{\"ruta\":"+ruta+"\",\"metodo\":"+metodo+"\"}";
+            	}
+            	//arr.add(stringRuina);
+	        }
+	        stringRuina += rutaMethod;
+	        System.out.println(stringRuina);
+	        arr.add(stringRuina);
+	     }
+        System.out.println(arr);
         
         /*Map<String, String> MetodoRuta = new HashMap<>();
         List<Ruta> rutas = new ArrayList<Ruta>();
@@ -185,7 +214,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		if(currentUserName != "") {
 			Rol userRole = rolRepo.findByNombre("ROLE_USER");
 			System.out.println(authentication.getName());
-			Usuario usuario = usuarioRepo.findByUsername(authentication.getName()).get();
+			Usuario usuario = usuarioRepo.findByNombreUsuario(authentication.getName()).get();
 			
 			usuario.setRoles(Arrays.asList(userRole));
 			usuarioRepo.save(usuario);	        

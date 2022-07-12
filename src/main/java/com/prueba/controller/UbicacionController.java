@@ -72,7 +72,7 @@ public class UbicacionController {
 		System.out.println("controller");
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(nit != null) {
 			empresa = util.obtenerEmpresa(nit);
@@ -95,7 +95,7 @@ public class UbicacionController {
 		
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
 		if(nit != null) {
@@ -120,7 +120,7 @@ public class UbicacionController {
 					 								 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
 		if(nitEmpresa != null) {
@@ -147,7 +147,7 @@ public class UbicacionController {
 										 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
 		if(nitEmpresa != null) {
@@ -165,7 +165,7 @@ public class UbicacionController {
 	 									@PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
 		if(nitEmpresa != null) {
@@ -193,7 +193,7 @@ public class UbicacionController {
         
         Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(nit != null) {
 			empresa = util.obtenerEmpresa(nit);

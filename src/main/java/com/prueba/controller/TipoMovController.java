@@ -68,7 +68,7 @@ public class TipoMovController {
 										@RequestParam(required=false) Long nit){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
 		if(nit != null) {
@@ -90,7 +90,7 @@ public class TipoMovController {
 					 							 @PathVariable(required=false) Long nit){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
 		if(nit != null) {
@@ -116,7 +116,7 @@ public class TipoMovController {
 										 @PathVariable(required=false) Long nit){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
 		if(nit != null) {
@@ -134,7 +134,7 @@ public class TipoMovController {
 	 									@PathVariable(required=false) Long nit){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
 		if(nit != null) {
@@ -158,7 +158,7 @@ public class TipoMovController {
         servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "estados"+ "_" + currentDateTime + ".csv" + "\"");
         
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    	Usuario usuario = usuarioRepo.findByUsername(authentication.getName()).get();
+    	Usuario usuario = usuarioRepo.findByNombreUsuario(authentication.getName()).get();
     	Empresa empresa = usuario.getEmpresa();
       		
         if(letras != null){

@@ -65,7 +65,7 @@ public class UsuarioController {
 		
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(nit != null) {
 			empresa = util.obtenerEmpresa(nit);
@@ -86,7 +86,7 @@ public class UsuarioController {
 		
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(nit != null) {
 			empresa = util.obtenerEmpresa(nit);
@@ -112,7 +112,7 @@ public class UsuarioController {
 		if(authentication.getName() == "anonymousUser") {
 			throw new IllegalAccessError("Debe estar logueado para realizar el registro");
 		}
-		Usuario usuarioActual = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuarioActual = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		System.out.println(usuarioActual);
 		if(usuarioActual == null) {
 			return new ResponseEntity<>("Debe estar logueado para realizar el registro",HttpStatus.BAD_REQUEST);
@@ -123,7 +123,7 @@ public class UsuarioController {
 		}else {
 			empresa = usuarioActual.getEmpresa();			
 		}
-		if(usuarioRepo.existsByUsername(registroDTO.getUsername())) {
+		if(usuarioRepo.existsByNombreUsuario(registroDTO.getNombreUsuario())) {
 			return new ResponseEntity<>("Ese nombre de usuario ya existe",HttpStatus.BAD_REQUEST);
 		}
 		
@@ -134,9 +134,9 @@ public class UsuarioController {
 		Usuario usuario = new Usuario();
 		usuario.setEmpresa(empresa);
 		usuario.setNombre(registroDTO.getNombre());
-		usuario.setUsername(registroDTO.getUsername());
+		usuario.setNombreUsuario(registroDTO.getNombreUsuario());
 		usuario.setEmail(registroDTO.getEmail());
-		usuario.setPassword(passwordEncoder.encode(registroDTO.getPassword()));
+		usuario.setContrasena(passwordEncoder.encode(registroDTO.getContrasena()));
 		
 		Rol roles = rolRepo.findByNombre("ROLE_USER");
 		usuario.setRoles(Arrays.asList(roles));
@@ -166,7 +166,7 @@ public class UsuarioController {
 			 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		
 		if(nitEmpresa != null) {

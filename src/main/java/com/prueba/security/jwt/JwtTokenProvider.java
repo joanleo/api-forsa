@@ -41,7 +41,7 @@ public class JwtTokenProvider {
 	private UsuarioRepository usuarioRepo;
 	
 	public String generarToken(Authentication authentication, String nombre) {
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		String email = usuario.getEmail();
 		String empresa = String.valueOf(usuario.getEmpresa().getNombre());
 		String nit = String.valueOf(usuario.getEmpresa().getNit());

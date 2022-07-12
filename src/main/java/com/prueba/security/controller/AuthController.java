@@ -62,7 +62,7 @@ public class AuthController {
 		
 		SecurityContextHolder.getContext().setAuthentication(autentication);
 		
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(loginDTO.getUsernameOrEmail(), loginDTO.getUsernameOrEmail()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(loginDTO.getUsernameOrEmail(), loginDTO.getUsernameOrEmail()).get();
 		//System.out.println(usuario.getEmpresa());
 		//System.out.println(autentication);
 		
@@ -84,7 +84,7 @@ public class AuthController {
 		if(authentication.getName() == "anonymousUser") {
 			throw new IllegalAccessError("Debe estar logueado para realizar el registro");
 		}
-		Usuario usuarioActual = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuarioActual = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		System.out.println(usuarioActual);
 		if(usuarioActual == null) {
 			System.out.println("Debe estar logueado para realizar el registro");
@@ -95,7 +95,7 @@ public class AuthController {
 		}else {
 			empresa = usuarioActual.getEmpresa();			
 		}
-		if(usuarioRepo.existsByUsername(registroDTO.getUsername())) {
+		if(usuarioRepo.existsByNombreUsuario(registroDTO.getNombreUsuario())) {
 			return new ResponseEntity<>("Ese nombre de usuario ya existe",HttpStatus.BAD_REQUEST);
 		}
 		
@@ -106,9 +106,9 @@ public class AuthController {
 		Usuario usuario = new Usuario();
 		usuario.setEmpresa(empresa);
 		usuario.setNombre(registroDTO.getNombre());
-		usuario.setUsername(registroDTO.getUsername());
+		usuario.setNombreUsuario(registroDTO.getNombreUsuario());
 		usuario.setEmail(registroDTO.getEmail());
-		usuario.setPassword(passwordEncoder.encode(registroDTO.getPassword()));
+		usuario.setContrasena(passwordEncoder.encode(registroDTO.getContrasena()));
 		
 		Rol roles = rolRepo.findByNombre("ROLE_USER");
 		usuario.setRoles(Arrays.asList(roles));

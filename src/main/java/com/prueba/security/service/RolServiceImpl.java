@@ -39,7 +39,7 @@ public class RolServiceImpl implements RolService{
 	public RolDTO create(RolDTO rolDTO) {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(rolDTO.getEmpresa() == null) {
 			rolDTO.setEmpresa(usuario.getEmpresa());

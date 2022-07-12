@@ -77,7 +77,7 @@ public class ProductoController {
 											@Valid@RequestBody(required=false) SearchDTO searchDTO){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(nit != null) {
 			empresa = util.obtenerEmpresa(nit);
@@ -104,7 +104,7 @@ public class ProductoController {
 											@RequestParam(required=false) Long nit){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(nit != null) {
 			empresa = util.obtenerEmpresa(nit);
@@ -179,7 +179,7 @@ public class ProductoController {
 								@RequestParam(required=false) Long nit) throws IOException{
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(nit != null) {
 			empresa = util.obtenerEmpresa(nit);

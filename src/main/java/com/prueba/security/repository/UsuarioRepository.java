@@ -16,11 +16,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> , JpaSpe
 
 	Usuario findByEmail(String email);
 
-	public Optional<Usuario> findByUsernameOrEmail(String username, String email);
+	public Optional<Usuario> findByNombreUsuarioOrEmail(String username, String email);
 
-	public Optional<Usuario> findByUsername(String username);
+	public Optional<Usuario> findByNombreUsuario(String username);
 
-	public Boolean existsByUsername(String username);
+	public Boolean existsByNombreUsuario(String username);
 
 	public Boolean existsByEmail(String email);
 	

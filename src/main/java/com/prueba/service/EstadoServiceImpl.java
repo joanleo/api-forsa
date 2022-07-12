@@ -38,7 +38,7 @@ public class EstadoServiceImpl implements EstadoService {
 	@Override
 	public EstadoDTO create(EstadoDTO estadoDTO) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(estadoDTO.getEmpresa() == null) {
 			estadoDTO.setEmpresa(usuario.getEmpresa());

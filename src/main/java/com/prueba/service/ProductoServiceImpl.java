@@ -184,7 +184,7 @@ public class ProductoServiceImpl implements ProductoService {
 			Usuario usuario = null;
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			if(authentication != null) {
-			    usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+			    usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 			}else {
 				throw new IllegalAccessException("Debe estar logueado para realizar esta accion");
 			}

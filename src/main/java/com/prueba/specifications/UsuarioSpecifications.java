@@ -24,8 +24,8 @@ public class UsuarioSpecifications {
 			if(registroDTO.getEmail() != null) {
 				predicates.add(criteryBuilder.like(root.get("nombre"), "%" +registroDTO.getEmail() + "%"));				
 			}
-			if(registroDTO.getUsername() != null) {
-				predicates.add(criteryBuilder.like(root.get("nombre"), "%" +registroDTO.getUsername() + "%"));				
+			if(registroDTO.getNombreUsuario() != null) {
+				predicates.add(criteryBuilder.like(root.get("nombre"), "%" +registroDTO.getNombreUsuario() + "%"));				
 			}
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));

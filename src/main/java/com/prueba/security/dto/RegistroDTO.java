@@ -12,7 +12,7 @@ public class RegistroDTO {
 	private String nombre;
 	
 	@NotBlank
-	private String username;
+	private String nombreUsuario;
 	
 	@NotBlank
 	@Email
@@ -20,7 +20,7 @@ public class RegistroDTO {
 	
 	@NotBlank
 	@Size(min = 4, max = 15)
-	private String password;
+	private String contrasena;
 	
 	@NotEmpty
 	private Long nitEmpresa;
@@ -39,12 +39,12 @@ public class RegistroDTO {
 		this.nombre = nombre;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getNombreUsuario() {
+		return nombreUsuario;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
 	}
 
 	public String getEmail() {
@@ -55,19 +55,19 @@ public class RegistroDTO {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getContrasena() {
+		return contrasena;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
 	}
 
 	public Long getNitEmpresa() {
 		return nitEmpresa;
 	}
 
-	public void setNitEmpresa(Long nitEmpresa) {  
+	public void setNitEmpresa(Long nitEmpresa) {
 		this.nitEmpresa = nitEmpresa;
 	}
 
@@ -78,5 +78,6 @@ public class RegistroDTO {
 	public void setEstaActivo(Boolean estaActivo) {
 		this.estaActivo = estaActivo;
 	}
+
 }
 

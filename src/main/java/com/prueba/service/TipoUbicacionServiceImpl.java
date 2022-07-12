@@ -39,7 +39,7 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 	public TipoUbicacionDTO create(TipoUbicacionDTO tipoUbicacionDTO) {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(tipoUbicacionDTO.getEmpresa() == null) {
 			tipoUbicacionDTO.setEmpresa(usuario.getEmpresa());

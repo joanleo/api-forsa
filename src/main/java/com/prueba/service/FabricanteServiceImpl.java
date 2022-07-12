@@ -39,7 +39,7 @@ public class FabricanteServiceImpl implements FabricanteService {
 	public FabricanteDTO create(FabricanteDTO fabricanteDTO) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByUsernameOrEmail(authentication.getName(), authentication.getName()).get();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		if(fabricanteDTO.getEmpresa() == null) {
 			fabricanteDTO.setEmpresa(usuario.getEmpresa());
