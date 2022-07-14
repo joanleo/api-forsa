@@ -1,7 +1,5 @@
 package com.prueba.security.entity;
 
-import java.util.Collection;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,9 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -49,10 +46,8 @@ public class Usuario {
     private String tokenPassword;
     
     
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "usuarios_roles", joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "nidusuario"), 
-	inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "nidrol"))
-	private Collection<Rol> roles;
+    @OneToOne(targetEntity = Usuario.class, cascade = CascadeType.ALL)
+	private Rol roles;
 	
     
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -70,11 +65,11 @@ public class Usuario {
 		this.empresa = empresa;
 	}
 
-	public Collection<Rol> getRoles() {
+	public Rol getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Collection<Rol> roles) {
+	public void setRoles(Rol roles) {
 		this.roles = roles;
 	}
 

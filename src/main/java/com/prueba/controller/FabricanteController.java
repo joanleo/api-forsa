@@ -38,12 +38,12 @@ import com.prueba.service.FabricanteService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/fabricantes")
-@Api(tags = "Fabricantes", description = "Operaciones referentes a los fabricantes")
+//@Api(tags = "Fabricantes", description = "Operaciones referentes a los fabricantes")
 public class FabricanteController {
 
 	@Autowired
@@ -59,13 +59,13 @@ public class FabricanteController {
 	private UtilitiesApi util;
 	
 	@PostMapping
-	@ApiOperation(value = "Crea un fabricante", notes = "Crea un nuevo fabricante")
+	//@ApiOperation(value = "Crea un fabricante", notes = "Crea un nuevo fabricante")
 	public ResponseEntity<FabricanteDTO> create(@Valid @RequestBody FabricanteDTO fabricanteDTO){
 		return new ResponseEntity<FabricanteDTO>(fabricanteService.create(fabricanteDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	@ApiOperation(value="Encuentra los fabricantes")
+	//@ApiOperation(value="Encuentra los fabricantes")
 	public List<FabricanteDTO> get(
 			@RequestParam(required=false)String letras,
 			@RequestParam(required=false) Long nit){
@@ -83,7 +83,7 @@ public class FabricanteController {
 	}
 	
 	@PostMapping("/indexados")
-	@ApiOperation(value = "Encuenta los fabricantes", notes = "Retorna los fabricantes que en su nombre contengan las letrtas indicadas, retorna todos los fabricantes si no se indica ninguna letra")
+	//@ApiOperation(value = "Encuenta los fabricantes", notes = "Retorna los fabricantes que en su nombre contengan las letrtas indicadas, retorna todos los fabricantes si no se indica ninguna letra")
 	public ApiResponse<Page<Fabricante>> paginationlist(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -110,7 +110,7 @@ public class FabricanteController {
 	}
 	
 	@GetMapping("/{nitFabricante},{nitEmpresa}")
-	@ApiOperation(value = "Encuentra un fabricante", notes = "Retorna un fabricante por el id y la empresa a la que pertenece")
+	//@ApiOperation(value = "Encuentra un fabricante", notes = "Retorna un fabricante por el id y la empresa a la que pertenece")
 	public FabricanteDTO get(@PathVariable(name = "nitFabricante") Long nitFabricante,
 			 				 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -127,7 +127,7 @@ public class FabricanteController {
 	}
 	
 	@PutMapping("/{nitFabricante}")
-	@ApiOperation(value = "Actualiza un fabricante", notes = "Actualiza los datos de un fabricante")
+	//@ApiOperation(value = "Actualiza un fabricante", notes = "Actualiza los datos de un fabricante")
 	public ResponseEntity<FabricanteDTO> update(@Valid @RequestBody FabricanteDTO fabricanteDTO,
 												@PathVariable Long nitFabricante){
 		FabricanteDTO actualizado = fabricanteService.update(nitFabricante, fabricanteDTO);
@@ -137,7 +137,7 @@ public class FabricanteController {
 	
 	
 	@DeleteMapping("/{nitFabricante},{nitEmpresa}")
-	@ApiOperation(value = "Elimina un fabricante", notes = "Elimina un fabricante por su id")
+	//@ApiOperation(value = "Elimina un fabricante", notes = "Elimina un fabricante por su id")
 	public ResponseEntity<ResDTO> delete(@PathVariable(name="nitFabricante")Long nitFabricante,
 			 							 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -155,7 +155,7 @@ public class FabricanteController {
 	}
 	
 	@PatchMapping("/{nitFabricante},{nitEmpresa}")
-	@ApiOperation(value = "Inhabilita un fabricante", notes = "Inhabilita un fabricante por su id")
+	//@ApiOperation(value = "Inhabilita un fabricante", notes = "Inhabilita un fabricante por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="nitFabricante")Long nitFabricante,
 				@PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -173,7 +173,7 @@ public class FabricanteController {
 	}
 	
 	@PostMapping("/descarga")
-	@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de fabricantes de la busqueda realizada en formato csv")
+	//@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de fabricantes de la busqueda realizada en formato csv")
 	public void getCsvEmpresas(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,

@@ -3,7 +3,6 @@ package com.prueba.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -43,9 +42,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	private static final String[] AUTH_WHITELIST = {
 	        "/auth/**",
 	        "/swagger-resources/**",
+	        "/swagger-ui/**",
+	        "/swagger-ui/index.html/**",
 	        "/swagger-ui.html/**",
 	        "/configuration/**",
-	        "/v2/api-docs",
+	        "/v3/api-docs/**",
 	        "/webjars/**",
 	        "/email/**",
 	        "/activos/descarga"
@@ -56,11 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.cors();
 		http.csrf().disable()
 		    .authorizeRequests()
-		    .antMatchers(AUTH_WHITELIST
-				    ).permitAll()
+		    .antMatchers(AUTH_WHITELIST).permitAll()
 		    //.antMatchers(HttpMethod.GET, "/**").permitAll()
-		    .antMatchers("/**").access("@userSecurity.hasPrivilege(authentication, request)")
-		    
+		    //.antMatchers("/**").access("@userSecurity.hasPrivilege(authentication, request)")
 		    .anyRequest()
 		    .authenticated()
 		    .and()

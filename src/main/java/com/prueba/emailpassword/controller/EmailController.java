@@ -22,15 +22,15 @@ import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 import net.bytebuddy.utility.RandomString;
-import springfox.documentation.annotations.ApiIgnore;
+//import springfox.documentation.annotations.ApiIgnore;
 
-@ApiIgnore
+//@ApiIgnore
 @RestController
 @RequestMapping("/email")
-@Api(tags = "Email", description = "Recuperacion de nombre de usuario y/o contraseña")
+//@Api(tags = "Email", description = "Recuperacion de nombre de usuario y/o contraseña")
 public class EmailController {
 
     @Autowired
@@ -46,7 +46,7 @@ public class EmailController {
     private PasswordEncoder passwordEncoder;
     
     @PostMapping("/password")
-    @ApiOperation(value = "Envio de contraseña")
+    //@ApiOperation(value = "Envio de contraseña")
     public ResponseEntity<ResDTO> sendEmailPasswor(@RequestBody EmailDTO dto) {
     	
     	Optional<Usuario> usuarioOpt = usuarioRepo.findByNombreUsuarioOrEmail(dto.getMailTo(), dto.getMailTo());
@@ -72,7 +72,7 @@ public class EmailController {
     }
     
     @PostMapping("/username")
-    @ApiOperation(value = "Envio de nombre de usuario")
+    //@ApiOperation(value = "Envio de nombre de usuario")
     public ResponseEntity<ResDTO> sendEmailUsername(@RequestBody EmailDTO dto){
     	Optional<Usuario> usuarioOpt = usuarioRepo.findByNombreUsuarioOrEmail(dto.getMailTo(), dto.getMailTo());
     	if(!usuarioOpt.isPresent()) {
@@ -91,7 +91,7 @@ public class EmailController {
     	return new ResponseEntity<ResDTO>(new ResDTO("Correo enviado con éxito"), HttpStatus.OK);
     }
     
-    @ApiIgnore
+    //@ApiIgnore
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDTO dto, BindingResult bindingResult) {
         if(bindingResult.hasErrors())

@@ -32,12 +32,12 @@ import com.prueba.security.dto.ResDTO;
 import com.prueba.service.EmpresaService;
 import com.prueba.util.CsvExportService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/empresas")
-@Api(tags = "Empresas",description = "Operaciones referentes a las empresas")
+//@Api(tags = "Empresas",description = "Operaciones referentes a las empresas")
 public class EmpresaController {
 	
 	@Autowired
@@ -47,13 +47,13 @@ public class EmpresaController {
 	private CsvExportService csvService;
 	
 	@PostMapping
-	@ApiOperation(value = "Crea una empresa", notes = "Crea una nueva empresa")
+	//@ApiOperation(value = "Crea una empresa", notes = "Crea una nueva empresa")
 	public ResponseEntity<EmpresaDTO> create(@Valid @RequestBody EmpresaDTO empresaDTO){
 		return new ResponseEntity<EmpresaDTO>(empresaService.create(empresaDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	@ApiOperation(value="Encuentra las empresas")
+	//@ApiOperation(value="Encuentra las empresas")
 	public List<EmpresaDTO> get(@RequestParam(required=false)String letras){
 		if(letras == null) {
 			empresaService.list();
@@ -62,7 +62,7 @@ public class EmpresaController {
 	}
 	
 	@PutMapping("/{nit}")
-	@ApiOperation(value = "Actualiza una empresa", notes = "Actualiza los datos de una empresa")
+	//@ApiOperation(value = "Actualiza una empresa", notes = "Actualiza los datos de una empresa")
 	public ResponseEntity<EmpresaDTO> update(@Valid @RequestBody EmpresaDTO empresaDTO,
 											 @PathVariable Long nit){
 		EmpresaDTO actualizada = empresaService.update(nit, empresaDTO);
@@ -71,7 +71,7 @@ public class EmpresaController {
 	}
 	
 	@PostMapping("/indexados")
-	@ApiOperation(value = "Encuentra las empresas", notes = "Retorna las empresas que en su nombre contengan las letrtas indicadas, retorna todas las empresas si no se indica ninguna letra")
+	//@ApiOperation(value = "Encuentra las empresas", notes = "Retorna las empresas que en su nombre contengan las letrtas indicadas, retorna todas las empresas si no se indica ninguna letra")
 	public ApiResponse<Page<Empresa>> paginationList(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -87,21 +87,21 @@ public class EmpresaController {
 	}
 
 	@GetMapping("/{nit}")
-	@ApiOperation(value = "Encuentra una empresa", notes = "Retorna una empresa por el id")
+	//@ApiOperation(value = "Encuentra una empresa", notes = "Retorna una empresa por el id")
 	public ResponseEntity<EmpresaDTO> get(@PathVariable(name = "id") Long id){
 		return ResponseEntity.ok(empresaService.getEmpresa(id));
 	}
 
 	
 	@DeleteMapping("/{nit}")
-	@ApiOperation(value = "Elimina una empresa", notes = "Elimina un empresa por su id")
+	//@ApiOperation(value = "Elimina una empresa", notes = "Elimina un empresa por su id")
 	public ResponseEntity<ResDTO> delete(@PathVariable(name="nit")Long id){
 		empresaService.delete(id);
 		return new ResponseEntity<ResDTO>(new ResDTO("Empresa eliminada con exito"), HttpStatus.OK);
 	}
 	
 	@PatchMapping("/{nit}")
-	@ApiOperation(value = "Inhabilita una empresa", notes = "Inhabilita una empresa por su id")
+	//@ApiOperation(value = "Inhabilita una empresa", notes = "Inhabilita una empresa por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="nit")Long id){
 		empresaService.unable(id);
 		
@@ -109,7 +109,7 @@ public class EmpresaController {
 	}
 	
 	@PostMapping("/descarga")
-	@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de activos de la busqueda realizada en formato csv")
+	//@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de activos de la busqueda realizada en formato csv")
 	public void getCsvEmpresa(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,

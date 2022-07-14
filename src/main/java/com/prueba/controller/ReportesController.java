@@ -26,12 +26,12 @@ import com.prueba.service.ProductoService;
 import com.prueba.util.ReporteVerificarPDF;
 import com.prueba.util.UtilitiesApi;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/reportes")
-@Api(tags = "Reportes", description = "Reportes")
+//@Api(tags = "Reportes", description = "Reportes")
 public class ReportesController {
 	
 	@Autowired
@@ -44,8 +44,8 @@ public class ReportesController {
 	private UtilitiesApi util;
 	
 	@GetMapping("/verificacion")
-	@ApiOperation(value = "Crea un reporte de verificacion", notes = "Retorna un listado de los activos de una orden dada "
-			+ "segun el filtro indicado. Los filtros podran ser 'faltantes', 'sobrantes', 'ok', 'todos'")
+	//@ApiOperation(value = "Crea un reporte de verificacion", notes = "Retorna un listado de los activos de una orden dada "
+			//+ "segun el filtro indicado. Los filtros podran ser 'faltantes', 'sobrantes', 'ok', 'todos'")
 	public Page<Producto> getVerificacion(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -71,8 +71,8 @@ public class ReportesController {
 	}
 	
 	@GetMapping("/verificacion/descarga")
-	@ApiOperation(value = "Crea un reporte de verificacion en formato PDF", notes = "Retorna un PDF con el listado de los activos de una orden dada "
-			+ "segun el filtro indicado. Los filtros podran ser 'faltantes', 'sobrantes', 'ok', 'todos'")
+	//@ApiOperation(value = "Crea un reporte de verificacion en formato PDF", notes = "Retorna un PDF con el listado de los activos de una orden dada "
+		//	+ "segun el filtro indicado. Los filtros podran ser 'faltantes', 'sobrantes', 'ok', 'todos'")
 	public void exportToPDF(HttpServletResponse response,
 			@RequestParam String orden,
 			@RequestParam(defaultValue = "todos") String filtro,

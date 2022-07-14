@@ -38,12 +38,12 @@ import com.prueba.service.FamiliaService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/familias")
-@Api(tags = "Familias", description = "Operaciones referentes a las familias")
+//@Api(tags = "Familias", description = "Operaciones referentes a las familias")
 public class FamiliaController {
 
 	@Autowired
@@ -59,7 +59,7 @@ public class FamiliaController {
 	private UtilitiesApi util;
 	
 	@PostMapping
-	@ApiOperation(value = "Crea una familia", notes = "Crea una nueva familia")
+	//@ApiOperation(value = "Crea una familia", notes = "Crea una nueva familia")
 	public ResponseEntity<FamiliaDTO> create(@Valid @RequestBody FamiliaDTO familiaDTO,
 			 								 @RequestParam(required=false) Long nit){
 		Empresa empresa;
@@ -75,7 +75,7 @@ public class FamiliaController {
 	}
 	
 	@GetMapping
-	@ApiOperation(value="Encuentra las familias")
+	//@ApiOperation(value="Encuentra las familias")
 	public List<FamiliaDTO> get(
 			@RequestParam(required=false)String letras,
 			@RequestParam(required=false) Long nit){
@@ -96,7 +96,7 @@ public class FamiliaController {
 	}
 	
 	@PutMapping("/{id}")
-	@ApiOperation(value = "Actualiza una familia", notes = "Actualiza los datos de una familia")
+	//@ApiOperation(value = "Actualiza una familia", notes = "Actualiza los datos de una familia")
 	public ResponseEntity<FamiliaDTO> update(@Valid @RequestBody FamiliaDTO familiaDTO,
 											 @PathVariable Long id,
 			 								 @RequestParam(required=false) Long nit){
@@ -117,7 +117,7 @@ public class FamiliaController {
 	
 	
 	@PostMapping("/indexados")
-	@ApiOperation(value = "Encuentra las familias", notes = "Retorna las familias que en su nombre contengan las letrtas indicadas, retorna todas las familias si no se indica ninguna letra")
+	//@ApiOperation(value = "Encuentra las familias", notes = "Retorna las familias que en su nombre contengan las letrtas indicadas, retorna todas las familias si no se indica ninguna letra")
 	public ApiResponse<Page<Familia>> paginationlist(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -144,7 +144,7 @@ public class FamiliaController {
 	}
 	
 	@GetMapping("/{id},{nitEmpresa}")
-	@ApiOperation(value = "Encuentra una familia", notes = "Retorna una familia por el id")
+	//@ApiOperation(value = "Encuentra una familia", notes = "Retorna una familia por el id")
 	public ResponseEntity<FamiliaDTO> get(@PathVariable(name = "id") Long id,
 			 							  @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -161,7 +161,7 @@ public class FamiliaController {
 	}
 	
 	@DeleteMapping("/{id},{nitEmpresa}")
-	@ApiOperation(value = "Elimina una familia", notes = "Elimina una familia por su id")
+	//@ApiOperation(value = "Elimina una familia", notes = "Elimina una familia por su id")
 	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
 					 					 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -180,7 +180,7 @@ public class FamiliaController {
 	}
 	
 	@PatchMapping("/{id},{nitEmpresa}")
-	@ApiOperation(value = "Inhabilita una familia", notes = "Inhabilita una familia por su id")
+	//@ApiOperation(value = "Inhabilita una familia", notes = "Inhabilita una familia por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
 					 					 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -199,7 +199,7 @@ public class FamiliaController {
 	}
 	
 	@PostMapping("/descarga")
-	@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de familias de la busqueda realizada en formato csv")
+	//@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de familias de la busqueda realizada en formato csv")
 	public void getCsvEmpresas(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,

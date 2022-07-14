@@ -2,7 +2,6 @@ package com.prueba.security.dto;
 
 import javax.validation.constraints.NotBlank;
 
-import com.prueba.dto.EmpresaDTO;
 import com.prueba.entity.Empresa;
 
 public class RolDTO {

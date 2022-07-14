@@ -1,8 +1,7 @@
 package com.prueba.security.entity;
 
-import java.util.Collection;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Rutina;
 
 @Entity
 @Table(name = "Roles")
@@ -28,10 +28,13 @@ public class Rol {
     @Column(name = "vcnombre", length = 20, nullable = false)
     private String nombre;
     
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "roles_poli", joinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "nidrol"),
-    inverseJoinColumns = @JoinColumn(name = "politica_id"))
-    private Collection<PoliRol> poliRoles;
+    @ManyToMany
+    @JoinTable(
+      name = "politicas", 
+      joinColumns = @JoinColumn(name = "nidrol"), 
+      inverseJoinColumns = @JoinColumn(name = "nidutina"))
+    private Set<Rutina> politicas;
+    
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitEmpresa")
@@ -48,6 +51,14 @@ public class Rol {
 		this.id = id;
 	}
 
+	public Set<Rutina> getPoliticas() {
+		return politicas;
+	}
+	
+	public void setPoliticas(Set<Rutina> politicas) {
+		this.politicas = politicas;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -55,15 +66,8 @@ public class Rol {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+	
 
-
-	public Collection<PoliRol> getPoliRoles() {
-		return poliRoles;
-	}
-
-	public void setPoliRoles(Collection<PoliRol> poliRoles) {
-		this.poliRoles = poliRoles;
-	}
 
 	public Empresa getEmpresa() {
 		return empresa;

@@ -1,6 +1,5 @@
 package com.prueba.security.jwt;
 
-import java.security.Key;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +14,13 @@ import com.prueba.security.repository.UsuarioRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwsHeader;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.SigningKeyResolver;
-import io.jsonwebtoken.SigningKeyResolverAdapter;
+
 import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.impl.TextCodec;
-import io.jsonwebtoken.lang.Strings;
+
 
 
 @Component

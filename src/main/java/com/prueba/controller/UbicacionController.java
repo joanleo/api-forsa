@@ -38,12 +38,12 @@ import com.prueba.service.UbicacionService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/ubicaciones")
-@Api(tags = "Ubicaciones", description = "Operaciones referentes a las ubicaciones")
+//@Api(tags = "Ubicaciones", description = "Operaciones referentes a las ubicaciones")
 public class UbicacionController {
 
 	@Autowired
@@ -59,13 +59,13 @@ public class UbicacionController {
 	private UtilitiesApi util;
 	
 	@PostMapping
-	@ApiOperation(value = "Crea una ubicacion", notes = "Crea una nueva ubicacion")
+	//@ApiOperation(value = "Crea una ubicacion", notes = "Crea una nueva ubicacion")
 	public ResponseEntity<UbicacionDTO> create(@Valid @RequestBody UbicacionDTO ubicacionDTO){
 		return new ResponseEntity<UbicacionDTO>(ubicacionService.create(ubicacionDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	@ApiOperation(value="Encuentra las ubicaciones")
+	//@ApiOperation(value="Encuentra las ubicaciones")
 	public List<UbicacionDTO> get(
 			@RequestParam(required=false)String letras,
 			@RequestParam(required=false) Long nit){
@@ -86,7 +86,7 @@ public class UbicacionController {
 	}
 	
 	@PostMapping("/indexados")
-	@ApiOperation(value = "Encuentra las ubicaciones", notes = "Retorna las ubicaciones que en su nombre contenga las letras indicadas, retorna todas las ubicaciones si no se especifica ninguna letra")
+	//@ApiOperation(value = "Encuentra las ubicaciones", notes = "Retorna las ubicaciones que en su nombre contenga las letras indicadas, retorna todas las ubicaciones si no se especifica ninguna letra")
 	public ApiResponse<Page<Ubicacion>> paginationList(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -115,7 +115,7 @@ public class UbicacionController {
 	}
 	
 	@GetMapping("/{id},{nitEmpresa}")
-	@ApiOperation(value = "Encuentra una ubicacion", notes = "Retorna una ubicacion por su id")
+	//@ApiOperation(value = "Encuentra una ubicacion", notes = "Retorna una ubicacion por su id")
 	public ResponseEntity<UbicacionDTO> getUbicacion(@PathVariable(name = "id") Long id,
 					 								 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -133,7 +133,7 @@ public class UbicacionController {
 	}
 	
 	@PutMapping("/{id}")
-	@ApiOperation(value = "Actualiza una ubicacion", notes = "Actualiza los datos de una ubicacion")
+	//@ApiOperation(value = "Actualiza una ubicacion", notes = "Actualiza los datos de una ubicacion")
 	public ResponseEntity<UbicacionDTO> update(@Valid @RequestBody UbicacionDTO ubicacionDTO,
 											@PathVariable Long id){
 		UbicacionDTO actualizado = ubicacionService.update(id, ubicacionDTO);
@@ -142,7 +142,7 @@ public class UbicacionController {
 	}
 	
 	@DeleteMapping("/{id},{nitEmpresa}")
-	@ApiOperation(value = "Elimina una ubicacion", notes = "Elimina una ubicacion por su id")
+	//@ApiOperation(value = "Elimina una ubicacion", notes = "Elimina una ubicacion por su id")
  	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
 										 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -160,7 +160,7 @@ public class UbicacionController {
 	}
 	
 	@PatchMapping("/{id},{nitEmpresa}")
-	@ApiOperation(value = "Inhabilita una ubicacion", notes = "Inhabilita una ubicacion por su id")
+	//@ApiOperation(value = "Inhabilita una ubicacion", notes = "Inhabilita una ubicacion por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
 	 									@PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -180,7 +180,7 @@ public class UbicacionController {
 	}
 	
 	@PostMapping("/descarga")
-	@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de activos de la busqueda realizada en formato csv")
+	//@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de activos de la busqueda realizada en formato csv")
 	public void getCsvUbicaciones(HttpServletResponse servletResponse,
 				@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 				@RequestParam(required=false, defaultValue = "0") Integer items,

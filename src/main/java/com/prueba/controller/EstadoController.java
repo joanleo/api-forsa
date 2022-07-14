@@ -38,12 +38,12 @@ import com.prueba.service.EstadoService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/estados")
-@Api(tags = "Estado", description="Operaciones referentes al estado del activo")
+//@Api(tags = "Estado", description="Operaciones referentes al estado del activo")
 public class EstadoController {
 
 	@Autowired
@@ -60,13 +60,13 @@ public class EstadoController {
 	
 	
 	@PostMapping
-	@ApiOperation(value = "Crea un estado para los activos de una empresa", notes = "Crea un nuevo estado para los activos")
+	//@ApiOperation(value = "Crea un estado para los activos de una empresa", notes = "Crea un nuevo estado para los activos")
 	public ResponseEntity<EstadoDTO> create(@Valid @RequestBody EstadoDTO estadoDTO){
 		return new ResponseEntity<EstadoDTO>(estadoService.create(estadoDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	@ApiOperation("Encuentra los estados")
+	//@ApiOperation("Encuentra los estados")
 	public List<EstadoDTO> get(
 			@RequestParam(required=false)String letras,
 			@RequestParam(required=false) Long nit){
@@ -84,7 +84,7 @@ public class EstadoController {
 	}
 	
 	@PostMapping("/indexados")
-	@ApiOperation(value = "Encuentra los estados de los activos de una empresa", notes = "Retorna los estados que pueden tomar los activos que en su nombre contengan las letras indicadas, retorna todos los estados si no se especifica ninguna letra")
+	//@ApiOperation(value = "Encuentra los estados de los activos de una empresa", notes = "Retorna los estados que pueden tomar los activos que en su nombre contengan las letras indicadas, retorna todos los estados si no se especifica ninguna letra")
 	public ApiResponse<Page<Estado>> paginationlist(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -111,7 +111,7 @@ public class EstadoController {
 	}
 	
 	@GetMapping("/{id},{nitEmpresa}")
-	@ApiOperation(value = "Encuentra un estado", notes = "Retorna un estado segun su id")
+	//@ApiOperation(value = "Encuentra un estado", notes = "Retorna un estado segun su id")
 	public ResponseEntity<EstadoDTO> get(@PathVariable(name = "id") Long id,
 										 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -128,7 +128,7 @@ public class EstadoController {
 	}
 	
 	@PutMapping("/{id}")
-	@ApiOperation(value = "Actualiza el estado de una empresa", notes = "Actualiza los datos de un estado")
+	//@ApiOperation(value = "Actualiza el estado de una empresa", notes = "Actualiza los datos de un estado")
 	public ResponseEntity<EstadoDTO> update(@Valid @RequestBody EstadoDTO estadoDTO,
 											@PathVariable Long id){
 		EstadoDTO actualizado = estadoService.update(id, estadoDTO);
@@ -137,7 +137,7 @@ public class EstadoController {
 	}
 	
 	@DeleteMapping("/{id},{nitEmpresa}")
-	@ApiOperation(value = "Elimina un estado de una empresa", notes = "Elimina un estado por su id")
+	//@ApiOperation(value = "Elimina un estado de una empresa", notes = "Elimina un estado por su id")
  	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
 										 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -155,7 +155,7 @@ public class EstadoController {
 	}
 	
 	@PatchMapping("/{id},{nitEmpresa}")
-	@ApiOperation(value = "Inhabilita un estado", notes = "Inhabilita un estado por su id")
+	//@ApiOperation(value = "Inhabilita un estado", notes = "Inhabilita un estado por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
 	 									@PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -173,7 +173,7 @@ public class EstadoController {
 	}
 	
 	@PostMapping("/descarga")
-	@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de activos de la busqueda realizada en formato csv")
+	//@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de activos de la busqueda realizada en formato csv")
 	public void getCsvEmpresas(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,

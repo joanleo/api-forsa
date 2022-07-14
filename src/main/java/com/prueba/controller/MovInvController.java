@@ -34,12 +34,12 @@ import com.prueba.service.MovInventarioService;
 import com.prueba.util.ReporteInventarioPDF;
 import com.prueba.util.UtilitiesApi;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/inventarios")
-@Api(tags = "Inventarios", description = "Operaciones referentes a los inventarios")
+//@Api(tags = "Inventarios", description = "Operaciones referentes a los inventarios")
 public class MovInvController {
 	
 	@Autowired
@@ -52,7 +52,7 @@ public class MovInvController {
 	private UtilitiesApi util;
 	
 	@PostMapping
-	@ApiOperation(value = "Crea un inventario", notes = "Crea un nuevo inventario")
+	//@ApiOperation(value = "Crea un inventario", notes = "Crea un nuevo inventario")
 	public ResponseEntity<MovInventarioDTO> create(@RequestBody MovInventarioDTO movInventarioDto,
 													@RequestParam(required=false) Long nit){
 		System.out.println(movInventarioDto.getUbicacion().getId());
@@ -81,8 +81,8 @@ public class MovInvController {
 	}
 	
 	@GetMapping
-	@ApiOperation(value = "Lista los inventarios existentes", notes = "Retorna los inventarios que se encuentren en el rango de fechas dado (formato de fecha 'yyyy-MM-dd') o que en su nombre "
-			+ "	contenga los valores  indicadas en la variable letras. Si no se incluye ningun valor retorna todos los inventarios existentes")
+	//@ApiOperation(value = "Lista los inventarios existentes", notes = "Retorna los inventarios que se encuentren en el rango de fechas dado (formato de fecha 'yyyy-MM-dd') o que en su nombre "
+	//		+ "	contenga los valores  indicadas en la variable letras. Si no se incluye ningun valor retorna todos los inventarios existentes")
 	public ApiResponse<Page<MovInventario>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 												 @RequestParam(required=false, defaultValue = "10") Integer items,
 												 @RequestParam(required=false) String letras,
@@ -113,13 +113,13 @@ public class MovInvController {
 	}
 	
 	@GetMapping("/detalle/{id}")
-	@ApiOperation(value = "Encuentra un inventario", notes = "Retorna un inventario con detalle segun el numero de inventario")
+	//@ApiOperation(value = "Encuentra un inventario", notes = "Retorna un inventario con detalle segun el numero de inventario")
 	public ResponseEntity<MovInventario> getInventario(@PathVariable Long id){
 		return ResponseEntity.ok(movInvService.getInventario(id));
 	}
 	
 	@GetMapping("/detalle/{id}/descarga")
-	@ApiOperation(value = "Crea un inventario en formato PDF", notes = "Retorna un inventario con detalle segun el numero de inventario")
+	//@ApiOperation(value = "Crea un inventario en formato PDF", notes = "Retorna un inventario con detalle segun el numero de inventario")
 	public void exportToPDF(HttpServletResponse response,
 							@PathVariable Long id) throws DocumentException, IOException {
 		response.setContentType("application/pdf");

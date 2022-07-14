@@ -1,5 +1,118 @@
 package com.prueba.entity;
 
-public class Rutina {
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.prueba.security.entity.Rol;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
+@Entity
+@Table(name = "rutinas")
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+public class Rutina implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Column(name = "nidutina")
+	private Long idRutina;
+	
+	@Column(name = "vcnombre")
+	private String nombre;
+	
+	@OneToMany(mappedBy = "rutina", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
+	private Set<DetalleRutina> detalles = new HashSet<>();
+	
+	@ManyToMany(mappedBy = "politicas")
+    private Set<Rol> rol;
+
+	public Long getIdRutina() {
+		return idRutina;
+	}
+
+	public void setIdRutina(Long idRutina) {
+		this.idRutina = idRutina;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public Set<DetalleRutina> getDetalles() {
+		return detalles;
+	}
+
+	public void setDetalles(Set<DetalleRutina> detalles) {
+		this.detalles = detalles;
+	}
+
+	public Set<Rol> getRol() {
+		return rol;
+	}
+
+	public void setRol(Set<Rol> rol) {
+		this.rol = rol;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void addPermiso(Permiso permiso) {
+        DetalleRutina detalle = new DetalleRutina(this, permiso);
+        detalles.add(detalle);
+    }
+	
+	public void removePermiso(Permiso permiso) {
+        for (Iterator<DetalleRutina> iterator = detalles.iterator();
+             iterator.hasNext(); ) {
+        	DetalleRutina detalle = iterator.next();
+ 
+            if (detalle.getRutina().equals(this) &&
+            		detalle.getPermiso().equals(permiso)) {
+                iterator.remove();
+                detalle.setRutina(null);
+                detalle.setPermiso(null);
+            }
+        }
+    }
+
+	public Rutina(Long idRutina, String nombre, Set<DetalleRutina> detalles, Empresa empresa) {
+		super();
+		this.idRutina = idRutina;
+		this.nombre = nombre;
+		this.detalles = detalles;
+	}
+
+	public Rutina() {
+		super();
+	}
+	
+	
+	
+	
 
 }

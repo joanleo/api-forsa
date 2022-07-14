@@ -2,7 +2,6 @@ package com.prueba.security;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.ServletRequest;
@@ -12,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import com.prueba.security.entity.PoliRol;
+import com.prueba.entity.Rutina;
 import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
@@ -31,17 +30,17 @@ public class UserSecurity {
 		System.out.println(authentication.getName());
 		Usuario usuario = UsuarioRepo.findByEmail(authentication.getName());
 		if(usuario == null) return false;
-		Collection<Rol> roles = usuario.getRoles();
+		Rol roles = usuario.getRoles();
 		System.out.println(Arrays.asList(usuario.getRoles()));
 		
 		List<String> privileges = new ArrayList<>();
-        List<PoliRol> collection = new ArrayList<>();
-        for (Rol rol : roles) {
-        	System.out.println("Rol "+ rol.getNombre());
-            privileges.add(rol.getNombre());
-            collection.addAll(rol.getPoliRoles());
-        }
-        for (PoliRol item : collection) {
+        List<Rutina> collection = new ArrayList<>();
+
+        	System.out.println("Rol "+ roles.getNombre());
+            privileges.add(roles.getNombre());
+            //collection.addAll(rol.getPoliticas());
+
+        for (Rutina item : collection) {
         	System.out.println("PoliRol "+ item.getNombre());
             privileges.add(item.getNombre());
         }

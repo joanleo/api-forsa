@@ -34,14 +34,14 @@ import com.prueba.service.TipoMovService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import springfox.documentation.annotations.ApiIgnore;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
+//import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/tiposmovimientos")
-@Api(tags = "Tipos Movimiento", description = "operaciones referentes a los tipos de movimiento")
-@ApiIgnore
+//@Api(tags = "Tipos Movimiento", description = "operaciones referentes a los tipos de movimiento")
+//@ApiIgnore
 public class TipoMovController {
 	
 	@Autowired
@@ -57,13 +57,13 @@ public class TipoMovController {
 	private UtilitiesApi util;
 	
 	@PostMapping
-	@ApiOperation(value = "Crea un tipo de movimiento", notes = "Crea un nuevo tipo de movimiento")
+	//@ApiOperation(value = "Crea un tipo de movimiento", notes = "Crea un nuevo tipo de movimiento")
 	public ResponseEntity<TipoMovDTO> create(@Valid @RequestBody TipoMovDTO tipoMovDTO){
 		return new ResponseEntity<TipoMovDTO>(tipoMovService.create(tipoMovDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	@ApiOperation(value = "Encuentra los tipos de movimientos", notes = "Retorna todos los tipos de movimiento")
+	//@ApiOperation(value = "Encuentra los tipos de movimientos", notes = "Retorna todos los tipos de movimiento")
 	public List<TipoMovDTO> getTiposMov(@RequestParam(required=false) String letras,
 										@RequestParam(required=false) Long nit){
 		Empresa empresa;
@@ -85,7 +85,7 @@ public class TipoMovController {
 	}
 	
 	@GetMapping("/{id}")
-	@ApiOperation(value = "Encuentra un tipo de movimiento", notes = "Retorna un tipo de movimiento segun su id")
+	//@ApiOperation(value = "Encuentra un tipo de movimiento", notes = "Retorna un tipo de movimiento segun su id")
 	public ResponseEntity<TipoMovDTO> getTipoMov(@PathVariable(name="id") Long id,
 					 							 @PathVariable(required=false) Long nit){
 		Empresa empresa;
@@ -102,7 +102,7 @@ public class TipoMovController {
 	}
 	
 	@PutMapping("/{id}")
-	@ApiOperation(value = "Actualiza un tipo de movimiento", notes = "Actualiza los datos de un tipo de movimiento")
+	//@ApiOperation(value = "Actualiza un tipo de movimiento", notes = "Actualiza los datos de un tipo de movimiento")
 	public ResponseEntity<TipoMovDTO> update(@Valid @RequestBody TipoMovDTO tipoMovDTO,
 											 @PathVariable Long id){
 		TipoMovDTO actualizado = tipoMovService.update(id, tipoMovDTO);
@@ -111,7 +111,7 @@ public class TipoMovController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@ApiOperation(value = "Elimina un tipo de movimiento", notes = "Elimina un tipo de movimiento por su id")
+	//@ApiOperation(value = "Elimina un tipo de movimiento", notes = "Elimina un tipo de movimiento por su id")
  	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
 										 @PathVariable(required=false) Long nit){
 		Empresa empresa;
@@ -129,7 +129,7 @@ public class TipoMovController {
 	}
 	
 	@PatchMapping("/{id}")
-	@ApiOperation(value = "Inhabilita un tipo de movimiento", notes = "Inhabilita un tipo de movimiento por su id")
+	//@ApiOperation(value = "Inhabilita un tipo de movimiento", notes = "Inhabilita un tipo de movimiento por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
 	 									@PathVariable(required=false) Long nit){
 		Empresa empresa;
@@ -147,7 +147,7 @@ public class TipoMovController {
 	}
 	
 	@PostMapping("/descarga")
-	@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de activos de la busqueda realizada en formato csv")
+	//@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de activos de la busqueda realizada en formato csv")
 	public void getCsvEmpresas(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,

@@ -30,12 +30,12 @@ import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.security.service.RolService;
 import com.prueba.util.UtilitiesApi;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/roles")
-@Api(tags = "Roles",description = "Operaciones referentes a los roles de los usuarios")
+//@Api(tags = "Roles",description = "Operaciones referentes a los roles de los usuarios")
 public class RolController {
 
 	@Autowired
@@ -48,13 +48,13 @@ public class RolController {
 	private UtilitiesApi util;
 	
 	@PostMapping
-	@ApiOperation(value = "Crear un rol", notes = "Crea un nuevo rol")
+	//@ApiOperation(value = "Crear un rol", notes = "Crea un nuevo rol")
 	public ResponseEntity<RolDTO> create(@Valid @RequestBody RolDTO rolDTO){
 		return new ResponseEntity<RolDTO>(rolService.create(rolDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	@ApiOperation(value = "Encuentra los roles", notes = "Retorna todos los roles existentes")
+	//@ApiOperation(value = "Encuentra los roles", notes = "Retorna todos los roles existentes")
 	public List<RolDTO> list(@RequestParam(required=false)String letras,
 							 @RequestParam(required=false) Long nit){
 		
@@ -103,7 +103,7 @@ public class RolController {
 	
 	
 	@GetMapping("/{id},{nitEmpresa}")
-	@ApiOperation(value = "Encuentra un rol", notes = "Retorna un rol por su id")
+	//@ApiOperation(value = "Encuentra un rol", notes = "Retorna un rol por su id")
 	public ResponseEntity<RolDTO> get(@PathVariable(name = "id") Long id,
 									@PathVariable(required=false) Long nitEmpresa){
 		
@@ -129,7 +129,7 @@ public class RolController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@ApiOperation(value = "Elimina un rol", notes = "Elimina el rol kque concuerde con el id especificado")
+	//@ApiOperation(value = "Elimina un rol", notes = "Elimina el rol kque concuerde con el id especificado")
 	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) {
 		rolService.delete(id);
 		return new ResponseEntity<>("Rol eliminado con exito", HttpStatus.OK);

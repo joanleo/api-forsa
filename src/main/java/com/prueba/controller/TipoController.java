@@ -33,12 +33,12 @@ import com.prueba.service.TipoActivoService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/tipos")
-@Api(tags = "Tipos", description = "Operaciones referentes a los tipos de activos")
+//@Api(tags = "Tipos", description = "Operaciones referentes a los tipos de activos")
 public class TipoController {
 	
 	private TipoActivoService tipoActivoService;
@@ -53,7 +53,7 @@ public class TipoController {
 	private UtilitiesApi util;
 	
 	@PostMapping
-	@ApiOperation(value = "Crea un tipo de activo", notes = "Crea un nuevo tipo de activo")
+	//@ApiOperation(value = "Crea un tipo de activo", notes = "Crea un nuevo tipo de activo")
 	public ResponseEntity<TipoActivo> create(@RequestBody TipoActivo tipoActivo,
 					 						 @RequestParam(required=false) Long nit){
 		Empresa empresa;
@@ -88,7 +88,7 @@ public class TipoController {
 	}
 	
 	@GetMapping("/{id},{nit}")
-	@ApiOperation(value = "Encuentra una tipo de activo", notes = "Retorna una tipo de activo por el id")
+	//@ApiOperation(value = "Encuentra una tipo de activo", notes = "Retorna una tipo de activo por el id")
 	public ResponseEntity<TipoActivo> get(@PathVariable(name = "id") Long id,
 			 							  @PathVariable(required=false) Long nit){
 		Empresa empresa;
@@ -105,7 +105,7 @@ public class TipoController {
 	}
 	
 	@PutMapping("/{id}")
-	@ApiOperation(value = "Actualiza una familia", notes = "Actualiza los datos de una familia")
+	//@ApiOperation(value = "Actualiza una familia", notes = "Actualiza los datos de una familia")
 	public ResponseEntity<TipoActivo> update(@RequestBody TipoActivo tipoActivo,
 											 @PathVariable Long id,
 											 @RequestParam(required=false) Long nit){
@@ -125,7 +125,7 @@ public class TipoController {
 	}
 
 	@DeleteMapping("/{id}")
-	@ApiOperation(value = "Elimina un tipo de activo", notes = "Elimina un tipo de activo por su id")
+	//@ApiOperation(value = "Elimina un tipo de activo", notes = "Elimina un tipo de activo por su id")
 	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
 					 					 @PathVariable(required=false) Long nit){
 		Empresa empresa;
@@ -144,7 +144,7 @@ public class TipoController {
 	}
 	
 	@PatchMapping("/{id}")
-	@ApiOperation(value = "Inhabilita un tipo de activo", notes = "Inhabilita un tipo de activo por su id")
+	//@ApiOperation(value = "Inhabilita un tipo de activo", notes = "Inhabilita un tipo de activo por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
 					 					 @PathVariable(required=false) Long nit){
 		Empresa empresa;
@@ -163,7 +163,7 @@ public class TipoController {
 	}
 	
 	@PostMapping("/descarga")
-	@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de familias de la busqueda realizada en formato csv")
+	//@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de familias de la busqueda realizada en formato csv")
 	public void getCsvEmpresas(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,

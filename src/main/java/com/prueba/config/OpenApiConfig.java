@@ -1,10 +1,21 @@
 package com.prueba.config;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+
+
+/*package com.prueba.config;
+
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
 
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -18,7 +29,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
-@Configuration
+
 public class SpringFoxConfig {
 	
 	private ApiKey apiKey() { 
@@ -55,4 +66,15 @@ public class SpringFoxConfig {
               .version("1.0.0")
               .build();
     }
+}*/
+@Configuration
+public class OpenApiConfig {
+
+	@Bean
+	public OpenAPI customOpenAPI(@Value("1.6.6") String appVersion) {
+		return new OpenAPI()
+				.components(new Components())
+				.info(new Info().title("Prueba api forsa").version(appVersion)
+						.license(new License().name("Apache 2.0").url("http://springdoc.org")));
+	}
 }

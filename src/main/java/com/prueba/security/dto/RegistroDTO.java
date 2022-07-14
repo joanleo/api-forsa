@@ -4,9 +4,9 @@ import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.prueba.entity.Empresa;
 import com.prueba.security.entity.Rol;
 
 public class RegistroDTO {
@@ -25,8 +25,7 @@ public class RegistroDTO {
 	@Size(min = 4, max = 15)
 	private String contrasena;
 	
-	@NotEmpty
-	private Long nitEmpresa;
+	private Empresa empresa;
 	
 	private Boolean estaActivo;
 	
@@ -68,12 +67,12 @@ public class RegistroDTO {
 		this.contrasena = contrasena;
 	}
 
-	public Long getNitEmpresa() {
-		return nitEmpresa;
+	public Empresa getEmpresa() {
+		return empresa;
 	}
 
-	public void setNitEmpresa(Long nitEmpresa) {
-		this.nitEmpresa = nitEmpresa;
+	public void setEmpresa(Empresa nitEmpresa) {
+		this.empresa = nitEmpresa;
 	}
 
 	public Boolean getEstaActivo() {

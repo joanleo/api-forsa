@@ -1,8 +1,5 @@
 package com.prueba.security.controller;
 
-import java.util.Arrays;
-//import java.util.Collections;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +25,12 @@ import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.util.UtilitiesApi;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/auth")
-@Api(tags = "Autenticacion", description = "Operaciones de autenticacion y registro de usuarios")
+//@Api(tags = "Autenticacion", description = "Operaciones de autenticacion y registro de usuarios")
 public class AuthController {
 
 	@Autowired
@@ -55,9 +52,9 @@ public class AuthController {
 	private UtilitiesApi util;
 	
 	@PostMapping("/login")
-	@ApiOperation(value = "Autenticacion de usuarios")
+	//@ApiOperation(value = "Autenticacion de usuarios")
 	public ResponseEntity<JWTAuthResonseDTO> authenticateUser(@RequestBody LoginDTO loginDTO){
-		
+		System.out.println("ingreso");
 		Authentication autentication = authenticationMnager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUsernameOrEmail(), loginDTO.getPassword()));
 		
 		SecurityContextHolder.getContext().setAuthentication(autentication);
@@ -76,7 +73,7 @@ public class AuthController {
 	}
 	
 	@PostMapping("/register")
-	@ApiOperation(value = "Registro de usuarios")
+	//@ApiOperation(value = "Registro de usuarios")
 	public ResponseEntity<?> registrarUsuario(@RequestBody RegistroDTO registroDTO){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -90,8 +87,8 @@ public class AuthController {
 			System.out.println("Debe estar logueado para realizar el registro");
 		}
 		
-		if(registroDTO.getNitEmpresa() != null) {
-			empresa = util.obtenerEmpresa(registroDTO.getNitEmpresa());
+		if(registroDTO.getEmpresa() != null) {
+			empresa = util.obtenerEmpresa(registroDTO.getEmpresa().getNit());
 		}else {
 			empresa = usuarioActual.getEmpresa();			
 		}
@@ -111,7 +108,7 @@ public class AuthController {
 		usuario.setContrasena(passwordEncoder.encode(registroDTO.getContrasena()));
 		
 		Rol roles = rolRepo.findByNombre("ROLE_USER");
-		usuario.setRoles(Arrays.asList(roles));
+		usuario.setRoles(roles);
 		
 		usuarioRepo.save(usuario);
 		return new ResponseEntity<>("Usuario registrado exitosamente",HttpStatus.OK);

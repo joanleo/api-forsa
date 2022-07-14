@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.prueba.entity.Empresa;
-import com.prueba.entity.Fabricante;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.security.dto.RegistroDTO;
@@ -33,11 +32,11 @@ public class UsuarioServiceImp implements UsuarioService {
 	
 	@Override
 	public Usuario update(Long id, RegistroDTO registroDTO) throws Exception {
-		Empresa empresa = empresaRepo.findByNit(registroDTO.getNitEmpresa());
+		Empresa empresa = empresaRepo.findByNit(registroDTO.getEmpresa().getNit());
 		if(Objects.isNull(empresa)) {
 			throw new Exception("Empresa no existe");
 		}
-		Usuario usuario = usuarioRepo.findByNombreAndEmpresa(registroDTO.getNombre(), registroDTO.getNitEmpresa());
+		Usuario usuario = usuarioRepo.findByNombreAndEmpresa(registroDTO.getNombre(), registroDTO.getEmpresa());
 		usuarioRepo.save(usuario);		
 		return usuario;
 	}

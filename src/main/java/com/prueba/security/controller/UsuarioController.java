@@ -1,6 +1,5 @@
 package com.prueba.security.controller;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,12 +33,12 @@ import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.security.service.UsuarioService;
 import com.prueba.util.UtilitiesApi;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/usuarios")
-@Api(tags = "Usuarios", description = "Operaciones referentes a los usuarios")
+//@Api(tags = "Usuarios", description = "Operaciones referentes a los usuarios")
 public class UsuarioController {
 	
 	@Autowired
@@ -58,7 +57,7 @@ public class UsuarioController {
 	private UsuarioService usuarioService;
 	
 	@GetMapping
-	@ApiOperation(value="Encuentra los usuarios")
+	//@ApiOperation(value="Encuentra los usuarios")
 	public List<Usuario> get(
 			@RequestParam(required=false)String letras,
 			@RequestParam(required=false) Long nit){
@@ -77,7 +76,7 @@ public class UsuarioController {
 	
 	
 	@PostMapping("/indexados")
-	@ApiOperation(value = "Encuentra los usuarios", notes = "Retorna los usuarios de una empresa dada")
+	//@ApiOperation(value = "Encuentra los usuarios", notes = "Retorna los usuarios de una empresa dada")
 	public ApiResponse<Page<Usuario>> paginationList(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -104,7 +103,7 @@ public class UsuarioController {
 	}
 	
 	@PostMapping
-	@ApiOperation(value = "Crea un usuario", notes = "Crea un nuevo usuario")
+	//@ApiOperation(value = "Crea un usuario", notes = "Crea un nuevo usuario")
 	public ResponseEntity<?> create(@Valid@RequestBody RegistroDTO registroDTO){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -118,8 +117,8 @@ public class UsuarioController {
 			return new ResponseEntity<>("Debe estar logueado para realizar el registro",HttpStatus.BAD_REQUEST);
 		}
 		
-		if(registroDTO.getNitEmpresa() != null) {
-			empresa = util.obtenerEmpresa(registroDTO.getNitEmpresa());
+		if(registroDTO.getEmpresa() != null) {
+			empresa = util.obtenerEmpresa(registroDTO.getEmpresa().getNit());
 		}else {
 			empresa = usuarioActual.getEmpresa();			
 		}
@@ -139,14 +138,14 @@ public class UsuarioController {
 		usuario.setContrasena(passwordEncoder.encode(registroDTO.getContrasena()));
 		
 		Rol roles = rolRepo.findByNombre("ROLE_USER");
-		usuario.setRoles(Arrays.asList(roles));
+		usuario.setRoles(roles);
 		
 		usuarioRepo.save(usuario);
 		return new ResponseEntity<>("Usuario creado exitosamente",HttpStatus.OK);
 	}
 	
 	@PutMapping("/{id}")
-	@ApiOperation(value = "Actualiza un usuario", notes = "Actualiza los datos de un usuario")
+	//@ApiOperation(value = "Actualiza un usuario", notes = "Actualiza los datos de un usuario")
 	public ResponseEntity<?> update(@Valid@RequestBody RegistroDTO registroDTO,
 			@PathVariable Long id){
 
@@ -161,7 +160,7 @@ public class UsuarioController {
 	}
 	
 	@DeleteMapping("/{id},{nitEmpresa}")
-	@ApiOperation(value = "Elimina un fabricante", notes = "Elimina un fabricante por su id")
+	//@ApiOperation(value = "Elimina un fabricante", notes = "Elimina un fabricante por su id")
 	public ResponseEntity<?> delete(@PathVariable(name="nitFabricante")Long nitFabricante,
 			 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;

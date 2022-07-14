@@ -28,7 +28,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> , JpaSpe
 	
 	Optional<Usuario> findByTokenPassword(String token);
 
-	Usuario findByNombreAndEmpresa(String nombre, Long nitEmpresa);
+	Usuario findByNombreAndEmpresa(String nombre, Empresa Empresa);
 
 	Page<Usuario> findByEmpresaAndEstaActivoTrue(Empresa empresa, Pageable page);
 
