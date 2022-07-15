@@ -51,7 +51,7 @@ public class JwtTokenProvider {
 									 .claim("empresa", empresa)
 									 .claim("nit", nit)
 									 .claim("email", email).setIssuedAt(new Date())
-									 .claim("rol", rol)
+									 //.claim("rol", rol)
 									 .setIssuer("Metrolink SAS")
 									 .setNotBefore(fechaActual)
 									 .setExpiration(fechaExpiracion)
