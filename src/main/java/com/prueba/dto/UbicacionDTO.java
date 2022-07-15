@@ -22,7 +22,7 @@ public class UbicacionDTO {
 	@NotNull(message = "Este campo no puede ser nulo")
 	private TipoUbicacion tipo;
 	
-	@NotNull(message = "Este campo no puede ser nulo")
+	//@NotNull(message = "Este campo no puede ser nulo")
 	private Empresa empresa;
 
 	public Long getId() {
