@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Rutina;
 
@@ -48,6 +49,7 @@ public class Rol implements Serializable{
     @JoinColumn(name = "vcnitEmpresa")
     private Empresa empresa;
     
+    @JsonIgnore
     @OneToMany(targetEntity=Usuario.class, mappedBy="rol",cascade=CascadeType.ALL, fetch = FetchType.LAZY)  
     private Set<Usuario> usuario = new HashSet<>();
     
