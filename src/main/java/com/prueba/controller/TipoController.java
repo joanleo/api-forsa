@@ -33,12 +33,15 @@ import com.prueba.service.TipoActivoService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/tipos")
 //@Api(tags = "Tipos", description = "Operaciones referentes a los tipos de activos")
+@Tag(name = "Tipos", description = "Operaciones referentes a los tipos de activos")
 public class TipoController {
 	
 	private TipoActivoService tipoActivoService;

@@ -78,4 +78,10 @@ public class UsuarioServiceImp implements UsuarioService {
 		usuario = usuarioRepo.save(usuario);
 	}
 
+	@Override
+	public List<Usuario> list(Empresa empresa) {
+		// TODO Auto-generated method stub
+		return usuarioRepo.findByEmpresaAndEstaActivoTrue(empresa);
+	}
+
 }

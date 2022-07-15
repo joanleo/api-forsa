@@ -33,12 +33,15 @@ import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.security.service.UsuarioService;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/usuarios")
 //@Api(tags = "Usuarios", description = "Operaciones referentes a los usuarios")
+@Tag(name = "Usuarios", description = "Operaciones referentes a los usuarios")
 public class UsuarioController {
 	
 	@Autowired
@@ -58,9 +61,8 @@ public class UsuarioController {
 	
 	@GetMapping
 	//@ApiOperation(value="Encuentra los usuarios")
-	public List<Usuario> get(
-			@RequestParam(required=false)String letras,
-			@RequestParam(required=false) Long nit){
+	public List<Usuario> get(@RequestParam(required=false)String letras,
+							 @RequestParam(required=false) Long nit){
 		
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -70,6 +72,10 @@ public class UsuarioController {
 			empresa = util.obtenerEmpresa(nit);
 		}else {
 			empresa = usuario.getEmpresa();
+		}
+		
+		if(letras == null) {
+			return usuarioService.list(empresa);
 		}
 		return  usuarioService.findByNombreAndEmpresaAndEstaActivo(letras, empresa);
 	}
@@ -118,27 +124,32 @@ public class UsuarioController {
 		}
 		
 		if(registroDTO.getEmpresa() != null) {
-			empresa = util.obtenerEmpresa(registroDTO.getEmpresa().getNit());
+			empresa = registroDTO.getEmpresa();
 		}else {
 			empresa = usuarioActual.getEmpresa();			
 		}
+		System.out.println("verificando nombre de usuario");
 		if(usuarioRepo.existsByNombreUsuario(registroDTO.getNombreUsuario())) {
 			return new ResponseEntity<>("Ese nombre de usuario ya existe",HttpStatus.BAD_REQUEST);
 		}
-		
+		System.out.println("verificando correo de usuario");
 		if(usuarioRepo.existsByEmail(registroDTO.getEmail())) {
 			return new ResponseEntity<>("Ese email de usuario ya existe",HttpStatus.BAD_REQUEST);
 		}
-		
+		System.out.println("usurio no existe");
 		Usuario usuario = new Usuario();
 		usuario.setEmpresa(empresa);
 		usuario.setNombre(registroDTO.getNombre());
 		usuario.setNombreUsuario(registroDTO.getNombreUsuario());
 		usuario.setEmail(registroDTO.getEmail());
 		usuario.setContrasena(passwordEncoder.encode(registroDTO.getContrasena()));
-		if(registroDTO.getRol() != null) {
-			Rol rol = rolRepo.findByNombre("ROLE_USER");			
+		if(registroDTO.getRol() == null) {
+			System.out.println("no tiene rol");
+			Rol rol = rolRepo.findByNombre("ROLE_USER");	
+			System.out.println("se asigna rol: "+rol.getNombre());
 			usuario.setRol(rol);
+		}else {
+			usuario.setRol(registroDTO.getRol());
 		}
 				
 		usuarioRepo.save(usuario);

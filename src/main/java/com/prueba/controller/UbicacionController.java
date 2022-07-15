@@ -38,12 +38,15 @@ import com.prueba.service.UbicacionService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/ubicaciones")
 //@Api(tags = "Ubicaciones", description = "Operaciones referentes a las ubicaciones")
+@Tag(name = "Ubicaciones", description = "Operaciones referentes a las ubicaciones")
 public class UbicacionController {
 
 	@Autowired

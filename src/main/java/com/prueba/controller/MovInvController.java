@@ -34,12 +34,15 @@ import com.prueba.service.MovInventarioService;
 import com.prueba.util.ReporteInventarioPDF;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/inventarios")
 //@Api(tags = "Inventarios", description = "Operaciones referentes a los inventarios")
+@Tag(name = "Inventarios", description = "Operaciones referentes a los inventarios")
 public class MovInvController {
 	
 	@Autowired

@@ -26,12 +26,15 @@ import com.prueba.service.ProductoService;
 import com.prueba.util.ReporteVerificarPDF;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/reportes")
 //@Api(tags = "Reportes", description = "Reportes")
+@Tag(name = "Reportes", description = "Crecion y descarga de reportes en pdf")
 public class ReportesController {
 	
 	@Autowired

@@ -40,12 +40,15 @@ import com.prueba.service.ProductoService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/activos")
 //@Api(tags = "Activos", description = "Operaciones referentes a los activos")
+@Tag(name = "Activos", description = "Operaciones referentes a los activos")
 public class ProductoController {
 
 	@Autowired

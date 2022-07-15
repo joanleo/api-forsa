@@ -38,12 +38,15 @@ import com.prueba.service.FamiliaService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/familias")
 //@Api(tags = "Familias", description = "Operaciones referentes a las familias")
+@Tag(name = "Familias", description = "Operaciones referentes a las familias")
 public class FamiliaController {
 
 	@Autowired

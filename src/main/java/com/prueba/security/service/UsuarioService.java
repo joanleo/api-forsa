@@ -22,6 +22,8 @@ public interface UsuarioService {
 	public List<Usuario> findByNombreAndEmpresaAndEstaActivo(String letras, Empresa empresa);
 
 	public void delete(Long nitFabricante, Empresa empresa) throws Exception;
+
+	public List<Usuario> list(Empresa empresa);
 	
 	
 

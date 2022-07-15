@@ -11,12 +11,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.prueba.entity.Empresa;
 
 
 @Entity
 @Table(name = "m_usuarios", uniqueConstraints = { @UniqueConstraint(columnNames = { "vcusername", "vcemail" }) })
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "id")
 public class Usuario {
 
 	@Id
@@ -45,8 +53,8 @@ public class Usuario {
     
     
     @ManyToOne()
-    @JoinColumn(name="nidrol", referencedColumnName = "nidrol") 
-	private Rol rol;
+    @JoinColumn(name="nidrol", referencedColumnName = "nidrol")
+    private Rol rol;
 	
     
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -54,7 +62,7 @@ public class Usuario {
     private Empresa empresa;
 	
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
-    private Boolean estaActivo;
+    private Boolean estaActivo=true;
 	
 	public Empresa getEmpresa() {
 		return empresa;

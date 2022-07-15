@@ -32,12 +32,15 @@ import com.prueba.security.dto.ResDTO;
 import com.prueba.service.TipoEmpresaService;
 import com.prueba.util.CsvExportService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/tipoempresas")
 //@Api(tags = "Tipos empresa", description = "Opereciones referentes a los tipos de empresa")
+@Tag(name = "Tipos empresa", description = "Opereciones referentes a los tipos de empresa")
 public class TipoEmpresaController {
 	
 	@Autowired

@@ -30,12 +30,15 @@ import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.security.service.RolService;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/roles")
 //@Api(tags = "Roles",description = "Operaciones referentes a los roles de los usuarios")
+@Tag(name = "Roles", description = "Operaciones referentes a los roles de los usuarios")
 public class RolController {
 
 	@Autowired

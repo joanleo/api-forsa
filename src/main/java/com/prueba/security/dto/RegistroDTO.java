@@ -25,7 +25,7 @@ public class RegistroDTO {
 	
 	private Empresa empresa;
 	
-	private Boolean estaActivo;
+	private Boolean estaActivo=true;
 	
 	private Rol rol;
 

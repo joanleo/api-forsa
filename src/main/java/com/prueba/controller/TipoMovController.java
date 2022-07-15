@@ -34,6 +34,8 @@ import com.prueba.service.TipoMovService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 //import springfox.documentation.annotations.ApiIgnore;
@@ -42,6 +44,7 @@ import com.prueba.util.UtilitiesApi;
 @RequestMapping("/tiposmovimientos")
 //@Api(tags = "Tipos Movimiento", description = "operaciones referentes a los tipos de movimiento")
 //@ApiIgnore
+@Tag(name = "Tipos Movimiento", description = "operaciones referentes a los tipos de movimiento")
 public class TipoMovController {
 	
 	@Autowired

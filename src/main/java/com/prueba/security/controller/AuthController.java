@@ -25,12 +25,15 @@ import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/auth")
 //@Api(tags = "Autenticacion", description = "Operaciones de autenticacion y registro de usuarios")
+@Tag(name = "Autenticacion", description = "Operaciones de autenticacion y registro de usuarios")
 public class AuthController {
 
 	@Autowired

@@ -35,4 +35,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> , JpaSpe
 	List<Usuario> findByNombreContainsAndEmpresaAndEstaActivoTrue(String letras, Empresa empresa);
 
 	Usuario findByIdAndEmpresa(Long id, Empresa empresa);
+
+	List<Usuario> findByEmpresaAndEstaActivoTrue(Empresa empresa);
+
+
 }

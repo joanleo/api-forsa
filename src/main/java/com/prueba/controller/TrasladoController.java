@@ -21,6 +21,8 @@ import com.prueba.dto.TrasladoDTO;
 import com.prueba.entity.Traslado;
 import com.prueba.service.TrasladoService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 //import springfox.documentation.annotations.ApiIgnore;
@@ -29,6 +31,7 @@ import com.prueba.service.TrasladoService;
 @RequestMapping("/traslados")
 //@Api(tags = "Traslados", description = "Operaciones referentes a los traslados")
 //@ApiIgnore
+@Tag(name = "Traslados", description = "Operaciones referentes a los traslados")
 public class TrasladoController {
 	
 	@Autowired

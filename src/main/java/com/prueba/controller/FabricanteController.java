@@ -38,12 +38,15 @@ import com.prueba.service.FabricanteService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/fabricantes")
 //@Api(tags = "Fabricantes", description = "Operaciones referentes a los fabricantes")
+@Tag(name = "Fabricantes", description = "Operaciones referentes a los fabricantes")
 public class FabricanteController {
 
 	@Autowired

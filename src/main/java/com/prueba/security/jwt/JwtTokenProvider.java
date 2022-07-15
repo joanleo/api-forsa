@@ -41,7 +41,7 @@ public class JwtTokenProvider {
 		String email = usuario.getEmail();
 		String empresa = String.valueOf(usuario.getEmpresa().getNombre());
 		String nit = String.valueOf(usuario.getEmpresa().getNit());
-		Rol rol = usuario.getRol();
+		Rol rol = usuario.getRol(); 
 		Date fechaActual = new Date();
 		Date fechaExpiracion = new Date(fechaActual.getTime() + jwtExpirationInMs);
 
