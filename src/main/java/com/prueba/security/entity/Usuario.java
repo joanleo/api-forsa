@@ -1,6 +1,5 @@
 package com.prueba.security.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -46,8 +44,9 @@ public class Usuario {
     private String tokenPassword;
     
     
-    @OneToOne(targetEntity = Usuario.class, cascade = CascadeType.ALL)
-	private Rol roles;
+    @ManyToOne()
+    @JoinColumn(name="nidrol", referencedColumnName = "nidrol") 
+	private Rol rol;
 	
     
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -65,12 +64,12 @@ public class Usuario {
 		this.empresa = empresa;
 	}
 
-	public Rol getRoles() {
-		return roles;
+	public Rol getRol() {
+		return rol;
 	}
 
-	public void setRoles(Rol roles) {
-		this.roles = roles;
+	public void setRol(Rol rol) {
+		this.rol = rol;
 	}
 
 	public Long getId() {

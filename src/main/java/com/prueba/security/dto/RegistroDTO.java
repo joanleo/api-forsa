@@ -1,7 +1,5 @@
 package com.prueba.security.dto;
 
-import java.util.Set;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -29,7 +27,7 @@ public class RegistroDTO {
 	
 	private Boolean estaActivo;
 	
-	private Set<Rol> roles;
+	private Rol rol;
 
 	public RegistroDTO() {
 		super();
@@ -83,12 +81,12 @@ public class RegistroDTO {
 		this.estaActivo = estaActivo;
 	}
 
-	public Set<Rol> getRoles() {
-		return roles;
+	public Rol getRol() {
+		return rol;
 	}
 
-	public void setRoles(Set<Rol> roles) {
-		this.roles = roles;
+	public void setRol(Rol rol) {
+		this.rol = rol;
 	}
 
 }

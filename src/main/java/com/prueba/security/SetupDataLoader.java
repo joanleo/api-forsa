@@ -1,7 +1,6 @@
 package com.prueba.security;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +10,6 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -387,13 +383,13 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         System.out.println("buscando rutinas");
         List<Rutina> listRutinas = rutinaRepo.findAll();
         Set<Rutina> targetSet = new HashSet<>(listRutinas);
-        createRoleIfNotFound("\"ROLE_USER", targetSet);
+        createRoleIfNotFound("ROLE_USER", targetSet);
 		if(currentUserName != "") {
 			Rol userRole = rolRepo.findByNombre("ROLE_USER");
 			System.out.println(authentication.getName());
 			Usuario usuario = usuarioRepo.findByNombreUsuario(authentication.getName()).get();
 			
-			usuario.setRoles(userRole);
+			usuario.setRol(userRole);
 			usuarioRepo.save(usuario);	        
 					
 			isConfig = true;

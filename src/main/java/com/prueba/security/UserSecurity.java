@@ -30,8 +30,8 @@ public class UserSecurity {
 		System.out.println(authentication.getName());
 		Usuario usuario = UsuarioRepo.findByEmail(authentication.getName());
 		if(usuario == null) return false;
-		Rol roles = usuario.getRoles();
-		System.out.println(Arrays.asList(usuario.getRoles()));
+		Rol roles = usuario.getRol();
+		System.out.println(Arrays.asList(usuario.getRol()));
 		
 		List<String> privileges = new ArrayList<>();
         List<Rutina> collection = new ArrayList<>();

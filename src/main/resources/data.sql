@@ -94,6 +94,7 @@ INSERT INTO m_usuarios
 `vcnombre`,
 `vcpassword`,
 `vcusername`,
-`vcnitempresa`)
+`vcnitempresa`,
+`nidrol`)
 VALUES
-('jleon@metrolinkeu.com', 'Joan David Leon', '$2a$10$wTWky7f3N.ASn.Q1VN0u/e3q2.cIo/5A4C8XHFFUM7oiZLNbmF9GO', 'joan1', '2222')
+('jleon@metrolinkeu.com', 'Joan David Leon', '$2a$10$wTWky7f3N.ASn.Q1VN0u/e3q2.cIo/5A4C8XHFFUM7oiZLNbmF9GO', 'joan1', '2222',129)

@@ -33,7 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 		Usuario usuario = usuarioRepositorio.findByNombreUsuarioOrEmail(usernameOrEmail, usernameOrEmail)
 				.orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con ese username o email : " + usernameOrEmail));
 	
-		return new User(usuario.getEmail(), usuario.getContrasena(), mapearRoles(usuario.getRoles()));
+		return new User(usuario.getEmail(), usuario.getContrasena(), mapearRoles(usuario.getRol()));
 	}
 
 	private Collection<? extends GrantedAuthority> mapearRoles(Rol collection){

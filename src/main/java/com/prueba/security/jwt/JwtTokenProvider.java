@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.prueba.exception.ApiException;
+import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 
@@ -40,6 +41,7 @@ public class JwtTokenProvider {
 		String email = usuario.getEmail();
 		String empresa = String.valueOf(usuario.getEmpresa().getNombre());
 		String nit = String.valueOf(usuario.getEmpresa().getNit());
+		Rol rol = usuario.getRol();
 		Date fechaActual = new Date();
 		Date fechaExpiracion = new Date(fechaActual.getTime() + jwtExpirationInMs);
 
@@ -49,6 +51,7 @@ public class JwtTokenProvider {
 									 .claim("empresa", empresa)
 									 .claim("nit", nit)
 									 .claim("email", email).setIssuedAt(new Date())
+									 .claim("rol", rol)
 									 .setIssuer("Metrolink SAS")
 									 .setNotBefore(fechaActual)
 									 .setExpiration(fechaExpiracion)

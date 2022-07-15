@@ -108,7 +108,7 @@ public class AuthController {
 		usuario.setContrasena(passwordEncoder.encode(registroDTO.getContrasena()));
 		
 		Rol roles = rolRepo.findByNombre("ROLE_USER");
-		usuario.setRoles(roles);
+		usuario.setRol(roles);
 		
 		usuarioRepo.save(usuario);
 		return new ResponseEntity<>("Usuario registrado exitosamente",HttpStatus.OK);

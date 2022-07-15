@@ -136,10 +136,11 @@ public class UsuarioController {
 		usuario.setNombreUsuario(registroDTO.getNombreUsuario());
 		usuario.setEmail(registroDTO.getEmail());
 		usuario.setContrasena(passwordEncoder.encode(registroDTO.getContrasena()));
-		
-		Rol roles = rolRepo.findByNombre("ROLE_USER");
-		usuario.setRoles(roles);
-		
+		if(registroDTO.getRol() != null) {
+			Rol rol = rolRepo.findByNombre("ROLE_USER");			
+			usuario.setRol(rol);
+		}
+				
 		usuarioRepo.save(usuario);
 		return new ResponseEntity<>("Usuario creado exitosamente",HttpStatus.OK);
 	}
