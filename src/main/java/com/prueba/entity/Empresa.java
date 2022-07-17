@@ -1,6 +1,7 @@
 package com.prueba.entity;
 
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,12 @@ import com.prueba.security.entity.Usuario;
 
 @Entity
 @Table(name = "m_empresas")
-public class Empresa {
+public class Empresa implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@JsonIgnore
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dfecha")

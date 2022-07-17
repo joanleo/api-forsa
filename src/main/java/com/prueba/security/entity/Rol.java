@@ -31,7 +31,7 @@ import com.prueba.entity.Politica;
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "id")
+		  property = "idRol")
 public class Rol implements Serializable{
     /**
 	 * 
@@ -48,7 +48,8 @@ public class Rol implements Serializable{
     
     @OneToMany(mappedBy = "rol")
     private Set<Politica> politicas;
-        
+    
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitEmpresa")
     private Empresa empresa;

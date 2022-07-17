@@ -24,4 +24,6 @@ public interface RolRepository extends JpaRepository<Rol, Long>, JpaSpecificatio
 	public List<Rol> findByNombreContainsAndEmpresaAndEstaActivoTrue(String letras, Empresa empresa);
 	
 	Page<Rol> findByEmpresaAndEstaActivoTrue(Empresa empresa, Pageable page);
+
+	public Rol findFirstByOrderByIdRolAsc();
 }
