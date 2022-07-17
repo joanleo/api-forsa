@@ -11,7 +11,7 @@ public class RolDTO {
 	@NotBlank(message = "Este campo no puede ser nulo")
 	private String nombre;
 	
-	@NotBlank(message = "Este campo no puede ser nulo")
+	//@NotBlank(message = "Este campo no puede ser nulo")
 	private Empresa empresa;
 	
 	private Boolean estaActivo=true;

@@ -1,0 +1,82 @@
+package com.prueba.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.prueba.security.entity.Rol;
+
+@Entity
+public class Politica {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long idPolitica;
+	
+	@ManyToOne
+	@JoinColumn(name = "nidrol")
+	private Rol rol;
+	
+	@ManyToOne
+	@JoinColumn(name = "nidrutina")
+	@JoinColumn(name = "nidpermiso")
+	private DetalleRutina detalle;
+	
+	@Column(name = "bpermiso")
+	private Boolean permiso;
+
+	public Politica() {
+		super();
+	}
+
+	public Politica(Rol rol, DetalleRutina detalle, Boolean permiso) {
+		super();
+		this.rol = rol;
+		this.detalle = detalle;
+		this.permiso = permiso;
+	}
+
+	public Politica(Long idPolitica, Rol rol, DetalleRutina detalle, Boolean permiso) {
+		super();
+		this.idPolitica = idPolitica;
+		this.rol = rol;
+		this.detalle = detalle;
+		this.permiso = permiso;
+	}
+
+	public Long getIdPolitica() {
+		return idPolitica;
+	}
+
+	public void setIdPolitica(Long idPolitica) {
+		this.idPolitica = idPolitica;
+	}
+
+	public Rol getRol() {
+		return rol;
+	}
+
+	public void setRol(Rol rol) {
+		this.rol = rol;
+	}
+
+	public DetalleRutina getDetalle() {
+		return detalle;
+	}
+
+	public void setDetalle(DetalleRutina detalle) {
+		this.detalle = detalle;
+	}
+
+	public Boolean getPermiso() {
+		return permiso;
+	}
+
+	public void setPermiso(Boolean permiso) {
+		this.permiso = permiso;
+	}
+}

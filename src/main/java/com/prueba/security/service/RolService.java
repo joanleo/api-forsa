@@ -13,7 +13,7 @@ public interface RolService {
 	
 	public RolDTO create(RolDTO rolDTO);
 	
-	public List<RolDTO> list(String letras, Empresa empresa);
+	public List<Rol> list(String letras, Empresa empresa);
 	
 	public RolDTO getRol(Long id, Empresa empresa);
 	
@@ -21,7 +21,7 @@ public interface RolService {
 	
 	public void delete(Long id);
 
-	public List<RolDTO> list(Empresa empresa);
+	public List<Rol> list(Empresa empresa);
 
 	public Page<Rol> searchRoles(Empresa empresa, Integer pagina, Integer items);
 

@@ -11,15 +11,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.prueba.security.entity.Rol;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 @Entity
@@ -46,10 +43,6 @@ public class Rutina implements Serializable{
 	@OneToMany(mappedBy = "rutina", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<DetalleRutina> detalles = new HashSet<>();
 	
-	@JsonIgnore
-	@ManyToMany(mappedBy = "politicas")
-    private Set<Rol> rol;
-
 	public Long getIdRutina() {
 		return idRutina;
 	}
@@ -74,33 +67,25 @@ public class Rutina implements Serializable{
 		this.detalles = detalles;
 	}
 
-	public Set<Rol> getRol() {
-		return rol;
-	}
-
-	public void setRol(Set<Rol> rol) {
-		this.rol = rol;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
-	public void addPermiso(Permiso permiso) {
+	public void addRuta(Ruta permiso) {
         DetalleRutina detalle = new DetalleRutina(this, permiso);
         detalles.add(detalle);
     }
 	
-	public void removePermiso(Permiso permiso) {
+	public void removeRuta(Ruta permiso) {
         for (Iterator<DetalleRutina> iterator = detalles.iterator();
              iterator.hasNext(); ) {
         	DetalleRutina detalle = iterator.next();
  
             if (detalle.getRutina().equals(this) &&
-            		detalle.getPermiso().equals(permiso)) {
+            		detalle.getRuta().equals(permiso)) {
                 iterator.remove();
                 detalle.setRutina(null);
-                detalle.setPermiso(null);
+                detalle.setRuta(null);
             }
         }
     }

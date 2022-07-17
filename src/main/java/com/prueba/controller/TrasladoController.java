@@ -23,9 +23,9 @@ import com.prueba.service.TrasladoService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-//import io.swagger.annotations.Api;
-//import io.swagger.annotations.ApiOperation;
-//import springfox.documentation.annotations.ApiIgnore;
+
+
+
 
 @RestController
 @RequestMapping("/traslados")

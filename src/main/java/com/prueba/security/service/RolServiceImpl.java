@@ -1,7 +1,6 @@
 package com.prueba.security.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,11 +56,11 @@ public class RolServiceImpl implements RolService{
 	}
 
 	@Override
-	public List<RolDTO> list(String letras, Empresa empresa) {
+	public List<Rol> list(String letras, Empresa empresa) {
 		System.out.println("Servicio: ");
 		List<Rol> roles = rolRepo.findByNombreContainsAndEmpresaAndEstaActivoTrue(letras, empresa);
 		
-		return roles.stream().map(rol -> mapearEntidad(rol)).collect(Collectors.toList());
+		return roles;//.stream().map(rol -> mapearEntidad(rol)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -101,9 +100,9 @@ public class RolServiceImpl implements RolService{
 	}
 
 	@Override
-	public List<RolDTO> list(Empresa empresa) {
+	public List<Rol> list(Empresa empresa) {
 		List<Rol> roles = rolRepo.findByEmpresaAndEstaActivoTrue(empresa);
-		return roles.stream().map(rol -> mapearEntidad(rol)).collect(Collectors.toList());
+		return roles;//.stream().map(rol -> mapearEntidad(rol)).collect(Collectors.toList());
 	}
 
 	@Override

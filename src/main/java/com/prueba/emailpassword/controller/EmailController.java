@@ -22,10 +22,10 @@ import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 
-//import io.swagger.annotations.Api;
-//import io.swagger.annotations.ApiOperation;
+
+
 import net.bytebuddy.utility.RandomString;
-//import springfox.documentation.annotations.ApiIgnore;
+
 
 //@ApiIgnore
 @RestController

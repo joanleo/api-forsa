@@ -2,12 +2,15 @@ package com.prueba.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -23,7 +26,12 @@ public class DetalleRutina implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private static int countBase = 0;
 
+	@Column(name = "npkDetalle")
+	private int pkDetalle;
+	
 	@EmbeddedId
 	private DetalleRutina_id idDetalle;
 	
@@ -34,17 +42,32 @@ public class DetalleRutina implements Serializable{
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@MapsId("idPermiso")
-	private Permiso permiso;
+	private Ruta ruta;
+	
+	@OneToMany(mappedBy = "detalle")
+	private Set<Politica> politica;
 
-	public DetalleRutina(Rutina rutina, Permiso permiso) {
+	public Set<Politica> getPolitica() {
+		return politica;
+	}
+
+	public void setPolitica(Set<Politica> politica) {
+		this.politica = politica;
+	}
+
+	public DetalleRutina(Rutina rutina, Ruta ruta) {
 		super();
-		this.idDetalle = new DetalleRutina_id(rutina.getIdRutina(), permiso.getIdPermiso());
+		DetalleRutina.countBase += 1;
+		this.pkDetalle = countBase;
+		this.idDetalle = new DetalleRutina_id(rutina.getIdRutina(), ruta.getIdRuta());
 		this.rutina = rutina;
-		this.permiso = permiso;
+		this.ruta = ruta;
 	}
 
 	public DetalleRutina() {
 		super();
+		DetalleRutina.countBase += 1;
+		this.pkDetalle = countBase;
 	}
 
 	public DetalleRutina_id getIdDetalle() {
@@ -62,13 +85,21 @@ public class DetalleRutina implements Serializable{
 	public void setRutina(Rutina rutina) {
 		this.rutina = rutina;
 	}
-
-	public Permiso getPermiso() {
-		return permiso;
+	
+	public Ruta getRuta() {
+		return ruta;
 	}
 
-	public void setPermiso(Permiso permiso) {
-		this.permiso = permiso;
+	public void setRuta(Ruta ruta) {
+		this.ruta = ruta;
+	}
+
+	public int getPkDetalle() {
+		return pkDetalle;
+	}
+
+	public void setPkDetalle(int pkDetalle) {
+		this.pkDetalle = pkDetalle;
 	}
 
 	public static long getSerialversionuid() {
@@ -77,7 +108,7 @@ public class DetalleRutina implements Serializable{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(idDetalle, permiso, rutina);
+		return Objects.hash(idDetalle, ruta, rutina);
 	}
 
 	@Override
@@ -89,7 +120,7 @@ public class DetalleRutina implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		DetalleRutina other = (DetalleRutina) obj;
-		return Objects.equals(idDetalle, other.idDetalle) && Objects.equals(permiso, other.permiso)
+		return Objects.equals(idDetalle, other.idDetalle) && Objects.equals(ruta, other.ruta)
 				&& Objects.equals(rutina, other.rutina);
 	}
 }

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.ApiResponse;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Rutina;
 import com.prueba.security.dto.RolDTO;
 import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
@@ -32,8 +33,8 @@ import com.prueba.util.UtilitiesApi;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-//import io.swagger.annotations.Api;
-//import io.swagger.annotations.ApiOperation;
+
+
 
 @RestController
 @RequestMapping("/roles")
@@ -58,7 +59,7 @@ public class RolController {
 	
 	@GetMapping
 	//@ApiOperation(value = "Encuentra los roles", notes = "Retorna todos los roles existentes")
-	public List<RolDTO> list(@RequestParam(required=false)String letras,
+	public List<Rol> list(@RequestParam(required=false)String letras,
 							 @RequestParam(required=false) Long nit){
 		
 		Empresa empresa;
@@ -136,6 +137,12 @@ public class RolController {
 	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) {
 		rolService.delete(id);
 		return new ResponseEntity<>("Rol eliminado con exito", HttpStatus.OK);
+	}
+	
+	@PostMapping("/politicas")
+	public ResponseEntity<?> agregarPolitica(@RequestBody Rutina rutina){
+		
+		return null;
 	}
 }
 

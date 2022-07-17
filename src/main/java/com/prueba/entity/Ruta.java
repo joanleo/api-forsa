@@ -10,8 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "permisos")
-public class Permiso implements Serializable{
+@Table(name = "rutas")
+public class Ruta implements Serializable{
 
 	/**
 	 * 
@@ -21,7 +21,7 @@ public class Permiso implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "nidpermiso")
-	private Long idPermiso;
+	private Long idRuta;
 	
 	@Column(name = "vcurl")
 	private String url;
@@ -31,16 +31,14 @@ public class Permiso implements Serializable{
 	
 	@Column(name = "vcmetodo")
 	private String metodo;
-	
-	@Column(name = "bpermitido", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
-	private Boolean permitido=false;
 
-	public Long getIdPermiso() {
-		return idPermiso;
+
+	public Long getIdRuta() {
+		return idRuta;
 	}
 
-	public void setIdPermiso(Long idPermiso) {
-		this.idPermiso = idPermiso;
+	public void setIdRuta(Long idRuta) {
+		this.idRuta = idRuta;
 	}
 
 	public String getUrl() {
@@ -67,29 +65,20 @@ public class Permiso implements Serializable{
 		this.metodo = metodo;
 	}
 
-	public Boolean getPermitido() {
-		return permitido;
-	}
-
-	public void setPermitido(Boolean permitido) {
-		this.permitido = permitido;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
-	public Permiso() {
+	public Ruta() {
 		super();
 	}
 
-	public Permiso(Long idPermiso, String url, String nombre, String metodo, Boolean permitido) {
+	public Ruta(Long idPermiso, String url, String nombre, String metodo, Boolean permitido) {
 		super();
-		this.idPermiso = idPermiso;
+		this.idRuta = idPermiso;
 		this.url = url;
 		this.nombre = nombre;
 		this.metodo = metodo;
-		this.permitido = permitido;
 	}
 
 		

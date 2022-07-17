@@ -3,32 +3,27 @@ package com.prueba.security;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import com.prueba.entity.Permiso;
+import com.prueba.entity.DetalleRutina;
+import com.prueba.entity.Politica;
 import com.prueba.entity.Rutina;
-import com.prueba.repository.PermisoRepository;
+import com.prueba.repository.PoliticaRepository;
 import com.prueba.repository.RutinaRepository;
 import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.UsuarioRepository;
+import com.prueba.util.UtilitiesApi;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -40,12 +35,15 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 	
 	@Autowired
 	private RolRepository rolRepo;
-	
-	@Autowired
-	private PermisoRepository permisoRepo;
-	
+		
 	@Autowired
 	private RutinaRepository rutinaRepo;
+	
+	@Autowired
+	private UtilitiesApi util;;
+	
+	@Autowired
+	private PoliticaRepository politicaRepo;
 			
 	@Override
 	@Transactional
@@ -59,250 +57,15 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		}
 		
 		if(isConfig) return;
-		System.out.println("Application Event inicial");
-		
-		ApplicationContext applicationContext = event.getApplicationContext();
-        RequestMappingHandlerMapping requestMappingHandlerMapping = applicationContext
-          .getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class);
-        Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
-
-        String aux="";
-        
-        Set<String> arrRutinas = new HashSet<>();
-
-        for(Entry<RequestMappingInfo, HandlerMethod> rutaMetodo: map.entrySet()) {
-        	String rutina = rutaMetodo.getKey().getActivePatternsCondition().toString().replace("[", "").replace("]", "").split("/")[1];
-        	if(rutina != aux) {
-        		aux = rutina;
-        		arrRutinas.add(aux);
-        	}
-        	
-        }
-        ArrayList<String> arr = new ArrayList<String>();
-        for(String rut: arrRutinas) {
-        	String stringRuina = "{\"rutina\":{\"nombre\":\""+rut+"\",\"opciones\":[";
-        	String rutaMethod = "";
-        	Rutina nuevaRutina = new Rutina();
-        	nuevaRutina.setNombre(rut);
-	        for(Entry<RequestMappingInfo, HandlerMethod> rutaMetodo: map.entrySet()) {
-	        	String rutina = rutaMetodo.getKey().getActivePatternsCondition().toString().replace("[", "").replace("]", "").split("/")[1];
-	        	String ruta = rutaMetodo.getKey().getActivePatternsCondition().toString().replace("[", "").replace("]", "");
-	        	String metodo = rutaMetodo.getKey().getMethodsCondition().toString().replace("[", "").replace("]", "");
-	        	
-            	if(rut.equals(rutina)) {
-            		System.out.println("Rutina: "+rutina);
-            		System.out.println("Ruta: "+ruta);
-            		System.out.println("Metodo: "+metodo);
-            		
-            		Permiso nuevoPermiso = new Permiso();
-            		//String ejemplo = "{\"id\":46,\"nombre\":\"Miguel\",\"empresa\":\"Autentia\"}";
-            		if(metodo.equals("PUT")) {
-            			rutaMethod += "{\"url\":\""+ruta+"\",\"actualizar\":\"false},";
-            			System.out.println("buscando permiso "+ruta);
-            			Permiso existPermiso = permisoRepo.findByUrlAndNombre(ruta,"actualizar");
-            			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("actualizar");
-            				nuevoPermiso.setMetodo(metodo);
-            			}else {
-            				nuevoPermiso = existPermiso;
-            			}
-            			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			System.out.println("buscando rutina "+rut);
-            			Rutina existRutina = rutinaRepo.findByNombre(rut);
-            			if(Objects.isNull(existRutina)) {
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}else {
-            				nuevaRutina = existRutina;
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}
-            		}
-            		if(metodo.equals("DELETE")) {
-            			rutaMethod += "{\"url\":\""+ruta+"\",\"eliminar\":\"false},";
-            			System.out.println("buscando permiso "+ruta);
-            			Permiso existPermiso = permisoRepo.findByUrlAndNombre(ruta,"eliminar");
-            			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("eliminar");
-            				nuevoPermiso.setMetodo(metodo);
-            			}else {
-            				nuevoPermiso = existPermiso;
-            			}
-            			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			System.out.println("buscando rutina "+rut);
-            			Rutina existRutina = rutinaRepo.findByNombre(rut);
-            			if(Objects.isNull(existRutina)) {
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}else {
-            				nuevaRutina = existRutina;
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}
-            		}
-            		if(metodo.equals("PATCH")) {
-            			rutaMethod += "{\"url\":\""+ruta+"\",\"inhabilitar\":\"false},";
-            			System.out.println("buscando permiso "+ruta);
-            			Permiso existPermiso = permisoRepo.findByUrlAndNombre(ruta,"inhabilitar");
-            			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("inhabilitar");
-            				nuevoPermiso.setMetodo(metodo);
-            			}else {
-            				nuevoPermiso = existPermiso;
-            			}
-            			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			System.out.println("buscando rutina "+rut);
-            			Rutina existRutina = rutinaRepo.findByNombre(rut);
-            			if(Objects.isNull(existRutina)) {
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}else {
-            				nuevaRutina = existRutina;
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}
-            		}
-            		if(metodo.equals("GET") && (!ruta.contains("id") || !ruta.contains("nit"))) {
-            			rutaMethod += "{\"url\":\""+ruta+"\",\"leer\":\"false},";
-            			System.out.println("buscando permiso "+ruta);
-            			Permiso existPermiso = permisoRepo.findByUrlAndNombre(ruta,"autocompletar");
-            			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("autocompletar");
-            				nuevoPermiso.setMetodo(metodo);
-            			}else {
-            				nuevoPermiso = existPermiso;
-            			}
-            			System.out.println("Permiso: "+nuevoPermiso.getNombre());
-            			System.out.println("guardando permiso");
-            			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			System.out.println("buscando rutina "+rut);
-            			Rutina existRutina = rutinaRepo.findByNombre(rut);
-            			if(Objects.isNull(existRutina)) {
-            				System.out.println("existe rutina");
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}else {
-            				System.out.println("noexiste rutina");
-            				nuevaRutina = existRutina;
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}
-            		}
-            		if((ruta.contains("id") || ruta.contains("nit")) && metodo.equals("GET")){
-            			rutaMethod += "{\"url\":\""+ruta+"\",\"autocompletar\":\"false},";
-            			System.out.println("buscando permiso "+ruta);
-            			Permiso existPermiso = permisoRepo.findByUrlAndNombre(ruta,"leer");
-            			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("leer");
-            				nuevoPermiso.setMetodo(metodo);
-            			}else {
-            				nuevoPermiso = existPermiso;
-            			}
-            			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			System.out.println("buscando rutina "+rut);
-            			Rutina existRutina = rutinaRepo.findByNombre(rut);
-            			if(Objects.isNull(existRutina)) {
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}else {
-            				nuevaRutina = existRutina;
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}
-            		}
-            		if(metodo.equals("POST") && !ruta.contains("indexados") && !ruta.contains("descarga") && !ruta.contains("cargar")) {
-            			rutaMethod += "{\"url\":\""+ruta+"\",\"crear\":\"false},";
-            			System.out.println("buscando permiso "+ruta);
-            			Permiso existPermiso = permisoRepo.findByUrlAndNombre(ruta,"crear");
-            			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("crear");
-            				nuevoPermiso.setMetodo(metodo);
-            			}else {
-            				nuevoPermiso = existPermiso;
-            			}
-            			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			System.out.println("buscando rutina "+rut);
-            			Rutina existRutina = rutinaRepo.findByNombre(rut);
-            			if(Objects.isNull(existRutina)) {
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}else {
-            				nuevaRutina = existRutina;
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}
-            		}
-            		if(ruta.contains("indexados")) {
-        				rutaMethod += "{\"url\":\""+ruta+"\",\"listar\":\"false},";
-        				System.out.println("buscando permiso "+ruta);
-        				Permiso existPermiso = permisoRepo.findByUrlAndNombre(ruta,"listar");
-            			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("listar");
-            				nuevoPermiso.setMetodo(metodo);
-            			}else {
-            				nuevoPermiso = existPermiso;
-            			}
-            			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			System.out.println("buscando rutina "+rut);
-            			Rutina existRutina = rutinaRepo.findByNombre(rut);
-            			if(Objects.isNull(existRutina)) {
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}else {
-            				nuevaRutina = existRutina;
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}
-        			}
-            		if(ruta.contains("descarga")) {
-        				rutaMethod += "{\"url\":\""+ruta+"\",\"exportar\":\"false},";
-        				System.out.println("buscando permiso "+ruta);
-        				Permiso existPermiso = permisoRepo.findByUrlAndNombre(ruta,"exportar");
-            			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("exportar");
-            				nuevoPermiso.setMetodo(metodo);
-            			}else {
-            				nuevoPermiso = existPermiso;
-            			}
-            			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			System.out.println("buscando rutina "+rut);
-            			Rutina existRutina = rutinaRepo.findByNombre(rut);
-            			if(Objects.isNull(existRutina)) {
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}else {
-            				nuevaRutina = existRutina;
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}
-        			}
-            		if(ruta.contains("cargar")) {
-        				rutaMethod += "{\"url\":\""+ruta+"\",\"importar\":\"false},";
-        				System.out.println("buscando permiso "+ruta);
-        				Permiso existPermiso = permisoRepo.findByUrlAndNombre(ruta,"importar");
-            			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("importar");
-            				nuevoPermiso.setMetodo(metodo);
-            			}else {
-            				nuevoPermiso = existPermiso;
-            			}
-            			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			System.out.println("buscando rutina "+rut);
-            			Rutina existRutina = rutinaRepo.findByNombre(rut);
-            			if(Objects.isNull(existRutina)) {
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}else {
-            				nuevaRutina = existRutina;
-            				nuevaRutina.addPermiso(nuevoPermiso);
-            			}
-            			
-        			}
-            		
-            	}
-            	
-	        }
-	        System.out.println("gardando rutina");
-        	rutinaRepo.save(nuevaRutina);
-	        if(rutaMethod.length() > 0) {
-	        	stringRuina += rutaMethod.substring(0,rutaMethod.length()-1)+"]}";	        	
-	        }
-	        System.out.println(stringRuina);
-	        arr.add(stringRuina);
-	     }
-        System.out.println(arr);
+		System.out.println("Application initial event");
+		System.out.println("buscando rutinas");
+		List<Rutina> listRutinas = rutinaRepo.findAll();
+		if(listRutinas.size() == 0) {
+			System.out.println("No se encontraron rutinas");
+			System.out.println("Creando rutinas");
+			util.crearRutinasBD(event);
+			listRutinas = rutinaRepo.findAll();
+		}
         
         /*Map<String, String> MetodoRuta = new HashMap<>();
         List<Ruta> rutas = new ArrayList<Ruta>();
@@ -380,10 +143,15 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		usuarioAdmin.setPassword(passwordEncoder.encode("admin"));
 		usuarioAdmin.setRoles(Arrays.asList(adminRole));
 		usuarioRepo.save(usuarioAdmin);*/
-        System.out.println("buscando rutinas");
-        List<Rutina> listRutinas = rutinaRepo.findAll();
+        
+		
+		
         Set<Rutina> targetSet = new HashSet<>(listRutinas);
+        
+
+        
         createRoleIfNotFound("ROLE_USER", targetSet);
+        
 		if(currentUserName != "") {
 			Rol userRole = rolRepo.findByNombre("ROLE_USER");
 			System.out.println(authentication.getName());
@@ -410,10 +178,37 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 	
 	@Transactional
 	Rol createRoleIfNotFound(String name, Set<Rutina> privileges) {
+		List<Rol> listaRoles = rolRepo.findAll();
+		if(listaRoles.size() == 0) {
+			System.out.println("No se encontro ningun rol");
+		}
 		Rol role = rolRepo.findByNombre(name);
         if (role == null) {
+        	System.out.println("Creando ROL_USER");
             role = new Rol(name);
-            role.setPoliticas(privileges);
+            List<DetalleRutina> listaDetalle = new ArrayList<>();
+            //List<Politica> listaPoliticas = new ArrayList<>();
+            for(Rutina rutina: privileges) {
+            	for(DetalleRutina detalle: rutina.getDetalles()) {
+            		listaDetalle.add(detalle);
+            	}
+            }
+            for(DetalleRutina detalle: listaDetalle) {
+            	//System.out.println("Lista de detalle url: "+detalle.getPermiso().getUrl());
+            	Politica politica = new Politica(role, detalle, false);
+            	//politica.setDetalle(detalle);
+            	//System.out.println("Poltica detalle url"+politica.getDetalle().getPermiso().getUrl());
+            	//politica.setPermiso(false);
+            	politica = politicaRepo.save(politica);
+            	//role.addPolitica(detalle);
+            	//listaPoliticas.add(politica);
+            	
+            }
+            System.out.println(role.getPoliticas().size());
+            //listaPoliticas = politicaRepo.saveAll(listaPoliticas);
+            //listaPoliticas = politicaRepo.findAll();
+            //Set<Politica> targetSet = new HashSet<>(listaPoliticas);
+            //role.setPolitica(targetSet);
             rolRepo.save(role);
         }
         return role;
