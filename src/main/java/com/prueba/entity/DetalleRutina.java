@@ -41,7 +41,7 @@ public class DetalleRutina implements Serializable{
 	private Rutina rutina;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@MapsId("idPermiso")
+	@MapsId("idRuta")
 	private Ruta ruta;
 	
 	@OneToMany(mappedBy = "detalle")

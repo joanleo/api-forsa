@@ -17,12 +17,12 @@ public class DetalleRutina_id implements Serializable{
 	@Column(name = "nidrutina")
 	private Long idRutina;
 	
-	@Column(name = "nidpermiso")
-	private Long idPermiso;
+	@Column(name = "nidruta")
+	private Long idRuta;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(idPermiso, idRutina);
+		return Objects.hash(idRuta, idRutina);
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class DetalleRutina_id implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		DetalleRutina_id other = (DetalleRutina_id) obj;
-		return Objects.equals(idPermiso, other.idPermiso) && Objects.equals(idRutina, other.idRutina);
+		return Objects.equals(idRuta, other.idRuta) && Objects.equals(idRutina, other.idRutina);
 	}
 
 	public Long getIdRutina() {
@@ -45,22 +45,23 @@ public class DetalleRutina_id implements Serializable{
 		this.idRutina = idRutina;
 	}
 
-	public Long getIdPermiso() {
-		return idPermiso;
+
+	public Long getIdRuta() {
+		return idRuta;
 	}
 
-	public void setIdPermiso(Long idPermiso) {
-		this.idPermiso = idPermiso;
+	public void setIdRuta(Long idRuta) {
+		this.idRuta = idRuta;
 	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
-	public DetalleRutina_id(Long idRutina, Long idPermiso) {
+	public DetalleRutina_id(Long idRutina, Long idRuta) {
 		super();
 		this.idRutina = idRutina;
-		this.idPermiso = idPermiso;
+		this.idRuta = idRuta;
 	}
 
 	public DetalleRutina_id() {

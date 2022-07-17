@@ -144,5 +144,11 @@ public class RolController {
 		
 		return null;
 	}
+	
+	@GetMapping("/politicas")
+	public ResponseEntity<?> listaPoliticas(){
+		
+		return null;
+	}
 }
 

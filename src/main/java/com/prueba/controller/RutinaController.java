@@ -14,14 +14,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/rutinas")
-@Tag(name = "Rutinas", description = "")
+@Tag(name = "Rutinas", description = "Rutinas o modulos de la aplicacion")
 public class RutinaController {
 	
 	@Autowired
 	private RutinaServices rutinaServices;
 	
 	@GetMapping
-	@Tag(name = "Encuentra las rutinas de la aplicacion", description = "Retorna todas las rutinas de la aplicacion")
 	public List<Rutina> listRutinas(){
 		return rutinaServices.listRutinas();
 	}

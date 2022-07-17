@@ -20,7 +20,7 @@ public class Ruta implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name = "nidpermiso")
+	@Column(name = "nidruta")
 	private Long idRuta;
 	
 	@Column(name = "vcurl")

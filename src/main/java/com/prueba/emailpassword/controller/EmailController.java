@@ -22,12 +22,11 @@ import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 
-
-
+import io.swagger.v3.oas.annotations.Hidden;
 import net.bytebuddy.utility.RandomString;
 
 
-//@ApiIgnore
+@Hidden
 @RestController
 @RequestMapping("/email")
 //@Api(tags = "Email", description = "Recuperacion de nombre de usuario y/o contraseña")
