@@ -145,12 +145,6 @@ public class RolController {
 		return new ResponseEntity<>("Rol eliminado con exito", HttpStatus.OK);
 	}
 	
-	@PostMapping("/politicas")
-	public ResponseEntity<?> agregarPolitica(@RequestBody Rutina rutina){
-		
-		return null;
-	}
-	
 	@GetMapping("/politicas")
 	public List<Politica> listaPoliticas(@RequestParam(required=false)String role){
 		List<Politica> politicas = rolService.listarPoliticas(role);
