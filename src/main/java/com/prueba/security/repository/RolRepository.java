@@ -26,4 +26,6 @@ public interface RolRepository extends JpaRepository<Rol, Long>, JpaSpecificatio
 	Page<Rol> findByEmpresaAndEstaActivoTrue(Empresa empresa, Pageable page);
 
 	public Rol findFirstByOrderByIdRolAsc();
+
+	public Rol findByIdRol(Long id);
 }

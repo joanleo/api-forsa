@@ -33,6 +33,9 @@ import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.security.service.UsuarioService;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 
@@ -40,7 +43,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/usuarios")
-//@Api(tags = "Usuarios", description = "Operaciones referentes a los usuarios")
 @Tag(name = "Usuarios", description = "Operaciones referentes a los usuarios")
 public class UsuarioController {
 	
@@ -59,7 +61,9 @@ public class UsuarioController {
 	private UsuarioService usuarioService;
 	
 	@GetMapping
-	//@ApiOperation(value="Encuentra los usuarios")
+	@Operation(summary = "Obtiene los usuarios", description = "Retorna una lista de usuarios que contengan en su nombre "
+			+ "las letras enviadas como parametro. Por defecto estos usuarios pertenecen a la empresa de quien esta logueado, "
+			+ "si se desea obtener otra empresa en especifico se debe enviar como parametro el nit")
 	public List<Usuario> get(@RequestParam(required=false)String letras,
 							 @RequestParam(required=false) Long nit){
 		
@@ -81,7 +85,8 @@ public class UsuarioController {
 	
 	
 	@PostMapping("/indexados")
-	//@ApiOperation(value = "Encuentra los usuarios", notes = "Retorna los usuarios de una empresa dada")
+	@Operation(summary = "Encuentra los usuarios", description = "Retorna los usuarios que coincidan con el filtro del datos "
+			+ "recibidos en formato JSON, segun el esquema RegistoDTO")
 	public ApiResponse<Page<Usuario>> paginationList(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -108,7 +113,8 @@ public class UsuarioController {
 	}
 	
 	@PostMapping
-	//@ApiOperation(value = "Crea un usuario", notes = "Crea un nuevo usuario")
+	@Operation(summary = "Crea un nuevo usuario", description = "Crea un nuevo usuario")
+	@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Usuario creado exitosamente")
 	public ResponseEntity<?> create(@Valid@RequestBody RegistroDTO registroDTO){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -156,8 +162,10 @@ public class UsuarioController {
 	}
 	
 	@PutMapping("/{id}")
-	//@ApiOperation(value = "Actualiza un usuario", notes = "Actualiza los datos de un usuario")
-	public ResponseEntity<?> update(@Valid@RequestBody RegistroDTO registroDTO,
+	@Operation(
+			summary = "Actualiza un usuario", 
+			description = "Actualiza los datos de un usuario")
+	public ResponseEntity<?> update(@Valid@RequestBody(required = true) RegistroDTO registroDTO,
 			@PathVariable Long id){
 
 		try {
@@ -171,7 +179,7 @@ public class UsuarioController {
 	}
 	
 	@DeleteMapping("/{id},{nitEmpresa}")
-	//@ApiOperation(value = "Elimina un fabricante", notes = "Elimina un fabricante por su id")
+	@Operation(summary = "Elimina un usuario", description = "Elimina un usuario por su id")
 	public ResponseEntity<?> delete(@PathVariable(name="nitFabricante")Long nitFabricante,
 			 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;

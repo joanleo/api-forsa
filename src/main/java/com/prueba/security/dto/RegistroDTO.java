@@ -13,6 +13,7 @@ public class RegistroDTO {
 	private String nombre;
 	
 	@NotBlank
+	@Size(min = 6, max = 10)
 	private String nombreUsuario;
 	
 	@NotBlank
@@ -20,7 +21,7 @@ public class RegistroDTO {
 	private String email;
 	
 	@NotBlank
-	@Size(min = 4, max = 15)
+	@Size(min = 6, max = 10)
 	private String contrasena;
 	
 	private Empresa empresa;

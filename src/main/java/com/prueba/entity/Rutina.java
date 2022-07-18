@@ -16,6 +16,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
@@ -40,6 +41,7 @@ public class Rutina implements Serializable{
 	@Column(name = "vcnombre")
 	private String nombre;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "rutina", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<DetalleRutina> detalles = new HashSet<>();
 	

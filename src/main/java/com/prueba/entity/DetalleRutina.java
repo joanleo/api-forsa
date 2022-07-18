@@ -33,6 +33,7 @@ public class DetalleRutina implements Serializable{
 	@Column(name = "npkDetalle")
 	private int pkDetalle;
 	
+	@JsonIgnore
 	@EmbeddedId
 	private DetalleRutina_id idDetalle;
 	

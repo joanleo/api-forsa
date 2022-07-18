@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.ApiResponse;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Politica;
 import com.prueba.entity.Rutina;
 import com.prueba.security.dto.RolDTO;
 import com.prueba.security.entity.Rol;
@@ -31,6 +32,7 @@ import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.security.service.RolService;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 
@@ -52,13 +54,15 @@ public class RolController {
 	private UtilitiesApi util;
 	
 	@PostMapping
-	//@ApiOperation(value = "Crear un rol", notes = "Crea un nuevo rol")
+	@Operation(summary = "Crea un rol", description = "Crea un nuevo rol" )
 	public ResponseEntity<RolDTO> create(@Valid @RequestBody RolDTO rolDTO){
 		return new ResponseEntity<RolDTO>(rolService.create(rolDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	//@ApiOperation(value = "Encuentra los roles", notes = "Retorna todos los roles existentes")
+	@Operation(summary = "Obtiene los roles", description = "Retorna una lista de roles que contengan en su nombre "
+			+ "las letras enviadas como parametro. Por defecto estos usuarios pertenecen a la empresa de quien esta logueado, "
+			+ "si se desea obtener otra empresa en especifico se debe enviar como parametro el nit")
 	public List<Rol> list(@RequestParam(required=false)String letras,
 							 @RequestParam(required=false) Long nit){
 		
@@ -79,6 +83,8 @@ public class RolController {
 	}
 	
 	@PostMapping("/indexados")
+	@Operation(summary = "Encuentra los roles", description = "Retorna los usuarios que coincidan con el filtro del datos "
+			+ "recibidos en formato JSON, segun el esquema RolDTO")
 	public ApiResponse<Page<Rol>> paginationList(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -146,9 +152,15 @@ public class RolController {
 	}
 	
 	@GetMapping("/politicas")
-	public ResponseEntity<?> listaPoliticas(){
-		
-		return null;
+	public List<Politica> listaPoliticas(@RequestParam(required=false)String role){
+		List<Politica> politicas = rolService.listarPoliticas(role);
+		return politicas;
+	}
+	
+	@PutMapping("/politicas/{idPolitica}")
+	public ResponseEntity<?> actualizarPolitica(@PathVariable Long idPolitica,
+			@RequestBody Politica politica){
+		return new ResponseEntity<>(rolService.actualizarPoliticar(idPolitica, politica), HttpStatus.OK);
 	}
 }
 

@@ -1,6 +1,8 @@
 package com.prueba.security.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +12,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.prueba.entity.DetalleRutina;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Politica;
+import com.prueba.entity.Rutina;
 import com.prueba.exception.ResourceNotFoundException;
+import com.prueba.repository.PoliticaRepository;
+import com.prueba.repository.RutinaRepository;
 import com.prueba.security.dto.RolDTO;
 import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
@@ -34,6 +41,12 @@ public class RolServiceImpl implements RolService{
 	@Autowired
 	private RolSpecifications rolSpec;
 	
+	@Autowired
+	private PoliticaRepository politicaRepo;
+	
+	@Autowired
+	private RutinaRepository rutinaRepo;
+	
 	@Override
 	public RolDTO create(RolDTO rolDTO) {
 		
@@ -44,15 +57,27 @@ public class RolServiceImpl implements RolService{
 			rolDTO.setEmpresa(usuario.getEmpresa());
 		}
 		
-		Rol rol = mapearDTO(rolDTO);
-		Rol exist = rolRepo.findByNombreAndEmpresaAndEstaActivoTrue(rol.getNombre(), rol.getEmpresa());
+		//Rol rol = mapearDTO(rolDTO);
+		Rol exist = rolRepo.findByNombreAndEmpresaAndEstaActivoTrue(rolDTO.getNombre(), rolDTO.getEmpresa());
 		if(exist == null) {
-			rolRepo.save(rol);
+			exist = new Rol(rolDTO.getNombre());
+			List<Rutina> listRutinas = rutinaRepo.findAll();
+			List<DetalleRutina> listaDetalle = new ArrayList<>();
+			for(Rutina rutina: listRutinas) {
+            	for(DetalleRutina detalle: rutina.getDetalles()) {
+            		listaDetalle.add(detalle);
+            	}
+            }
+			for(DetalleRutina detalle: listaDetalle) {
+            	Politica politica = new Politica(exist, detalle, false);
+            	politica = politicaRepo.save(politica);
+            }
+			rolRepo.save(exist);
 		}else {
-			throw new IllegalAccessError("El Rol que desea crear ya existe: " + rol.getNombre());
+			throw new IllegalAccessError("El Rol que desea crear ya existe: " + rolDTO.getNombre());
 		}
 		
-		return mapearEntidad(rol);
+		return mapearEntidad(exist);
 	}
 
 	@Override
@@ -85,10 +110,12 @@ public class RolServiceImpl implements RolService{
 
 	@Override
 	public void delete(Long id) {
-		Rol rol = rolRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("ROL", "id", id));
-		
-		rolRepo.delete(rol);
+		Rol rol = rolRepo.findByIdRol(id);
+		if(Objects.isNull(rol)) {
+			throw new ResourceNotFoundException("Rol", "id", id);
+		}
+		rol.setEstaActivo(false);
+		rol = rolRepo.save(rol);
 	}
 	
 	public RolDTO mapearEntidad(Rol rol) {
@@ -123,6 +150,26 @@ public class RolServiceImpl implements RolService{
 		}
 		Page<Rol> roles = rolRepo.findAll(rolSpec.getRoles(rolDTO, empresa), PageRequest.of(pagina, items));
 		return roles;
+	}
+
+	@Override
+	public List<Politica> listarPoliticas(String role) {
+		Rol rol = rolRepo.findByNombre(role);
+		List<Politica> politicas = politicaRepo.findByRol(rol);
+		return politicas;
+	}
+
+	@Override
+	public Politica actualizarPoliticar(Long idPolitica, Politica politica) {
+		Politica exist = politicaRepo.findByIdPolitica(idPolitica);
+		if(!Objects.isNull(exist)) {
+			exist.setPermiso(politica.getPermiso());
+			politicaRepo.save(exist);
+			return exist;
+		}else {
+			throw new ResourceNotFoundException("Politica", "id", idPolitica);
+		}
+		
 	}
 
 }

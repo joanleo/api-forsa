@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Politica;
 import com.prueba.security.dto.RolDTO;
 import com.prueba.security.entity.Rol;
 
@@ -26,6 +27,10 @@ public interface RolService {
 	public Page<Rol> searchRoles(Empresa empresa, Integer pagina, Integer items);
 
 	public Page<Rol> serachRoles(RolDTO rolDTO, Empresa empresa, Integer pagina, Integer items);
+
+	public List<Politica> listarPoliticas(String role);
+
+	public Politica actualizarPoliticar(Long idPolitica, Politica politica);
 
 
 }
