@@ -40,7 +40,7 @@ public class DetalleRutina implements Serializable{
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@MapsId("idRutina")
-	@JsonBackReference
+	//@JsonBackReference
 	private Rutina rutina;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
