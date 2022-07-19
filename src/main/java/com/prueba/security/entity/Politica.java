@@ -1,4 +1,4 @@
-package com.prueba.entity;
+package com.prueba.security.entity;
 
 import java.io.Serializable;
 
@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.prueba.security.entity.Rol;
+import com.prueba.entity.DetalleRutina;
 
 @Entity
 @Table(name = "politicas")

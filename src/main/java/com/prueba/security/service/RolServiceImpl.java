@@ -14,14 +14,14 @@ import org.springframework.stereotype.Service;
 
 import com.prueba.entity.DetalleRutina;
 import com.prueba.entity.Empresa;
-import com.prueba.entity.Politica;
 import com.prueba.entity.Rutina;
 import com.prueba.exception.ResourceNotFoundException;
-import com.prueba.repository.PoliticaRepository;
 import com.prueba.repository.RutinaRepository;
 import com.prueba.security.dto.RolDTO;
+import com.prueba.security.entity.Politica;
 import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
+import com.prueba.security.repository.PoliticaRepository;
 import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.RolSpecifications;
@@ -61,6 +61,7 @@ public class RolServiceImpl implements RolService{
 		Rol exist = rolRepo.findByNombreAndEmpresaAndEstaActivoTrue(rolDTO.getNombre(), rolDTO.getEmpresa());
 		if(exist == null) {
 			exist = new Rol(rolDTO.getNombre());
+			exist.setEmpresa(rolDTO.getEmpresa());
 			List<Rutina> listRutinas = rutinaRepo.findAll();
 			List<DetalleRutina> listaDetalle = new ArrayList<>();
 			for(Rutina rutina: listRutinas) {
@@ -153,8 +154,11 @@ public class RolServiceImpl implements RolService{
 	}
 
 	@Override
-	public List<Politica> listarPoliticas(String role) {
-		Rol rol = rolRepo.findByNombre(role);
+	public List<Politica> listarPoliticas(Long idRole) {
+		Rol rol = rolRepo.findByIdRol(idRole);
+		if(Objects.isNull(rol)) {
+			throw new ResourceNotFoundException("Rol", "Id", idRole);
+		}
 		List<Politica> politicas = politicaRepo.findByRol(rol);
 		return politicas;
 	}

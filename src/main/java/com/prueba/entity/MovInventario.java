@@ -19,14 +19,19 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.prueba.security.entity.Usuario;
 
-//Para realizar inventariio
-
+/**
+ * 
+ * @author Joan Leon
+ *
+ */
 @Entity
 @Table(name = "mov_inventario", uniqueConstraints = { @UniqueConstraint(columnNames = { "nidmov" }) })
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
@@ -41,6 +46,7 @@ public class MovInventario implements Serializable{
 	@Column(name = "nidmov", length = 6)
 	private Long idMov;
 	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "dfecha")
 	private Date fecha;
 	

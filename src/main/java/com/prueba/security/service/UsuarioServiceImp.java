@@ -11,8 +11,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.prueba.entity.Empresa;
+import com.prueba.entity.MovInventario;
+import com.prueba.entity.Producto;
+import com.prueba.entity.Traslado;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
+import com.prueba.repository.MovInventarioRepository;
+import com.prueba.repository.ProductoRepository;
+import com.prueba.repository.TrasladoRepository;
 import com.prueba.security.dto.RegistroDTO;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
@@ -29,6 +35,15 @@ public class UsuarioServiceImp implements UsuarioService {
 	
 	@Autowired
 	private UsuarioSpecifications usuarioSpec;
+	
+	@Autowired
+	private MovInventarioRepository movInventarioRepo;
+	
+	@Autowired
+	private ProductoRepository productoRepo;
+	
+	@Autowired
+	private TrasladoRepository trasladoRepo;
 	
 	@Override
 	public Usuario update(Long id, RegistroDTO registroDTO) throws Exception {
@@ -74,14 +89,38 @@ public class UsuarioServiceImp implements UsuarioService {
 		if(Objects.isNull(usuario)) {
 			throw new ResourceNotFoundException("Usuario", "id", id);
 		}
-		usuario.setEstaActivo(false);
+		
+		MovInventario existInven = movInventarioRepo.findByRealizo(usuario);
+		Producto existProducto = productoRepo.findByReviso(usuario);
+		Traslado existTraslado = trasladoRepo.findByUsuarioEnvioOrUsuarioRecibe(usuario, usuario);
+		
+		if(!Objects.isNull(existInven) || !Objects.isNull(existProducto) || !Objects.isNull(existTraslado)){
+			throw new Exception("No es posible eliminar este usuario, se deberia inhabilitar");
+		}
+	
 		usuario = usuarioRepo.save(usuario);
 	}
 
 	@Override
 	public List<Usuario> list(Empresa empresa) {
-		// TODO Auto-generated method stub
 		return usuarioRepo.findByEmpresaAndEstaActivoTrue(empresa);
+	}
+
+	@Override
+	public void deshabilitar(Long id, Empresa empresa) {
+		Usuario usuario = usuarioRepo.findByIdAndEmpresa(id, empresa);
+		if(Objects.isNull(usuario)) {
+			throw new ResourceNotFoundException("Usuario", "id", id);
+		}
+		usuario.setEstaActivo(false);
+		usuarioRepo.save(usuario);
+		
+	}
+
+	@Override
+	public List<Usuario> listUsuarios(RegistroDTO registroDTO, Empresa empresa) {
+		List<Usuario> usuarios = usuarioRepo.findAll(usuarioSpec.getUsuarios(registroDTO, empresa));
+		return usuarios;
 	}
 
 }

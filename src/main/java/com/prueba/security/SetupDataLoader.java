@@ -15,12 +15,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.prueba.entity.DetalleRutina;
-import com.prueba.entity.Politica;
 import com.prueba.entity.Rutina;
-import com.prueba.repository.PoliticaRepository;
 import com.prueba.repository.RutinaRepository;
+import com.prueba.security.entity.Politica;
 import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
+import com.prueba.security.repository.PoliticaRepository;
 import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.util.UtilitiesApi;

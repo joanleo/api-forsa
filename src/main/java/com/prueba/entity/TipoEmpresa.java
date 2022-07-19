@@ -12,6 +12,11 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * 
+ * @author Joan Leon
+ *
+ */
 @Entity
 @Table(name = "m_tipos_empresa")
 public class TipoEmpresa {
@@ -27,6 +32,8 @@ public class TipoEmpresa {
 	
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
 	private Boolean estaActivo=true;
+	
+	
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "tipoEmpresa")
@@ -70,16 +77,29 @@ public class TipoEmpresa {
 	
 	
 
+	/**
+	 * Constructor sin parametros
+	 */
 	public TipoEmpresa() {
 		super();
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param id Identificador unico de la empresa
+	 */
 	public TipoEmpresa(Long id) {
 		super();
 		this.id = id;
 	}
 
-	public TipoEmpresa(Long id, String tipo, String descripcion) {
+	/**
+	 * 
+	 * @param id 
+	 * @param tipo Nombre para el tipo de empresa
+	 */
+	public TipoEmpresa(Long id, String tipo) {
 		super();
 		this.id = id;
 		this.tipo = tipo;

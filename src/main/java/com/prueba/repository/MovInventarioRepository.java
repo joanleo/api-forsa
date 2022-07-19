@@ -7,9 +7,16 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.prueba.entity.Empresa;
 import com.prueba.entity.MovInventario;
+import com.prueba.security.entity.Usuario;
 
 public interface MovInventarioRepository extends JpaRepository<MovInventario, Long>, JpaSpecificationExecutor<MovInventario> {
 
 	Page<MovInventario> findByEmpresa(Empresa empresa, Pageable page);
+
+	/**
+	 * @param usuario
+	 * @return
+	 */
+	MovInventario findByRealizo(Usuario usuario);
 	
 }

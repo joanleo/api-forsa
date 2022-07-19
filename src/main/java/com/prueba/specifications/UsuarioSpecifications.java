@@ -19,13 +19,13 @@ public class UsuarioSpecifications {
 		return (root, query, criteryBuilder) ->{
 			List<Predicate> predicates = new ArrayList<>();
 			if(registroDTO.getNombre() != null) {
-				predicates.add(criteryBuilder.equal(root.get("nombre"), registroDTO.getNombre()));				
+				predicates.add(criteryBuilder.like(root.get("nombre"), "%" + registroDTO.getNombre() + "%"));				
 			}
 			if(registroDTO.getEmail() != null) {
-				predicates.add(criteryBuilder.like(root.get("nombre"), "%" +registroDTO.getEmail() + "%"));				
+				predicates.add(criteryBuilder.like(root.get("email"), "%" +registroDTO.getEmail() + "%"));				
 			}
 			if(registroDTO.getNombreUsuario() != null) {
-				predicates.add(criteryBuilder.like(root.get("nombre"), "%" +registroDTO.getNombreUsuario() + "%"));				
+				predicates.add(criteryBuilder.like(root.get("nombreUsuario"), "%" +registroDTO.getNombreUsuario() + "%"));				
 			}
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));

@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.prueba.entity.DetalleRutina;
 import com.prueba.entity.Empresa;
-import com.prueba.entity.Politica;
 
 
 @Entity

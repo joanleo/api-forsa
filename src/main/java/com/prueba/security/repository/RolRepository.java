@@ -28,4 +28,17 @@ public interface RolRepository extends JpaRepository<Rol, Long>, JpaSpecificatio
 	public Rol findFirstByOrderByIdRolAsc();
 
 	public Rol findByIdRol(Long id);
+
+	/**
+	 * @param idRol
+	 * @return
+	 */
+	public Rol findByIdRolAndEstaActivoTrue(Long idRol);
+
+	/**
+	 * @param idRol
+	 * @param empresa
+	 * @return
+	 */
+	public Rol findByIdRolAndEmpresaAndEstaActivoTrue(Long idRol, Empresa empresa);
 }

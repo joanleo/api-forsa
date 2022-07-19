@@ -21,6 +21,7 @@ import com.prueba.dto.TipoUbicacionDTO;
 import com.prueba.dto.UbicacionDTO;
 import com.prueba.entity.Producto;
 import com.prueba.entity.TipoActivo;
+import com.prueba.security.entity.Usuario;
 
 
 @Service
@@ -157,6 +158,24 @@ public class CsvExportService {
 		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
     		for(TipoActivo tipoActivo: tiposActivos) {
     			csvPrinter.printRecord(tipoActivo.getId(), tipoActivo.getNombre());    			
+    		}
+	    }catch (IOException e) {
+	        log.error("Error en la generacion del CSV  ", e);
+	    }
+		
+	}
+
+	/**
+	 * @param writer
+	 * @param usuarios
+	 */
+	public void writeUsuariosToCsv(PrintWriter writer, List<Usuario> usuarios) {
+		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			csvPrinter.printRecord(
+        			"Id", "Nombres Completos", "Nombre de usuario", "Contraseña", "Email", "Rol", "Contraseña");
+    		for(Usuario usuario: usuarios) {
+    			csvPrinter.printRecord(usuario.getId(), usuario.getNombre(), usuario.getNombreUsuario(), 
+    					usuario.getEmail(), usuario.getRol().getNombre(), usuario.getContrasena());    			
     		}
 	    }catch (IOException e) {
 	        log.error("Error en la generacion del CSV  ", e);

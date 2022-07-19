@@ -23,13 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.ApiResponse;
 import com.prueba.entity.Empresa;
-import com.prueba.entity.Politica;
-import com.prueba.entity.Rutina;
 import com.prueba.security.dto.RolDTO;
+import com.prueba.security.entity.Politica;
 import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.security.service.RolService;
+import com.prueba.service.PoliticaService;
 import com.prueba.util.UtilitiesApi;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,6 +52,9 @@ public class RolController {
 	
 	@Autowired
 	private UtilitiesApi util;
+	
+	@Autowired
+	private PoliticaService politicaService;
 	
 	@PostMapping
 	@Operation(summary = "Crea un rol", description = "Crea un nuevo rol" )
@@ -146,9 +149,44 @@ public class RolController {
 	}
 	
 	@GetMapping("/politicas")
-	public List<Politica> listaPoliticas(@RequestParam(required=false)String role){
-		List<Politica> politicas = rolService.listarPoliticas(role);
+	public List<Politica> listaPoliticas(@RequestParam(required=false)Long id){
+		List<Politica> politicas = rolService.listarPoliticas(id);
 		return politicas;
+	}
+	
+	@PostMapping("/politicas/indexados")
+	public ApiResponse<Page<Politica>> paginacionPoliticas(
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
+			@RequestBody(required=true) Rol rol,
+			@RequestParam(required=false) Long nit){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		Page<Politica> politicas = politicaService.buscarPoliticas(rol, empresa, pagina, items);
+		
+		return new ApiResponse<>(politicas.getSize(), politicas);
+
+	}
+	
+	@GetMapping("/politicas/indexados")
+	public ApiResponse<Page<Politica>> obtenerTodasPoliticasPaginadas(
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
+			@RequestParam(required=true) Long nit){
+		System.out.println("Ingreso");
+		Page<Politica> politicas = politicaService.buscarPoliticas(nit, pagina, items);
+		
+		return new ApiResponse<>(politicas.getSize(), politicas);
+
 	}
 	
 	@PutMapping("/politicas/{idPolitica}")

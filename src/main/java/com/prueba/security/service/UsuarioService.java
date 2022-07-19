@@ -24,6 +24,19 @@ public interface UsuarioService {
 	public void delete(Long nitFabricante, Empresa empresa) throws Exception;
 
 	public List<Usuario> list(Empresa empresa);
+
+	/**
+	 * @param id
+	 * @param empresa
+	 */
+	public void deshabilitar(Long id, Empresa empresa);
+
+	/**
+	 * @param registroDTO
+	 * @param empresa
+	 * @return
+	 */
+	public List<Usuario> listUsuarios(RegistroDTO registroDTO, Empresa empresa);
 	
 	
 

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
+import com.prueba.security.entity.Usuario;
 
 public interface ProductoRepository extends JpaRepository<Producto, String>, JpaSpecificationExecutor<Producto>{
 		
@@ -23,6 +24,12 @@ public interface ProductoRepository extends JpaRepository<Producto, String>, Jpa
 	public Producto findByCodigoPieza(String codigoPieza);
 	
 	public Page<Producto> findByDescripcion(String letra, Boolean activo, Pageable pageable);
+
+	/**
+	 * @param usuario
+	 * @return
+	 */
+	public Producto findByReviso(Usuario usuario);
 	
 	//public Producto findByIdProducto(Producto_id producto_id);
 	

@@ -1,8 +1,13 @@
 package com.prueba.security.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -31,11 +37,10 @@ import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.security.service.UsuarioService;
+import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 
@@ -59,6 +64,9 @@ public class UsuarioController {
 	
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private CsvExportService csvService;
 	
 	@GetMapping
 	@Operation(summary = "Obtiene los usuarios", description = "Retorna una lista de usuarios que contengan en su nombre "
@@ -141,7 +149,7 @@ public class UsuarioController {
 		if(usuarioRepo.existsByEmail(registroDTO.getEmail())) {
 			return new ResponseEntity<>("Ese email de usuario ya existe",HttpStatus.BAD_REQUEST);
 		}
-		System.out.println("usurio no existe");
+		System.out.println("usuario no existe");
 		Usuario usuario = new Usuario();
 		usuario.setEmpresa(empresa);
 		usuario.setNombre(registroDTO.getNombre());
@@ -180,25 +188,76 @@ public class UsuarioController {
 	
 	@DeleteMapping("/{id},{nitEmpresa}")
 	@Operation(summary = "Elimina un usuario", description = "Elimina un usuario por su id")
-	public ResponseEntity<?> delete(@PathVariable(name="nitFabricante")Long nitFabricante,
+	public ResponseEntity<?> delete(@PathVariable(name="id")Long id,
 			 @PathVariable(required=false) Long nitEmpresa){
+		
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
-		
-		
+				
 		if(nitEmpresa != null) {
 		empresa = util.obtenerEmpresa(nitEmpresa);
 		}else {
 		empresa = usuario.getEmpresa();			
 		}
 		try {
-			usuarioService.delete(nitFabricante, empresa);
-			return new ResponseEntity<ResDTO>(new ResDTO("Fabricante eliminado con exito"), HttpStatus.OK);
+			usuarioService.delete(id, empresa);
+			return new ResponseEntity<ResDTO>(new ResDTO("Usuario eliminado con exito"), HttpStatus.OK);
 		} catch (Exception error) {
 			return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
 		} 
 		
-}
-
+	}
+	
+	@PatchMapping("/{id},{nitEmpresa}")
+	@Operation(summary = "Deshabilita un usuario", description = "Deshabilita un usuario por su id")
+	public ResponseEntity<?> deshabilitar(@PathVariable(name="id")Long id,
+			 							  @PathVariable(required=false) Long nitEmpresa){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+				
+		if(nitEmpresa != null) {
+		empresa = util.obtenerEmpresa(nitEmpresa);
+		}else {
+		empresa = usuario.getEmpresa();			
+		}
+		
+		usuarioService.deshabilitar(id, empresa);
+		
+		return new ResponseEntity<ResDTO>(new ResDTO("Usuario inhabilitado con exito"), HttpStatus.OK);
+	}
+	
+	@PostMapping("/descarga")
+	@Operation(summary = "Descarga listado de usuarios en formato csv", description = "Descarga listado de usuarios de la busqueda realizada en fotmato csv")
+	public void getCsvUsuarios(HttpServletResponse servletResponse,
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
+			@RequestBody(required=false)RegistroDTO registroDTO,
+			@RequestParam(required=false) Long nit) throws IOException {
+		
+		servletResponse.setContentType("application/x-download");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+        servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "fabricantes"+ "_" + currentDateTime + ".csv" + "\"");
+        
+        Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		if(Objects.isNull(registroDTO)) {
+			List<Usuario> usuarios = usuarioService.list(empresa);
+			csvService.writeUsuariosToCsv(servletResponse.getWriter(), usuarios);
+		}else {
+			List<Usuario> usuarios = usuarioService.listUsuarios(registroDTO, empresa);
+			csvService.writeUsuariosToCsv(servletResponse.getWriter(), usuarios);
+		}
+	}
 }
