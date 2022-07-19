@@ -3,6 +3,7 @@ package com.prueba.dto;
 import java.util.List;
 
 import com.prueba.entity.Producto;
+import com.prueba.entity.Ubicacion;
 
 public class TrasladoDTO {
 	
@@ -10,9 +11,9 @@ public class TrasladoDTO {
 	
 	private int cantProductos;
 	
-	private String origen;
+	private Ubicacion origen;
 	
-	private String destino;
+	private Ubicacion destino;
 
 	public List<Producto> getProductos() {
 		return productos;
@@ -30,20 +31,21 @@ public class TrasladoDTO {
 		this.cantProductos = cantProductos;
 	}
 
-	public String getOrigen() {
+	public Ubicacion getOrigen() {
 		return origen;
 	}
 
-	public void setOrigen(String origen) {
+	public void setOrigen(Ubicacion origen) {
 		this.origen = origen;
 	}
 
-	public String getDestino() {
+	public Ubicacion getDestino() {
 		return destino;
 	}
 
-	public void setDestino(String destino) {
+	public void setDestino(Ubicacion destino) {
 		this.destino = destino;
 	}
+
 
 }
