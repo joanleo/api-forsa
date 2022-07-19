@@ -47,7 +47,6 @@ public class DetalleRutina implements Serializable{
 	@MapsId("idRuta")
 	private Ruta ruta;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "detalle")
 	private Set<Politica> politica;
 
