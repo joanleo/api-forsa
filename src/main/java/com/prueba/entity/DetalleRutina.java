@@ -34,7 +34,7 @@ public class DetalleRutina implements Serializable{
 	@Column(name = "npkDetalle")
 	private int pkDetalle;
 	
-	@JsonIgnore
+	//@JsonIgnore
 	@EmbeddedId
 	private DetalleRutina_id idDetalle;
 	
@@ -47,6 +47,7 @@ public class DetalleRutina implements Serializable{
 	@MapsId("idRuta")
 	private Ruta ruta;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "detalle")
 	private Set<Politica> politica;
 
