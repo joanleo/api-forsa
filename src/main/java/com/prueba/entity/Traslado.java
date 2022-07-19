@@ -8,14 +8,18 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.prueba.security.entity.Usuario;
 
 @Entity
 @Table(name = "mov_traslados")
@@ -26,11 +30,11 @@ public class Traslado {
 	@Column(name = "nidMov_traslado")
 	public Long id;
 	
-	@Column(name = "vcubicacionOrigen")
-	public String origen;
+ 	@ManyToOne(targetEntity = Ubicacion.class, cascade = CascadeType.ALL)
+	private Ubicacion origen;
 	
-	@Column(name = "vcubicacionDestino")
-	public String destino;
+	@ManyToOne(targetEntity = Ubicacion.class, cascade = CascadeType.ALL)
+	private Ubicacion destino;
 	
 	@Column(name = "dfecha_Salida")
 	public Date fechaSalida;
@@ -43,8 +47,8 @@ public class Traslado {
 	@Column(name = "dfecha_Ingreso")
 	public Date fechaIngreso;
 	
-	@Column(name = "bestaRecibido", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
-	public Boolean estRecibido = false;
+	@Column(name = "vcestadotraslado")
+	public String estadoTraslado;
 
 	@Column(name = "ncantActivos")
 	public int cantActivos;
@@ -52,6 +56,16 @@ public class Traslado {
 	@JsonIgnore
 	@OneToMany(mappedBy = "traslado", cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<DetalleTrasl> detalles = new ArrayList<DetalleTrasl>();
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "vcnitempresa")
+    private Empresa empresa;
+	
+	@ManyToOne(targetEntity = Usuario.class, cascade = CascadeType.ALL)
+	private Usuario usuarioEnvio;
+	
+	@ManyToOne(targetEntity = Usuario.class, cascade = CascadeType.ALL)
+	private Usuario usuarioRecibe;
 
 	public Traslado() {
 		super();
@@ -65,19 +79,19 @@ public class Traslado {
 		this.id = id;
 	}
 
-	public String getOrigen() {
+	public Ubicacion getOrigen() {
 		return origen;
 	}
 
-	public void setOrigen(String origen) {
+	public void setOrigen(Ubicacion origen) {
 		this.origen = origen;
 	}
 
-	public String getDestino() {
+	public Ubicacion getDestino() {
 		return destino;
 	}
 
-	public void setDestino(String destino) {
+	public void setDestino(Ubicacion destino) {
 		this.destino = destino;
 	}
 
@@ -97,12 +111,12 @@ public class Traslado {
 		this.fechaIngreso = fechaIngreso;
 	}
 
-	public Boolean getEstRecibido() {
-		return estRecibido;
+	public String getEstadoTraslado() {
+		return estadoTraslado;
 	}
 
-	public void setEstRecibido(Boolean estRecibido) {
-		this.estRecibido = estRecibido;
+	public void setEstadoTraslado(String estadoTraslado) {
+		this.estadoTraslado = estadoTraslado;
 	}
 
 	public int getCantActivos() {
@@ -139,4 +153,29 @@ public class Traslado {
             }
         }
     }
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
+	public Usuario getUsuarioEnvio() {
+		return usuarioEnvio;
+	}
+
+	public void setUsuarioEnvio(Usuario usuarioEnvio) {
+		this.usuarioEnvio = usuarioEnvio;
+	}
+
+	public Usuario getUsuarioRecibe() {
+		return usuarioRecibe;
+	}
+
+	public void setUsuarioRecibe(Usuario usuarioRecibe) {
+		this.usuarioRecibe = usuarioRecibe;
+	}
+	
 }
