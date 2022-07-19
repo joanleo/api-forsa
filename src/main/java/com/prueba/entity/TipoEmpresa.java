@@ -39,7 +39,10 @@ public class TipoEmpresa {
 	@OneToMany(mappedBy = "tipoEmpresa")
 	private List<Empresa> empresas;
 	
-	
+	/**
+	 * 
+	 * @return
+	 */
 	public Long getId() {
 		return id;
 	}

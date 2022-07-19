@@ -28,7 +28,7 @@ public class Traslado {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "nidMov_traslado")
-	public Long id;
+	public Long idTraslado;
 	
  	@ManyToOne(targetEntity = Ubicacion.class, cascade = CascadeType.ALL)
 	private Ubicacion origen;
@@ -71,12 +71,12 @@ public class Traslado {
 		super();
 	}
 
-	public Long getId() {
-		return id;
+	public Long getIdTraslado() {
+		return idTraslado;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setIdTraslado(Long idTraslado) {
+		this.idTraslado = idTraslado;
 	}
 
 	public Ubicacion getOrigen() {

@@ -15,7 +15,7 @@ public class DetalleTrasl_id implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "nidMov_traslado")
-	private Long idTraslados;
+	private Long idTraslado;
 	
 	@Column(name = "vccodigopieza")
 	private String codigoPieza;
@@ -26,16 +26,16 @@ public class DetalleTrasl_id implements Serializable{
 
 	public DetalleTrasl_id(Long idTraslados, String codigoPieza) {
 		super();
-		this.idTraslados = idTraslados;
+		this.idTraslado = idTraslados;
 		this.codigoPieza = codigoPieza;
 	}
 	
-	 public Long getIdTraslados() {
-		return idTraslados;
+	 public Long getIdTraslado() {
+		return idTraslado;
 	}
 
-	public void setIdTraslados(Long idTraslados) {
-		this.idTraslados = idTraslados;
+	public void setIdTraslado(Long idTraslado) {
+		this.idTraslado = idTraslado;
 	}
 
 	public String getCodigoPieza() {
@@ -54,13 +54,13 @@ public class DetalleTrasl_id implements Serializable{
             return false;
  
         DetalleTrasl_id that = (DetalleTrasl_id) o;
-        return Objects.equals(idTraslados, that.idTraslados) &&
+        return Objects.equals(idTraslado, that.idTraslado) &&
                Objects.equals(codigoPieza, that.codigoPieza);
     }
  
     @Override
     public int hashCode() {
-        return Objects.hash(idTraslados, codigoPieza);
+        return Objects.hash(idTraslado, codigoPieza);
     }
 	
 }

@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -20,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.prueba.entity.DetalleRutina;
 
 @Entity
-@Table(name = "politicas")
+@Table(name = "m_politicas")
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
@@ -33,7 +34,9 @@ public class Politica implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,
+    		generator = "seq_politicas")
+	@SequenceGenerator(name = "seq_politica", allocationSize = 10)
 	private Long idPolitica;
 	
 	@JsonIgnore
@@ -43,7 +46,7 @@ public class Politica implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "nidrutina")
-	@JoinColumn(name = "nidpermiso")
+	@JoinColumn(name = "nidruta")
 	private DetalleRutina detalle;
 	
 	@Column(name = "bpermiso")

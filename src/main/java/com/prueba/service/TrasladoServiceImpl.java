@@ -32,6 +32,7 @@ public class TrasladoServiceImpl implements TrasladoService {
 		traslado.setCantActivos(trasladoDTO.getCantProductos());
 		traslado.setDestino(trasladoDTO.getDestino());
 		traslado.setOrigen(trasladoDTO.getOrigen());
+		traslado.setUsuarioEnvio(trasladoDTO.getUsuarioRecibe());
 		
 		List<Producto> productos = trasladoDTO.getProductos();		
 		for(Producto producto: productos) {

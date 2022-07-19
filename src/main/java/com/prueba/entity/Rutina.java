@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -21,7 +22,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 @Entity
-@Table(name = "rutinas")
+@Table(name = "m_rutinas")
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
@@ -34,7 +35,9 @@ public class Rutina implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,
+    		generator = "seq_rutina")
+	@SequenceGenerator(name = "seq_rutina", allocationSize = 10)
 	@Column(name = "nidutina")
 	private Long idRutina;
 	

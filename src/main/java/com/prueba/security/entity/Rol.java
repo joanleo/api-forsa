@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -26,7 +27,7 @@ import com.prueba.entity.Empresa;
 
 
 @Entity
-@Table(name = "Roles")
+@Table(name = "m_roles")
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
@@ -38,7 +39,11 @@ public class Rol implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(
+    		strategy = GenerationType.SEQUENCE,
+    		generator = "seq_rol")
+	@SequenceGenerator(name = "seq_rol", allocationSize = 10)
+
     @Column(name = "nidrol", length = 2)
     private Long idRol;
     

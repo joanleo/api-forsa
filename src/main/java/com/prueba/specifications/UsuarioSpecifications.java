@@ -12,9 +12,20 @@ import com.prueba.entity.Empresa;
 import com.prueba.security.dto.RegistroDTO;
 import com.prueba.security.entity.Usuario;
 
+/**
+ * 
+ * @author Joan Leon
+ *
+ */
 @Component
 public class UsuarioSpecifications {
 
+	/**
+	 * 
+	 * @param registroDTO
+	 * @param empresa
+	 * @return
+	 */
 	public Specification<Usuario> getUsuarios(RegistroDTO registroDTO, Empresa empresa){
 		return (root, query, criteryBuilder) ->{
 			List<Predicate> predicates = new ArrayList<>();

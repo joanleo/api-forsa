@@ -21,6 +21,7 @@ import com.prueba.dto.TrasladoDTO;
 import com.prueba.entity.Traslado;
 import com.prueba.service.TrasladoService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 
@@ -29,8 +30,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/traslados")
-//@Api(tags = "Traslados", description = "Operaciones referentes a los traslados")
-//@ApiIgnore
 @Tag(name = "Traslados", description = "Operaciones referentes a los traslados")
 public class TrasladoController {
 	
@@ -38,21 +37,21 @@ public class TrasladoController {
 	private TrasladoService trasladoService;
 		
 	@PostMapping
-	//@ApiOperation(value = "Crea un traslado", notes = "Crea un nuevo traslado")
+	@Operation(summary = "Crear un traslado", description = "Crea un nuevo traslado")
 	public ApiResponse<TrasladoDTO> create(@RequestBody TrasladoDTO trasladoDTO){
 		System.out.println(trasladoDTO.getCantProductos());
 		return new ApiResponse<>(trasladoService.create(trasladoDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/{id}")
-	//@ApiOperation(value = "Encuentra un traslado", notes = "Retorna el traslado segun el id indicado")
+	@Operation(summary = "Encuentra un traslado", description = "Retorna el traslado segun el id indicado")
 	public ResponseEntity<Traslado> get(@PathVariable(name = "id")Long id){
 		
 		return ResponseEntity.ok(trasladoService.getTraslado(id));
 	}
 	
 	@GetMapping("/fecha")
-	//@ApiOperation(value = "Encuentra traslados entre fechas dadas", notes = "Retorna listado de traslado entre dos fechas dadas")
+	@Operation(summary = "Encuentra traslados entre fechas dadas", description = "Retorna listado de traslado entre dos fechas dadas")
 	public ApiResponse<Page<Traslado>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 											@RequestParam(required=false, defaultValue = "0") Integer items,
 											@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate desde,

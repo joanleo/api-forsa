@@ -7,10 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "rutas")
+@Table(name = "m_rutas")
 public class Ruta implements Serializable{
 
 	/**
@@ -19,7 +20,9 @@ public class Ruta implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,
+    		generator = "seq_ruta")
+	@SequenceGenerator(name = "seq_ruta", allocationSize = 10)
 	@Column(name = "nidruta")
 	private Long idRuta;
 	

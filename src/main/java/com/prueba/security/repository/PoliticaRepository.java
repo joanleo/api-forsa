@@ -17,8 +17,9 @@ public interface PoliticaRepository extends JpaRepository<Politica, Long>, JpaSp
 	List<Politica> findByRol(Rol rol);
 
 	/**
+	 * 
 	 * @param rol
-	 * @param of
+	 * @param page
 	 * @return
 	 */
 	Page<Politica> findByRol(Rol rol, Pageable page);

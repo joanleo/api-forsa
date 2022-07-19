@@ -16,6 +16,8 @@ import com.prueba.security.entity.Rol;
 public interface PoliticaService {
 
 	/**
+	 * 
+	 * @param rol
 	 * @param empresa
 	 * @param pagina
 	 * @param items

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.prueba.entity.Producto;
 import com.prueba.entity.Ubicacion;
+import com.prueba.security.entity.Usuario;
 
 public class TrasladoDTO {
 	
@@ -14,6 +15,10 @@ public class TrasladoDTO {
 	private Ubicacion origen;
 	
 	private Ubicacion destino;
+	
+	private Usuario usuarioEnvio;
+	
+	private Usuario usuarioRecibe;
 
 	public List<Producto> getProductos() {
 		return productos;
@@ -47,5 +52,22 @@ public class TrasladoDTO {
 		this.destino = destino;
 	}
 
+	public Usuario getUsuarioEnvio() {
+		return usuarioEnvio;
+	}
+
+	public void setUsuarioEnvio(Usuario usuarioEnvio) {
+		this.usuarioEnvio = usuarioEnvio;
+	}
+
+	public Usuario getUsuarioRecibe() {
+		return usuarioRecibe;
+	}
+
+	public void setUsuarioRecibe(Usuario usuarioRecibe) {
+		this.usuarioRecibe = usuarioRecibe;
+	}
+
+	
 
 }

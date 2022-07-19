@@ -1,14 +1,19 @@
 package com.prueba.entity;
 
+import java.util.Date;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+
+import com.prueba.security.entity.Usuario;
 
 @Entity
 @Table(name = "detalle_traslado")
@@ -22,12 +27,26 @@ public class DetalleTrasl {
 	private Traslado traslado;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("id")
+	@MapsId("codigoPieza")
 	private Producto producto;
 	
-	@Column(name = "bestaRecibido")
-	private Boolean estaRecibido = false;
-
+	
+	@ManyToOne(targetEntity = Usuario.class, cascade = CascadeType.ALL)
+	private Usuario usuarioEnvio;
+	
+	@ManyToOne(targetEntity = Usuario.class, cascade = CascadeType.ALL)
+	private Usuario usuarioRecibe;
+	
+	@Column(name = "dfecha_envio")
+	public Date fechaEnvio;
+	
+	@Column(name = "dfecha_recibe")
+	public Date fechaRecibe;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vcnitempresa")
+    private Empresa empresa;
+	
 	public DetalleTrasl() {
 		super();
 	}
@@ -36,8 +55,29 @@ public class DetalleTrasl {
 		super();
 		this.traslado = traslado;
 		this.producto = producto;
-		this.id = new DetalleTrasl_id(traslado.getId(), producto.getCodigoPieza());
+		this.id = new DetalleTrasl_id(traslado.getIdTraslado(), producto.getCodigoPieza());
 
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(empresa, fechaEnvio, fechaRecibe, id, producto, traslado, usuarioEnvio, usuarioRecibe);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DetalleTrasl other = (DetalleTrasl) obj;
+		return Objects.equals(empresa, other.empresa) && Objects.equals(fechaEnvio, other.fechaEnvio)
+				&& Objects.equals(fechaRecibe, other.fechaRecibe) && Objects.equals(id, other.id)
+				&& Objects.equals(producto, other.producto) && Objects.equals(traslado, other.traslado)
+				&& Objects.equals(usuarioEnvio, other.usuarioEnvio)
+				&& Objects.equals(usuarioRecibe, other.usuarioRecibe);
 	}
 
 	public DetalleTrasl_id getId() {
@@ -64,28 +104,46 @@ public class DetalleTrasl {
 		this.producto = producto;
 	}
 
-	public Boolean getEstaRecibido() {
-		return estaRecibido;
+	public Usuario getUsuarioEnvio() {
+		return usuarioEnvio;
 	}
 
-	public void setEstaRecibido(Boolean estaRecibido) {
-		this.estaRecibido = estaRecibido;
+	public void setUsuarioEnvio(Usuario usuarioEnvio) {
+		this.usuarioEnvio = usuarioEnvio;
 	}
-	@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
- 
-        if (o == null || getClass() != o.getClass())
-            return false;
- 
-        DetalleTrasl that = (DetalleTrasl) o;
-        return Objects.equals(traslado, that.traslado) &&
-               Objects.equals(producto, that.producto);
-    }
- 
-    @Override
-    public int hashCode() {
-        return Objects.hash(traslado, producto);
-    }
+
+	public Usuario getUsuarioRecibe() {
+		return usuarioRecibe;
+	}
+
+	public void setUsuarioRecibe(Usuario usuarioRecibe) {
+		this.usuarioRecibe = usuarioRecibe;
+	}
+
+	public Date getFechaEnvio() {
+		return fechaEnvio;
+	}
+
+	public void setFechaEnvio(Date fechaEnvio) {
+		this.fechaEnvio = fechaEnvio;
+	}
+
+	public Date getFechaRecibe() {
+		return fechaRecibe;
+	}
+
+	public void setFechaRecibe(Date fechaRecibe) {
+		this.fechaRecibe = fechaRecibe;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
+	
 	
 }
