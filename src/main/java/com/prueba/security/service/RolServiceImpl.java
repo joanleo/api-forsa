@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.prueba.entity.DetalleRutina;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Rutina;
+import com.prueba.exception.ResourceAlreadyExistsException;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.RutinaRepository;
 import com.prueba.security.dto.RolDTO;
@@ -75,7 +76,7 @@ public class RolServiceImpl implements RolService{
             }
 			rolRepo.save(exist);
 		}else {
-			throw new IllegalAccessError("El Rol que desea crear ya existe: " + rolDTO.getNombre());
+			throw new ResourceAlreadyExistsException("Rol", "Nombre", rolDTO.getNombre());
 		}
 		
 		return mapearEntidad(exist);

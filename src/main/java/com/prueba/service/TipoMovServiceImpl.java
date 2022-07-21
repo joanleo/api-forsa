@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.prueba.dto.TipoMovDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.TipoMov;
+import com.prueba.exception.ResourceAlreadyExistsException;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.TipoMovRepository;
 
@@ -29,7 +30,7 @@ public class TipoMovServiceImpl implements TipoMovService {
 		if(exist != null) {
 			tipoMovRepo.save(tipoMov);
 		}else {
-			throw new IllegalAccessError("El tipo de mpvimiento que desea crear ya existe: " + tipoMov.getNombre());
+			throw new ResourceAlreadyExistsException("Tipo de movimiento", "nombre", tipoMov.getNombre());
 		}
 
 		return mapearEntidad(tipoMov);

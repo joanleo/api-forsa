@@ -67,15 +67,17 @@ public class PoliticaServiceImp implements PoliticaService {
 						PoliticaDTO politicaDTO= new PoliticaDTO();
 						String nombre = politicaRe.getDetalle().getRuta().getNombre();
 						String url = politicaRe.getDetalle().getRuta().getUrl();
+						Long id = politicaRe.getIdPolitica();
 						Boolean permitido = politicaRe.getPermiso();
 						politicaDTO.setNombre(nombre);
 						politicaDTO.setUrl(url);
 						politicaDTO.setRol(esxiste.getNombre());
+						politicaDTO.setIdPolitica(id);
 						politicaDTO.setPermiso(permitido);
 						listPoliDTO.add(politicaDTO);
 					}
 				}	
-				nuevaRutina.setPolitica(listPoliDTO);
+				nuevaRutina.setPoliticas(listPoliDTO);
 	        	System.out.println(rutinaRol.contains(nuevaRutina));
 	        	rutinaRol.add(nuevaRutina);
 			}

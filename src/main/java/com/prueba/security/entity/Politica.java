@@ -45,8 +45,8 @@ public class Politica implements Serializable{
 	private Rol rol;
 	
 	@ManyToOne
-	@JoinColumn(name = "nidrutina")
 	@JoinColumn(name = "nidruta")
+	@JoinColumn(name = "nidrutina")
 	private DetalleRutina detalle;
 	
 	@Column(name = "bpermiso")

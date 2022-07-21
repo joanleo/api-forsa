@@ -67,6 +67,20 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 			listRutinas = rutinaRepo.findAll();
 		}
         
+		Set<Rutina> targetSet = new HashSet<>(listRutinas);
+		createRoleIfNotFound("ROLE_USER", targetSet);
+		System.out.println(currentUserName);
+		if(currentUserName != "") {
+			System.out.println(currentUserName);
+			Rol userRole = rolRepo.findByNombre("ROLE_USER");
+			System.out.println(authentication.getName());
+			Usuario usuario = usuarioRepo.findByNombreUsuario(authentication.getName()).get();
+			
+			usuario.setRol(userRole);
+			usuarioRepo.save(usuario);	        
+			
+			isConfig = true;
+		}
         /*Map<String, String> MetodoRuta = new HashMap<>();
         List<Ruta> rutas = new ArrayList<Ruta>();
         List<Ruta> nuevasRutas = new ArrayList<Ruta>();
@@ -146,22 +160,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         
 		
 		
-        Set<Rutina> targetSet = new HashSet<>(listRutinas);
         
 
         
-        createRoleIfNotFound("ROLE_USER", targetSet);
-        
-		if(currentUserName != "") {
-			Rol userRole = rolRepo.findByNombre("ROLE_USER");
-			System.out.println(authentication.getName());
-			Usuario usuario = usuarioRepo.findByNombreUsuario(authentication.getName()).get();
-			
-			usuario.setRol(userRole);
-			usuarioRepo.save(usuario);	        
-					
-			isConfig = true;
-		}
 		
 	}
 	

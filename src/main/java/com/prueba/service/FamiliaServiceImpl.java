@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.prueba.dto.FamiliaDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Familia;
+import com.prueba.exception.ResourceAlreadyExistsException;
+import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.FamiliaRepository;
 import com.prueba.specifications.FamiliaSpecifications;
@@ -36,7 +38,7 @@ public class FamiliaServiceImpl implements FamiliaService {
 		if(exist == null) {
 			familiaRepo.save(familia);
 		}else {
-			throw new IllegalAccessError("La familia "+ familia.getNombre() +" que esta tratando de crear ya existe en empresa " + empresa);
+			throw new ResourceAlreadyExistsException("Familia ", "nombre" , familia.getNombre());
 		}
 		return mapearEntidad(familia);
 	}
@@ -84,7 +86,7 @@ public class FamiliaServiceImpl implements FamiliaService {
 		Familia familia = familiaRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Familia", "id", id));
 		if(familia.getProductos().size() > 0) {
-			throw new IllegalAccessError("No se pude eliminar la familia tiene activoss asociados");
+			throw new ResourceCannotBeDeleted("Familia");
 		}
 		familiaRepo.delete(familia);
 

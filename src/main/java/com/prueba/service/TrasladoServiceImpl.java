@@ -40,7 +40,7 @@ public class TrasladoServiceImpl implements TrasladoService {
 			if(nuevo != null) {
 				traslado.addActivo(nuevo);				
 			}else {
-				throw new IllegalAccessError("El producto con codigo de pieza " + producto.getCodigoPieza() + " no existe");
+				throw new ResourceNotFoundException("Activo", "codigo de pieza", producto.getCodigoPieza());
 			}
 		}
 		trasladoRepo.save(traslado);

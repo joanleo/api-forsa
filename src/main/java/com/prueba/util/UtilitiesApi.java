@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Ruta;
 import com.prueba.entity.Rutina;
+import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.RutaRepository;
 import com.prueba.repository.RutinaRepository;
@@ -40,7 +41,7 @@ public class UtilitiesApi {
 		if (exist != null) {
 			return exist;
 		} else {
-			throw new IllegalAccessError("La empresa " + nit + " no existe en la base de datos");
+			throw new ResourceNotFoundException("Empresa", "nit", nit);
 		}
 	}
 	

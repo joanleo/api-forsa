@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import com.prueba.dto.UbicacionDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Ubicacion;
+import com.prueba.exception.ResourceAlreadyExistsException;
+import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.UbicacionRepository;
 import com.prueba.security.entity.Usuario;
@@ -51,7 +53,7 @@ public class UbicacionServiceImpl implements UbicacionService {
 		if(exist == null) {
 			ubicacionRepo.save(ubicacion);
 		}else {
-			throw new IllegalAccessError("La ubicacion que desea crear ya existe: "+ ubicacion.getNombre());
+			throw new ResourceAlreadyExistsException("Ubicacion", "nombre", ubicacion.getNombre());
 		}
 		
 		return mapearEntidad(ubicacion);
@@ -93,7 +95,7 @@ public class UbicacionServiceImpl implements UbicacionService {
 				.orElseThrow(() -> new ResourceNotFoundException("Ubicacion", "id", id));
 		
 		if(ubicacion.getProductos().size() > 0) {
-			throw new IllegalAccessError("No se pude eliminar la ubicacion tiene productos asociados");
+			throw new ResourceCannotBeDeleted("Empresa");
 		}
 		
 		ubicacionRepo.delete(ubicacion);

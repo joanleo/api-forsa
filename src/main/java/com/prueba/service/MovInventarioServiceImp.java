@@ -53,13 +53,13 @@ public class MovInventarioServiceImp implements MovInventarioService {
 				if(actualizar != null) {
 					inventario.addActivo(actualizar);
 				}else {
-					throw new IllegalAccessError("El activo con codigo de pieza " + producto.getCodigoPieza() + " no existe");
+					throw new ResourceNotFoundException("Activo", "codigo de pieza", producto.getCodigoPieza());
 				}
 				
 			}			
 			movInvRepo.save(inventario);
 		}else {
-			throw new IllegalAccessError("El inventario con id " + movInventarioDto.getId() + " ya existe");
+			throw new ResourceNotFoundException("Inventario", "id", movInventarioDto.getId());
 		}
 		
 

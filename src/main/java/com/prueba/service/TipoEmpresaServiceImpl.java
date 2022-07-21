@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.prueba.dto.TipoEmpresaDTO;
 import com.prueba.entity.TipoEmpresa;
+import com.prueba.exception.ResourceAlreadyExistsException;
+import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.TipoEmpresaRepository;
 import com.prueba.specifications.TipoEmpresaSpecifications;
@@ -34,7 +36,7 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 		if (exist == null) {
 			tipoEmpresaRepo.save(tipoEmpresa);
 		} else {
-			throw new IllegalAccessError("El tipo de empresa que desea crear ya existe: " + " Tipo: " + tipoEmpresa.getTipo());
+			throw new ResourceAlreadyExistsException("Tipo de empresa", "nombre", tipoEmpresa.getTipo());
 		}
 
 		return mapearEntidad(tipoEmpresa);
@@ -79,7 +81,7 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 				.orElseThrow(() -> new ResourceNotFoundException("Tipo de empresa", "id", id));
 		
 		if(tipoEmpresa.getEmpresas().size() > 0) {
-			throw new IllegalAccessError("no se puede eliminar el tipo de empresa, existen empresas de este tipo");
+			throw new ResourceCannotBeDeleted("Tipo de empresa");
 		}
 		tipoEmpresaRepo.delete(tipoEmpresa);
 

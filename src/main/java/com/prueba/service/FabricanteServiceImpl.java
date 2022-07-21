@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import com.prueba.dto.FabricanteDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Fabricante;
+import com.prueba.exception.ResourceAlreadyExistsException;
+import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.FabricanteRepository;
 import com.prueba.security.entity.Usuario;
@@ -51,8 +53,7 @@ public class FabricanteServiceImpl implements FabricanteService {
 		if(exist == null) {
 			fabricanteRepo.save(fabricante);
 		}else {
-			throw new IllegalAccessError("El fabricante que esta tratando de crear ya existe"
-					+ fabricanteDTO.getNit() + " " + fabricanteDTO.getNombre() );
+			throw new ResourceAlreadyExistsException("Fabricante", "nit", fabricanteDTO.getNit());
 		}
 		
 		return mapearEntidad(fabricante);
@@ -112,7 +113,7 @@ public class FabricanteServiceImpl implements FabricanteService {
 				.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "id", id));
 		
 		if(fabricante.getProductos().size() > 0) {
-			throw new IllegalAccessError("El fabricante no se puede eliminar, tiene productos asociados");
+			throw new ResourceCannotBeDeleted("Fabricante");
 		}
 		
 		fabricanteRepo.delete(fabricante);

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.prueba.dto.EstadoDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
+import com.prueba.exception.ResourceAlreadyExistsException;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EstadoRepository;
 import com.prueba.security.entity.Usuario;
@@ -48,7 +49,7 @@ public class EstadoServiceImpl implements EstadoService {
 		if(exist == null) {
 			estadoRepo.save(estado);
 		}else {
-			throw new IllegalAccessError("El estado que esta tratando de crear ya existe" + estado.getTipo());
+			throw new ResourceAlreadyExistsException("Estado", "nombre", estado.getTipo());
 		}
 		
 		return mapearEntidad(estado);

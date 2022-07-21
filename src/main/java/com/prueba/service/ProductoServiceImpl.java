@@ -30,6 +30,7 @@ import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Ubicacion;
+import com.prueba.exception.ResourceAlreadyExistsException;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.ErorRepository;
@@ -77,7 +78,7 @@ public class ProductoServiceImpl implements ProductoService {
 			producto.setEmpresa(empresa);
 			productoRepo.save(producto);
 		}else {
-			throw new IllegalAccessError("El producto con id "+ productoDTO.getCodigoPieza() + " que trata de crear ya existe en la empresa "+productoDTO.getEmpresa().getNit());
+			throw new ResourceAlreadyExistsException("Activo", "codigo de pieza", productoDTO.getCodigoPieza());
 		}
 		
 		return mapearEntidad(producto);
@@ -115,7 +116,7 @@ public class ProductoServiceImpl implements ProductoService {
 		
 		
 		if(exist == null) {
-			throw new IllegalAccessError("El producto con codigo de pieza "+ codigoPieza + " no existe");
+			throw new ResourceNotFoundException("Activo", "codigo de pieza ", codigoPieza);
 		}
 		
 		
@@ -128,7 +129,7 @@ public class ProductoServiceImpl implements ProductoService {
 		Producto exist = productoRepo.findByCodigoPieza(productoDTO.getCodigoPieza());
 		
 		if(exist == null) {
-			throw new IllegalAccessError("El producto con codigo de pieza "+ codigoPieza + " no existe");
+			throw new ResourceNotFoundException("Activo", "codigo de pieza ", codigoPieza);
 		}
 		
 		exist.setArea(productoDTO.getArea());

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.prueba.dto.EmpresaDTO;
 import com.prueba.entity.Empresa;
+import com.prueba.exception.ResourceAlreadyExistsException;
+import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.specifications.EmpresaSpecifications;
@@ -34,8 +36,7 @@ public class EmpresaServiceImpl implements EmpresaService {
 		if (exist == null) {
 			empresaRepo.save(empresa);
 		} else {
-			throw new IllegalAccessError("La empresa que intenta crear ya existe en la base de datos: " + " "
-					+ empresa.getNombre() + "" + empresa.getNit());
+			throw new ResourceAlreadyExistsException("Empresa", "nombre", empresa.getNombre());
 		}
 		return mapearEntidad(empresa);
 	}
@@ -100,7 +101,7 @@ public class EmpresaServiceImpl implements EmpresaService {
 				.orElseThrow(() -> new ResourceNotFoundException("Empresa", "id", id));
 		
 		if(empresa.getUsuarios().size() > 0 || empresa.getProductos().size() > 0) {
-			throw new IllegalAccessError("no se puede eliminar la empresa, existen productos y/o usuarios asociados");
+			throw new ResourceCannotBeDeleted("Empresa");
 		}
 		
 		empresaRepo.delete(empresa);

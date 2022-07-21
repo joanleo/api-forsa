@@ -8,6 +8,8 @@ package com.prueba.security.dto;
  *
  */
 public class PoliticaDTO {
+	
+	private Long idPolitica;
 
 	private String url;
 	
@@ -17,6 +19,14 @@ public class PoliticaDTO {
 	
 	private Boolean permiso;
 
+
+	public Long getIdPolitica() {
+		return idPolitica;
+	}
+
+	public void setIdPolitica(Long idPolitica) {
+		this.idPolitica = idPolitica;
+	}
 
 	public String getUrl() {
 		return url;

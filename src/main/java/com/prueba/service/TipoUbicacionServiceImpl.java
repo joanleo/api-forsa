@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import com.prueba.dto.TipoUbicacionDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.TipoUbicacion;
+import com.prueba.exception.ResourceAlreadyExistsException;
+import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.TipoUbicacionRepository;
 import com.prueba.security.entity.Usuario;
@@ -50,7 +52,7 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 		if(exist == null) {
 			tipoUbicRepo.save(tipoUbicacion);
 		}else {
-			throw new IllegalAccessError("El tipo de ubicacion que desea crear ya existe");
+			throw new ResourceAlreadyExistsException("Tipo de ubicacion", "nombre", tipoUbicacionDTO.getNombre());
 		}
 		
 		return mapearEntidad(tipoUbicacion);
@@ -89,7 +91,7 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 				.orElseThrow(() -> new ResourceNotFoundException("Tipo de ubicacion", "id", id));
 		
 		if(tipoUbicacion.getUbicaciones().size() > 0) {
-			throw new IllegalAccessError("El tipo de empresa no se puede eliminar, tiene ubicaciones asociadas");
+			throw new ResourceCannotBeDeleted("Tipo de empresa");
 		}
 		
 		tipoUbicRepo.delete(tipoUbicacion);

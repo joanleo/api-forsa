@@ -14,7 +14,7 @@ public class RutinaDTO {
 	
 	private String nombre;
 	
-	private Set<PoliticaDTO> politica;
+	private Set<PoliticaDTO> politicas;
 
 	public String getNombre() {
 		return nombre;
@@ -24,12 +24,13 @@ public class RutinaDTO {
 		this.nombre = nombre;
 	}
 
-	public Set<PoliticaDTO> getPolitica() {
-		return politica;
+	public Set<PoliticaDTO> getPoliticas() {
+		return politicas;
 	}
 
-	public void setPolitica(Set<PoliticaDTO> politica) {
-		this.politica = politica;
+	public void setPoliticas(Set<PoliticaDTO> politicas) {
+		this.politicas = politicas;
 	}
+
 
 }

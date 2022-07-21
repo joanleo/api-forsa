@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.prueba.entity.Empresa;
 import com.prueba.entity.TipoActivo;
+import com.prueba.exception.ResourceAlreadyExistsException;
+import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.TipoActivoRepository;
 
@@ -22,7 +24,7 @@ public class TipoActivoServiceImp implements TipoActivoService {
 		if(exist == null) {
 			tipoActivoRepo.save(tipoActivo);
 		}else {
-			throw new IllegalAccessError("La tipo de activo "+ tipoActivo.getNombre() +" que esta tratando de crear ya existe en Empresa: " + empresa);
+			throw new ResourceAlreadyExistsException("Tipo de activo", "nombre", tipoActivo.getNombre());
 		}
 		return null;
 	}
@@ -52,7 +54,7 @@ public class TipoActivoServiceImp implements TipoActivoService {
 		TipoActivo tipoActivo = tipoActivoRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Tipo de activo", "id", id));
 		if(tipoActivo.getProductos().size() > 0) {
-			throw new IllegalAccessError("No se pude eliminar el tipo de activo tiene activos asociados");
+			throw new ResourceCannotBeDeleted("Tipo de activo");
 		}
 		tipoActivoRepo.delete(tipoActivo);
 		
