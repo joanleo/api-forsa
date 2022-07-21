@@ -2,6 +2,7 @@ package com.prueba.security.controller;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.prueba.dto.ApiResponse;
 import com.prueba.entity.Empresa;
 import com.prueba.security.dto.RolDTO;
+import com.prueba.security.dto.RutinaDTO;
 import com.prueba.security.entity.Politica;
 import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
@@ -155,7 +157,7 @@ public class RolController {
 	}
 	
 	@PostMapping("/politicas/indexados")
-	public ApiResponse<Page<Politica>> paginacionPoliticas(
+	public Set<RutinaDTO> paginacionPoliticas(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
 			@RequestBody(required=true) Rol rol,
@@ -170,10 +172,16 @@ public class RolController {
 		}else {
 			empresa = usuario.getEmpresa();			
 		}
+		System.out.println(rol);
+		if(Objects.isNull(rol)) {
+			System.out.println("Rol nulo");
+		}
+		System.out.println("Controller");
+		Set<RutinaDTO> politicas = politicaService.buscarPoliticas(rol, empresa);
 		
-		Page<Politica> politicas = politicaService.buscarPoliticas(rol, empresa, pagina, items);
+		System.out.println(politicas);
 		
-		return new ApiResponse<>(politicas.getSize(), politicas);
+		return politicas;
 
 	}
 	

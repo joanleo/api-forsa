@@ -132,10 +132,21 @@ public class Rol implements Serializable{
 		super();
 	}
 
+	public Rol(Long idRol) {
+		super();
+		this.idRol = idRol;
+	}
+
 	public Rol(String nombre) {
 		super();
 		this.nombre = nombre;
 		this.politicas = new HashSet<>();
+	}
+
+	@Override
+	public String toString() {
+		return "Rol [idRol=" + idRol + ", nombre=" + nombre + ", politicas=" + politicas + ", empresa=" + empresa
+				+ ", usuario=" + usuario + ", estaActivo=" + estaActivo + "]";
 	}
 
 }

@@ -24,10 +24,11 @@ public class PoliticaSpecifications {
 		return (root, query, criteriaBuilder) ->{
 			List<Predicate> predicates = new ArrayList<>();
 			
-			if(nit != null) {
+			/*if(nit != null) {
 				predicates.add(criteriaBuilder.equal(root.get("rol").get("empresa").get("nit"), nit));
-				}
-			
+				}*/
+			//criteriaBuilder.createQuery().select(root.get("rol").get("empresa").get("nit")).groupBy(root.get("rol").get("empresa").get("nit"));
+			criteriaBuilder.createQuery().select(root).where(criteriaBuilder.equal(root.get("rol").get("empresa").get("nit"), nit)).groupBy(root.get("rol").get("empresa").get("nit"));
 			return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
 		};
 	}
