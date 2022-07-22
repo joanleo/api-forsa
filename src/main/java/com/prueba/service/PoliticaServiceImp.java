@@ -5,6 +5,7 @@ package com.prueba.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.prueba.entity.Empresa;
+import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.security.dto.PoliticaDTO;
 import com.prueba.security.dto.RutinaDTO;
 import com.prueba.security.entity.Politica;
@@ -42,10 +44,9 @@ public class PoliticaServiceImp implements PoliticaService {
 		System.out.println(rol.getIdRol() +" "+ empresa.getNombre());
 		Rol esxiste = rolRepo.findByIdRol(rol.getIdRol());
 		System.out.println("Buscando Rol por id: "+esxiste);
-		/*Rol exist = rolRepo.findByIdRolAndEmpresaAndEstaActivoTrue(rol.getIdRol(), empresa);
-		if(Objects.isNull(exist)) {
+		if(Objects.isNull(esxiste)) {
 			throw new ResourceNotFoundException("Rol", "Id", rol.getIdRol());
-		}*/
+		}
 		List<Politica> politicas = politicaRepo.findByRol(esxiste);
 		
 		String aux = "";
@@ -53,6 +54,10 @@ public class PoliticaServiceImp implements PoliticaService {
 		for(Politica politica: politicas) {
 			
 			String auxInterna = politica.getDetalle().getRutina().getNombre();
+			if(auxInterna.equalsIgnoreCase("email") || auxInterna.equalsIgnoreCase("v3") || auxInterna.equalsIgnoreCase("swagger-ui.html") || 
+					auxInterna.equalsIgnoreCase("error")) {
+				continue;
+			}
 			if(aux != auxInterna) {
 				RutinaDTO nuevaRutina = new RutinaDTO();
 				nuevaRutina.setNombre(politica.getDetalle().getRutina().getNombre());
@@ -80,12 +85,7 @@ public class PoliticaServiceImp implements PoliticaService {
         	aux = auxInterna;
 			
 		}
-		/*if(items == 0) {
-			Page<Politica> politicas = politicaRepo.findByRol(Exist, PageRequest.of(0, 10));
-			return politicas;
-		}
-		Page<Politica> politicas = politicaRepo.findByRol(Exist, PageRequest.of(pagina, items));		
-		return politicas;*/
+
 		return rutinaRol;
 	}
 

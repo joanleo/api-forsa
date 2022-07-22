@@ -1,9 +1,14 @@
 package com.prueba.security.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +37,7 @@ import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.security.service.RolService;
 import com.prueba.service.PoliticaService;
+import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,6 +62,9 @@ public class RolController {
 	
 	@Autowired
 	private PoliticaService politicaService;
+	
+	@Autowired
+	private CsvExportService csvService;
 	
 	@PostMapping
 	@Operation(summary = "Crea un rol", description = "Crea un nuevo rol" )
@@ -171,17 +180,36 @@ public class RolController {
 		}else {
 			empresa = usuario.getEmpresa();			
 		}
-		System.out.println(rol);
-		if(Objects.isNull(rol)) {
-			System.out.println("Rol nulo");
-		}
-		System.out.println("Controller");
+
 		Set<RutinaDTO> politicas = politicaService.buscarPoliticas(rol, empresa);
 		
 		System.out.println(politicas);
 		
 		return politicas;
 
+	}
+	@PostMapping("/politicas/indexados/descarga")
+	public void getCsvPoliticasRol(HttpServletResponse servletResponse,
+			@RequestBody(required=true) Rol rol,
+			@RequestParam(required=false) Long nit) throws IOException {
+		
+		servletResponse.setContentType("application/x-download");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+        servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "fabricantes"+ "_" + currentDateTime + ".csv" + "\"");
+        
+        Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		Set<RutinaDTO> politicas = politicaService.buscarPoliticas(rol, empresa);
+		csvService.writePolitica(servletResponse.getWriter(), politicas);
 	}
 	
 	@GetMapping("/politicas/indexados")

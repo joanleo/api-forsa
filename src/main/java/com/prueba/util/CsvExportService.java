@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -21,6 +22,8 @@ import com.prueba.dto.TipoUbicacionDTO;
 import com.prueba.dto.UbicacionDTO;
 import com.prueba.entity.Producto;
 import com.prueba.entity.TipoActivo;
+import com.prueba.security.dto.PoliticaDTO;
+import com.prueba.security.dto.RutinaDTO;
 import com.prueba.security.entity.Usuario;
 
 
@@ -176,6 +179,27 @@ public class CsvExportService {
     		for(Usuario usuario: usuarios) {
     			csvPrinter.printRecord(usuario.getId(), usuario.getNombre(), usuario.getNombreUsuario(), 
     					usuario.getEmail(), usuario.getRol().getNombre(), usuario.getContrasena());    			
+    		}
+	    }catch (IOException e) {
+	        log.error("Error en la generacion del CSV  ", e);
+	    }
+		
+	}
+
+	/**
+	 * @param writer
+	 * @param politicas
+	 */
+	public void writePolitica(PrintWriter writer, Set<RutinaDTO> politicas) {
+		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			csvPrinter.printRecord(
+        			"Rutina");
+    		for(RutinaDTO politica: politicas) {
+    			csvPrinter.printRecord(politica.getNombre());
+    			csvPrinter.printRecord("Id politica", "Nombre permiso", "Url", "Permitido");
+    			for(PoliticaDTO detalle: politica.getPoliticas()) {
+    				csvPrinter.printRecord(detalle.getIdPolitica(), detalle.getNombre(), detalle.getUrl(), detalle.getPermiso());
+    			}
     		}
 	    }catch (IOException e) {
 	        log.error("Error en la generacion del CSV  ", e);
