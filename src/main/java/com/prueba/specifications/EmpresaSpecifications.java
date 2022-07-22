@@ -25,7 +25,7 @@ public class EmpresaSpecifications {
 			predicates.add(criteryBuilder.like(root.get("nombre"), "%" + empresaDTO.getNombre() +"%"));
 			}
 			if(empresaDTO.getTipoEmpresa() != null) {
-			predicates.add(criteryBuilder.like(root.get("tipoEmpresa"), "%" + empresaDTO.getTipoEmpresa() + "%"));
+			predicates.add(criteryBuilder.equal(root.get("tipoEmpresa"), empresaDTO.getTipoEmpresa()));
 			}
 			
 			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
