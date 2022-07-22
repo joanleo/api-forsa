@@ -3,7 +3,6 @@
  */
 package com.prueba.service;
 
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.domain.Page;

@@ -20,10 +20,10 @@ public class TipoUbicacionSpecifications {
 			List<Predicate> predicates = new ArrayList<>();
 			
 			if(tipoUbicacionDTO.getId() != null) {
-			predicates.add(criteryBuilder.like(root.get("nit").as(String.class), "%"+tipoUbicacionDTO.getId()+ "%"));
+			predicates.add(criteryBuilder.like(root.get("nit").as(String.class), "%" + tipoUbicacionDTO.getId()+ "%"));
 			}
 			if(tipoUbicacionDTO.getNombre() != null) {
-			predicates.add(criteryBuilder.equal(root.get("nombre"), tipoUbicacionDTO.getNombre()));
+			predicates.add(criteryBuilder.like(root.get("nombre"), "%" +tipoUbicacionDTO.getNombre()+ "%"));
 			}
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));

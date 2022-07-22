@@ -25,7 +25,7 @@ public class FabricanteSpecificatios {
 			predicates.add(criteryBuilder.like(root.get("nit").as(String.class), "%"+fabricanteDTO.getNit()+ "%"));
 			}
 			if(fabricanteDTO.getNombre() != null) {
-			predicates.add(criteryBuilder.equal(root.get("nombre"), fabricanteDTO.getNombre()));
+			predicates.add(criteryBuilder.like(root.get("nombre"), "%" + fabricanteDTO.getNombre() + "%"));
 			}
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));

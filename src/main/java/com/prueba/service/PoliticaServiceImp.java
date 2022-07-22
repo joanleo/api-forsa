@@ -3,10 +3,8 @@
  */
 package com.prueba.service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.prueba.entity.Empresa;
-import com.prueba.entity.Rutina;
-import com.prueba.exception.ResourceNotFoundException;
-import com.prueba.repository.RutinaRepository;
 import com.prueba.security.dto.PoliticaDTO;
 import com.prueba.security.dto.RutinaDTO;
 import com.prueba.security.entity.Politica;

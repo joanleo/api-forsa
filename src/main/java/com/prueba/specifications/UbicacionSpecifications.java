@@ -23,13 +23,13 @@ public class UbicacionSpecifications {
 				predicates.add(criteryBuilder.like(root.get("id").as(String.class), "%"+ubicacionDTO.getId() + "%"));
 			}
 			if(ubicacionDTO.getNombre() != null) {
-				predicates.add(criteryBuilder.equal(root.get("nombre"), ubicacionDTO.getNombre()));
+				predicates.add(criteryBuilder.like(root.get("nombre"), "%"+ubicacionDTO.getNombre()));
 			}
 			if(ubicacionDTO.getCiudad() != null) {
-				predicates.add(criteryBuilder.equal(root.get("ciudad"), ubicacionDTO.getCiudad()));
+				predicates.add(criteryBuilder.like(root.get("ciudad"), "%"+ubicacionDTO.getCiudad()));
 			}
 			if(ubicacionDTO.getDireccion() != null) {
-				predicates.add(criteryBuilder.equal(root.get("direccion"), ubicacionDTO.getDireccion()));
+				predicates.add(criteryBuilder.like(root.get("direccion"), "%"+ubicacionDTO.getDireccion()));
 			}
 			if(ubicacionDTO.getTipo() != null) {
 				predicates.add(criteryBuilder.equal(root.get("tipo"), ubicacionDTO.getTipo()));

@@ -42,7 +42,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/roles")
-//@Api(tags = "Roles",description = "Operaciones referentes a los roles de los usuarios")
 @Tag(name = "Roles", description = "Operaciones referentes a los roles de los usuarios")
 public class RolController {
 

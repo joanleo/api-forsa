@@ -22,7 +22,7 @@ public class TipoEmpresaSpecifications {
 			predicates.add(criteryBuilder.like(root.get("id").as(String.class), "%"+tipoEmpresaDTO.getId()+ "%"));
 			}
 			if(tipoEmpresaDTO.getTipo() != null) {
-			predicates.add(criteryBuilder.equal(root.get("tipo"), tipoEmpresaDTO.getTipo()));
+			predicates.add(criteryBuilder.like(root.get("tipo"), "%" + tipoEmpresaDTO.getTipo() + "%"));
 			}
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};

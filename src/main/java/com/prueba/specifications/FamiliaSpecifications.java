@@ -23,8 +23,11 @@ public class FamiliaSpecifications {
 			predicates.add(criteryBuilder.like(root.get("id").as(String.class), "%"+familiaDTO.getId()+ "%"));
 			}
 			if(familiaDTO.getNombre() != null) {
-			predicates.add(criteryBuilder.equal(root.get("nombre"), familiaDTO.getNombre()));
+			predicates.add(criteryBuilder.like(root.get("nombre"), "%"+familiaDTO.getNombre()+ "%"));
 			}
+			if(familiaDTO.getSigla() != null) {
+				predicates.add(criteryBuilder.like(root.get("sigla"), "%"+familiaDTO.getSigla()+ "%"));
+				}
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 			
