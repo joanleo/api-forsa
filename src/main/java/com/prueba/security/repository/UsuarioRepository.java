@@ -38,5 +38,12 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> , JpaSpe
 
 	List<Usuario> findByEmpresaAndEstaActivoTrue(Empresa empresa);
 
+	/**
+	 * @param nombreUsuario
+	 * @param empresa
+	 * @return
+	 */
+	Usuario findByNombreUsuarioAndEmpresa(String nombreUsuario, Empresa empresa);
+
 
 }

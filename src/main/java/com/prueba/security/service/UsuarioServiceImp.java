@@ -8,6 +8,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.prueba.entity.Empresa;
@@ -20,7 +23,9 @@ import com.prueba.repository.MovInventarioRepository;
 import com.prueba.repository.ProductoRepository;
 import com.prueba.repository.TrasladoRepository;
 import com.prueba.security.dto.RegistroDTO;
+import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
+import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.UsuarioSpecifications;
 
@@ -45,14 +50,51 @@ public class UsuarioServiceImp implements UsuarioService {
 	@Autowired
 	private TrasladoRepository trasladoRepo;
 	
+	@Autowired
+	private RolRepository rolRepo;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Override
 	public Usuario update(Long id, RegistroDTO registroDTO) throws Exception {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuarioLogueado = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		if(registroDTO.getEmpresa() == null) {
+			registroDTO.setEmpresa(usuarioLogueado.getEmpresa());
+		}
 		Empresa empresa = empresaRepo.findByNit(registroDTO.getEmpresa().getNit());
 		if(Objects.isNull(empresa)) {
 			throw new Exception("Empresa no existe");
 		}
-		Usuario usuario = usuarioRepo.findByNombreAndEmpresa(registroDTO.getNombre(), registroDTO.getEmpresa());
-		usuarioRepo.save(usuario);		
+		Usuario usuario = usuarioRepo.findByIdAndEmpresa(id, registroDTO.getEmpresa());
+		
+		if(Objects.isNull(usuario)) {
+			throw new ResourceNotFoundException("Usuario", "Nombre de usuario", registroDTO.getNombreUsuario());
+		}
+		
+		if(registroDTO.getNombre() != null) {
+			usuario.setNombre(registroDTO.getNombre());
+		}
+		if(registroDTO.getNombreUsuario() != null) {
+			usuario.setNombreUsuario(registroDTO.getNombreUsuario());
+		}
+		if(registroDTO.getEmail() != null) {
+			usuario.setEmail(registroDTO.getEmail());
+		}
+		if(registroDTO.getContrasena() != null) {
+			//System.out.println("Antigua contraseña: "+ passwordEncoder.de);
+			usuario.setContrasena(passwordEncoder.encode(registroDTO.getContrasena()));
+		}
+		if(registroDTO.getRol() != null) {
+			System.out.println(registroDTO.getRol().getIdRol());
+			Rol nuevoRol = rolRepo.findByIdRol(registroDTO.getRol().getIdRol());
+			if(Objects.isNull(nuevoRol)) {
+				throw new ResourceNotFoundException("Rol", "id", registroDTO.getRol().getIdRol());
+			}
+			usuario.setRol(nuevoRol);
+		}
+		usuario = usuarioRepo.save(usuario);		
 		return usuario;
 	}
 

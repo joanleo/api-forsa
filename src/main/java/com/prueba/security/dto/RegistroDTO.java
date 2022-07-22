@@ -8,7 +8,9 @@ import com.prueba.entity.Empresa;
 import com.prueba.security.entity.Rol;
 
 public class RegistroDTO {
-
+	
+	private Long id; 
+	
 	@NotBlank
 	private String nombre;
 	
@@ -32,6 +34,14 @@ public class RegistroDTO {
 
 	public RegistroDTO() {
 		super();
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getNombre() {
