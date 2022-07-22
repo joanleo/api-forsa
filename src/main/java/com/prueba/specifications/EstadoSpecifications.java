@@ -12,9 +12,20 @@ import com.prueba.dto.EstadoDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
 
+/**
+ * 
+ * @author Joan Leon
+ *
+ */
 @Component
 public class EstadoSpecifications {
 
+	/**
+	 * 
+	 * @param estadoDTO
+	 * @param empresa
+	 * @return
+	 */
 	public Specification<Estado> getEstado(EstadoDTO estadoDTO, Empresa empresa) {
 		return (root, query, criteryBuilder) ->{
 			List<Predicate> predicates = new ArrayList<>();
