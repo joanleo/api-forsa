@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.ApiResponse;
 import com.prueba.entity.Empresa;
+import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.security.dto.RegistroDTO;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Rol;
@@ -162,7 +163,11 @@ public class UsuarioController {
 			System.out.println("se asigna rol: "+rol.getNombre());
 			usuario.setRol(rol);
 		}else {
-			usuario.setRol(registroDTO.getRol());
+			Rol nuevoRol = rolRepo.findByIdRol(registroDTO.getRol().getIdRol());
+			if(Objects.isNull(nuevoRol)) {
+				throw new ResourceNotFoundException("Rol", "id", registroDTO.getRol().getIdRol());
+			}
+			usuario.setRol(nuevoRol);
 		}
 				
 		usuarioRepo.save(usuario);

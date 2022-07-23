@@ -192,8 +192,6 @@ public class CsvExportService {
 	 */
 	public void writePolitica(PrintWriter writer, Set<RutinaDTO> politicas) {
 		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
-			csvPrinter.printRecord(
-        			"Rutina");
     		for(RutinaDTO politica: politicas) {
     			csvPrinter.printRecord(politica.getNombre());
     			csvPrinter.printRecord("Id politica", "Nombre permiso", "Url", "Permitido");

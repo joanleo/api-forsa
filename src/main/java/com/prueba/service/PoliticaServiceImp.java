@@ -43,7 +43,6 @@ public class PoliticaServiceImp implements PoliticaService {
 	public Set<RutinaDTO> buscarPoliticas(Rol rol, Empresa empresa) {
 		System.out.println(rol.getIdRol() +" "+ empresa.getNombre());
 		Rol esxiste = rolRepo.findByIdRol(rol.getIdRol());
-		System.out.println("Buscando Rol por id: "+esxiste);
 		if(Objects.isNull(esxiste)) {
 			throw new ResourceNotFoundException("Rol", "Id", rol.getIdRol());
 		}
@@ -78,7 +77,6 @@ public class PoliticaServiceImp implements PoliticaService {
 					}
 				}	
 				nuevaRutina.setPoliticas(listPoliDTO);
-	        	System.out.println(rutinaRol.contains(nuevaRutina));
 	        	rutinaRol.add(nuevaRutina);
 			}
 			

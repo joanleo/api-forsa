@@ -140,7 +140,7 @@ public class Traslado {
         detalles.add(detalle);
     }
 	
-	public void removeTag(Producto producto) {
+	public void removeActivo(Producto producto) {
         for (Iterator<DetalleTrasl> iterator = detalles.iterator();
              iterator.hasNext(); ) {
             DetalleTrasl detalle = iterator.next();
