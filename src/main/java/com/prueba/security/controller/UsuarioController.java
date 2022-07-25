@@ -157,7 +157,8 @@ public class UsuarioController {
 		usuario.setNombreUsuario(registroDTO.getNombreUsuario());
 		usuario.setEmail(registroDTO.getEmail());
 		usuario.setContrasena(passwordEncoder.encode(registroDTO.getContrasena()));
-		if(registroDTO.getRol() == null) {
+		System.out.println("Rol "+registroDTO.getRol());
+		if(registroDTO.getRol().getIdRol() == null) {
 			System.out.println("no tiene rol");
 			Rol rol = rolRepo.findByNombre("ROLE_USER");	
 			System.out.println("se asigna rol: "+rol.getNombre());

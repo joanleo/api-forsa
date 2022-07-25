@@ -3,6 +3,8 @@ package com.prueba.security.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +52,15 @@ public class RolServiceImpl implements RolService{
 	
 	@Override
 	public RolDTO create(RolDTO rolDTO) {
-		
+		Pattern special = Pattern.compile("[!@#$%&*()+=|<>?:;{}/./,\\\\[\\\\^'\"]~]", Pattern.CASE_INSENSITIVE);
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		Matcher matcher = special.matcher(rolDTO.getNombre());
+		boolean errorNombre = matcher.find();
+		
+		if(errorNombre) {
+			throw new IllegalArgumentException("El nombre no debe contener caracteres espaciales []!@#$%&*()+=|<>?{},.:;");
+		}
 		
 		if(rolDTO.getEmpresa() == null) {
 			rolDTO.setEmpresa(usuario.getEmpresa());
