@@ -8,9 +8,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.TrasladoDTO;
 import com.prueba.entity.Traslado;
+import com.prueba.security.dto.ResDTO;
 import com.prueba.service.TrasladoService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,5 +64,58 @@ public class TrasladoController {
 		
 		return new ApiResponse<>(traslados.getSize(), traslados);
 	}
+	
+	@PatchMapping("/{idtraslado}/{codigopieza}")
+	public ResponseEntity<?> confirmarPieza(@PathVariable Long idtraslado,
+											@PathVariable String codigopieza,
+											@RequestParam(required=false) Long nit){
+		
+		Traslado traslado = trasladoService.confirmarPieza(idtraslado, codigopieza);
+		
+		return new ResponseEntity<Traslado>(traslado, HttpStatus.OK);
+	}
+	
+	@PatchMapping("/{idtraslado}")
+	public ResponseEntity<?> confirmarTodo(@PathVariable Long idtraslado,
+											@RequestParam(required=false) Long nit){
+		
+		Traslado traslado = trasladoService.confirmarTodo(idtraslado);
+		
+		return new ResponseEntity<Traslado>(traslado, HttpStatus.OK);
+	}
+	
+	@PutMapping("/{idtraslado}/{codigopieza}")
+	public ResponseEntity<?> recibirPieza(@PathVariable Long idtraslado,
+											@PathVariable String codigopieza,
+											@RequestParam(required=false) Long nit){
+		
+		Traslado traslado = trasladoService.recibirPieza(idtraslado, codigopieza);
+		
+		return new ResponseEntity<Traslado>(traslado, HttpStatus.OK);
+	}
+	
+	@PutMapping("/{idtraslado}")
+	public ResponseEntity<?> recibirTodo(@PathVariable Long idtraslado,
+											@RequestParam(required=false) Long nit){
+								
+		Traslado traslado = trasladoService.recibirTodo(idtraslado);
+		
+		return new ResponseEntity<Traslado>(traslado, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{idtraslado}/{codigopieza}")
+	public ResponseEntity<?> eliminarPieza(@PathVariable Long idtraslado,
+										   @PathVariable String codigopieza,
+										   @RequestParam(required=false) Long nit){
+		trasladoService.eliminarPieza(idtraslado, codigopieza);
+		return new ResponseEntity<ResDTO>(new ResDTO("Activo eliminado del traslado con exito"), HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{idtraslado}")
+	public ResponseEntity<?> eliminarTodo(@PathVariable Long idtraslado,
+										   @RequestParam(required=false) Long nit){
+		trasladoService.eliminarTodo(idtraslado);
+		return new ResponseEntity<ResDTO>(new ResDTO("Activos eliminados del traslado con exito"), HttpStatus.OK);
+		}
 
 }

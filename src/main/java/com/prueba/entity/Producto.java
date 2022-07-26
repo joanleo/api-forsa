@@ -91,6 +91,9 @@ public class Producto{
     @Column(name = "benviado", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
     private Boolean enviado = false;
     
+    @Column(name = "vcestadotraslado")
+	public String estadoTraslado;
+    
     
 	
 	public String getCodigoPieza() {
@@ -243,9 +246,16 @@ public class Producto{
 
 	public void setEnviado(Boolean enviado) {
 		this.enviado = enviado;
+	}	
+
+	public String getEstadoTraslado() {
+		return estadoTraslado;
 	}
 
-
+	public void setEstadoTraslado(String estadoTraslado) {
+		this.estadoTraslado = estadoTraslado;
+	}
+	
 	
 	
 

@@ -1,5 +1,6 @@
 package com.prueba.dto;
 
+import java.util.Date;
 import java.util.List;
 
 import com.prueba.entity.Producto;
@@ -19,6 +20,12 @@ public class TrasladoDTO {
 	private Usuario usuarioEnvio;
 	
 	private Usuario usuarioRecibe;
+	
+	public Date fechaSalida;
+	
+	public Date fechaIngreso;
+	
+	public String estadoTraslado;
 
 	public List<Producto> getProductos() {
 		return productos;
@@ -66,6 +73,30 @@ public class TrasladoDTO {
 
 	public void setUsuarioRecibe(Usuario usuarioRecibe) {
 		this.usuarioRecibe = usuarioRecibe;
+	}
+
+	public Date getFechaSalida() {
+		return fechaSalida;
+	}
+
+	public void setFechaSalida(Date fechaSalida) {
+		this.fechaSalida = fechaSalida;
+	}
+
+	public Date getFechaIngreso() {
+		return fechaIngreso;
+	}
+
+	public void setFechaIngreso(Date fechaIngreso) {
+		this.fechaIngreso = fechaIngreso;
+	}
+
+	public String getEstadoTraslado() {
+		return estadoTraslado;
+	}
+
+	public void setEstadoTraslado(String estadoTraslado) {
+		this.estadoTraslado = estadoTraslado;
 	}
 
 	

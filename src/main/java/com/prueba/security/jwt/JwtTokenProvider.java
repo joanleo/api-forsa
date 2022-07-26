@@ -86,24 +86,5 @@ public class JwtTokenProvider {
 		}
 	}
 	
-/*
-	private SigningKeyResolver signingKeyResolver = new SigningKeyResolverAdapter() {
-	    @Override
-	    public Key resolveSigningKey(JwsHeader header, Claims claims) {
-	        String kid = header.getKeyId();
-	        if (!Strings.hasText(kid)) {
-	            throw new JwtException("Missing required 'kid' header param in JWT with claims: " + claims);
-	        }
-	        Key key = publicKeys.get(kid);
-	        if (key == null) {
-	            throw new JwtException("No public key registered for kid: " + kid + ". JWT claims: " + claims);
-	        }
-	        return key;
-	    }
-	};
-	 
-	public SigningKeyResolver getSigningKeyResolver() {
-	    return signingKeyResolver;
-	}*/
 }
 

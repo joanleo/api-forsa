@@ -51,7 +51,7 @@ public class RolServiceImpl implements RolService{
 	private RutinaRepository rutinaRepo;
 	
 	@Override
-	public RolDTO create(RolDTO rolDTO) {
+	public RolDTO create(RolDTO rolDTO) throws IllegalArgumentException {
 		Pattern special = Pattern.compile("[!@#$%&*()+=|<>?:;{}/./,\\\\[\\\\^'\"]~]", Pattern.CASE_INSENSITIVE);
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();

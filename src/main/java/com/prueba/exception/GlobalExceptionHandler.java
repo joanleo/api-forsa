@@ -65,7 +65,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 	 */
 	@ExceptionHandler(ApiException.class)
 	public ResponseEntity<ErrorDetalles> manejarApiException(ApiException exception, WebRequest webRequest){
-		System.out.println(exception);
+		System.out.println("manejando excepcion " + exception.getEstado());
 		ErrorDetalles errorDetalles = new ErrorDetalles(new Date(), exception.getMessage(), webRequest.getDescription(false));
 		return new ResponseEntity<>(errorDetalles,HttpStatus.BAD_REQUEST);
 	}
