@@ -52,4 +52,19 @@ public interface TrasladoService {
 	 */
 	public void eliminarTodo(Long idtraslado);
 
+	/**
+	 * @param pagina
+	 * @param items
+	 * @return
+	 */
+	public Page<Traslado> buscarTraslados(Integer pagina, Integer items);
+
+	/**
+	 * @param trasladoDTO
+	 * @param pagina
+	 * @param items
+	 * @return
+	 */
+	public Page<Traslado> buscarTraslados(TrasladoDTO trasladoDTO, Integer pagina, Integer items);
+
 }

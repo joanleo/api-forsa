@@ -195,4 +195,19 @@ public class TrasladoServiceImpl implements TrasladoService {
 		
 	}
 
+	@Override
+	public Page<Traslado> buscarTraslados(Integer pagina, Integer items) {
+		if(items == 0) {
+			Page<Traslado> traslados = trasladoRepo.findAll(PageRequest.of(pagina, items));
+			return traslados;
+		}
+		return null;
+	}
+
+	@Override
+	public Page<Traslado> buscarTraslados(TrasladoDTO trasladoDTO, Integer pagina, Integer items) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -5,11 +5,12 @@ import java.time.LocalDate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.prueba.entity.Traslado;
 import com.prueba.security.entity.Usuario;
 
-public interface TrasladoRepository extends JpaRepository<Traslado, Long> {
+public interface TrasladoRepository extends JpaRepository<Traslado, Long>, JpaSpecificationExecutor<Traslado> {
 	
 	Page<Traslado> findByFechaSalidaBetween(LocalDate desde, LocalDate hasta, Pageable pageable);
 

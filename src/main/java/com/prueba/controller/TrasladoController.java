@@ -1,6 +1,7 @@
 package com.prueba.controller;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import com.prueba.entity.Traslado;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.service.TrasladoService;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -45,6 +47,22 @@ public class TrasladoController {
 	public ApiResponse<TrasladoDTO> create(@RequestBody TrasladoDTO trasladoDTO){
 		System.out.println(trasladoDTO.getCantProductos());
 		return new ApiResponse<>(trasladoService.create(trasladoDTO), HttpStatus.CREATED);
+	}
+	
+	@GetMapping("/indexados")
+	public ApiResponse<Page<Traslado>> listaPaginada(
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
+			@RequestBody(required=false) TrasladoDTO trasladoDTO){
+		
+		if(Objects.isNull(trasladoDTO)) {
+			Page<Traslado> traslados = trasladoService.buscarTraslados(pagina, items);
+			return new ApiResponse<>(traslados.getSize(), traslados);			
+		}else {
+			Page<Traslado> traslados = trasladoService.buscarTraslados(trasladoDTO, pagina, items);
+			return new ApiResponse<>(traslados.getSize(), traslados);
+		}
+	
 	}
 	
 	@GetMapping("/{id}")
@@ -103,6 +121,7 @@ public class TrasladoController {
 		return new ResponseEntity<Traslado>(traslado, HttpStatus.OK);
 	}
 	
+	@Hidden
 	@DeleteMapping("/{idtraslado}/{codigopieza}")
 	public ResponseEntity<?> eliminarPieza(@PathVariable Long idtraslado,
 										   @PathVariable String codigopieza,
@@ -111,6 +130,7 @@ public class TrasladoController {
 		return new ResponseEntity<ResDTO>(new ResDTO("Activo eliminado del traslado con exito"), HttpStatus.OK);
 	}
 	
+	@Hidden
 	@DeleteMapping("/{idtraslado}")
 	public ResponseEntity<?> eliminarTodo(@PathVariable Long idtraslado,
 										   @RequestParam(required=false) Long nit){
