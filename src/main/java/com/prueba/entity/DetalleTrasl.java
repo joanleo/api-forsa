@@ -1,9 +1,9 @@
 package com.prueba.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -13,28 +13,38 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.prueba.security.entity.Usuario;
 
 @Entity
 @Table(name = "detalle_traslado")
-public class DetalleTrasl {
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+public class DetalleTrasl implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
 	private DetalleTrasl_id id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("idTraslados")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@MapsId("idTraslado")
 	private Traslado traslado;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@MapsId("codigoPieza")
 	private Producto producto;
 	
 	
-	@ManyToOne(targetEntity = Usuario.class, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "usuarioenvio", referencedColumnName = "nidusuario")
 	private Usuario usuarioEnvio;
 	
-	@ManyToOne(targetEntity = Usuario.class, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "usuariorecibe", referencedColumnName = "nidusuario")
 	private Usuario usuarioRecibe;
 	
 	@Column(name = "dfecha_envio")

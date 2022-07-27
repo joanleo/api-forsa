@@ -1,5 +1,6 @@
 package com.prueba.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -16,55 +17,72 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.prueba.security.entity.Usuario;
 
 @Entity
 @Table(name = "mov_traslados")
-public class Traslado {
-	
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idTraslado")
+public class Traslado implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "nidMov_traslado")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_traslados")
+	@SequenceGenerator(name = "seq_traslados", allocationSize = 10)
+	@Column(name = "idtraslado")
 	public Long idTraslado;
-	
- 	@ManyToOne(targetEntity = Ubicacion.class, cascade = CascadeType.ALL)
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "origen", referencedColumnName = "nidubicacion")
 	private Ubicacion origen;
-	
-	@ManyToOne(targetEntity = Ubicacion.class, cascade = CascadeType.ALL)
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "destino", referencedColumnName = "nidubicacion")
 	private Ubicacion destino;
-	
+
 	@Column(name = "dfecha_Salida")
 	public Date fechaSalida;
-	
+
 	@PrePersist
 	private void onCreate() {
 		fechaSalida = new Date();
 	}
-	
+
 	@Column(name = "dfecha_Ingreso")
 	public Date fechaIngreso;
-	
+
 	@Column(name = "vcestadotraslado")
 	public String estadoTraslado;
 
 	@Column(name = "ncantActivos")
 	public int cantActivos;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "traslado", cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<DetalleTrasl> detalles = new ArrayList<DetalleTrasl>();
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "vcnitempresa")
-    private Empresa empresa;
-	
-	@ManyToOne(targetEntity = Usuario.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "vcnitempresa")
+	private Empresa empresa;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "usuarioenvio", referencedColumnName = "nidusuario")
 	private Usuario usuarioEnvio;
-	
-	@ManyToOne(targetEntity = Usuario.class, cascade = CascadeType.ALL)
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "usuariorecibe", referencedColumnName = "nidusuario")
 	private Usuario usuarioRecibe;
 
 	public Traslado() {
@@ -134,25 +152,6 @@ public class Traslado {
 	public void setDetalles(List<DetalleTrasl> detalles) {
 		this.detalles = detalles;
 	}
-	
-	public void addActivo(Producto producto) {
-        DetalleTrasl detalle = new DetalleTrasl(this, producto);
-        detalles.add(detalle);
-    }
-	
-	public void removeActivo(Producto producto) {
-        for (Iterator<DetalleTrasl> iterator = detalles.iterator();
-             iterator.hasNext(); ) {
-            DetalleTrasl detalle = iterator.next();
- 
-            if (detalle.getTraslado().equals(this) &&
-            		detalle.getProducto().equals(producto)) {
-                iterator.remove();
-                detalle.setTraslado(null);
-                detalle.setProducto(null);
-            }
-        }
-    }
 
 	public Empresa getEmpresa() {
 		return empresa;
@@ -177,5 +176,27 @@ public class Traslado {
 	public void setUsuarioRecibe(Usuario usuarioRecibe) {
 		this.usuarioRecibe = usuarioRecibe;
 	}
-	
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void addActivo(Producto producto) {
+		DetalleTrasl detalle = new DetalleTrasl(this, producto);
+		System.out.println(this.getIdTraslado());
+		detalles.add(detalle);
+	}
+
+	public void removeActivo(Producto producto) {
+		for (Iterator<DetalleTrasl> iterator = detalles.iterator(); iterator.hasNext();) {
+			DetalleTrasl detalle = iterator.next();
+
+			if (detalle.getTraslado().equals(this) && detalle.getProducto().equals(producto)) {
+				iterator.remove();
+				detalle.setTraslado(null);
+				detalle.setProducto(null);
+			}
+		}
+	}
+
 }

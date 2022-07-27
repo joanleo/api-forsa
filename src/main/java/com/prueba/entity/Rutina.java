@@ -105,9 +105,6 @@ public class Rutina implements Serializable{
 	public Rutina() {
 		super();
 	}
-	
-	
-	
-	
+		
 
 }

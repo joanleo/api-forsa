@@ -279,7 +279,6 @@ public class UtilitiesApi {
             	}
             	
 	        }
-	        //System.out.println("gardando rutina");
         	rutinaRepo.save(nuevaRutina);
 	        if(rutaMethod.length() > 0) {
 	        	stringRuina += rutaMethod.substring(0,rutaMethod.length()-1)+"]}";	        	

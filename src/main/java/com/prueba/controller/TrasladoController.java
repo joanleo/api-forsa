@@ -44,9 +44,8 @@ public class TrasladoController {
 		
 	@PostMapping
 	@Operation(summary = "Crear un traslado", description = "Crea un nuevo traslado")
-	public ApiResponse<TrasladoDTO> create(@RequestBody TrasladoDTO trasladoDTO){
-		System.out.println(trasladoDTO.getCantProductos());
-		return new ApiResponse<>(trasladoService.create(trasladoDTO), HttpStatus.CREATED);
+	public ResponseEntity<TrasladoDTO> create(@RequestBody TrasladoDTO trasladoDTO){
+		return new ResponseEntity<>(trasladoService.create(trasladoDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/indexados")

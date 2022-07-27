@@ -14,7 +14,7 @@ public class DetalleTrasl_id implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "nidMov_traslado")
+	@Column(name = "nidtraslado")
 	private Long idTraslado;
 	
 	@Column(name = "vccodigopieza")

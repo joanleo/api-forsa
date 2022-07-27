@@ -9,9 +9,9 @@ import com.prueba.security.entity.Usuario;
 
 public class TrasladoDTO {
 	
-	private List<Producto> productos;
+	private List<Producto> detalles;
 	
-	private int cantProductos;
+	private int cantActivos;
 	
 	private Ubicacion origen;
 	
@@ -27,20 +27,20 @@ public class TrasladoDTO {
 	
 	public String estadoTraslado;
 
-	public List<Producto> getProductos() {
-		return productos;
+	public List<Producto> getDetalles() {
+		return detalles;
 	}
 
-	public void setProductos(List<Producto> productos) {
-		this.productos = productos;
+	public void setDetalles(List<Producto> detalles) {
+		this.detalles = detalles;
 	}
 
-	public int getCantProductos() {
-		return cantProductos;
+	public int getCantActivos() {
+		return cantActivos;
 	}
 
-	public void setCantProductos(int cantProductos) {
-		this.cantProductos = cantProductos;
+	public void setCantActivos(int cantActivos) {
+		this.cantActivos = cantActivos;
 	}
 
 	public Ubicacion getOrigen() {
