@@ -1,5 +1,6 @@
 package com.prueba.service;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 
 import org.springframework.data.domain.Page;
@@ -19,15 +20,18 @@ public interface TrasladoService {
 	 * @param idtraslado
 	 * @param codigopieza
 	 * @return
+	 * @throws ParseException 
+	 * @throws Exception 
 	 */
-	public Traslado confirmarPieza(Long idtraslado, String codigopieza);
+	public Traslado confirmarPieza(Long idtraslado, String codigopieza) throws Exception;
 
 	/**
 	 * @param idtraslado
 	 * @param codigopieza
 	 * @return
+	 * @throws Exception 
 	 */
-	public Traslado recibirPieza(Long idtraslado, String codigopieza);
+	public Traslado recibirPieza(Long idtraslado, String codigopieza) throws Exception;
 
 	/**
 	 * @param idtraslado
@@ -51,6 +55,12 @@ public interface TrasladoService {
 	 * @param idtraslado
 	 */
 	public void eliminarTodo(Long idtraslado);
+	
+	/**
+	 * 
+	 * @param idtraslado
+	 */
+	public void eliminarTraslado(Long idtraslado);
 
 	/**
 	 * @param pagina

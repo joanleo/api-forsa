@@ -87,9 +87,16 @@ public class TrasladoController {
 											@PathVariable String codigopieza,
 											@RequestParam(required=false) Long nit){
 		
-		Traslado traslado = trasladoService.confirmarPieza(idtraslado, codigopieza);
+		Traslado traslado;
+		try {
+			traslado = trasladoService.confirmarPieza(idtraslado, codigopieza);
+			return new ResponseEntity<Traslado>(traslado, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("Hubo un error", HttpStatus.CONFLICT);
+		}
 		
-		return new ResponseEntity<Traslado>(traslado, HttpStatus.OK);
+		
 	}
 	
 	@PatchMapping("/{idtraslado}")
@@ -106,9 +113,16 @@ public class TrasladoController {
 											@PathVariable String codigopieza,
 											@RequestParam(required=false) Long nit){
 		
-		Traslado traslado = trasladoService.recibirPieza(idtraslado, codigopieza);
+		Traslado traslado;
+		try {
+			traslado = trasladoService.recibirPieza(idtraslado, codigopieza);
+			return new ResponseEntity<Traslado>(traslado, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("Hubo un error", HttpStatus.CONFLICT);
+		}
 		
-		return new ResponseEntity<Traslado>(traslado, HttpStatus.OK);
+		
 	}
 	
 	@PutMapping("/{idtraslado}")

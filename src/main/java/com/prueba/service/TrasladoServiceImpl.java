@@ -1,7 +1,11 @@
 package com.prueba.service;
 
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,6 +22,7 @@ import com.prueba.entity.DetalleTrasl;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Traslado;
 import com.prueba.entity.Ubicacion;
+import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.ProductoRepository;
 import com.prueba.repository.TrasladoRepository;
@@ -136,15 +141,37 @@ public class TrasladoServiceImpl implements TrasladoService {
 	}
 
 	@Override
-	public Traslado confirmarPieza(Long idtraslado, String codigopieza) {
+	public Traslado confirmarPieza(Long idtraslado, String codigopieza) throws Exception {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		Traslado traslado = trasladoRepo.findById(idtraslado)
 				.orElseThrow(() -> new ResourceNotFoundException("Traslado", "id", idtraslado));
-		Producto verificar = productoRepo.findByCodigoPieza(codigopieza);
-		if(Objects.isNull(verificar)) {
+		Producto confirmar = productoRepo.findByCodigoPieza(codigopieza);
+		if(Objects.isNull(confirmar)) {
 			throw new ResourceNotFoundException("Activo", "codigo de pieza", codigopieza);
 		}
-		verificar.setEstadoTraslado("E");
-		productoRepo.save(verificar);
+		confirmar.setEstadoTraslado("E");
+		productoRepo.save(confirmar);
+		List<DetalleTrasl> detallesTras = traslado.getDetalles();
+		for(DetalleTrasl detalle: detallesTras) {
+			if(detalle.getProducto().getCodigoPieza() == codigopieza) {
+				DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+				String currentDateTime = dateFormatter.format(new Date());
+				Date fechaEnvio = dateFormatter.parse(currentDateTime);
+				detalle.setUsuarioEnvio(usuario);
+				detalle.setFechaEnvio(fechaEnvio);
+			}
+		}
+		traslado.setDetalles(detallesTras);
+		int cont = 0;
+		for(DetalleTrasl detalle: detallesTras) {
+			if(detalle.getProducto().getEstadoTraslado().equalsIgnoreCase("F")) {
+				cont += 1;
+			}
+		}
+		if(cont == traslado.getDetalles().size()) {
+			traslado.setEstadoTraslado("E");			
+		}
 		traslado.setEstadoTraslado("E");
 		traslado = trasladoRepo.save(traslado);
 		
@@ -152,16 +179,37 @@ public class TrasladoServiceImpl implements TrasladoService {
 	}
 
 	@Override
-	public Traslado recibirPieza(Long idtraslado, String codigopieza) {
+	public Traslado recibirPieza(Long idtraslado, String codigopieza) throws Exception {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		Traslado traslado = trasladoRepo.findById(idtraslado)
 				.orElseThrow(() -> new ResourceNotFoundException("Traslado", "id", idtraslado));
-		Producto verificar = productoRepo.findByCodigoPieza(codigopieza);
-		if(Objects.isNull(verificar)) {
+		Producto recibir = productoRepo.findByCodigoPieza(codigopieza);
+		if(Objects.isNull(recibir)) {
 			throw new ResourceNotFoundException("Activo", "codigo de pieza", codigopieza);
 		}
-		verificar.setEstadoTraslado("F");
-		productoRepo.save(verificar);
-		traslado.setEstadoTraslado("F");
+		recibir.setEstadoTraslado("F");
+		productoRepo.save(recibir);
+		List<DetalleTrasl> detallesTras = traslado.getDetalles();
+		for(DetalleTrasl detalle: detallesTras) {
+			if(detalle.getProducto().getCodigoPieza() == codigopieza) {
+				DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+				String currentDateTime = dateFormatter.format(new Date());
+				Date fechaRecibo = dateFormatter.parse(currentDateTime);
+				detalle.setUsuarioRecibe(usuario);
+				detalle.setFechaRecibe(fechaRecibo);
+			}
+		}
+		traslado.setDetalles(detallesTras);
+		int cont = 0;
+		for(DetalleTrasl detalle: detallesTras) {
+			if(detalle.getProducto().getEstadoTraslado().equalsIgnoreCase("F")) {
+				cont += 1;
+			}
+		}
+		if(cont == traslado.getDetalles().size()) {
+			traslado.setEstadoTraslado("F");			
+		}
 		traslado = trasladoRepo.save(traslado);
 		
 		return traslado;
@@ -169,20 +217,34 @@ public class TrasladoServiceImpl implements TrasladoService {
 
 	@Override
 	public Traslado confirmarTodo(Long idtraslado) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		Traslado traslado = trasladoRepo.findById(idtraslado)
 				.orElseThrow(() -> new ResourceNotFoundException("Traslado", "id", idtraslado));
 		
-		List<DetalleTrasl> productos = traslado.getDetalles();
-		for(DetalleTrasl producto: productos) {
-			Producto nuevo = productoRepo.findByCodigoPieza(producto.getProducto().getCodigoPieza());
-			if(nuevo != null) {
-				nuevo.setEstadoTraslado("E");
-				nuevo = productoRepo.save(nuevo);
-				//traslado.addActivo(nuevo);				
+		List<DetalleTrasl> detalles = traslado.getDetalles();
+		for(DetalleTrasl detalle: detalles) {
+			Producto confirmar = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
+			if(confirmar != null) {
+				confirmar.setEstadoTraslado("E");
+				confirmar = productoRepo.save(confirmar);
 			}else {
-				throw new ResourceNotFoundException("Activo", "codigo de pieza", producto.getProducto().getCodigoPieza());
+				throw new ResourceNotFoundException("Activo", "codigo de pieza", detalle.getProducto().getCodigoPieza());
 			}
+			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			String currentDateTime = dateFormatter.format(new Date());
+			Date fechaEnvio;
+			try {
+				fechaEnvio = dateFormatter.parse(currentDateTime);
+				detalle.setFechaEnvio(fechaEnvio);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			detalle.setUsuarioEnvio(usuario);
+			
 		}
+		traslado.setDetalles(detalles);
 		traslado.setEstadoTraslado("E");
 		traslado = trasladoRepo.save(traslado);
 		return traslado;
@@ -190,20 +252,34 @@ public class TrasladoServiceImpl implements TrasladoService {
 
 	@Override
 	public Traslado recibirTodo(Long idtraslado) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		Traslado traslado = trasladoRepo.findById(idtraslado)
 				.orElseThrow(() -> new ResourceNotFoundException("Traslado", "id", idtraslado));
 		
-		List<DetalleTrasl> productos = traslado.getDetalles();
-		for(DetalleTrasl producto: productos) {
-			Producto nuevo = productoRepo.findByCodigoPieza(producto.getProducto().getCodigoPieza());
+		List<DetalleTrasl> detalles = traslado.getDetalles();
+		for(DetalleTrasl detalle: detalles) {
+			Producto nuevo = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
 			if(nuevo != null) {
 				nuevo.setEstadoTraslado("F");
 				nuevo = productoRepo.save(nuevo);
-				//traslado.addActivo(nuevo);				
 			}else {
-				throw new ResourceNotFoundException("Activo", "codigo de pieza", producto.getProducto().getCodigoPieza());
+				throw new ResourceNotFoundException("Activo", "codigo de pieza", detalle.getProducto().getCodigoPieza());
 			}
+			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			String currentDateTime = dateFormatter.format(new Date());
+			Date fechaRecibo;
+			try {
+				fechaRecibo = dateFormatter.parse(currentDateTime);
+				detalle.setFechaRecibe(fechaRecibo);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			detalle.setUsuarioRecibe(usuario);
+			
 		}
+		traslado.setDetalles(detalles);
 		traslado.setEstadoTraslado("F");
 		traslado = trasladoRepo.save(traslado);
 		return traslado;
@@ -256,6 +332,37 @@ public class TrasladoServiceImpl implements TrasladoService {
 	public Page<Traslado> buscarTraslados(TrasladoDTO trasladoDTO, Integer pagina, Integer items) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void eliminarTraslado(Long idtraslado) {
+		Traslado traslado = trasladoRepo.findById(idtraslado)
+				.orElseThrow(() -> new ResourceNotFoundException("Traslado", "id", idtraslado));
+		
+		List<DetalleTrasl> detalles = traslado.getDetalles();
+		for(DetalleTrasl detalle: detalles) {
+			Producto activo = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
+			if(activo != null) {
+				if(activo.getEstadoTraslado().equalsIgnoreCase("A")) {
+					throw new ResourceCannotBeDeleted("Traslado");
+				}				
+			}else {
+				throw new ResourceNotFoundException("Activo", "codigo de pieza", detalle.getProducto().getCodigoPieza());
+			}
+		}
+		for(DetalleTrasl detalle: detalles) {
+			Producto activo = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
+			if(activo != null) {
+				activo.setEstadoTraslado("");
+				activo = productoRepo.save(activo);
+				traslado.removeActivo(activo);				
+			}else {
+				throw new ResourceNotFoundException("Activo", "codigo de pieza", detalle.getProducto().getCodigoPieza());
+			}
+		}
+		
+		trasladoRepo.delete(traslado);
+		
 	}
 
 }
