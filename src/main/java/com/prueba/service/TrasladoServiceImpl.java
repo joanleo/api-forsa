@@ -343,7 +343,7 @@ public class TrasladoServiceImpl implements TrasladoService {
 		for(DetalleTrasl detalle: detalles) {
 			Producto activo = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
 			if(activo != null) {
-				if(activo.getEstadoTraslado().equalsIgnoreCase("A")) {
+				if(!activo.getEstadoTraslado().equalsIgnoreCase("A")) {
 					throw new ResourceCannotBeDeleted("Traslado");
 				}				
 			}else {
