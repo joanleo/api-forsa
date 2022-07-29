@@ -77,7 +77,7 @@ public class FabricanteController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
-		if(nit != null) {
+		if(nit == null) {
 			empresa = util.obtenerEmpresa(nit);
 		}else {
 			empresa = usuario.getEmpresa();

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.prueba.dto.TrasladoDTO;
 import com.prueba.entity.DetalleTrasl;
+import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Traslado;
 import com.prueba.entity.Ubicacion;
@@ -29,6 +30,7 @@ import com.prueba.repository.TrasladoRepository;
 import com.prueba.repository.UbicacionRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
+import com.prueba.util.UtilitiesApi;
 
 @Service
 public class TrasladoServiceImpl implements TrasladoService {
@@ -47,6 +49,9 @@ public class TrasladoServiceImpl implements TrasladoService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private UtilitiesApi util;
 
 	@Override
 	public TrasladoDTO create(TrasladoDTO trasladoDTO) {
@@ -54,7 +59,9 @@ public class TrasladoServiceImpl implements TrasladoService {
 		Traslado traslado = new Traslado();
 		Ubicacion destino = new Ubicacion();
 		Ubicacion origen = new Ubicacion();
-		Usuario usuario = new Usuario();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		Empresa empresa;
 		if(trasladoDTO.getDestino() != null) {
 			Long idDestino = trasladoDTO.getDestino().getId();
 			destino = ubicacionRepo.findById(idDestino)
@@ -81,18 +88,22 @@ public class TrasladoServiceImpl implements TrasladoService {
 					.orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", idUsuario));
 		}else {
 			System.out.println("Usuario que envia es null");
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 			traslado.setUsuarioEnvio(usuario);
 		}
-		
 
+		if(trasladoDTO.getEmpresa() != null) {
+			empresa = util.obtenerEmpresa(trasladoDTO.getEmpresa().getNit());
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		traslado.setEmpresa(empresa);
 		traslado.setDestino(destino);
 		traslado.setOrigen(origen);
-		
 		traslado.setUsuarioEnvio(usuario);
 		traslado.setEstadoTraslado("A");
 		traslado = trasladoRepo.saveAndFlush(traslado);
+		
 		Long idtraslado = traslado.getIdTraslado();
 		System.out.println("Traslado creado con id" + idtraslado);
 		List<Producto> productos = trasladoDTO.getDetalles();
@@ -103,11 +114,21 @@ public class TrasladoServiceImpl implements TrasladoService {
 			if(nuevo != null) {
 				nuevo.setEstadoTraslado("A");
 				nuevo = productoRepo.save(nuevo);
-				actualizar.addActivo(nuevo);
+				actualizar.addActivo(nuevo, empresa, usuario);
 			}else {
 				throw new ResourceNotFoundException("Activo", "codigo de pieza", producto.getCodigoPieza());
 			}
 		}
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		try {
+			Date fechaEnvio = dateFormatter.parse(currentDateTime);
+			traslado.setFechaSalida(fechaEnvio);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		traslado = trasladoRepo.save(actualizar);
 		
 		trasladoDTO = mapearEntidad(traslado);
@@ -157,9 +178,9 @@ public class TrasladoServiceImpl implements TrasladoService {
 			if(detalle.getProducto().getCodigoPieza() == codigopieza) {
 				DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 				String currentDateTime = dateFormatter.format(new Date());
-				Date fechaEnvio = dateFormatter.parse(currentDateTime);
-				detalle.setUsuarioEnvio(usuario);
-				detalle.setFechaEnvio(fechaEnvio);
+				Date fechaConfirma = dateFormatter.parse(currentDateTime);
+				detalle.setUsuarioconfirma(usuario);
+				detalle.setFechaEnvio(fechaConfirma);
 			}
 		}
 		traslado.setDetalles(detallesTras);
@@ -241,7 +262,7 @@ public class TrasladoServiceImpl implements TrasladoService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			detalle.setUsuarioEnvio(usuario);
+			detalle.setUsuarioconfirma(usuario);
 			
 		}
 		traslado.setDetalles(detalles);

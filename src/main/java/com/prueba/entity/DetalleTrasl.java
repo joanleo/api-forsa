@@ -40,15 +40,15 @@ public class DetalleTrasl implements Serializable{
 	
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "usuarioenvio", referencedColumnName = "nidusuario")
-	private Usuario usuarioEnvio;
+	@JoinColumn(name = "usuarioconfirma", referencedColumnName = "nidusuario")
+	private Usuario usuarioconfirma;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "usuariorecibe", referencedColumnName = "nidusuario")
 	private Usuario usuarioRecibe;
 	
 	@Column(name = "dfecha_envio")
-	public Date fechaEnvio;
+	public Date fechaConfirma;
 	
 	@Column(name = "dfecha_recibe")
 	public Date fechaRecibe;
@@ -69,9 +69,24 @@ public class DetalleTrasl implements Serializable{
 
 	}
 
+	/**
+	 * @param traslado
+	 * @param producto
+	 * @param empresa
+	 * @param usuarioEnvia
+	 */
+	public DetalleTrasl(Traslado traslado, Producto producto, Empresa empresa, Usuario usuarioEnvia) {
+		this.traslado = traslado;
+		this.producto = producto;
+		this.empresa = empresa;
+		this.usuarioconfirma = usuarioEnvia;
+		this.id = new DetalleTrasl_id(traslado.getIdTraslado(), producto.getCodigoPieza());
+		
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(empresa, fechaEnvio, fechaRecibe, id, producto, traslado, usuarioEnvio, usuarioRecibe);
+		return Objects.hash(empresa, fechaConfirma, fechaRecibe, id, producto, traslado, usuarioRecibe, usuarioconfirma);
 	}
 
 	@Override
@@ -83,11 +98,11 @@ public class DetalleTrasl implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		DetalleTrasl other = (DetalleTrasl) obj;
-		return Objects.equals(empresa, other.empresa) && Objects.equals(fechaEnvio, other.fechaEnvio)
+		return Objects.equals(empresa, other.empresa) && Objects.equals(fechaConfirma, other.fechaConfirma)
 				&& Objects.equals(fechaRecibe, other.fechaRecibe) && Objects.equals(id, other.id)
 				&& Objects.equals(producto, other.producto) && Objects.equals(traslado, other.traslado)
-				&& Objects.equals(usuarioEnvio, other.usuarioEnvio)
-				&& Objects.equals(usuarioRecibe, other.usuarioRecibe);
+				&& Objects.equals(usuarioRecibe, other.usuarioRecibe)
+				&& Objects.equals(usuarioconfirma, other.usuarioconfirma);
 	}
 
 	public DetalleTrasl_id getId() {
@@ -114,12 +129,16 @@ public class DetalleTrasl implements Serializable{
 		this.producto = producto;
 	}
 
-	public Usuario getUsuarioEnvio() {
-		return usuarioEnvio;
+	public Usuario getUsuarioconfirma() {
+		return usuarioconfirma;
 	}
 
-	public void setUsuarioEnvio(Usuario usuarioEnvio) {
-		this.usuarioEnvio = usuarioEnvio;
+	public void setUsuarioconfirma(Usuario usuarioconfirma) {
+		this.usuarioconfirma = usuarioconfirma;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	public Usuario getUsuarioRecibe() {
@@ -131,11 +150,11 @@ public class DetalleTrasl implements Serializable{
 	}
 
 	public Date getFechaEnvio() {
-		return fechaEnvio;
+		return fechaConfirma;
 	}
 
 	public void setFechaEnvio(Date fechaEnvio) {
-		this.fechaEnvio = fechaEnvio;
+		this.fechaConfirma = fechaEnvio;
 	}
 
 	public Date getFechaRecibe() {

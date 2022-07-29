@@ -3,6 +3,7 @@ package com.prueba.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Ubicacion;
 import com.prueba.security.entity.Usuario;
@@ -23,9 +24,11 @@ public class TrasladoDTO {
 	
 	public Date fechaSalida;
 	
-	public Date fechaIngreso;
+	private Date fechaIngreso;
 	
-	public String estadoTraslado;
+	private String estadoTraslado;
+	
+	private Empresa empresa;
 
 	public List<Producto> getDetalles() {
 		return detalles;
@@ -97,6 +100,14 @@ public class TrasladoDTO {
 
 	public void setEstadoTraslado(String estadoTraslado) {
 		this.estadoTraslado = estadoTraslado;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 
 	

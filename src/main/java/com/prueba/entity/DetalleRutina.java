@@ -23,9 +23,6 @@ import com.prueba.security.entity.Politica;
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class DetalleRutina implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private static int countBase = 0;

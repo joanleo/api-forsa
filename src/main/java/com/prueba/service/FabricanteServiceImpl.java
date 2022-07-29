@@ -67,7 +67,7 @@ public class FabricanteServiceImpl implements FabricanteService {
 		}
 		Page<Fabricante> fabricantes = fabricanteRepo.findAll(fabricanteSpec.getFabricante(fabricanteDTO, empresa), PageRequest.of(pagina, items));		
 		return fabricantes;
-	}
+	}	
 	
 	@Override
 	public Page<Fabricante> searchFabricantes(Empresa empresa, Integer pagina, Integer items) {

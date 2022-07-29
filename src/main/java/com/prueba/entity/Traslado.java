@@ -10,14 +10,11 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -33,16 +30,16 @@ import com.prueba.security.entity.Usuario;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idTraslado")
 public class Traslado implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	
+	private static int countBase = 0;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_traslados")
-	@SequenceGenerator(name = "seq_traslados", allocationSize = 10)
 	@Column(name = "idtraslado")
 	public Long idTraslado;
+	
+	@Column(name = "vcnumdocumento")
+	public String numDocumento;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "origen", referencedColumnName = "nidubicacion")
@@ -87,6 +84,9 @@ public class Traslado implements Serializable {
 
 	public Traslado() {
 		super();
+		Traslado.countBase += 1;
+		this.idTraslado = Long.valueOf(countBase);
+		this.numDocumento = "TR-" + String.valueOf(countBase);
 	}
 
 	public Long getIdTraslado() {
@@ -197,6 +197,18 @@ public class Traslado implements Serializable {
 				detalle.setProducto(null);
 			}
 		}
+	}
+
+	/**
+	 * @param nuevo
+	 * @param empresa2
+	 * @param usuario
+	 */
+	public void addActivo(Producto producto, Empresa empresa, Usuario usuario) {
+		DetalleTrasl detalle = new DetalleTrasl(this, producto, empresa, usuario);
+		System.out.println(this.getIdTraslado());
+		detalles.add(detalle);
+		
 	}
 
 }

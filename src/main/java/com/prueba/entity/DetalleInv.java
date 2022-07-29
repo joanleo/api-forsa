@@ -1,22 +1,18 @@
 package com.prueba.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
+
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.prueba.security.entity.Usuario;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
@@ -41,21 +37,6 @@ public class DetalleInv implements Serializable{
 	@MapsId("codigoPieza")
 	private Producto producto;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "vcnitempresa")
-    private Empresa empresa;
-	
-	@ManyToOne(targetEntity = Usuario.class, cascade = CascadeType.ALL)
-	private Usuario usuarioEnvio;
-	
-	@ManyToOne(targetEntity = Usuario.class, cascade = CascadeType.ALL)
-	private Usuario usuarioRecibe;
-	
-	@Column(name = "dfecha_envio")
-	public Date fechaEnvio;
-	
-	@Column(name = "dfecha_recibe")
-	public Date fechaRecibe;
 
 	public DetalleInv() {
 		super();
@@ -109,45 +90,7 @@ public class DetalleInv implements Serializable{
         return Objects.hash(movimiento, producto);
     }
 
-	public Empresa getEmpresa() {
-		return empresa;
-	}
 
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
-	}
-
-	public Usuario getUsuarioEnvio() {
-		return usuarioEnvio;
-	}
-
-	public void setUsuarioEnvio(Usuario usuarioEnvio) {
-		this.usuarioEnvio = usuarioEnvio;
-	}
-
-	public Usuario getUsuarioRecibe() {
-		return usuarioRecibe;
-	}
-
-	public void setUsuarioRecibe(Usuario usuarioRecibe) {
-		this.usuarioRecibe = usuarioRecibe;
-	}
-
-	public Date getFechaEnvio() {
-		return fechaEnvio;
-	}
-
-	public void setFechaEnvio(Date fechaEnvio) {
-		this.fechaEnvio = fechaEnvio;
-	}
-
-	public Date getFechaRecibe() {
-		return fechaRecibe;
-	}
-
-	public void setFechaRecibe(Date fechaRecibe) {
-		this.fechaRecibe = fechaRecibe;
-	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
