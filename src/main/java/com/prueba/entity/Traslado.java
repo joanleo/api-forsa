@@ -200,8 +200,8 @@ public class Traslado implements Serializable {
 	}
 
 	/**
-	 * @param nuevo
-	 * @param empresa2
+	 * @param producto 
+	 * @param empresa 
 	 * @param usuario
 	 */
 	public void addActivo(Producto producto, Empresa empresa, Usuario usuario) {
