@@ -3,6 +3,7 @@
  */
 package com.prueba.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -95,5 +96,51 @@ public class SalidaServiceImp implements SalidaService {
 		Page<Salida> salidas = salidaRepo.findAll(salidaSpec.obtenerFabricantes(salida, empresa), PageRequest.of(pagina, items));
 		return salidas;
 	}
+
+	@Override
+	public List<Salida> buscarSalidas(String letras, Empresa empresa) {
+		List<Salida> salidas = new ArrayList<>();
+		if(letras == null) {
+			salidas = salidaRepo.findByEmpresa(empresa);
+		}
+		salidas = salidaRepo.findByNumDocumentoContainsAndEmpresa(letras, empresa);
+	
+		return salidas;
+	}
+
+	@Override
+	public Salida confirmarActivoSalida(Integer idsalida, String codigopieza) {
+		Salida salida = salidaRepo.findByIdSalida(idsalida);
+		if(Objects.isNull(salida)) {
+			throw new ResourceNotFoundException("Salida", "id", String.valueOf(idsalida));
+		}
+		List<DetalleSalida> detalles = salida.getDetalles();
+		for(DetalleSalida detalle:detalles) {
+			if(detalle.getProducto().getCodigoPieza().equalsIgnoreCase(codigopieza)) {
+				Producto activoEliminar = productoRepo.findByCodigoPieza(codigopieza);
+				activoEliminar.setEstaActivo(false);
+				productoRepo.save(activoEliminar);
+			}
+		}
+		
+		return salidaRepo.findByIdSalida(idsalida);
+	}
+
+	@Override
+	public Salida confirmarSalida(Integer idsalida) {
+		Salida salida = salidaRepo.findByIdSalida(idsalida);
+		if(Objects.isNull(salida)) {
+			throw new ResourceNotFoundException("Salida", "id", String.valueOf(idsalida));
+		}
+		List<DetalleSalida> detalles = salida.getDetalles();
+		for(DetalleSalida detalle:detalles) {
+				Producto activoEliminar = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
+				activoEliminar.setEstaActivo(false);
+				productoRepo.save(activoEliminar);
+		}
+		
+		return salidaRepo.findByIdSalida(idsalida);
+	}
+
 
 }

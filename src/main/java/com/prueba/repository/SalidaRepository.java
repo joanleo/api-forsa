@@ -3,6 +3,8 @@
  */
 package com.prueba.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,5 +26,24 @@ public interface SalidaRepository extends JpaRepository<Salida, Integer>, JpaSpe
 	 * @return
 	 */
 	public Page<Salida> findByEmpresa(Empresa empresa, Pageable page);
+
+	/**
+	 * @param empresa
+	 * @return
+	 */
+	public List<Salida> findByEmpresa(Empresa empresa);
+
+	/**
+	 * @param letras
+	 * @param empresa
+	 * @return
+	 */
+	public List<Salida> findByNumDocumentoContainsAndEmpresa(String letras, Empresa empresa);
+
+	/**
+	 * @param idsalida
+	 * @return
+	 */
+	public Salida findByIdSalida(Integer idsalida);
 
 }

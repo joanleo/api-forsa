@@ -3,6 +3,8 @@
  */
 package com.prueba.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 import com.prueba.entity.Empresa;
@@ -36,5 +38,26 @@ public interface SalidaService {
 	 * @return
 	 */
 	public Page<Salida> buscarSalidas(Salida salida, Empresa empresa, Integer pagina, Integer items);
+
+	/**
+	 * @param letras
+	 * @param empresa
+	 * @return
+	 */
+	public List<Salida> buscarSalidas(String letras, Empresa empresa);
+
+	/**
+	 * @param idsalida
+	 * @param codigopieza
+	 * @return
+	 */
+	public Salida confirmarActivoSalida(Integer idsalida, String codigopieza);
+
+	/**
+	 * @param idsalida
+	 * @return
+	 */
+	public Salida confirmarSalida(Integer idsalida);
+
 
 }
