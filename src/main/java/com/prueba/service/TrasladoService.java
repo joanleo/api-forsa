@@ -60,7 +60,7 @@ public interface TrasladoService {
 	 * 
 	 * @param idtraslado
 	 */
-	public void eliminarTraslado(Long idtraslado);
+	public void eliminarTraslado(Long idtraslado, Long nit);
 
 	/**
 	 * @param pagina
@@ -76,5 +76,7 @@ public interface TrasladoService {
 	 * @return
 	 */
 	public Page<Traslado> buscarTraslados(TrasladoDTO trasladoDTO, Integer pagina, Integer items);
+
+
 
 }

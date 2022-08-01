@@ -356,7 +356,7 @@ public class TrasladoServiceImpl implements TrasladoService {
 	}
 
 	@Override
-	public void eliminarTraslado(Long idtraslado) {
+	public void eliminarTraslado(Long idtraslado, Long nit) {
 		Traslado traslado = trasladoRepo.findById(idtraslado)
 				.orElseThrow(() -> new ResourceNotFoundException("Traslado", "id", idtraslado));
 		
