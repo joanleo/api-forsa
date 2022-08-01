@@ -35,16 +35,12 @@ import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 
-
-
-@Hidden
 @RestController
 @RequestMapping("/tiposmovimientos")
-//@Api(tags = "Tipos Movimiento", description = "operaciones referentes a los tipos de movimiento")
-//@ApiIgnore
 @Tag(name = "Tipos Movimiento", description = "operaciones referentes a los tipos de movimiento")
 public class TipoMovController {
 	
@@ -61,13 +57,13 @@ public class TipoMovController {
 	private UtilitiesApi util;
 	
 	@PostMapping
-	//@ApiOperation(value = "Crea un tipo de movimiento", notes = "Crea un nuevo tipo de movimiento")
+	@Operation(summary = "Crea un tipo de movimiento", description = "Crea un nuevo tipo de movimiento")
 	public ResponseEntity<TipoMovDTO> create(@Valid @RequestBody TipoMovDTO tipoMovDTO){
 		return new ResponseEntity<TipoMovDTO>(tipoMovService.create(tipoMovDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	//@ApiOperation(value = "Encuentra los tipos de movimientos", notes = "Retorna todos los tipos de movimiento")
+	@Operation(summary = "Encuentra los tipos de movimientos", description = "Retorna todos los tipos de movimiento")
 	public List<TipoMovDTO> getTiposMov(@RequestParam(required=false) String letras,
 										@RequestParam(required=false) Long nit){
 		Empresa empresa;
@@ -89,7 +85,7 @@ public class TipoMovController {
 	}
 	
 	@GetMapping("/{id}")
-	//@ApiOperation(value = "Encuentra un tipo de movimiento", notes = "Retorna un tipo de movimiento segun su id")
+	@Operation(summary = "Encuentra un tipo de movimiento", description = "Retorna un tipo de movimiento segun su id")
 	public ResponseEntity<TipoMovDTO> getTipoMov(@PathVariable(name="id") Long id,
 					 							 @PathVariable(required=false) Long nit){
 		Empresa empresa;
@@ -106,7 +102,7 @@ public class TipoMovController {
 	}
 	
 	@PutMapping("/{id}")
-	//@ApiOperation(value = "Actualiza un tipo de movimiento", notes = "Actualiza los datos de un tipo de movimiento")
+	@Operation(summary = "Actualiza un tipo de movimiento", description = "Actualiza los datos de un tipo de movimiento")
 	public ResponseEntity<TipoMovDTO> update(@Valid @RequestBody TipoMovDTO tipoMovDTO,
 											 @PathVariable Long id){
 		TipoMovDTO actualizado = tipoMovService.update(id, tipoMovDTO);
@@ -115,7 +111,7 @@ public class TipoMovController {
 	}
 	
 	@DeleteMapping("/{id}")
-	//@ApiOperation(value = "Elimina un tipo de movimiento", notes = "Elimina un tipo de movimiento por su id")
+	@Operation(summary = "Elimina un tipo de movimiento", description = "Elimina un tipo de movimiento por su id")
  	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
 										 @PathVariable(required=false) Long nit){
 		Empresa empresa;
@@ -133,7 +129,7 @@ public class TipoMovController {
 	}
 	
 	@PatchMapping("/{id}")
-	//@ApiOperation(value = "Inhabilita un tipo de movimiento", notes = "Inhabilita un tipo de movimiento por su id")
+	@Operation(summary = "Inhabilita un tipo de movimiento", description = "Inhabilita un tipo de movimiento por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
 	 									@PathVariable(required=false) Long nit){
 		Empresa empresa;
@@ -151,7 +147,7 @@ public class TipoMovController {
 	}
 	
 	@PostMapping("/descarga")
-	//@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de activos de la busqueda realizada en formato csv")
+	@Operation(summary = "Descarga listado en formato csv", description = "Descarga listado de activos de la busqueda realizada en formato csv")
 	public void getCsvEmpresas(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,
