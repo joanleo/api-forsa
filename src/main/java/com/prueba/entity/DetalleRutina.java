@@ -41,7 +41,7 @@ public class DetalleRutina implements Serializable{
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@MapsId("idRuta")
-	private Ruta ruta;
+	private Permiso ruta;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "detalle")
@@ -55,7 +55,7 @@ public class DetalleRutina implements Serializable{
 		this.politica = politica;
 	}
 
-	public DetalleRutina(Rutina rutina, Ruta ruta) {
+	public DetalleRutina(Rutina rutina, Permiso ruta) {
 		super();
 		DetalleRutina.countBase += 1;
 		this.pkDetalle = countBase;
@@ -86,11 +86,11 @@ public class DetalleRutina implements Serializable{
 		this.rutina = rutina;
 	}
 	
-	public Ruta getRuta() {
+	public Permiso getRuta() {
 		return ruta;
 	}
 
-	public void setRuta(Ruta ruta) {
+	public void setRuta(Permiso ruta) {
 		this.ruta = ruta;
 	}
 

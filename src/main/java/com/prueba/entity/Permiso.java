@@ -1,8 +1,13 @@
 package com.prueba.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,9 +15,11 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.prueba.util.ListToStringConverter;
+
 @Entity
-@Table(name = "m_rutas")
-public class Ruta implements Serializable{
+@Table(name = "m_permisos")
+public class Permiso implements Serializable{
 
 	/**
 	 * 
@@ -26,8 +33,10 @@ public class Ruta implements Serializable{
 	@Column(name = "nidruta")
 	private Long idRuta;
 	
+
 	@Column(name = "vcurl")
-	private String url;
+	@Convert(converter = ListToStringConverter.class)
+	private List<String> url = new ArrayList<>();
 	
 	@Column(name = "vcnombre")
 	private String nombre;
@@ -44,11 +53,11 @@ public class Ruta implements Serializable{
 		this.idRuta = idRuta;
 	}
 
-	public String getUrl() {
+	public List<String> getUrl() {
 		return url;
 	}
 
-	public void setUrl(String url) {
+	public void setUrl(List<String> url) {
 		this.url = url;
 	}
 
@@ -72,17 +81,22 @@ public class Ruta implements Serializable{
 		return serialVersionUID;
 	}
 
-	public Ruta() {
+	public Permiso() {
 		super();
 	}
 
-	public Ruta(Long idPermiso, String url, String nombre, String metodo, Boolean permitido) {
+	public Permiso(Long idRuta, List<String> url, String nombre, String metodo) {
 		super();
-		this.idRuta = idPermiso;
+		this.idRuta = idRuta;
 		this.url = url;
 		this.nombre = nombre;
 		this.metodo = metodo;
 	}
+	
+	public void addUrl(String url) {
+		this.url.add(url);
+	}
+
 
 		
 

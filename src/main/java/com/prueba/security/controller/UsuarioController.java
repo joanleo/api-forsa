@@ -160,7 +160,9 @@ public class UsuarioController {
 		System.out.println("Rol "+registroDTO.getRol());
 		if(registroDTO.getRol().getIdRol() == null) {
 			System.out.println("no tiene rol");
-			Rol rol = rolRepo.findByNombre("ROLE_USER");	
+			Rol rol = rolRepo.findByNombre("ROLE_USER");
+			rol.setEmpresa(empresa);
+			rol = rolRepo.save(rol);
 			System.out.println("se asigna rol: "+rol.getNombre());
 			usuario.setRol(rol);
 		}else {

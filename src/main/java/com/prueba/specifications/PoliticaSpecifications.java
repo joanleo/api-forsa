@@ -29,6 +29,11 @@ public class PoliticaSpecifications {
 				}*/
 			//criteriaBuilder.createQuery().select(root.get("rol").get("empresa").get("nit")).groupBy(root.get("rol").get("empresa").get("nit"));
 			criteriaBuilder.createQuery().select(root).where(criteriaBuilder.equal(root.get("rol").get("empresa").get("nit"), nit)).groupBy(root.get("rol").get("empresa").get("nit"));
+			
+			query.groupBy(root.get("detalle").get("rutina").get("nombre"));
+			query.orderBy(criteriaBuilder.desc(root.get("detalle").get("rutina").get("nombre")));
+			//query.orderBy(criteriaBuilder.desc(root.get("detalle").get("ruta").get("nombre"))); 
+			
 			return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
 		};
 	}

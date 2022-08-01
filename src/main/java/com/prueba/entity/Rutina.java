@@ -76,12 +76,12 @@ public class Rutina implements Serializable{
 		return serialVersionUID;
 	}
 
-	public void addRuta(Ruta ruta) {
+	public void addRuta(Permiso ruta) {
         DetalleRutina detalle = new DetalleRutina(this, ruta);
         detalles.add(detalle);
     }
 	
-	public void removeRuta(Ruta ruta) {
+	public void removeRuta(Permiso ruta) {
         for (Iterator<DetalleRutina> iterator = detalles.iterator();
              iterator.hasNext(); ) {
         	DetalleRutina detalle = iterator.next();

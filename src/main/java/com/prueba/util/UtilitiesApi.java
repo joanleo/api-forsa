@@ -2,6 +2,7 @@ package com.prueba.util;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -16,11 +17,11 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import com.prueba.entity.Empresa;
-import com.prueba.entity.Ruta;
+import com.prueba.entity.Permiso;
 import com.prueba.entity.Rutina;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
-import com.prueba.repository.RutaRepository;
+import com.prueba.repository.PermisoRepository;
 import com.prueba.repository.RutinaRepository;
 
 
@@ -31,7 +32,7 @@ public class UtilitiesApi {
 	private EmpresaRepository empresaRepo;
 	
 	@Autowired
-	private RutaRepository permisoRepo;
+	private PermisoRepository permisoRepo;
 	
 	@Autowired
 	private RutinaRepository rutinaRepo;
@@ -53,20 +54,21 @@ public class UtilitiesApi {
 
         String aux="";
         
-        Set<String> arrRutinas = new HashSet<>();
+        Set<String> arrRutinas = new HashSet<String>();
 
         for(Entry<RequestMappingInfo, HandlerMethod> rutaMetodo: map.entrySet()) {
         	String rutina = rutaMetodo.getKey().getActivePatternsCondition().toString().replace("[", "").replace("]", "").split("/")[1];
+        	if(rutina.equalsIgnoreCase("error") || rutina.equalsIgnoreCase("v3") || rutina.equalsIgnoreCase("swagger-ui.html") || 
+        			rutina.equalsIgnoreCase("auth") || rutina.equalsIgnoreCase("email")) {
+        		continue;
+        	}
         	if(rutina != aux) {
         		aux = rutina;
         		arrRutinas.add(aux);
         	}
-        	
         }
-        ArrayList<String> arr = new ArrayList<String>();
+        
         for(String rut: arrRutinas) {
-        	String stringRuina = "{\"rutina\":{\"nombre\":\""+rut+"\",\"opciones\":[";
-        	String rutaMethod = "";
         	Rutina nuevaRutina = new Rutina();
         	nuevaRutina.setNombre(rut);
 	        for(Entry<RequestMappingInfo, HandlerMethod> rutaMetodo: map.entrySet()) {
@@ -75,25 +77,55 @@ public class UtilitiesApi {
 	        	String metodo = rutaMetodo.getKey().getMethodsCondition().toString().replace("[", "").replace("]", "");
 	        	
             	if(rut.equals(rutina)) {
-            		//System.out.println("Rutina: "+rutina);
-            		//System.out.println("Ruta: "+ruta);
-            		//System.out.println("Metodo: "+metodo);
             		
-            		Ruta nuevoPermiso = new Ruta();
-            		//String ejemplo = "{\"id\":46,\"nombre\":\"Miguel\",\"empresa\":\"Autentia\"}";
+            		Permiso nuevoPermiso = new Permiso();
             		if(metodo.equals("PUT")) {
-            			rutaMethod += "{\"url\":\""+ruta+"\",\"actualizar\":\"false},";
-            			//System.out.println("buscando permiso "+ruta);
-            			Ruta existPermiso = permisoRepo.findByUrlAndNombre(ruta,"actualizar");
+            			Permiso existPermiso = permisoRepo.findByNombre("editar_"+rut);
             			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("actualizar");
+            				nuevoPermiso.addUrl(ruta);
+            				nuevoPermiso.setNombre("editar"+rut);
             				nuevoPermiso.setMetodo(metodo);
             			}else {
             				nuevoPermiso = existPermiso;
             			}
             			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			//System.out.println("buscando rutina "+rut);
+            			Rutina existRutina = rutinaRepo.findByNombre(rut);
+            			if(Objects.isNull(existRutina)) {
+            				nuevaRutina.addRuta(nuevoPermiso);
+            			}else {
+            				nuevaRutina = existRutina;
+            				nuevaRutina.addRuta(nuevoPermiso);
+            			}
+            		}
+            		if(ruta.contains("cargar")) {
+            			Permiso existPermiso = permisoRepo.findByNombre("importar"+rut);
+            			if(Objects.isNull(existPermiso)) {
+            				nuevoPermiso.addUrl(ruta);
+            				nuevoPermiso.setNombre("importar"+rut);
+            				nuevoPermiso.setMetodo(metodo);
+            			}else {
+            				nuevoPermiso = existPermiso;
+            			}
+            			nuevoPermiso = permisoRepo.save(nuevoPermiso);
+            			Rutina existRutina = rutinaRepo.findByNombre(rut);
+            			if(Objects.isNull(existRutina)) {
+            				nuevaRutina.addRuta(nuevoPermiso);
+            			}else {
+            				nuevaRutina = existRutina;
+            				nuevaRutina.addRuta(nuevoPermiso);
+            			}
+            			
+            		}
+            		if(ruta.contains("descarga")) {
+            			Permiso existPermiso = permisoRepo.findByNombre("exportar"+rut);
+            			if(Objects.isNull(existPermiso)) {
+            				nuevoPermiso.addUrl(ruta);
+            				nuevoPermiso.setNombre("exportar"+rut);
+            				nuevoPermiso.setMetodo(metodo);
+            			}else {
+            				nuevoPermiso = existPermiso;
+            			}
+            			nuevoPermiso = permisoRepo.save(nuevoPermiso);
             			Rutina existRutina = rutinaRepo.findByNombre(rut);
             			if(Objects.isNull(existRutina)) {
             				nuevaRutina.addRuta(nuevoPermiso);
@@ -103,18 +135,15 @@ public class UtilitiesApi {
             			}
             		}
             		if(metodo.equals("DELETE")) {
-            			rutaMethod += "{\"url\":\""+ruta+"\",\"eliminar\":\"false},";
-            			//System.out.println("buscando permiso "+ruta);
-            			Ruta existPermiso = permisoRepo.findByUrlAndNombre(ruta,"eliminar");
+            			Permiso existPermiso = permisoRepo.findByNombre("eliminar"+rut);
             			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("eliminar");
+            				nuevoPermiso.addUrl(ruta);
+            				nuevoPermiso.setNombre("eliminar"+rut);
             				nuevoPermiso.setMetodo(metodo);
             			}else {
             				nuevoPermiso = existPermiso;
             			}
             			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			//System.out.println("buscando rutina "+rut);
             			Rutina existRutina = rutinaRepo.findByNombre(rut);
             			if(Objects.isNull(existRutina)) {
             				nuevaRutina.addRuta(nuevoPermiso);
@@ -124,18 +153,15 @@ public class UtilitiesApi {
             			}
             		}
             		if(metodo.equals("PATCH")) {
-            			rutaMethod += "{\"url\":\""+ruta+"\",\"inhabilitar\":\"false},";
-            			//System.out.println("buscando permiso "+ruta);
-            			Ruta existPermiso = permisoRepo.findByUrlAndNombre(ruta,"inhabilitar");
+            			Permiso existPermiso = permisoRepo.findByNombre("inhabilitar"+rut);
             			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("inhabilitar");
+            				nuevoPermiso.addUrl(ruta);
+            				nuevoPermiso.setNombre("inhabilitar"+rut);
             				nuevoPermiso.setMetodo(metodo);
             			}else {
             				nuevoPermiso = existPermiso;
             			}
             			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			//System.out.println("buscando rutina "+rut);
             			Rutina existRutina = rutinaRepo.findByNombre(rut);
             			if(Objects.isNull(existRutina)) {
             				nuevaRutina.addRuta(nuevoPermiso);
@@ -145,43 +171,16 @@ public class UtilitiesApi {
             			}
             		}
             		if(metodo.equals("GET") && (!ruta.contains("id") || !ruta.contains("nit"))) {
-            			rutaMethod += "{\"url\":\""+ruta+"\",\"leer\":\"false},";
-            			//System.out.println("buscando permiso "+ruta);
-            			Ruta existPermiso = permisoRepo.findByUrlAndNombre(ruta,"autocompletar");
+            			Permiso existPermiso = permisoRepo.findByNombre("consultar"+rut);
             			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("autocompletar");
+            				nuevoPermiso.addUrl(ruta);
+            				nuevoPermiso.setNombre("consultar"+rut);
             				nuevoPermiso.setMetodo(metodo);
             			}else {
             				nuevoPermiso = existPermiso;
-            			}
-            			//System.out.println("Permiso: "+nuevoPermiso.getNombre());
-            			//System.out.println("guardando permiso");
-            			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			//System.out.println("buscando rutina "+rut);
-            			Rutina existRutina = rutinaRepo.findByNombre(rut);
-            			if(Objects.isNull(existRutina)) {
-            				//System.out.println("existe rutina");
-            				nuevaRutina.addRuta(nuevoPermiso);
-            			}else {
-            				//System.out.println("noexiste rutina");
-            				nuevaRutina = existRutina;
-            				nuevaRutina.addRuta(nuevoPermiso);
-            			}
-            		}
-            		if((ruta.contains("id") || ruta.contains("nit")) && metodo.equals("GET")){
-            			rutaMethod += "{\"url\":\""+ruta+"\",\"autocompletar\":\"false},";
-            			//System.out.println("buscando permiso "+ruta);
-            			Ruta existPermiso = permisoRepo.findByUrlAndNombre(ruta,"leer");
-            			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("leer");
-            				nuevoPermiso.setMetodo(metodo);
-            			}else {
-            				nuevoPermiso = existPermiso;
+            				nuevoPermiso.addUrl(ruta);
             			}
             			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			//System.out.println("buscando rutina "+rut);
             			Rutina existRutina = rutinaRepo.findByNombre(rut);
             			if(Objects.isNull(existRutina)) {
             				nuevaRutina.addRuta(nuevoPermiso);
@@ -190,19 +189,17 @@ public class UtilitiesApi {
             				nuevaRutina.addRuta(nuevoPermiso);
             			}
             		}
-            		if(metodo.equals("POST") && !ruta.contains("indexados") && !ruta.contains("descarga") && !ruta.contains("cargar")) {
-            			rutaMethod += "{\"url\":\""+ruta+"\",\"crear\":\"false},";
-            			//System.out.println("buscando permiso "+ruta);
-            			Ruta existPermiso = permisoRepo.findByUrlAndNombre(ruta,"crear");
+            		if((ruta.contains("id") || ruta.contains("nit")) && metodo.equals("GET"+rut)){
+            			Permiso existPermiso = permisoRepo.findByNombre("consultar");
             			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("crear");
+            				nuevoPermiso.addUrl(ruta);
+            				nuevoPermiso.setNombre("consultar"+rut);
             				nuevoPermiso.setMetodo(metodo);
             			}else {
             				nuevoPermiso = existPermiso;
+            				nuevoPermiso.addUrl(ruta);
             			}
             			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			//System.out.println("buscando rutina "+rut);
             			Rutina existRutina = rutinaRepo.findByNombre(rut);
             			if(Objects.isNull(existRutina)) {
             				nuevaRutina.addRuta(nuevoPermiso);
@@ -212,18 +209,16 @@ public class UtilitiesApi {
             			}
             		}
             		if(ruta.contains("indexados")) {
-        				rutaMethod += "{\"url\":\""+ruta+"\",\"listar\":\"false},";
-        				//System.out.println("buscando permiso "+ruta);
-        				Ruta existPermiso = permisoRepo.findByUrlAndNombre(ruta,"listar");
+            			Permiso existPermiso = permisoRepo.findByNombre("consultar"+rut);
             			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("listar");
+            				nuevoPermiso.addUrl(ruta);
+            				nuevoPermiso.setNombre("consultar"+rut);
             				nuevoPermiso.setMetodo(metodo);
             			}else {
             				nuevoPermiso = existPermiso;
+            				nuevoPermiso.addUrl(ruta);
             			}
             			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			//System.out.println("buscando rutina "+rut);
             			Rutina existRutina = rutinaRepo.findByNombre(rut);
             			if(Objects.isNull(existRutina)) {
             				nuevaRutina.addRuta(nuevoPermiso);
@@ -231,20 +226,17 @@ public class UtilitiesApi {
             				nuevaRutina = existRutina;
             				nuevaRutina.addRuta(nuevoPermiso);
             			}
-        			}
-            		if(ruta.contains("descarga")) {
-        				rutaMethod += "{\"url\":\""+ruta+"\",\"exportar\":\"false},";
-        				//System.out.println("buscando permiso "+ruta);
-        				Ruta existPermiso = permisoRepo.findByUrlAndNombre(ruta,"exportar");
+            		}
+            		if(metodo.equals("POST") && !ruta.contains("indexados") && !ruta.contains("descarga") && !ruta.contains("cargar")) {
+            			Permiso existPermiso = permisoRepo.findByNombre("crear"+rut);
             			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("exportar");
+            				nuevoPermiso.addUrl(ruta);
+            				nuevoPermiso.setNombre("crear"+rut);
             				nuevoPermiso.setMetodo(metodo);
             			}else {
             				nuevoPermiso = existPermiso;
             			}
             			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			//System.out.println("buscando rutina "+rut);
             			Rutina existRutina = rutinaRepo.findByNombre(rut);
             			if(Objects.isNull(existRutina)) {
             				nuevaRutina.addRuta(nuevoPermiso);
@@ -252,40 +244,13 @@ public class UtilitiesApi {
             				nuevaRutina = existRutina;
             				nuevaRutina.addRuta(nuevoPermiso);
             			}
-        			}
-            		if(ruta.contains("cargar")) {
-        				rutaMethod += "{\"url\":\""+ruta+"\",\"importar\":\"false},";
-        				//System.out.println("buscando permiso "+ruta);
-        				Ruta existPermiso = permisoRepo.findByUrlAndNombre(ruta,"importar");
-            			if(Objects.isNull(existPermiso)) {
-            				nuevoPermiso.setUrl(ruta);
-            				nuevoPermiso.setNombre("importar");
-            				nuevoPermiso.setMetodo(metodo);
-            			}else {
-            				nuevoPermiso = existPermiso;
-            			}
-            			nuevoPermiso = permisoRepo.save(nuevoPermiso);
-            			//System.out.println("buscando rutina "+rut);
-            			Rutina existRutina = rutinaRepo.findByNombre(rut);
-            			if(Objects.isNull(existRutina)) {
-            				nuevaRutina.addRuta(nuevoPermiso);
-            			}else {
-            				nuevaRutina = existRutina;
-            				nuevaRutina.addRuta(nuevoPermiso);
-            			}
-            			
-        			}
+            		}
             		
             	}
             	
 	        }
         	rutinaRepo.save(nuevaRutina);
-	        if(rutaMethod.length() > 0) {
-	        	stringRuina += rutaMethod.substring(0,rutaMethod.length()-1)+"]}";	        	
 	        }
-	        //System.out.println(stringRuina);
-	        arr.add(stringRuina);
 	     }
-        //System.out.println(arr);
-	}
+	
 }

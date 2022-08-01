@@ -3,6 +3,9 @@
  */
 package com.prueba.security.dto;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author Joan Leon
  *
@@ -11,7 +14,7 @@ public class PoliticaDTO {
 	
 	private Long idPolitica;
 
-	private String url;
+	private List<String> url;
 	
 	private String rol;
 	
@@ -28,11 +31,11 @@ public class PoliticaDTO {
 		this.idPolitica = idPolitica;
 	}
 
-	public String getUrl() {
+	public List<String> getUrl() {
 		return url;
 	}
 
-	public void setUrl(String url) {
+	public void setUrl(List<String> url) {
 		this.url = url;
 	}
 

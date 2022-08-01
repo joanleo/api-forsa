@@ -65,7 +65,7 @@ public class PoliticaServiceImp implements PoliticaService {
 					if(nuevaRutina.getNombre() == politicaRe.getDetalle().getRutina().getNombre()) {
 						PoliticaDTO politicaDTO= new PoliticaDTO();
 						String nombre = politicaRe.getDetalle().getRuta().getNombre();
-						String url = politicaRe.getDetalle().getRuta().getUrl();
+						List<String> url = politicaRe.getDetalle().getRuta().getUrl();
 						Long id = politicaRe.getIdPolitica();
 						Boolean permitido = politicaRe.getPermiso();
 						politicaDTO.setNombre(nombre);
