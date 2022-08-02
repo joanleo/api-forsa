@@ -22,7 +22,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.prueba.security.entity.Usuario;
@@ -48,6 +48,10 @@ public class Salida implements Serializable {
 	@Column(name = "vcnumdocumento")
 	public String numDocumento;
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "nidtipo_mov", nullable = false)
+	public TipoMov tipoMovimiento;
+	
 	@Column(name = "dfecha_Salida")
 	public Date fechaCreacion;
 
@@ -64,8 +68,8 @@ public class Salida implements Serializable {
 	@JoinColumn(name = "usuarioCrea", referencedColumnName = "nidusuario")
 	private Usuario usuarioCrea;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "salida", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
 	public List<DetalleSalida> detalles = new ArrayList<DetalleSalida>();
 
 	public Salida(Empresa empresa, Usuario usuarioCrea, List<DetalleSalida> detalles) {
@@ -131,6 +135,14 @@ public class Salida implements Serializable {
 
 	public void setDetalles(List<DetalleSalida> detalles) {
 		this.detalles = detalles;
+	}
+
+	public TipoMov getTipoMovimiento() {
+		return tipoMovimiento;
+	}
+
+	public void setTipoMovimiento(TipoMov tipoMovimiento) {
+		this.tipoMovimiento = tipoMovimiento;
 	}
 
 	public void addActivo(Producto producto) {

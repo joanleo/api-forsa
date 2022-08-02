@@ -59,5 +59,17 @@ public interface SalidaService {
 	 */
 	public Salida confirmarSalida(Integer idsalida);
 
+	/**
+	 * @param idsalida
+	 * @param nit
+	 */
+	public void eliminarSalida(Integer idsalida, Long nit);
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	public Salida obtieneSalida(Integer id);
+
 
 }

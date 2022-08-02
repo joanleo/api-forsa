@@ -15,6 +15,7 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.prueba.security.entity.Usuario;
 
@@ -34,6 +35,7 @@ public class DetalleSalida implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@MapsId("idSalida")
+	@JsonBackReference
 	private Salida salida;
 	
 	@ManyToOne(fetch = FetchType.EAGER)

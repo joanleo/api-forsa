@@ -15,12 +15,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.prueba.entity.DetalleSalida;
+import com.prueba.entity.DetalleTrasl;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Salida;
+import com.prueba.entity.TipoMov;
+import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.ProductoRepository;
 import com.prueba.repository.SalidaRepository;
+import com.prueba.repository.TipoMovRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.SalidaSpecifications;
@@ -44,6 +48,9 @@ public class SalidaServiceImp implements SalidaService {
 	@Autowired
 	private SalidaSpecifications salidaSpec;
 	
+	@Autowired
+	private TipoMovRepository tipoMovRepo;
+	
 	@Override
 	public Salida crearSalida(Salida salida) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -63,12 +70,23 @@ public class SalidaServiceImp implements SalidaService {
 			nuevaSalida.setUsuarioCrea(usuario);
 		}
 		
+		TipoMov tipomov = tipoMovRepo.findById(salida.getTipoMovimiento().getId())
+				.orElseThrow(() -> new ResourceNotFoundException("Tipo de Movimiento", "id", salida.getTipoMovimiento().getId()));
+		if(tipomov != null) {
+			nuevaSalida.setTipoMovimiento(tipomov);
+		}
+		
+		if(salida.getDetalles() != null) {
+			System.out.println(salida.getDetalles());
+		}
 		List<DetalleSalida> detalles = salida.getDetalles();
 		for(DetalleSalida detalle: detalles) {
+			System.out.println("codigo de pieza: "+detalle.getProducto().getCodigoPieza());
 			Producto activo = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
 			if(Objects.isNull(activo)) {
 				throw new ResourceNotFoundException("activo", "codigo de pieza", detalle.getProducto().getCodigoPieza());
 			}
+			System.out.println(activo.getDescripcion());
 			nuevaSalida.addActivo(activo);
 		}
 		
@@ -140,6 +158,47 @@ public class SalidaServiceImp implements SalidaService {
 		}
 		
 		return salidaRepo.findByIdSalida(idsalida);
+	}
+
+	@Override
+	public void eliminarSalida(Integer idsalida, Long nit) throws ResourceCannotBeDeleted{
+		Salida salida = salidaRepo.findByIdSalida(idsalida);
+		if(Objects.isNull(salida)) {
+			throw new ResourceNotFoundException("Salida", "id", String.valueOf(idsalida));
+		}
+		List<DetalleSalida> detalles = salida.getDetalles();
+		for(DetalleSalida detalle:detalles) {
+				Producto activoEliminar = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
+				if(!activoEliminar.getEstaActivo()) {
+					throw new ResourceCannotBeDeleted("Salida");
+				}
+				if(activoEliminar.getEstadoTraslado().equalsIgnoreCase("F")) {
+					List<DetalleTrasl> lista = activoEliminar.getDetalles();
+					if(!lista.get(0).getTraslado().getEstadoTraslado().equalsIgnoreCase("F")) {
+						throw new ResourceCannotBeDeleted("Salida");
+					}
+				}
+		}
+		for(DetalleSalida detalle:detalles) {
+			Producto activoEliminar = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
+			salida.removeActivo(activoEliminar);
+		}
+		salida.setEmpresa(null);
+		salida.setFechaCreacion(null);
+		//salida.setIdSalida(null);
+		salida.setNumDocumento(null);
+		salida.setTipoMovimiento(null);
+		salida.setUsuarioCrea(null);
+		salidaRepo.delete(salida);
+	}
+
+	@Override
+	public Salida obtieneSalida(Integer id) {
+		Salida salida = salidaRepo.findByIdSalida(id);
+		if(Objects.isNull(salida)) {
+			throw new ResourceNotFoundException("Salida", "id", String.valueOf(id));
+		}
+		return salida;
 	}
 
 

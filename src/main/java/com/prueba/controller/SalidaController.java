@@ -3,8 +3,14 @@
  */
 package com.prueba.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,12 +28,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lowagie.text.DocumentException;
 import com.prueba.dto.ApiResponse;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Salida;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.service.SalidaService;
+import com.prueba.util.ReporteSalidaPDF;
 import com.prueba.util.UtilitiesApi;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,6 +66,7 @@ public class SalidaController {
 	}
 	
 	@GetMapping
+	@Operation(summary = "Obtiene una lista de salidas")
 	public List<Salida> obtenerSalidas(
 			@RequestParam(required=false)String letras,
 			@RequestParam(required=false) Long nit){
@@ -75,7 +84,15 @@ public class SalidaController {
 		return salidaService.buscarSalidas(letras, empresa);
 	}
 	
+	public ResponseEntity<Salida> obtenerSalida(@RequestParam Integer idsalida){
+		
+		Salida salida = salidaService.obtieneSalida(idsalida);
+		
+		return ResponseEntity.ok(salida);
+	}
+	
 	@GetMapping("/indexados")
+	@Operation(summary = "Pagina las salidas existentes")
 	public ApiResponse<Page<Salida>> obtenerSalidasPaginado(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -120,6 +137,29 @@ public class SalidaController {
 		Salida salida = salidaService.confirmarSalida(idsalida);
 		
 		return new ResponseEntity<Salida>(salida, HttpStatus.OK);
+	}
+	
+	@GetMapping("/detalle/{idsalida}")
+	public ResponseEntity<Salida> getInventario(@PathVariable Integer idsalida){
+		return ResponseEntity.ok(salidaService.obtieneSalida(idsalida));
+	}
+	
+	@GetMapping("/detalle/{idsalida}/descarga")
+	@Operation(summary = "Retorna una salida en formato PDF", description = "Retorna una salida con detalle segun el numero de salida")
+	public void exportToPdfSlida(HttpServletResponse response,
+			@PathVariable Integer idsalida) throws DocumentException, IOException{
+		
+		response.setContentType("application/pdf");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=reporteSalida_" + idsalida + "_" + currentDateTime + ".pdf";
+		response.setHeader(headerKey, headerValue);
+		
+		Salida salida = salidaService.obtieneSalida(idsalida);
+		System.out.println(salida);
+		ReporteSalidaPDF exportar = new ReporteSalidaPDF(salida);
+		exportar.export(response);
 	}
 
 }
