@@ -26,6 +26,7 @@ import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.util.UtilitiesApi;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 
@@ -33,7 +34,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Hidden
 @RestController
 @RequestMapping("/auth")
-//@Api(tags = "Autenticacion", description = "Operaciones de autenticacion y registro de usuarios")
 @Tag(name = "Autenticacion", description = "Operaciones de autenticacion y registro de usuarios")
 public class AuthController {
 
@@ -56,7 +56,7 @@ public class AuthController {
 	private UtilitiesApi util;
 	
 	@PostMapping("/login")
-	//@ApiOperation(value = "Autenticacion de usuarios")
+	@Operation(summary = "Autenticacion de usuarios")
 	public ResponseEntity<JWTAuthResonseDTO> authenticateUser(@RequestBody LoginDTO loginDTO){
 		System.out.println("ingreso");
 		Authentication autentication = authenticationMnager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUsernameOrEmail(), loginDTO.getPassword()));
@@ -64,9 +64,7 @@ public class AuthController {
 		SecurityContextHolder.getContext().setAuthentication(autentication);
 		
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(loginDTO.getUsernameOrEmail(), loginDTO.getUsernameOrEmail()).get();
-		System.out.println(usuario.getEmpresa());
-		System.out.println(autentication);
-		
+
 		//Obtenemos el token
 		String token = jwtTokenProvider.generarToken(autentication, usuario.getNombre());
 		
@@ -77,7 +75,7 @@ public class AuthController {
 	}
 	
 	@PostMapping("/register")
-	//@ApiOperation(value = "Registro de usuarios")
+	@Operation(summary = "Registro de usuarios")
 	public ResponseEntity<?> registrarUsuario(@RequestBody RegistroDTO registroDTO){
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

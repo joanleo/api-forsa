@@ -4,7 +4,6 @@
 package com.prueba.security.dto;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Joan Leon
