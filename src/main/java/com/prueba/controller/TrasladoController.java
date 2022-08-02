@@ -26,7 +26,6 @@ import com.prueba.entity.Traslado;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.service.TrasladoService;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -48,7 +47,8 @@ public class TrasladoController {
 		return new ResponseEntity<>(trasladoService.create(trasladoDTO), HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/indexados")
+	@PostMapping("/indexados")
+	@Operation(summary = "Encuentra los traslados")
 	public ApiResponse<Page<Traslado>> listaPaginada(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -94,14 +94,14 @@ public class TrasladoController {
 			return new ResponseEntity<Traslado>(traslado, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<String>("Hubo un error", HttpStatus.CONFLICT);
+			return new ResponseEntity<ResDTO>(new ResDTO("Hubo un error"), HttpStatus.CONFLICT);
 		}
 		
 		
 	}
 	
 	@PatchMapping("/{idtraslado}")
-	@Operation(summary = "Confirma una pieza de un traslado")
+	@Operation(summary = "Confirma todas las piezas de un traslado")
 	public ResponseEntity<?> confirmarTodo(@PathVariable Long idtraslado,
 											@RequestParam(required=false) Long nit){
 		
@@ -129,7 +129,7 @@ public class TrasladoController {
 	}
 	
 	@PutMapping("/{idtraslado}")
-	@Operation(summary = "Recibe una pieza de un traslado")
+	@Operation(summary = "Recibe todas las pieza de un traslado")
 	public ResponseEntity<?> recibirTodo(@PathVariable Long idtraslado,
 											@RequestParam(required=false) Long nit){
 								
@@ -138,22 +138,23 @@ public class TrasladoController {
 		return new ResponseEntity<Traslado>(traslado, HttpStatus.OK);
 	}
 	
-	@Hidden
-	@DeleteMapping("/{idtraslado}/{codigopieza}")
+	@PatchMapping("eliminar/{idtraslado}")
+	@Operation(summary = "Eliminar piezas de un traslado", description = "Elimina una pieza de un traslado o elimina todas las piezas de un traslado")
 	public ResponseEntity<?> eliminarPieza(@PathVariable Long idtraslado,
-										   @PathVariable String codigopieza,
+										   @RequestParam String codigopieza,
 										   @RequestParam(required=false) Long nit){
-		trasladoService.eliminarPieza(idtraslado, codigopieza);
-		return new ResponseEntity<ResDTO>(new ResDTO("Activo eliminado del traslado con exito"), HttpStatus.OK);
-	}
-	
-	@Hidden
-	@DeleteMapping("/{idtraslado}/verificar aun no se confirma este endpoint")
-	public ResponseEntity<?> eliminarTodo(@PathVariable Long idtraslado,
-										   @RequestParam(required=false) Long nit){
+		if(codigopieza != null) {
+			trasladoService.eliminarPieza(idtraslado, codigopieza);			
+			return new ResponseEntity<ResDTO>(new ResDTO("Activo eliminado del traslado con exito"), HttpStatus.OK);
+		}
 		trasladoService.eliminarTodo(idtraslado);
 		return new ResponseEntity<ResDTO>(new ResDTO("Activos eliminados del traslado con exito"), HttpStatus.OK);
-		}
+	}
+	
+	/*@PatchMapping("/{idtraslado}/verificar aun no se confirma este endpoint")
+	public ResponseEntity<?> eliminarTodo(@PathVariable Long idtraslado,
+										   @RequestParam(required=false) Long nit){
+		}*/
 
 	@DeleteMapping("/{idtraslado}")
 	public ResponseEntity<?> eliminarTraslado(@PathVariable Long idtraslado,

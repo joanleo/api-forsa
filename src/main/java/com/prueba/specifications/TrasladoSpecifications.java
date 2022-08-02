@@ -21,7 +21,7 @@ import com.prueba.entity.Traslado;
 @Component
 public class TrasladoSpecifications {
 	
-	public Specification<Traslado> obtenerTraslados(TrasladoDTO trasladoDTO, String orden){
+	public Specification<Traslado> obtenerTraslados(TrasladoDTO trasladoDTO /*String orden*/){
 		return (root, query, criteryBuilder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 			

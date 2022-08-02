@@ -30,6 +30,7 @@ import com.prueba.repository.TrasladoRepository;
 import com.prueba.repository.UbicacionRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
+import com.prueba.specifications.TrasladoSpecifications;
 import com.prueba.util.UtilitiesApi;
 
 @Service
@@ -52,6 +53,9 @@ public class TrasladoServiceImpl implements TrasladoService {
 	
 	@Autowired
 	private UtilitiesApi util;
+	
+	@Autowired
+	private TrasladoSpecifications trasladoSpec;
 
 	@Override
 	public TrasladoDTO create(TrasladoDTO trasladoDTO) {
@@ -343,16 +347,21 @@ public class TrasladoServiceImpl implements TrasladoService {
 	@Override
 	public Page<Traslado> buscarTraslados(Integer pagina, Integer items) {
 		if(items == 0) {
-			Page<Traslado> traslados = trasladoRepo.findAll(PageRequest.of(pagina, items));
+			Page<Traslado> traslados = trasladoRepo.findAll(PageRequest.of(0, 10));
 			return traslados;
 		}
-		return null;
+		Page<Traslado> traslados = trasladoRepo.findAll(PageRequest.of(pagina, items));
+		return traslados;
 	}
 
 	@Override
 	public Page<Traslado> buscarTraslados(TrasladoDTO trasladoDTO, Integer pagina, Integer items) {
-		// TODO Auto-generated method stub
-		return null;
+		if(items == 0) {
+			Page<Traslado> traslados = trasladoRepo.findAll(trasladoSpec.obtenerTraslados(trasladoDTO), PageRequest.of(0, 10));
+			return traslados;
+		}
+		Page<Traslado> traslados = trasladoRepo.findAll(trasladoSpec.obtenerTraslados(trasladoDTO),PageRequest.of(pagina, items));
+		return traslados;
 	}
 
 	@Override

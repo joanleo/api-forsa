@@ -66,7 +66,6 @@ public class Traslado implements Serializable {
 	@Column(name = "ncantActivos")
 	public int cantActivos;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "traslado", cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<DetalleTrasl> detalles = new ArrayList<DetalleTrasl>();
 

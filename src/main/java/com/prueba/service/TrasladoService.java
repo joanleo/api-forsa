@@ -59,6 +59,7 @@ public interface TrasladoService {
 	/**
 	 * 
 	 * @param idtraslado
+	 * @param nit 
 	 */
 	public void eliminarTraslado(Long idtraslado, Long nit);
 
