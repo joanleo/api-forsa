@@ -1,7 +1,13 @@
 package com.prueba.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Objects;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +26,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lowagie.text.DocumentException;
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.TrasladoDTO;
 import com.prueba.entity.Traslado;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.service.TrasladoService;
+import com.prueba.util.ReporteTrasladoPDF;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -161,6 +169,23 @@ public class TrasladoController {
 			   @RequestParam(required=false) Long nit){
 		trasladoService.eliminarTraslado(idtraslado, nit);
 		return new ResponseEntity<ResDTO>(new ResDTO("Traslado eliminado con exito"), HttpStatus.OK);
+	}
+	
+	@GetMapping("/detalle/{idtraslado}/descarga")
+	@Operation(summary = "Retorna un traslado en formato PDF", description = "Retorna un traslado con detalle segun el numero del traslado")
+	public void exportToPdfSlida(HttpServletResponse response,
+			@PathVariable Long idtraslado) throws DocumentException, IOException{
+		
+		response.setContentType("application/pdf");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=reporteTraslado_" + idtraslado + "_" + currentDateTime + ".pdf";
+		response.setHeader(headerKey, headerValue);
+		
+		Traslado traslado = trasladoService.getTraslado(idtraslado);
+		ReporteTrasladoPDF exportar = new ReporteTrasladoPDF(traslado);
+		exportar.export(response);
 	}
 	
 }

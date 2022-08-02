@@ -14,10 +14,16 @@ public interface MovInventarioService {
 
 	//Page<MovInventario> list(Integer pagina, Integer items);
 
-	MovInventario getInventario(Long id);
+	//MovInventario getInventario(Long id);
 
 	Page<MovInventario> searchInv(String letras, Empresa empresa, Integer pagina, Integer items);
 
 	Page<MovInventario> list(Empresa empresa, Integer pagina, Integer items);
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	MovInventario getInventario(Integer id);
 
 }

@@ -101,7 +101,7 @@ public class ProductoController {
 	
 	@GetMapping
 	//@ApiOperation(value = "Encuentra los activos", notes = "Retorna los activos que contengan las letras indicadas, retorna todos los activos si no se indica ninguna letra, se puede indicar o no los parametros de la paginacion")
-	public ApiResponse<Page<Producto>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+	public List<Producto> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 											@RequestParam(required=false, defaultValue = "0") Integer items,
 											@RequestParam(required=false) String letras,
 											@RequestParam(required=false) Long nit){
@@ -116,11 +116,11 @@ public class ProductoController {
 		}
 		
 		if(letras != null) {
-			Page<Producto> productos = productoService.searchProducts(empresa, letras, pagina, items);
-			return new ApiResponse<>(productos.getSize(), productos);
+			List<Producto> productos = productoService.searchProducts(letras, empresa);
+			return  productos;
 		}else {
-			Page<Producto> productos = productoService.list(empresa, pagina, items);
-			return new ApiResponse<>(productos.getSize(), productos);
+			List<Producto> productos = productoService.list(empresa);
+			return productos;
 		}
 	}
 	

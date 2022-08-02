@@ -1,7 +1,7 @@
  package com.prueba.service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,31 +36,29 @@ public class MovInventarioServiceImp implements MovInventarioService {
 	
 	@Override
 	public MovInventarioDTO create(MovInventarioDTO movInventarioDto) {
-		Optional<MovInventario> exist = movInvRepo.findById(movInventarioDto.getId());
-		if(exist.isEmpty()) {
-			MovInventario inventario = new MovInventario();
-			Ubicacion ubicacion = ubicacionRepo.findById(movInventarioDto.getUbicacion().getId())
-					.orElseThrow(() -> new ResourceNotFoundException("Ubicacion", "Id", movInventarioDto.getUbicacion().getId())); 
-			inventario.setUbicacion(ubicacion);
-			inventario.setIdMov(movInventarioDto.getId());;
-			inventario.setRealizo(movInventarioDto.getRealizo());
-			inventario.setEmpresa(movInventarioDto.getEmpresa());
-			List<Producto> productos = movInventarioDto.getProductos();
+		
+		MovInventario inventario = new MovInventario();
+		Ubicacion ubicacion = ubicacionRepo.findById(movInventarioDto.getUbicacion().getId())
+				.orElseThrow(() -> new ResourceNotFoundException("Ubicacion", "Id", movInventarioDto.getUbicacion().getId())); 
+		inventario.setUbicacion(ubicacion);
+		inventario.setRealizo(movInventarioDto.getRealizo());
+		inventario.setEmpresa(movInventarioDto.getEmpresa());
+		inventario = movInvRepo.save(inventario);
+		List<Producto> productos = movInventarioDto.getProductos();
+		Integer idInventario = inventario.getIdMov();
+		MovInventario actualizar = movInvRepo.findByidMov(idInventario);
+		for(Producto producto: productos) {
+			System.out.println(producto);
+			Producto activo = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
+			if(activo != null) {
+				actualizar.addActivo(activo);
+			}else {
+				throw new ResourceNotFoundException("Activo", "codigo de pieza", producto.getCodigoPieza());
+			}
 			
-			for(Producto producto: productos) {
-				System.out.println(producto);
-				Producto actualizar = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
-				if(actualizar != null) {
-					inventario.addActivo(actualizar);
-				}else {
-					throw new ResourceNotFoundException("Activo", "codigo de pieza", producto.getCodigoPieza());
-				}
-				
-			}			
-			movInvRepo.save(inventario);
-		}else {
-			throw new ResourceNotFoundException("Inventario", "id", movInventarioDto.getId());
-		}
+		}			
+		actualizar = movInvRepo.save(actualizar);
+
 		
 
 		return movInventarioDto;
@@ -82,11 +80,16 @@ public class MovInventarioServiceImp implements MovInventarioService {
 	}
 
 	@Override
-	public MovInventario getInventario(Long id) {
+	public MovInventario getInventario(Integer id) {
 
-		MovInventario inventario = movInvRepo.findById(id)
-									.orElseThrow(()-> new ResourceNotFoundException("inventario", "id", id));
+		MovInventario inventario = movInvRepo.findByidMov(id);
+		if(Objects.isNull(inventario)) {
+			throw new ResourceNotFoundException("inventario", "id", id.toString());
+			
+		}
 		return inventario;
 	}
+
+
 
 }

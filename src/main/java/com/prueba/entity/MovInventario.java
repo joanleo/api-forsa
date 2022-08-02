@@ -37,16 +37,17 @@ import com.prueba.security.entity.Usuario;
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class MovInventario implements Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
+	private static int countBase = 0;
+	
 	@Id
 	@Column(name = "nidmov", length = 6)
-	private Long idMov;
+	private Integer idMov;
 	
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Column(name = "vcnumdocumento")
+	public String numDocumento;
+	
 	@Column(name = "dfecha")
 	private Date fecha;
 	
@@ -81,10 +82,6 @@ public class MovInventario implements Serializable{
 		this.realizo = realizo;
 	}
 
-	public MovInventario() {
-		super();
-	}
-
 	public Ubicacion getUbicacion() {
 		return ubicacion;
 	}
@@ -93,11 +90,11 @@ public class MovInventario implements Serializable{
 		this.ubicacion = ubicacion;
 	}
 
-	public Long getIdMov() {
+	public Integer getIdMov() {
 		return idMov;
 	}
 
-	public void setIdMov(Long idMov) {
+	public void setIdMov(Integer idMov) {
 		this.idMov = idMov;
 	}
 
@@ -125,6 +122,14 @@ public class MovInventario implements Serializable{
 		this.empresa = empresa;
 	}
 
+	public String getNumDocumento() {
+		return numDocumento;
+	}
+
+	public void setNumDocumento(String numDocumento) {
+		this.numDocumento = numDocumento;
+	}
+
 	public void addActivo(Producto producto) {
         DetalleInv detalle = new DetalleInv(this, producto);
         System.out.println("Añadiento detalle "+producto.getCodigoPieza()+" Inventario: "+this.getIdMov());
@@ -149,12 +154,21 @@ public class MovInventario implements Serializable{
 	public MovInventario(Long idMov, Date fecha, Ubicacion ubicacion, List<DetalleInv> detalles, Usuario realizo,
 			Empresa empresa) {
 		super();
-		this.idMov = idMov;
+		MovInventario.countBase +=1;
+		this.idMov = countBase;
+		this.numDocumento = "INV-" + String.valueOf(countBase);
 		this.fecha = fecha;
 		this.ubicacion = ubicacion;
 		this.detalles = detalles;
 		this.realizo = realizo;
 		this.empresa = empresa;
+	}
+
+	public MovInventario() {
+		super();
+		MovInventario.countBase +=1;
+		this.idMov = countBase;
+		this.numDocumento = "INV-" + String.valueOf(countBase);
 	}
 
 	

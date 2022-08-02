@@ -30,7 +30,7 @@ public interface ProductoService {
 	
 	public List<Producto> searchProducts(SearchDTO searchDTO, Empresa empresa);
 	
-	public Page<Producto> searchProducts(Empresa empresa, String letra, int offset, int pageSize);
+	//public Page<Producto> searchProducts(Empresa empresa, String letra, int offset, int pageSize);
 	
 	public List<Producto> searchProducts(String letras, Empresa empresa);
 	
@@ -41,4 +41,10 @@ public interface ProductoService {
 	public Page<Producto> getVerificacion(String orden, String filtro, Empresa empresa, int offset, int pageSize);
 
 	public List<Producto> getVerificacion(String orden, String filtro, Empresa empresa);
+
+	/**
+	 * @param empresa
+	 * @return
+	 */
+	public List<Producto> list(Empresa empresa);
 }

@@ -9,7 +9,7 @@ import com.prueba.security.entity.Usuario;
 
 public class MovInventarioDTO {
 	
-	private Long id;
+	private Integer id;
 	
 	private Ubicacion ubicacion;
 	
@@ -27,11 +27,11 @@ public class MovInventarioDTO {
 		this.realizo = realizo;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

@@ -9,7 +9,7 @@ import com.prueba.entity.Empresa;
 import com.prueba.entity.MovInventario;
 import com.prueba.security.entity.Usuario;
 
-public interface MovInventarioRepository extends JpaRepository<MovInventario, Long>, JpaSpecificationExecutor<MovInventario> {
+public interface MovInventarioRepository extends JpaRepository<MovInventario, Integer>, JpaSpecificationExecutor<MovInventario> {
 
 	Page<MovInventario> findByEmpresa(Empresa empresa, Pageable page);
 
@@ -18,5 +18,11 @@ public interface MovInventarioRepository extends JpaRepository<MovInventario, Lo
 	 * @return
 	 */
 	MovInventario findByRealizo(Usuario usuario);
+
+	/**
+	 * @param idMov
+	 * @return
+	 */
+	MovInventario findByidMov(Integer idMov);
 	
 }

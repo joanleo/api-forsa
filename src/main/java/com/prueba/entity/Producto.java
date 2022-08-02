@@ -1,6 +1,8 @@
 package com.prueba.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,11 +11,14 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.prueba.security.entity.Usuario;
 
@@ -58,10 +63,20 @@ public class Producto{
     @Column(name = "vcmotivoIngreso")
     private String motivoIngreso = "Compra";
     
-    @UpdateTimestamp
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    //@UpdateTimestamp
 	@Column(name = "dupdatefecha")
 	private Date fechaActualizacion;
     
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "dfechacreacion")
+    private Date fechaCreacion;
+    
+    @PrePersist
+	private void onCreate() {
+    	fechaCreacion = new Date();
+	}
+    	
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitfabricante")
     private Fabricante fabricante;
@@ -94,7 +109,9 @@ public class Producto{
     @Column(name = "vcestadotraslado")
 	public String estadoTraslado;
     
-    
+    @JsonIgnore
+	@OneToMany(mappedBy = "traslado", cascade = CascadeType.ALL, orphanRemoval = true)
+	public List<DetalleTrasl> detalles = new ArrayList<DetalleTrasl>();
 	
 	public String getCodigoPieza() {
 		return codigoPieza;
@@ -254,13 +271,24 @@ public class Producto{
 
 	public void setEstadoTraslado(String estadoTraslado) {
 		this.estadoTraslado = estadoTraslado;
+	}	
+	
+
+	public List<DetalleTrasl> getDetalles() {
+		return detalles;
 	}
-	
-	
-	
+
+	public void setDetalles(List<DetalleTrasl> detalles) {
+		this.detalles = detalles;
+	}
 
 	public Producto() {
 		super();
+	}
+
+	public Producto(String codigoPieza) {
+		super();
+		this.codigoPieza = codigoPieza;
 	}
 
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
@@ -377,6 +405,17 @@ public class Producto{
 		this.reviso = reviso;
 		this.medidas = medidas;
 		this.enviado = enviado;
+	}
+
+	@Override
+	public String toString() {
+		return "Producto [codigoPieza=" + codigoPieza + ", descripcion=" + descripcion + ", area=" + area + ", orden="
+				+ orden + ", familia=" + familia + ", tipo=" + tipo + ", nconfirmacion=" + nconfirmacion
+				+ ", verificado=" + verificado + ", estaActivo=" + estaActivo + ", motivoIngreso=" + motivoIngreso
+				+ ", fechaActualizacion=" + fechaActualizacion + ", fechaCreacion=" + fechaCreacion + ", fabricante="
+				+ fabricante + ", empresa=" + empresa + ", estado=" + estado + ", ubicacion=" + ubicacion
+				+ ", importado=" + importado + ", reviso=" + reviso + ", medidas=" + medidas + ", enviado=" + enviado
+				+ ", estadoTraslado=" + estadoTraslado + ", detalles=" + detalles + "]";
 	}
 
 	    

@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package com.prueba.util;
 
 import java.awt.Color;
@@ -20,20 +23,26 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import com.prueba.entity.DetalleInv;
-import com.prueba.entity.MovInventario;
+import com.prueba.entity.DetalleSalida;
 import com.prueba.entity.Producto;
+import com.prueba.entity.Salida;
+import com.prueba.entity.TipoMov;
 
-public class ReporteInventarioPDF {
-	
-	private MovInventario inventario;
+/**
+ * @author Joan Leon
+ *
+ */
+public class ReporteSalidaPDF {
 
-	public ReporteInventarioPDF(MovInventario inventario) {
+	private Salida salida;
+
+	public ReporteSalidaPDF(Salida salida) {
 		super();
-		this.inventario = inventario;
+		this.salida = salida;
 	}
 	
 	private void tableHeader(PdfPTable table) {
+		
 		PdfPCell cell = new PdfPCell();
 	 	cell.setBackgroundColor(new Color(46,60,115));
         cell.setPadding(5);
@@ -53,49 +62,29 @@ public class ReporteInventarioPDF {
          
         cell.setPhrase(new Phrase("Nombre", font));
         table.addCell(cell);
-         
-        cell.setPhrase(new Phrase("Área", font));
-        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        
+        cell.setPhrase(new Phrase("Tipo Mov", font));
         table.addCell(cell);
-         
-        //cell.setPhrase(new Phrase("Empresa", font));
-        //table.addCell(cell);
-         
-        cell.setPhrase(new Phrase("Estado", font));
+        
+        cell.setPhrase(new Phrase("Confirmado por", font));
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-        table.addCell(cell);
-        
-        cell.setPhrase(new Phrase("Fabricante", font));
-        table.addCell(cell);
-        
-        cell.setPhrase(new Phrase("Familia", font));
-        table.addCell(cell);
-        
-        //cell.setPhrase(new Phrase("Órden", font));
-        //table.addCell(cell);
-        
-        cell.setPhrase(new Phrase("Ubicación", font));
-        table.addCell(cell);
-        
-        //cell.setPhrase(new Phrase("Motivo ingreso", font));
-        //table.addCell(cell);
-        
-        cell.setPhrase(new Phrase("Activo", font));
-        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(cell);
-        
-        cell.setPhrase(new Phrase("Verificado", font));
         table.addCell(cell);
 	}
 	
 	private void tableData(PdfPTable table) {
-		List<DetalleInv> detalles = inventario.getDetalles();
+		List<DetalleSalida> detalles = salida.getDetalles();
+		TipoMov tipom = salida.getTipoMovimiento();
 		int count = 1;
-		for(DetalleInv detalle: detalles) {
+		for(DetalleSalida detalle: detalles) {
 			Font font = FontFactory.getFont(FontFactory.HELVETICA);
 			font.setSize(8);
 			
 			Producto producto = detalle.getProducto();
+			String usuario = "Sin confirmar";
+			if(detalle.getUsuarioConfirma() != null) {
+				usuario = salida.getUsuarioCrea().getNombre();				
+			}
+			
 			
 			Phrase phrase = new Phrase(String.valueOf(count), font);
 			PdfPCell cell = new PdfPCell(phrase);
@@ -107,54 +96,25 @@ public class ReporteInventarioPDF {
 			cell = new PdfPCell(phrase);
 			table.addCell(cell);
 			
-			phrase = new Phrase(producto.getDescripcion(), font);
-			cell = new PdfPCell(phrase);
-			table.addCell(cell);
-			
-			phrase = new Phrase(String.format("%.2f",producto.getArea()), font);
-			cell.setPhrase(phrase);
-			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-			table.addCell(cell);
-			
-			//table.addCell(producto.getEmpresa().getNombre());
-			
-			phrase = new Phrase(producto.getEstado() == null ? " ":producto.getEstado().getTipo(), font);
-			cell = new PdfPCell(phrase);
-			table.addCell(cell);
-			
 			phrase = new Phrase(producto.getFabricante().getNombre(), font);
 			cell = new PdfPCell(phrase);
 			table.addCell(cell);
 			
-			phrase = new Phrase(producto.getFamilia().getNombre(), font);
+			phrase = new Phrase(tipom.getNombre(), font);
 			cell = new PdfPCell(phrase);
 			table.addCell(cell);
-			
-			//table.addCell(producto.getOrden());
-			
-			phrase = new Phrase(producto.getUbicacion().getNombre(), font);
+
+			phrase = new Phrase(usuario, font);
 			cell = new PdfPCell(phrase);
 			table.addCell(cell);
-			
-			//table.addCell(producto.getMotivoIngreso());
-			phrase = new Phrase(String.valueOf(producto.getEstaActivo()) == "true" ? "Si": "No", font);
-			cell.setPhrase(phrase);
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(cell);
-			
-			phrase = new Phrase(String.valueOf(producto.getVerificado()) == "true" ? "Si": "No", font);
-			cell.setPhrase(phrase);
-			table.addCell(cell);
-			//table.setHorizontalAlignment(count);
 			
 			count++;
 		}
-		
 	}
-
+	
 	public void export(HttpServletResponse response) throws DocumentException, IOException {
 		
-		Document documento = new Document(PageSize.LETTER.rotate());
+		Document documento = new Document(PageSize.LETTER);
 		PdfWriter.getInstance(documento, response.getOutputStream());
 		
 		documento.setMargins(30, 20, 20, 20);
@@ -165,7 +125,7 @@ public class ReporteInventarioPDF {
         font.setSize(18);
         font.setColor(new Color(226,119,12));
          
-        Paragraph titulo = new Paragraph("REPORTE DE INVENTARIO", font);
+        Paragraph titulo = new Paragraph("REPORTE DE SALIDA", font);
         titulo.setAlignment(Paragraph.ALIGN_CENTER);
         titulo.setSpacingBefore(20);
         
@@ -174,23 +134,22 @@ public class ReporteInventarioPDF {
         Paragraph fechaCreacion = new Paragraph("Fecha de creacion: " + currentDateTime, font1);
         fechaCreacion.setAlignment(Paragraph.ALIGN_RIGHT);
         
-        Paragraph porden =  new Paragraph("REALIZADO POR: " + inventario.getRealizo().getNombre().toUpperCase() + "         DOCUMENTO: " + inventario.getNumDocumento().toUpperCase(), font1);
+        Paragraph porden =  new Paragraph("REALIZADO POR: " + salida.getUsuarioCrea().getNombre().toUpperCase() + "         DOCUMENTO: " + salida.getNumDocumento().toUpperCase(), font1);
         porden.setAlignment(Paragraph.ALIGN_LEFT);
         porden.setSpacingBefore(30);
         
-        Paragraph cantidad = new Paragraph("Total [" + inventario.getDetalles().size() + "]");
+        Paragraph cantidad = new Paragraph("Total [" + salida.getDetalles().size() + "]");
         cantidad.setAlignment(Paragraph.ALIGN_RIGHT);
         cantidad.setSpacingBefore(20);
-		
         
         documento.add(fechaCreacion);
         documento.add(titulo);
         documento.add(porden);
         documento.add(cantidad);
         
-        PdfPTable table = new PdfPTable(10);
+        PdfPTable table = new PdfPTable(5);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[] {0.6f, 2.0f, 2.0f, 0.8f, 1.5f, 2.0f, 2.0f, 2.0f, 0.7f, 1.0f});
+        //table.setWidths(new float[] {0.6f, 2.0f, 2.0f, 0.8f, 1.5f, 2.0f, 2.0f, 2.0f, 0.7f, 1.0f});
         table.setSpacingBefore(10);
          
         tableHeader(table);
@@ -200,5 +159,6 @@ public class ReporteInventarioPDF {
         
         documento.close();
 	}
-
+	
+	
 }

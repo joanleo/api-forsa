@@ -34,6 +34,7 @@ import com.prueba.service.MovInventarioService;
 import com.prueba.util.ReporteInventarioPDF;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 
@@ -41,7 +42,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/inventarios")
-//@Api(tags = "Inventarios", description = "Operaciones referentes a los inventarios")
 @Tag(name = "Inventarios", description = "Operaciones referentes a los inventarios")
 public class MovInvController {
 	
@@ -55,10 +55,9 @@ public class MovInvController {
 	private UtilitiesApi util;
 	
 	@PostMapping
-	//@ApiOperation(value = "Crea un inventario", notes = "Crea un nuevo inventario")
+	@Operation(summary = "Crea un inventario", description = "Crea un nuevo inventario")
 	public ResponseEntity<MovInventarioDTO> create(@RequestBody MovInventarioDTO movInventarioDto,
 													@RequestParam(required=false) Long nit){
-		System.out.println(movInventarioDto.getUbicacion().getId());
 
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -69,23 +68,19 @@ public class MovInvController {
 		}else {
 			empresa = usuario.getEmpresa();			
 		}
-		System.out.println(usuario);
-		movInventarioDto.setRealizo(usuario);
+		if(movInventarioDto.getRealizo() == null) {
+			movInventarioDto.setRealizo(usuario);			
+		}
 		if(movInventarioDto.getEmpresa() == null) {
 			movInventarioDto.setEmpresa(empresa);
 		}
-		if(movInventarioDto.getId() == null) {
-			DateFormat dateFormatter = new SimpleDateFormat("yyyyMMddHHmmss");
-			String currentDateTime = dateFormatter.format(new Date());
-			movInventarioDto.setId(Long.valueOf(currentDateTime));
-		}
-		System.out.println(movInventarioDto.getEmpresa().getNit());
+
 		return new ResponseEntity<MovInventarioDTO>(movInvService.create(movInventarioDto), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	//@ApiOperation(value = "Lista los inventarios existentes", notes = "Retorna los inventarios que se encuentren en el rango de fechas dado (formato de fecha 'yyyy-MM-dd') o que en su nombre "
-	//		+ "	contenga los valores  indicadas en la variable letras. Si no se incluye ningun valor retorna todos los inventarios existentes")
+	@Operation(summary = "Pagina los inventarios existentes", description = "Retorna los inventarios que se encuentren en el rango de fechas dado (formato de fecha 'yyyy-MM-dd') o que en su nombre "
+			+ "	contenga los valores  indicadas en la variable letras. Si no se incluye ningun valor retorna todos los inventarios existentes")
 	public ApiResponse<Page<MovInventario>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 												 @RequestParam(required=false, defaultValue = "10") Integer items,
 												 @RequestParam(required=false) String letras,
@@ -116,15 +111,15 @@ public class MovInvController {
 	}
 	
 	@GetMapping("/detalle/{id}")
-	//@ApiOperation(value = "Encuentra un inventario", notes = "Retorna un inventario con detalle segun el numero de inventario")
-	public ResponseEntity<MovInventario> getInventario(@PathVariable Long id){
+	@Operation(summary = "Encuentra un inventario", description = "Retorna un inventario con detalle segun el numero de inventario")
+	public ResponseEntity<MovInventario> getInventario(@PathVariable Integer id){
 		return ResponseEntity.ok(movInvService.getInventario(id));
 	}
 	
 	@GetMapping("/detalle/{id}/descarga")
-	//@ApiOperation(value = "Crea un inventario en formato PDF", notes = "Retorna un inventario con detalle segun el numero de inventario")
+	@Operation(summary = "Crea un inventario en formato PDF", description = "Retorna un inventario con detalle segun el numero de inventario")
 	public void exportToPDF(HttpServletResponse response,
-							@PathVariable Long id) throws DocumentException, IOException {
+							@PathVariable Integer id) throws DocumentException, IOException {
 		response.setContentType("application/pdf");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());

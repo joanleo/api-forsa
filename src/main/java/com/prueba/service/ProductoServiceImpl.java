@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -208,7 +209,8 @@ public class ProductoServiceImpl implements ProductoService {
 			Estado nuevoEstado = new Estado(productoDTO.getEstado().getId());
 			producto.setUbicacion(nuevaUbicacion);
 			producto.setEstado(nuevoEstado);
-			producto.setVerificado(true);
+			producto.setVerificado(true);//añadir fecha de verificacion
+			producto.setFechaActualizacion(new Date());
 			producto.setEstaActivo(true);
 			producto.setReviso(usuario);
 			productoRepo.save(producto);
@@ -228,7 +230,7 @@ public class ProductoServiceImpl implements ProductoService {
 	}
 	
 
-	@Override
+	/*@Override
 	public Page<Producto> searchProducts(Empresa empresa, String letra, int offset, int pageSize) {
 		
 		if(pageSize == 0) {
@@ -237,7 +239,7 @@ public class ProductoServiceImpl implements ProductoService {
 		}
 		Page<Producto> listProducts = productoRepo.findAll(productSpec.getProductosActivos(letra, empresa), PageRequest.of(offset, pageSize));		
 		return listProducts;
-	}
+	}*/
 	
 
 	@Override
@@ -525,6 +527,7 @@ public class ProductoServiceImpl implements ProductoService {
 		List<Producto> listProducts = productoRepo.findAll(productSpec.getProductosActivos(letras, empresa));		
 		return listProducts;
 	}
+	
 
 
 	@Override
@@ -542,6 +545,13 @@ public class ProductoServiceImpl implements ProductoService {
 	@Override
 	public List<Producto> getVerificacion(String orden, String filtro, Empresa empresa){
 		List<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro, empresa));
+		return productos;
+	}
+
+
+	@Override
+	public List<Producto> list(Empresa empresa) {
+		List<Producto> productos = productoRepo.findAllByEmpresaAndEstaActivoTrue(empresa);		
 		return productos;
 	}
 	

@@ -15,7 +15,7 @@ public class DetalleInv_id implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "nidmov")
-	private Long idMov;
+	private Integer idMov;
 	
 	@Column(name = "vccodigopieza")
 	private String codigoPieza;
@@ -24,17 +24,17 @@ public class DetalleInv_id implements Serializable{
 		super();
 	}
 
-	public DetalleInv_id(Long idMov, String codigoPieza) {
+	public DetalleInv_id(Integer idMov, String codigoPieza) {
 		super();
 		this.idMov = idMov;
 		this.codigoPieza = codigoPieza;
 	}
 
-	public Long getIdMov() {
+	public Integer getIdMov() {
 		return idMov;
 	}
 
-	public void setIdMov(Long idMov) {
+	public void setIdMov(Integer idMov) {
 		this.idMov = idMov;
 	}
 
