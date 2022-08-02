@@ -84,7 +84,9 @@ public class SalidaController {
 		return salidaService.buscarSalidas(letras, empresa);
 	}
 	
-	public ResponseEntity<Salida> obtenerSalida(@RequestParam Integer idsalida){
+	@GetMapping("/{idsalida}")
+	@Operation(summary = "Obtiene una salida")
+	public ResponseEntity<Salida> obtenerSalida(@PathVariable Integer idsalida){
 		
 		Salida salida = salidaService.obtieneSalida(idsalida);
 		
