@@ -66,8 +66,6 @@ public class TipoMov {
 	}
 	
 	
-	
-	
 
 	public TipoMov(Long id, String nombre, Empresa empresa, Boolean estaActibo) {
 		super();
@@ -75,6 +73,11 @@ public class TipoMov {
 		this.nombre = nombre;
 		this.empresa = empresa;
 		this.estaActivo = estaActibo;
+	}
+
+	public TipoMov(Long id) {
+		super();
+		this.id = id;
 	}
 
 	public TipoMov() {
