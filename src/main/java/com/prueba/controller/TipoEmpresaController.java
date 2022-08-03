@@ -32,6 +32,7 @@ import com.prueba.security.dto.ResDTO;
 import com.prueba.service.TipoEmpresaService;
 import com.prueba.util.CsvExportService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 
@@ -39,7 +40,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/tipoempresas")
-//@Api(tags = "Tipos empresa", description = "Opereciones referentes a los tipos de empresa")
 @Tag(name = "Tipos empresa", description = "Opereciones referentes a los tipos de empresa")
 public class TipoEmpresaController {
 	
@@ -50,13 +50,13 @@ public class TipoEmpresaController {
 	private CsvExportService csvService;
 	
 	@PostMapping
-	//@ApiOperation(value = "Crea un tipo de empresa", notes = "Crea un nuevo tipo de empresa")
+	@Operation(summary = "Crea un tipo de empresa", description = "Crea un nuevo tipo de empresa")
 	public ResponseEntity<TipoEmpresaDTO> create(@Valid @RequestBody TipoEmpresaDTO tipoEmpresaDTO){
 		return new ResponseEntity<TipoEmpresaDTO>(tipoEmpresaService.create(tipoEmpresaDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	//@ApiOperation(value = "Encuentra los tipos de empresa")
+	@Operation(summary = "Obtiene los tipos de empresa")
 	public List<TipoEmpresaDTO> list(@RequestParam(required=false)String letras){
 		if(letras == null) {
 			return tipoEmpresaService.list();
@@ -65,7 +65,7 @@ public class TipoEmpresaController {
 	}
 	
 	@PostMapping("/indexados")
-	//@ApiOperation(value = "Encuentra los tipos de empresas", notes = "Retorna todos los tipos de empresas segun las letras indicadas, si no se digita ninguna retorna todos los tipos de empresas activos")
+	@Operation(summary = "Encuentra los tipos de empresas", description = "Retorna paginacion de los tipos de empresas que coincidan con el filtro enviado en tipoEmpresaDTO")
 	public ApiResponse<Page<TipoEmpresa>> paginationList(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -83,13 +83,13 @@ public class TipoEmpresaController {
 	}
 	
 	@GetMapping("/{id}")
-	//@ApiOperation(value = "Encuentra un tipo de empresa", notes = "Retorna un tipo de empresa segun su id")
+	@Operation(summary = "Encuentra un tipo de empresa", description = "Retorna un tipo de empresa segun su id")
 	public ResponseEntity<TipoEmpresaDTO> getEmpresa(@PathVariable(name = "id") Long id){
 		return ResponseEntity.ok(tipoEmpresaService.getTipoEmpresa(id));
 	}
 	
 	@PutMapping("/{id}")
-	//@ApiOperation(value = "Actualiza un tipo de empresa", notes = "Actualiza los datos de un tipo de empresa")
+	@Operation(summary = "Actualiza un tipo de empresa", description = "Actualiza los datos de un tipo de empresa")
 	public ResponseEntity<TipoEmpresaDTO> update(
 			@Valid @RequestBody TipoEmpresaDTO tipoEmpresaDTO,
 			@PathVariable Long id){
@@ -99,14 +99,14 @@ public class TipoEmpresaController {
 	}
 	
 	@DeleteMapping("/{id}")
-	//@ApiOperation(value = "Elimina un tipo de empresa", notes = "Elimina un tipo de empresa por su id")
+	@Operation(summary = "Elimina un tipo de empresa", description = "Elimina un tipo de empresa por su id")
 	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id){
 		tipoEmpresaService.delete(id);
 		return new ResponseEntity<ResDTO>(new ResDTO("Tipo de empresa eliminado con exito"), HttpStatus.OK);
 	}
 	
 	@PatchMapping("/{id}")
-	//@ApiOperation(value = "Inhabilita un tipo de empresa", notes = "Inhabilita un tipo de empresa por su id")
+	@Operation(summary = "Inhabilita un tipo de empresa", description = "Inhabilita un tipo de empresa por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id){
 		tipoEmpresaService.unable(id);
 		
@@ -114,7 +114,7 @@ public class TipoEmpresaController {
 	}
 	
 	@PostMapping("/descarga")
-	//@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de activos de la busqueda realizada en formato csv")
+	@Operation(summary = "Descarga listado en formato csv", description = "Descarga listado de activos de la busqueda realizada en formato csv")
 	public void getCsvTiposEmpresa(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,

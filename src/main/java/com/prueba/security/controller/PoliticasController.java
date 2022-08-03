@@ -14,8 +14,10 @@ import com.prueba.security.entity.Rol;
 import com.prueba.security.repository.PoliticaRepository;
 import com.prueba.security.repository.RolRepository;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Hidden
 @RestController
 @RequestMapping("/politicas")
 @Tag(name = "Politicas")
@@ -31,11 +33,6 @@ public class PoliticasController {
 	@GetMapping
 	public List<Politica> listsPoliticas(@RequestParam(required=false)String role){
 		Rol rol = rolRepo.findByNombre(role);
-		/*Politica politica = poiliticaRepo.findByRol(rol);
-		
-		System.out.println(rol.getNombre());
-		System.out.println(rol.getIdRol());
-		System.out.println(politica);*/
 		return (poiliticaRepo.findByRol(rol));
 	}
 }

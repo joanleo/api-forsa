@@ -64,7 +64,7 @@ public class SalidaController {
 	
 	@PostMapping
 	@Operation(summary = "Crea una salida")
-	public ResponseEntity<?> crearSalida(@RequestBody Salida salida){
+	public ResponseEntity<?> crearSalida(@RequestBody Salida salida) throws IllegalAccessException{
 		return new ResponseEntity<Salida>(salidaService.crearSalida(salida), HttpStatus.CREATED);
 	}
 	
@@ -153,7 +153,6 @@ public class SalidaController {
 		
 		Page<DetalleSalida> detalles = salidaService.obtieneDetalleSalida(idsalida, pagina, items);
 		return new ApiResponse<>(detalles.getSize(), detalles);
-		//return ResponseEntity.ok(salidaService.obtieneSalida(idsalida));
 	}
 	
 	@DeleteMapping("/{idsalida}/eliminar/{codigopieza}")

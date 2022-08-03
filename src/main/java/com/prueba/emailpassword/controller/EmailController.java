@@ -23,13 +23,15 @@ import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import net.bytebuddy.utility.RandomString;
 
 
 @Hidden
 @RestController
 @RequestMapping("/email")
-//@Api(tags = "Email", description = "Recuperacion de nombre de usuario y/o contraseña")
+@Tag(name = "Email", description = "Recuperacion de nombre de usuario y/o contraseña")
 public class EmailController {
 
     @Autowired
@@ -45,7 +47,7 @@ public class EmailController {
     private PasswordEncoder passwordEncoder;
     
     @PostMapping("/password")
-    //@ApiOperation(value = "Envio de contraseña")
+    @Operation(summary = "Envio de contraseña")
     public ResponseEntity<ResDTO> sendEmailPasswor(@RequestBody EmailDTO dto) {
     	
     	Optional<Usuario> usuarioOpt = usuarioRepo.findByNombreUsuarioOrEmail(dto.getMailTo(), dto.getMailTo());
@@ -71,7 +73,7 @@ public class EmailController {
     }
     
     @PostMapping("/username")
-    //@ApiOperation(value = "Envio de nombre de usuario")
+    @Operation(summary = "Envio de nombre de usuario")
     public ResponseEntity<ResDTO> sendEmailUsername(@RequestBody EmailDTO dto){
     	Optional<Usuario> usuarioOpt = usuarioRepo.findByNombreUsuarioOrEmail(dto.getMailTo(), dto.getMailTo());
     	if(!usuarioOpt.isPresent()) {
@@ -90,7 +92,7 @@ public class EmailController {
     	return new ResponseEntity<ResDTO>(new ResDTO("Correo enviado con éxito"), HttpStatus.OK);
     }
     
-    //@ApiIgnore
+    @Hidden
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDTO dto, BindingResult bindingResult) {
         if(bindingResult.hasErrors())

@@ -40,6 +40,8 @@ import com.prueba.service.ProductoService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 
@@ -47,7 +49,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/activos")
-//@Api(tags = "Activos", description = "Operaciones referentes a los activos")
 @Tag(name = "Activos", description = "Operaciones referentes a los activos")
 public class ProductoController {
 
@@ -67,13 +68,13 @@ public class ProductoController {
 	private UtilitiesApi util;
 	
 	@PostMapping
-	//@ApiOperation(value = "Crea un activo", notes = "Crea un nuevo activo")
+	@Operation(summary = "Crea un activo", description = "Crea un nuevo activo")
 	public ResponseEntity<ProductoDTO> create(@Valid @RequestBody ProductoDTO productoDTO){
 		return new ResponseEntity<ProductoDTO>(productoService.create(productoDTO), HttpStatus.CREATED);
 	}
 	
 	@PostMapping("/indexados")
-	//@ApiOperation(value = "Encuentra los activos", notes = "Encuentra los activos que concuerden con las especificaciones enviadas en el Json, se puede indicar o no los parametros de la paginacion")
+	@Operation(summary = "Encuentra los activos", description = "Encuentra los activos que concuerden con las especificaciones enviadas searchDTO, se puede indicar o no los parametros de la paginacion")
 	public ApiResponse<Page<Producto>> listSearchDTO(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 											@RequestParam(required=false, defaultValue = "0") Integer items, 
 											@RequestParam(required=false) Long nit,
@@ -100,7 +101,7 @@ public class ProductoController {
 	}
 	
 	@GetMapping
-	//@ApiOperation(value = "Encuentra los activos", notes = "Retorna los activos que contengan las letras indicadas, retorna todos los activos si no se indica ninguna letra, se puede indicar o no los parametros de la paginacion")
+	@Operation(summary = "Encuentra los activos", description = "Retorna los activos que contengan las letras indicadas, retorna todos los activos si no se indica ninguna letra, se puede indicar o no los parametros de la paginacion")
 	public List<Producto> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 											@RequestParam(required=false, defaultValue = "0") Integer items,
 											@RequestParam(required=false) String letras,
@@ -125,7 +126,7 @@ public class ProductoController {
 	}
 	
 	@GetMapping("/{id},{nit}")
-	//@ApiOperation(value = "Encuentra un activo", notes = "Retorna un activo por el id")
+	@Operation(summary = "Encuentra un activo", description = "Retorna un activo por el id")
 	public ResponseEntity<Producto> get(@PathVariable(name = "id") String codigoPieza,
 										@PathVariable(name = "nit") Long nit){
 		
@@ -133,7 +134,7 @@ public class ProductoController {
 	}
 	
 	@PutMapping("/{id}")
-	//@ApiOperation(value = "Actualiza un activo", notes = "Actualiza los datos de un activo")
+	@Operation(summary = "Actualiza un activo", description = "Actualiza los datos de un activo")
 	public ResponseEntity<Producto> update(@Valid @RequestBody ProductoDTO productoDTO,
 										   @PathVariable String id){
 		Producto actualizado = productoService.update(id, productoDTO);
@@ -142,7 +143,7 @@ public class ProductoController {
 	}
 	
 	@PatchMapping("/{id}")
-	//@ApiOperation(value = "Verifica un activo", notes = "Actualiza un activo por su id")
+	@Operation(summary = "Verifica un activo", description = "Actualiza un activo por su id")
 	public ResponseEntity<Producto> verify(@PathVariable(name = "id") String id,
 										   @RequestBody(required=false) ProductoDTO productoDTO) throws IllegalAccessException{
 		if(productoDTO == null) {
@@ -151,8 +152,9 @@ public class ProductoController {
 		return new ResponseEntity<Producto>(productoService.receive(id, productoDTO), HttpStatus.ACCEPTED);
 	}
 	
+	@Hidden
 	@PostMapping("/cargar")
-	//@ApiOperation(value = "Carga de activos", notes = "AUN PENDIENTE POR DEFINIR")
+	@Operation(summary = "Carga de activos", description = "AUN PENDIENTE POR DEFINIR")
 	public ResponseEntity<ResDTO> loadProducts(@RequestParam("archivo") MultipartFile file, WebRequest webRequest){ //@RequestBody List<ProductoDTO> list
 		
 		try {
@@ -165,7 +167,7 @@ public class ProductoController {
 	}
 	
 	@DeleteMapping("/{id}")
-	//@ApiOperation(value = "Elimina un activo", notes = "Elimina un activo por su id")
+	@Operation(summary = "Elimina un activo", description = "Elimina un activo por su id")
 	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")String codigoPieza){
 		
 		
@@ -173,7 +175,7 @@ public class ProductoController {
 	}
 	
 	@PostMapping("/descarga")
-	//@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de activos de la busqueda realizada en formato csv")
+	@Operation(summary = "Descarga listado en formato csv", description = "Descarga listado de activos de la busqueda realizada en formato csv")
 	public void getCsvProducts(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,

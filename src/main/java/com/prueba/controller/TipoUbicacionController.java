@@ -38,6 +38,7 @@ import com.prueba.service.TipoUbicacionService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.UtilitiesApi;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 
@@ -45,7 +46,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/tiposubicaciones")
-//@Api(tags = "Tipos ubicaciones", description = "Operaciones referentes a los tipos de ubicaciones")
 @Tag(name = "Tipos ubicaciones", description = "Operaciones referentes a los tipos de ubicaciones")
 public class TipoUbicacionController {
 	
@@ -62,13 +62,13 @@ public class TipoUbicacionController {
 	private UtilitiesApi util;
 	
 	@PostMapping
-	//ApiOperation(value = "Crea un tipo de ubicacion", notes = "Crea un nuevo tipo de ubicacion")
+	@Operation(summary = "Crea un tipo de ubicacion", description = "Crea un nuevo tipo de ubicacion")
 	public ResponseEntity<TipoUbicacionDTO> create(@Valid @RequestBody TipoUbicacionDTO tipoUbicacionDTO){
 		return new ResponseEntity<TipoUbicacionDTO>(tipoUbicService.create(tipoUbicacionDTO), HttpStatus.CREATED); 
 	}
 	
 	@GetMapping
-	//@ApiOperation(value="Encuentra los tipos de ubicaciones")
+	@Operation(summary="Obtiene los tipos de ubicaciones", description = "Retorna una llista con los tipos de ubicaciones")
 	public List<TipoUbicacionDTO> get(
 			@RequestParam(required=false)String letras,
 			@RequestParam(required=false) Long nit){
@@ -86,7 +86,7 @@ public class TipoUbicacionController {
 	}
 	
 	@PostMapping("/indexados")
-	//@ApiOperation(value = "Encuentra los tipos de ubicacion", notes = "Retorna todos los tipos de ubicacion")
+	@Operation(summary = "Encuentra los tipos de ubicacion", description = "Retorna paginacion de los tipos de ubicacion que coincidan con el filtro enviado en tipoUbicacionDTO")
 	public ApiResponse<Page<TipoUbicacion>> paginationlist(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -113,7 +113,7 @@ public class TipoUbicacionController {
 	}
 
 	@GetMapping("/{id},{nitEmpresa}")
-	//@ApiOperation(value = "Encuentra un tipo de ubicacion", notes = "Retorna un tipo de ubicacion segun su id y empresa")
+	@Operation(summary = "Encuentra un tipo de ubicacion", description = "Retorna un tipo de ubicacion segun su id y empresa")
 	public ResponseEntity<TipoUbicacionDTO> getTipoUbic(@PathVariable(name="id") Long id,
 					 									@PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -130,7 +130,7 @@ public class TipoUbicacionController {
 	}
 	
 	@PutMapping("/{id}")
-	//@ApiOperation(value = "Actualiza un tipo de ubicacion", notes = "Actualiza los datos de un tipo de ubicacion")
+	@Operation(summary = "Actualiza un tipo de ubicacion", description = "Actualiza los datos de un tipo de ubicacion")
 	public ResponseEntity<TipoUbicacionDTO> update(@Valid @RequestBody TipoUbicacionDTO tipoUbicacionDTO,
 											 @PathVariable Long id){
 		TipoUbicacionDTO actualizado = tipoUbicService.update(id, tipoUbicacionDTO);
@@ -139,7 +139,7 @@ public class TipoUbicacionController {
 	}
 	
 	@DeleteMapping("/{id},{nitEmpresa}")
-	//@ApiOperation(value = "Elimina un tipo de ubicacion", notes = "Elimina un tipo de ubicacion por su id")
+	@Operation(summary = "Elimina un tipo de ubicacion", description = "Elimina un tipo de ubicacion por su id")
  	public ResponseEntity<ResDTO> delete(@PathVariable(name="id")Long id,
 										 @PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -157,7 +157,7 @@ public class TipoUbicacionController {
 	}
 	
 	@PatchMapping("/{id},{nitEmpresa}")
-	//@ApiOperation(value = "Inhabilita un tipo de ubicacion", notes = "Inhabilita un tipo de ubicacion por su id")
+	@Operation(summary = "Inhabilita un tipo de ubicacion", description = "Inhabilita un tipo de ubicacion por su id")
 	public ResponseEntity<ResDTO> unable(@PathVariable(name="id")Long id,
 	 									@PathVariable(required=false) Long nitEmpresa){
 		Empresa empresa;
@@ -175,7 +175,7 @@ public class TipoUbicacionController {
 	}
 	
 	@PostMapping("/descarga")
-	//@ApiOperation(value = "Descarga listado en formato csv", notes = "Descarga listado de Tipo de movimiento de la busqueda realizada en formato csv")
+	@Operation(summary = "Descarga listado en formato csv", description = "Descarga listado de Tipo de movimiento de la busqueda realizada en formato csv")
 	public void getCsvEmpresas(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,

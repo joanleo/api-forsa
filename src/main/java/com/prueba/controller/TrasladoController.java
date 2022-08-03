@@ -56,7 +56,7 @@ public class TrasladoController {
 	}
 	
 	@PostMapping("/indexados")
-	@Operation(summary = "Encuentra los traslados")
+	@Operation(summary = "Encuentra los traslados", description = "Retorna paginacion de los traslados que coincidan con el filtro enviado en trasladoDTO")
 	public ApiResponse<Page<Traslado>> listaPaginada(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -159,12 +159,8 @@ public class TrasladoController {
 		return new ResponseEntity<ResDTO>(new ResDTO("Activos eliminados del traslado con exito"), HttpStatus.OK);
 	}
 	
-	/*@PatchMapping("/{idtraslado}/verificar aun no se confirma este endpoint")
-	public ResponseEntity<?> eliminarTodo(@PathVariable Long idtraslado,
-										   @RequestParam(required=false) Long nit){
-		}*/
-
 	@DeleteMapping("/{idtraslado}")
+	@Operation(summary = "Elimina un traslado", description = "Elimina un traslado por su id")
 	public ResponseEntity<?> eliminarTraslado(@PathVariable Long idtraslado,
 			   @RequestParam(required=false) Long nit){
 		trasladoService.eliminarTraslado(idtraslado, nit);
@@ -172,7 +168,7 @@ public class TrasladoController {
 	}
 	
 	@GetMapping("/detalle/{idtraslado}/descarga")
-	@Operation(summary = "Retorna un traslado en formato PDF", description = "Retorna un traslado con detalle segun el numero del traslado")
+	@Operation(summary = "Retorna el detalle de traslado en formato PDF", description = "Retorna un traslado con detalle segun el numero del traslado")
 	public void exportToPdfSlida(HttpServletResponse response,
 			@PathVariable Long idtraslado) throws DocumentException, IOException{
 		

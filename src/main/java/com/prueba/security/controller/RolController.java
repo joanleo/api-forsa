@@ -96,7 +96,7 @@ public class RolController {
 	}
 	
 	@PostMapping("/indexados")
-	@Operation(summary = "Encuentra los roles", description = "Retorna los usuarios que coincidan con el filtro del datos "
+	@Operation(summary = "Encuentra los roles", description = "Retorna los roles que coincidan con el filtro del datos "
 			+ "recibidos en formato JSON, segun el esquema RolDTO")
 	public ApiResponse<Page<Rol>> paginationList(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
@@ -126,7 +126,7 @@ public class RolController {
 	
 	
 	@GetMapping("/{id},{nitEmpresa}")
-	//@ApiOperation(value = "Encuentra un rol", notes = "Retorna un rol por su id")
+	@Operation(summary = "Encuentra un rol", description = "Retorna un rol por su id")
 	public ResponseEntity<RolDTO> get(@PathVariable(name = "id") Long id,
 									@PathVariable(required=false) Long nitEmpresa){
 		
@@ -145,6 +145,7 @@ public class RolController {
 	}
 	
 	@PutMapping("/{id}")
+	@Operation(summary = "Actualiza un rol", description = "actualiza el nombre de un rol")
 	public ResponseEntity<RolDTO> update(@RequestBody RolDTO rol,
 			@PathVariable long id){
 		
@@ -152,19 +153,21 @@ public class RolController {
 	}
 	
 	@DeleteMapping("/{id}")
-	//@ApiOperation(value = "Elimina un rol", notes = "Elimina el rol kque concuerde con el id especificado")
+	@Operation(summary = "Elimina un rol", description = "Elimina el rol kque concuerde con el id especificado")
 	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) {
 		rolService.delete(id);
 		return new ResponseEntity<>("Rol eliminado con exito", HttpStatus.OK);
 	}
 	
 	@GetMapping("/politicas")
+	@Operation(summary = "Obtiene las politicas de un rol", description = "Retorna una lista con las politicas de un rol")
 	public List<Politica> listaPoliticas(@RequestParam(required=false)Long id){
 		List<Politica> politicas = rolService.listarPoliticas(id);
 		return politicas;
 	}
 	
 	@PostMapping("/politicas/indexados")
+	@Operation(summary = "Obtiene las politicas de un rol", description = "Retorna paginacion de las politicas que coincidan con el filtro enviado en rol")
 	public Set<RutinaDTO> paginacionPoliticas(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -189,6 +192,7 @@ public class RolController {
 
 	}
 	@PostMapping("/politicas/indexados/descarga")
+	@Operation(summary = "Descarga listado en formato csv", description = "Descarga listado de politicas de un rol de la busqueda realizada en formato csv")
 	public void getCsvPoliticasRol(HttpServletResponse servletResponse,
 			@RequestBody(required=true) Rol rol,
 			@RequestParam(required=false) Long nit) throws IOException {
@@ -212,7 +216,7 @@ public class RolController {
 		csvService.writePolitica(servletResponse.getWriter(), politicas);
 	}
 	
-	@GetMapping("/politicas/indexados")
+	/*@GetMapping("/politicas/indexados")
 	public ApiResponse<Page<Politica>> obtenerTodasPoliticasPaginadas(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -222,9 +226,10 @@ public class RolController {
 		
 		return new ApiResponse<>(politicas.getSize(), politicas);
 
-	}
+	}*/
 	
 	@PutMapping("/politicas/{idPolitica}")
+	@Operation(summary = "Actualiza el permiso de una politica", description = "Actualiza el permiso de una politica segun su id")
 	public ResponseEntity<?> actualizarPolitica(@PathVariable Long idPolitica,
 			@RequestBody Politica politica){
 		return new ResponseEntity<>(rolService.actualizarPoliticar(idPolitica, politica), HttpStatus.OK);

@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.prueba.entity.Rutina;
 import com.prueba.service.RutinaServices;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Hidden
 @RestController
 @RequestMapping("/rutinas")
 @Tag(name = "Rutinas", description = "Rutinas o modulos de la aplicacion")
