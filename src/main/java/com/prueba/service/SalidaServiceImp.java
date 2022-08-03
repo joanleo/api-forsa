@@ -56,7 +56,7 @@ public class SalidaServiceImp implements SalidaService {
 	private DetalleSalidaRepository detalleSalidaRepo;
 	
 	@Override
-	public Salida crearSalida(Salida salida) {
+	public Salida crearSalida(Salida salida) throws IllegalAccessException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
@@ -89,6 +89,9 @@ public class SalidaServiceImp implements SalidaService {
 			Producto activo = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
 			if(Objects.isNull(activo)) {
 				throw new ResourceNotFoundException("activo", "codigo de pieza", detalle.getProducto().getCodigoPieza());
+			}
+			if(!activo.getEstaActivo()) {
+				throw new IllegalAccessException("Activo se encuentra inhabilitado");
 			}
 			System.out.println(activo.getDescripcion());
 			nuevaSalida.addActivo(activo);
