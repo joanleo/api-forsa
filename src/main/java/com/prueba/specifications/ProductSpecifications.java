@@ -93,6 +93,8 @@ public class ProductSpecifications {
 			System.out.println("Specification "+letras);
 			predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+letras+ "%"));
 			
+			predicates.add(criteryBuilder.like(root.get("codigoPieza"), "%"+letras+ "%"));
+			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 
 			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
