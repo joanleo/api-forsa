@@ -20,6 +20,10 @@ public class ResourceCannotBeDeleted extends RuntimeException  {
 		super(String.format("%s no puede ser eliminado tiene movimientos asociados", recurso));
 		this.recurso = recurso;
 	}
+	public ResourceCannotBeDeleted(String recurso, String mensaje) {
+		super(String.format("%s no puede ser eliminado, %s ", recurso, mensaje));
+		this.recurso = recurso;
+	}
 	
 	public String getRecurso() {
 		return recurso;

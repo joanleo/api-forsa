@@ -227,8 +227,9 @@ public class SalidaServiceImp implements SalidaService {
 		if(Objects.isNull(activo)) {
 			throw new ResourceNotFoundException("activo", "codigo de pieza", codigopieza);
 		}
+		System.out.println("estado del activo: "+activo.getEstaActivo());
 		if(!activo.getEstaActivo()) {
-			throw new ResourceCannotBeDeleted("Activo");
+			throw new ResourceCannotBeDeleted("Activo", "se encuentra inhabilitado");
 		}
 		salida.removeActivo(activo);
 		
