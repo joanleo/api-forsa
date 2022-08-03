@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lowagie.text.DocumentException;
 import com.prueba.dto.ApiResponse;
+import com.prueba.entity.DetalleSalida;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Salida;
 import com.prueba.security.entity.Usuario;
@@ -142,8 +143,12 @@ public class SalidaController {
 	}
 	
 	@GetMapping("/detalle/{idsalida}")
-	public ResponseEntity<Salida> getInventario(@PathVariable Integer idsalida){
-		return ResponseEntity.ok(salidaService.obtieneSalida(idsalida));
+	@Operation(summary = "Obtiene el detalle de una salida")
+	public ApiResponse<Page<DetalleSalida>> getInventario(@PathVariable Integer idsalida){
+		
+		Page<DetalleSalida> detalles = salidaService.obtieneDetalleSalida(idsalida);
+		return new ApiResponse<>(detalles.getSize(), detalles);
+		//return ResponseEntity.ok(salidaService.obtieneSalida(idsalida));
 	}
 	
 	@GetMapping("/detalle/{idsalida}/descarga")

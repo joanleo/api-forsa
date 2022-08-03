@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import com.prueba.entity.DetalleSalida;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Salida;
 
@@ -70,6 +71,12 @@ public interface SalidaService {
 	 * @return
 	 */
 	public Salida obtieneSalida(Integer id);
+
+	/**
+	 * @param idsalida
+	 * @return
+	 */
+	public Page<DetalleSalida> obtieneDetalleSalida(Integer idsalida);
 
 
 }

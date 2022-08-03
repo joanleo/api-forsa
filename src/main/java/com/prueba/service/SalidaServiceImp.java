@@ -22,6 +22,7 @@ import com.prueba.entity.Salida;
 import com.prueba.entity.TipoMov;
 import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
+import com.prueba.repository.DetalleSalidaRepository;
 import com.prueba.repository.ProductoRepository;
 import com.prueba.repository.SalidaRepository;
 import com.prueba.repository.TipoMovRepository;
@@ -50,6 +51,9 @@ public class SalidaServiceImp implements SalidaService {
 	
 	@Autowired
 	private TipoMovRepository tipoMovRepo;
+	
+	@Autowired
+	private DetalleSalidaRepository detalleSalidaRepo;
 	
 	@Override
 	public Salida crearSalida(Salida salida) {
@@ -194,11 +198,23 @@ public class SalidaServiceImp implements SalidaService {
 
 	@Override
 	public Salida obtieneSalida(Integer id) {
+		
 		Salida salida = salidaRepo.findByIdSalida(id);
 		if(Objects.isNull(salida)) {
 			throw new ResourceNotFoundException("Salida", "id", String.valueOf(id));
 		}
 		return salida;
+	}
+
+	@Override
+	public Page<DetalleSalida> obtieneDetalleSalida(Integer idsalida) {
+		
+		Salida salida = salidaRepo.findByIdSalida(idsalida);
+		if(Objects.isNull(salida)) {
+			throw new ResourceNotFoundException("Salida", "id", String.valueOf(idsalida));
+		}
+		Page<DetalleSalida> detalles = detalleSalidaRepo.findBySalida(salida, PageRequest.of(0, 10));
+		return detalles;
 	}
 
 
