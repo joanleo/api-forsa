@@ -74,9 +74,11 @@ public interface SalidaService {
 
 	/**
 	 * @param idsalida
+	 * @param items 
+	 * @param pagina 
 	 * @return
 	 */
-	public Page<DetalleSalida> obtieneDetalleSalida(Integer idsalida);
+	public Page<DetalleSalida> obtieneDetalleSalida(Integer idsalida, Integer pagina, Integer items);
 
 	/**
 	 * @param idsalida

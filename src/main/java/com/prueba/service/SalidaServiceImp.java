@@ -207,13 +207,17 @@ public class SalidaServiceImp implements SalidaService {
 	}
 
 	@Override
-	public Page<DetalleSalida> obtieneDetalleSalida(Integer idsalida) {
+	public Page<DetalleSalida> obtieneDetalleSalida(Integer idsalida, Integer pagina, Integer items) {
 		
 		Salida salida = salidaRepo.findByIdSalida(idsalida);
 		if(Objects.isNull(salida)) {
 			throw new ResourceNotFoundException("Salida", "id", String.valueOf(idsalida));
 		}
-		Page<DetalleSalida> detalles = detalleSalidaRepo.findBySalida(salida, PageRequest.of(0, 10));
+		if(items == 0) {
+			Page<DetalleSalida> detalles = detalleSalidaRepo.findBySalida(salida, PageRequest.of(0, 10));
+			return detalles;
+		}
+		Page<DetalleSalida> detalles = detalleSalidaRepo.findBySalida(salida, PageRequest.of(pagina, items));
 		return detalles;
 	}
 

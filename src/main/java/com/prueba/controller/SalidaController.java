@@ -146,9 +146,12 @@ public class SalidaController {
 	
 	@GetMapping("/detalle/{idsalida}")
 	@Operation(summary = "Obtiene el detalle de una salida")
-	public ApiResponse<Page<DetalleSalida>> getInventario(@PathVariable Integer idsalida){
+	public ApiResponse<Page<DetalleSalida>> getInventario(
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
+			@PathVariable Integer idsalida){
 		
-		Page<DetalleSalida> detalles = salidaService.obtieneDetalleSalida(idsalida);
+		Page<DetalleSalida> detalles = salidaService.obtieneDetalleSalida(idsalida, pagina, items);
 		return new ApiResponse<>(detalles.getSize(), detalles);
 		//return ResponseEntity.ok(salidaService.obtieneSalida(idsalida));
 	}
