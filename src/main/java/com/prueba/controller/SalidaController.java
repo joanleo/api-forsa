@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,7 @@ import com.prueba.dto.ApiResponse;
 import com.prueba.entity.DetalleSalida;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Salida;
+import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.service.SalidaService;
@@ -149,6 +151,14 @@ public class SalidaController {
 		Page<DetalleSalida> detalles = salidaService.obtieneDetalleSalida(idsalida);
 		return new ApiResponse<>(detalles.getSize(), detalles);
 		//return ResponseEntity.ok(salidaService.obtieneSalida(idsalida));
+	}
+	
+	@DeleteMapping("/{idsalida}/eliminar/{codigopieza}")
+	@Operation(summary = "Elimina un activo de una salida")
+	public ResponseEntity<?> eliminarActivo(@PathVariable Integer idsalida,
+			@PathVariable String codigopieza){
+		salidaService.eliminarActivo(idsalida, codigopieza);
+		return new ResponseEntity<ResDTO>(new ResDTO("Activo eliminada con exito"), HttpStatus.OK);
 	}
 	
 	@GetMapping("/detalle/{idsalida}/descarga")

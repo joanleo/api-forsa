@@ -217,5 +217,24 @@ public class SalidaServiceImp implements SalidaService {
 		return detalles;
 	}
 
+	@Override
+	public void eliminarActivo(Integer idsalida, String codigopieza) {
+		Salida salida = salidaRepo.findByIdSalida(idsalida);
+		if(Objects.isNull(salida)) {
+			throw new ResourceNotFoundException("Salida", "id", String.valueOf(idsalida));
+		}
+		Producto activo = productoRepo.findByCodigoPieza(codigopieza);
+		if(Objects.isNull(activo)) {
+			throw new ResourceNotFoundException("activo", "codigo de pieza", codigopieza);
+		}
+		if(!activo.getEstaActivo()) {
+			throw new ResourceCannotBeDeleted("Activo");
+		}
+		salida.removeActivo(activo);
+		
+		salidaRepo.save(salida);
+		
+	}
+
 
 }

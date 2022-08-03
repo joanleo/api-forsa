@@ -78,5 +78,11 @@ public interface SalidaService {
 	 */
 	public Page<DetalleSalida> obtieneDetalleSalida(Integer idsalida);
 
+	/**
+	 * @param idsalida
+	 * @param codigopieza
+	 */
+	public void eliminarActivo(Integer idsalida, String codigopieza);
+
 
 }
