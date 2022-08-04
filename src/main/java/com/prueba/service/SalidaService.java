@@ -87,5 +87,11 @@ public interface SalidaService {
 	 */
 	public void eliminarActivo(Integer idsalida, String codigopieza);
 
+	/**
+	 * @param idsalida 
+	 * 
+	 */
+	public void eliminarTodosActivos(Integer idsalida);
+
 
 }

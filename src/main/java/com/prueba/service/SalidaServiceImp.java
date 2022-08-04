@@ -4,6 +4,7 @@
 package com.prueba.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -85,7 +86,6 @@ public class SalidaServiceImp implements SalidaService {
 		}
 		List<DetalleSalida> detalles = salida.getDetalles();
 		for(DetalleSalida detalle: detalles) {
-			System.out.println("codigo de pieza: "+detalle.getProducto().getCodigoPieza());
 			Producto activo = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
 			if(Objects.isNull(activo)) {
 				throw new ResourceNotFoundException("activo", "codigo de pieza", detalle.getProducto().getCodigoPieza());
@@ -93,9 +93,10 @@ public class SalidaServiceImp implements SalidaService {
 			if(!activo.getEstaActivo()) {
 				throw new IllegalAccessException("Activo se encuentra inhabilitado");
 			}
-			System.out.println(activo.getDescripcion());
 			nuevaSalida.addActivo(activo);
 		}
+		
+		nuevaSalida.setEstadoSalida("A");
 		
 		nuevaSalida = salidaRepo.save(nuevaSalida);
 		
@@ -135,6 +136,9 @@ public class SalidaServiceImp implements SalidaService {
 
 	@Override
 	public Salida confirmarActivoSalida(Integer idsalida, String codigopieza) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
 		Salida salida = salidaRepo.findByIdSalida(idsalida);
 		if(Objects.isNull(salida)) {
 			throw new ResourceNotFoundException("Salida", "id", String.valueOf(idsalida));
@@ -145,14 +149,20 @@ public class SalidaServiceImp implements SalidaService {
 				Producto activoEliminar = productoRepo.findByCodigoPieza(codigopieza);
 				activoEliminar.setEstaActivo(false);
 				productoRepo.save(activoEliminar);
+				salida.updateActivo(activoEliminar, usuario, new Date());
 			}
 		}
 		
-		return salidaRepo.findByIdSalida(idsalida);
+		salida = salidaRepo.save(salida);
+		
+		return salida;
 	}
 
 	@Override
 	public Salida confirmarSalida(Integer idsalida) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
 		Salida salida = salidaRepo.findByIdSalida(idsalida);
 		if(Objects.isNull(salida)) {
 			throw new ResourceNotFoundException("Salida", "id", String.valueOf(idsalida));
@@ -162,9 +172,12 @@ public class SalidaServiceImp implements SalidaService {
 				Producto activoEliminar = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
 				activoEliminar.setEstaActivo(false);
 				productoRepo.save(activoEliminar);
+				salida.updateActivo(activoEliminar, usuario, new Date());
 		}
 		
-		return salidaRepo.findByIdSalida(idsalida);
+		salida = salidaRepo.save(salida);
+		
+		return salida;
 	}
 
 	@Override
@@ -234,7 +247,6 @@ public class SalidaServiceImp implements SalidaService {
 		if(Objects.isNull(activo)) {
 			throw new ResourceNotFoundException("activo", "codigo de pieza", codigopieza);
 		}
-		System.out.println("estado del activo: "+activo.getEstaActivo());
 		if(!activo.getEstaActivo()) {
 			throw new ResourceCannotBeDeleted("Activo", "se encuentra inhabilitado");
 		}
@@ -242,6 +254,40 @@ public class SalidaServiceImp implements SalidaService {
 		
 		salidaRepo.save(salida);
 		
+	}
+
+	@Override
+	public void eliminarTodosActivos(Integer idsalida) {
+
+		Salida salida = salidaRepo.findByIdSalida(idsalida);
+		if(Objects.isNull(salida)) {
+			throw new ResourceNotFoundException("Salida", "id", String.valueOf(idsalida));
+		}
+		List<DetalleSalida> detalles = salida.getDetalles();
+		for(DetalleSalida detalle:detalles) {
+				Producto activoEliminar = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
+				if(!activoEliminar.getEstaActivo()) {
+					throw new ResourceCannotBeDeleted("Activo", "se encuentra inhabilitado");
+				}
+				if(activoEliminar.getEstadoTraslado().equalsIgnoreCase("F")) {
+					List<DetalleTrasl> lista = activoEliminar.getDetalles();
+					if(!lista.get(0).getTraslado().getEstadoTraslado().equalsIgnoreCase("F")) {
+						throw new ResourceCannotBeDeleted("Activo", "se encuentra en un traslado sin finalizar");
+					}
+				}
+		}
+		for(DetalleSalida detalle:detalles) {
+			Producto activoEliminar = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
+			salida.removeActivo(activoEliminar);
+		}
+		salida.setEmpresa(null);
+		salida.setFechaCreacion(null);
+		//salida.setIdSalida(null);
+		salida.setNumDocumento(null);
+		salida.setTipoMovimiento(null);
+		salida.setUsuarioCrea(null);
+		
+		salidaRepo.save(salida);
 	}
 
 

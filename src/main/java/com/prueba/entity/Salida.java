@@ -71,6 +71,9 @@ public class Salida implements Serializable {
 	@OneToMany(mappedBy = "salida", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
 	public List<DetalleSalida> detalles = new ArrayList<DetalleSalida>();
+	
+	@Column(name = "vcestadosalida")
+	private String estadoSalida;
 
 	public Salida(Empresa empresa, Usuario usuarioCrea, List<DetalleSalida> detalles) {
 		super();
@@ -145,10 +148,29 @@ public class Salida implements Serializable {
 		this.tipoMovimiento = tipoMovimiento;
 	}
 
+	public String getEstadoSalida() {
+		return estadoSalida;
+	}
+
+	public void setEstadoSalida(String estadoSalida) {
+		this.estadoSalida = estadoSalida;
+	}
+
 	public void addActivo(Producto producto) {
 		DetalleSalida detalle = new DetalleSalida(this, producto);
-		System.out.println(this.getIdSalida());
 		detalles.add(detalle);
+	}
+	
+	public void updateActivo(Producto producto, Usuario usuario, Date date) {
+		for (Iterator<DetalleSalida> iterator = detalles.iterator(); iterator.hasNext();) {
+			DetalleSalida detalle = iterator.next();
+			
+			if(detalle.getProducto().equals(producto)) {
+				iterator.remove();
+				detalle.setUsuarioConfirma(usuario);
+				detalle.setFechaConfirma(date);
+			}
+		}
 	}
 
 	public void removeActivo(Producto producto) {

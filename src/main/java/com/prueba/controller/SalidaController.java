@@ -163,6 +163,13 @@ public class SalidaController {
 		return new ResponseEntity<ResDTO>(new ResDTO("Activo eliminada con exito"), HttpStatus.OK);
 	}
 	
+	@DeleteMapping("/{idsalida}")
+	@Operation(summary = "Elimina todos los activos de una salida")
+	public ResponseEntity<?> eliminarTodosActivos(@PathVariable Integer idsalida){
+		salidaService.eliminarTodosActivos(idsalida);
+		return new ResponseEntity<ResDTO>(new ResDTO("Se eliminaro todos los activos con exito"), HttpStatus.OK);
+	}
+	
 	@GetMapping("/detalle/{idsalida}/descarga")
 	@Operation(summary = "Retorna una salida en formato PDF", description = "Retorna una salida con detalle segun el numero de salida")
 	public void exportToPdfSlida(HttpServletResponse response,
@@ -176,7 +183,6 @@ public class SalidaController {
 		response.setHeader(headerKey, headerValue);
 		
 		Salida salida = salidaService.obtieneSalida(idsalida);
-		System.out.println(salida);
 		ReporteSalidaPDF exportar = new ReporteSalidaPDF(salida);
 		exportar.export(response);
 	}
