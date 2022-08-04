@@ -92,7 +92,6 @@ public class RolServiceImpl implements RolService{
 
 	@Override
 	public List<Rol> list(String letras, Empresa empresa) {
-		System.out.println("Servicio: ");
 		List<Rol> roles = rolRepo.findByNombreContainsAndEmpresaAndEstaActivoTrue(letras, empresa);
 		
 		return roles;//.stream().map(rol -> mapearEntidad(rol)).collect(Collectors.toList());

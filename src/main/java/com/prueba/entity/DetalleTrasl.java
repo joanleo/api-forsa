@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.prueba.security.entity.Usuario;
 
 @Entity
-@Table(name = "detalle_traslado")
+@Table(name = "mov_det_traslados")
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class DetalleTrasl implements Serializable{
 

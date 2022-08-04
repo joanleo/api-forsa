@@ -130,7 +130,6 @@ public class UsuarioController {
 			throw new IllegalAccessError("Debe estar logueado para realizar el registro");
 		}
 		Usuario usuarioActual = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
-		System.out.println(usuarioActual);
 		if(usuarioActual == null) {
 			return new ResponseEntity<>("Debe estar logueado para realizar el registro",HttpStatus.BAD_REQUEST);
 		}
@@ -140,28 +139,22 @@ public class UsuarioController {
 		}else {
 			empresa = usuarioActual.getEmpresa();			
 		}
-		System.out.println("verificando nombre de usuario");
 		if(usuarioRepo.existsByNombreUsuario(registroDTO.getNombreUsuario())) {
 			return new ResponseEntity<>("Ese nombre de usuario ya existe",HttpStatus.BAD_REQUEST);
 		}
-		System.out.println("verificando correo de usuario");
 		if(usuarioRepo.existsByEmail(registroDTO.getEmail())) {
 			return new ResponseEntity<>("Ese email de usuario ya existe",HttpStatus.BAD_REQUEST);
 		}
-		System.out.println("usuario no existe");
 		Usuario usuario = new Usuario();
 		usuario.setEmpresa(empresa);
 		usuario.setNombre(registroDTO.getNombre());
 		usuario.setNombreUsuario(registroDTO.getNombreUsuario());
 		usuario.setEmail(registroDTO.getEmail());
 		usuario.setContrasena(passwordEncoder.encode(registroDTO.getContrasena()));
-		System.out.println("Rol "+registroDTO.getRol());
 		if(registroDTO.getRol().getIdRol() == null) {
-			System.out.println("no tiene rol");
 			Rol rol = rolRepo.findByNombre("ROLE_USER");
 			rol.setEmpresa(empresa);
 			rol = rolRepo.save(rol);
-			System.out.println("se asigna rol: "+rol.getNombre());
 			usuario.setRol(rol);
 		}else {
 			Rol nuevoRol = rolRepo.findByIdRol(registroDTO.getRol().getIdRol());

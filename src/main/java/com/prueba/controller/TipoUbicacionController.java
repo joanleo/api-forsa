@@ -197,7 +197,6 @@ public class TipoUbicacionController {
 		}
       		
         if(Objects.isNull(tipoUbicacionDTO)){
-        	System.out.println("Controller busqueda vacia");
         	List<TipoUbicacionDTO> tiposUbic = tipoUbicService.list(empresa);
         	csvService.writeTiposUbiToCsv(servletResponse.getWriter(), tiposUbic);
 		}else{

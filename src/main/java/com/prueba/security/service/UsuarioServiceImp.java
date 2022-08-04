@@ -83,11 +83,9 @@ public class UsuarioServiceImp implements UsuarioService {
 			usuario.setEmail(registroDTO.getEmail());
 		}
 		if(registroDTO.getContrasena() != null) {
-			//System.out.println("Antigua contraseña: "+ passwordEncoder.de);
 			usuario.setContrasena(passwordEncoder.encode(registroDTO.getContrasena()));
 		}
 		if(registroDTO.getRol() != null) {
-			System.out.println(registroDTO.getRol().getIdRol());
 			Rol nuevoRol = rolRepo.findByIdRol(registroDTO.getRol().getIdRol());
 			if(Objects.isNull(nuevoRol)) {
 				throw new ResourceNotFoundException("Rol", "id", registroDTO.getRol().getIdRol());

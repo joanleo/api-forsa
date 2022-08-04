@@ -41,7 +41,6 @@ public class PoliticaServiceImp implements PoliticaService {
 
 	@Override
 	public Set<RutinaDTO> buscarPoliticas(Rol rol, Empresa empresa) {
-		System.out.println(rol.getIdRol() +" "+ empresa.getNombre());
 		Rol esxiste = rolRepo.findByIdRol(rol.getIdRol());
 		if(Objects.isNull(esxiste)) {
 			throw new ResourceNotFoundException("Rol", "Id", rol.getIdRol());

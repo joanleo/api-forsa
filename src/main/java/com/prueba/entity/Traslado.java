@@ -34,7 +34,7 @@ public class Traslado implements Serializable {
 	private static int countBase = 0;
 
 	@Id
-	@Column(name = "idtraslado")
+	@Column(name = "nidtraslado")
 	public Long idTraslado;
 	
 	@Column(name = "vcnumdocumento")
@@ -189,7 +189,6 @@ public class Traslado implements Serializable {
 
 	public void addActivo(Producto producto) {
 		DetalleTrasl detalle = new DetalleTrasl(this, producto);
-		System.out.println(this.getIdTraslado());
 		detalles.add(detalle);
 	}
 
@@ -212,7 +211,6 @@ public class Traslado implements Serializable {
 	 */
 	public void addActivo(Producto producto, Empresa empresa, Usuario usuario) {
 		DetalleTrasl detalle = new DetalleTrasl(this, producto, empresa, usuario);
-		System.out.println(this.getIdTraslado());
 		detalles.add(detalle);
 		
 	}

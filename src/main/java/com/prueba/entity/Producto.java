@@ -12,10 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -63,20 +60,12 @@ public class Producto{
     @Column(name = "vcmotivoIngreso")
     private String motivoIngreso = "Compra";
     
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    //@UpdateTimestamp
-	@Column(name = "dupdatefecha")
+    @Column(name = "dupdatefecha")
 	private Date fechaActualizacion;
     
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "dfechacreacion")
-    private Date fechaCreacion;
-    
-    @PrePersist
-	private void onCreate() {
-    	fechaCreacion = new Date();
-	}
-    	
+    @Column(name = "dfechaconfirmacion")
+    private Date fechaConfirmacion;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitfabricante")
     private Fabricante fabricante;
@@ -108,6 +97,9 @@ public class Producto{
     
     @Column(name = "vcestadotraslado")
 	public String estadoTraslado;
+    
+    @Column(name = "bsobrante", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
+    public Boolean sobrante = false;
     
     @JsonIgnore
 	@OneToMany(mappedBy = "traslado", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -282,6 +274,22 @@ public class Producto{
 		this.detalles = detalles;
 	}
 
+	public Date getFechaConfirmacion() {
+		return fechaConfirmacion;
+	}
+
+	public void setFechaConfirmacion(Date fechaConfirmacion) {
+		this.fechaConfirmacion = fechaConfirmacion;
+	}
+
+	public Boolean getSobrante() {
+		return sobrante;
+	}
+
+	public void setSobrante(Boolean sobrante) {
+		this.sobrante = sobrante;
+	}
+
 	public Producto() {
 		super();
 	}
@@ -412,7 +420,7 @@ public class Producto{
 		return "Producto [codigoPieza=" + codigoPieza + ", descripcion=" + descripcion + ", area=" + area + ", orden="
 				+ orden + ", familia=" + familia + ", tipo=" + tipo + ", nconfirmacion=" + nconfirmacion
 				+ ", verificado=" + verificado + ", estaActivo=" + estaActivo + ", motivoIngreso=" + motivoIngreso
-				+ ", fechaActualizacion=" + fechaActualizacion + ", fechaCreacion=" + fechaCreacion + ", fabricante="
+				+ ", fechaActualizacion=" + fechaActualizacion + ", fechaCreacion=" + fechaConfirmacion + ", fabricante="
 				+ fabricante + ", empresa=" + empresa + ", estado=" + estado + ", ubicacion=" + ubicacion
 				+ ", importado=" + importado + ", reviso=" + reviso + ", medidas=" + medidas + ", enviado=" + enviado
 				+ ", estadoTraslado=" + estadoTraslado + ", detalles=" + detalles + "]";

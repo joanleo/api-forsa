@@ -53,27 +53,19 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if ((authentication != null)) {
 		    currentUserName = authentication.getName();
-		    System.out.println(currentUserName);
 		}
 		
 		if(isConfig) return;
-		System.out.println("Application initial event");
-		System.out.println("buscando rutinas");
 		List<Rutina> listRutinas = rutinaRepo.findAll();
 		if(listRutinas.size() == 0) {
-			System.out.println("No se encontraron rutinas");
-			System.out.println("Creando rutinas");
 			util.crearRutinasBD(event);
 			listRutinas = rutinaRepo.findAll();
 		}
         
 		Set<Rutina> targetSet = new HashSet<>(listRutinas);
 		createRoleIfNotFound("ROLE_USER", targetSet);
-		System.out.println(currentUserName);
 		if(currentUserName != "") {
-			System.out.println(currentUserName);
 			Rol userRole = rolRepo.findByNombre("ROLE_USER");
-			System.out.println(authentication.getName());
 			Usuario usuario = usuarioRepo.findByNombreUsuario(authentication.getName()).get();
 			userRole.setEmpresa(usuario.getEmpresa());
 			usuario.setRol(userRole);
@@ -102,7 +94,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		}
 		Rol role = rolRepo.findByNombre(name);
         if (role == null) {
-        	System.out.println("Creando ROL_USER");
             role = new Rol(name);
             List<DetalleRutina> listaDetalle = new ArrayList<>();
             //List<Politica> listaPoliticas = new ArrayList<>();
@@ -112,21 +103,14 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             	}
             }
             for(DetalleRutina detalle: listaDetalle) {
-            	//System.out.println("Lista de detalle url: "+detalle.getPermiso().getUrl());
             	Politica politica = new Politica(role, detalle, false);
-            	//politica.setDetalle(detalle);
-            	//System.out.println("Poltica detalle url"+politica.getDetalle().getPermiso().getUrl());
-            	//politica.setPermiso(false);
+
             	politica = politicaRepo.save(politica);
-            	//role.addPolitica(detalle);
-            	//listaPoliticas.add(politica);
+
             	
             }
             System.out.println(role.getPoliticas().size());
-            //listaPoliticas = politicaRepo.saveAll(listaPoliticas);
-            //listaPoliticas = politicaRepo.findAll();
-            //Set<Politica> targetSet = new HashSet<>(listaPoliticas);
-            //role.setPolitica(targetSet);
+
             rolRepo.save(role);
         }
         return role;

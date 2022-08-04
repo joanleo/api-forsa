@@ -99,11 +99,9 @@ public class MovInvController {
 		}
 		
 		if(letras != null && desde != null) {
-			System.out.println("letras "+letras);
 			Page<MovInventario> inventarios = movInvService.searchInv(letras, empresa, pagina, items);
 			return new ApiResponse<>(inventarios.getSize(), inventarios);
 		}else {
-			System.out.println("entra");
 			Page<MovInventario> inventarios = movInvService.list(empresa, pagina, items);
 			return new ApiResponse<>(inventarios.getSize(), inventarios);
 		}

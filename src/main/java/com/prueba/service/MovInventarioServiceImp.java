@@ -1,5 +1,6 @@
  package com.prueba.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -48,10 +49,9 @@ public class MovInventarioServiceImp implements MovInventarioService {
 		Integer idInventario = inventario.getIdMov();
 		MovInventario actualizar = movInvRepo.findByidMov(idInventario);
 		for(Producto producto: productos) {
-			System.out.println(producto);
 			Producto activo = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
 			if(activo != null) {
-				actualizar.addActivo(activo);
+				actualizar.addActivo(activo, movInventarioDto.getRealizo(), new Date());
 			}else {
 				throw new ResourceNotFoundException("Activo", "codigo de pieza", producto.getCodigoPieza());
 			}
@@ -73,8 +73,6 @@ public class MovInventarioServiceImp implements MovInventarioService {
 
 	@Override
 	public Page<MovInventario> list(Empresa empresa, Integer pagina, Integer items) {
-		System.out.println("servicio");
-		System.out.println(empresa.getNit());
 		Page<MovInventario> inventarios = movInvRepo.findByEmpresa(empresa, PageRequest.of(pagina, items));
 		return inventarios;
 	}

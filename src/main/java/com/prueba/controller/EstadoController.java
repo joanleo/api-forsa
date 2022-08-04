@@ -196,7 +196,6 @@ public class EstadoController {
 		}
       		
         if(Objects.isNull(estadoDTO)){
-        	System.out.println("Controller busqueda vacia");
         	List<EstadoDTO> estados = estadoService.list(empresa);
         	csvService.writeEstadosToCsv(servletResponse.getWriter(), estados);
 		}else{

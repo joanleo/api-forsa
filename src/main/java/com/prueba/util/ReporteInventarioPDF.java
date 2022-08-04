@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+
 import javax.servlet.http.HttpServletResponse;
 
 import com.lowagie.text.Document;
@@ -90,6 +91,8 @@ public class ReporteInventarioPDF {
 	
 	private void tableData(PdfPTable table) {
 		List<DetalleInv> detalles = inventario.getDetalles();
+		
+		
 		int count = 1;
 		for(DetalleInv detalle: detalles) {
 			Font font = FontFactory.getFont(FontFactory.HELVETICA);
@@ -115,9 +118,7 @@ public class ReporteInventarioPDF {
 			cell.setPhrase(phrase);
 			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			table.addCell(cell);
-			
-			//table.addCell(producto.getEmpresa().getNombre());
-			
+						
 			phrase = new Phrase(producto.getEstado() == null ? " ":producto.getEstado().getTipo(), font);
 			cell = new PdfPCell(phrase);
 			table.addCell(cell);

@@ -90,7 +90,6 @@ public class ProductSpecifications {
 	public Specification<Producto> getProductosActivos(String letras, Empresa empresa){
 		return (root, query, criteryBuilder) ->{
 			List<Predicate> predicates = new ArrayList<>();
-			System.out.println("Specification "+letras);
 			predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+letras+ "%"));
 			
 			predicates.add(criteryBuilder.like(root.get("codigoPieza"), "%"+letras+ "%"));
@@ -108,8 +107,6 @@ public class ProductSpecifications {
 		return (root, query, criteryBuilder) ->{
 			
 			List<Predicate> predicates = new ArrayList<>();
-			System.out.println("Specification orden " + orden);
-			System.out.println("Specification filtro " + filtro);
 			if(orden != null) {
 				predicates.add(criteryBuilder.equal(root.get("orden"), orden));				
 			}

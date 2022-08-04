@@ -4,8 +4,10 @@
 package com.prueba.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,7 +26,7 @@ import com.prueba.security.entity.Usuario;
  *
  */
 @Entity
-@Table(name = "detalle_salida")
+@Table(name = "mov_det_salidas")
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class DetalleSalida implements Serializable {
 
@@ -45,6 +47,9 @@ public class DetalleSalida implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "usuarioConfirma", referencedColumnName = "nidusuario")
 	private Usuario usuarioConfirma;
+	
+	@Column(name = "dfecha_confirma")
+	public Date fechaConfirma;
 
 	public DetalleSalida(Salida salida, Producto producto) {
 		super();
@@ -87,6 +92,14 @@ public class DetalleSalida implements Serializable {
 
 	public void setUsuarioConfirma(Usuario usuarioConfirma) {
 		this.usuarioConfirma = usuarioConfirma;
+	}
+
+	public Date getFechaConfirma() {
+		return fechaConfirma;
+	}
+
+	public void setFechaConfirma(Date fechaConfirma) {
+		this.fechaConfirma = fechaConfirma;
 	}
 
 	public static long getSerialversionuid() {

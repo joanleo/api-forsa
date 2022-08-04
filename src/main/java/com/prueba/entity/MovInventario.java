@@ -31,7 +31,7 @@ import com.prueba.security.entity.Usuario;
  *
  */
 @Entity
-@Table(name = "mov_inventario", uniqueConstraints = { @UniqueConstraint(columnNames = { "nidmov" }) })
+@Table(name = "mov_inventarios", uniqueConstraints = { @UniqueConstraint(columnNames = { "nidmov" }) })
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class MovInventario implements Serializable{
 	
@@ -128,11 +128,11 @@ public class MovInventario implements Serializable{
 		this.numDocumento = numDocumento;
 	}
 
-	public void addActivo(Producto producto) {
+	public void addActivo(Producto producto, Usuario usuario, Date date) {
         DetalleInv detalle = new DetalleInv(this, producto);
-        System.out.println("Añadiento detalle "+producto.getCodigoPieza()+" Inventario: "+this.getIdMov());
+        detalle.setUsuarioConfirma(usuario);
+        detalle.setFechaConfirma(date);
         detalles.add(detalle);
-        System.out.println("Añadido");
     }
 	
 	public void removeActivo(Producto producto) {

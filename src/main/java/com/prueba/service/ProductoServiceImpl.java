@@ -210,7 +210,7 @@ public class ProductoServiceImpl implements ProductoService {
 			producto.setUbicacion(nuevaUbicacion);
 			producto.setEstado(nuevoEstado);
 			producto.setVerificado(true);//añadir fecha de verificacion
-			producto.setFechaActualizacion(new Date());
+			producto.setFechaConfirmacion(new Date());
 			producto.setEstaActivo(true);
 			producto.setReviso(usuario);
 			productoRepo.save(producto);
@@ -430,26 +430,9 @@ public class ProductoServiceImpl implements ProductoService {
 				
 				System.out.println("Inicio de guardado");
 				Long startProducts = System.currentTimeMillis();
-				
-				/*File filename = new File("src/main/resources/procts.txt");
-			 	RandomAccessFile stream = new RandomAccessFile(filename, "rw");
-			 	FileChannel channel = stream.getChannel(); 
-				for(Producto producto: listProductos) {
-									    
-				    String linea = producto.toString()+"\r\n";
-				    byte[] strBytes = linea.getBytes();
-				    ByteBuffer buffer = ByteBuffer.allocate(strBytes.length);
-				    buffer.put(strBytes);
-				    buffer.flip();
-				    channel.write(buffer);
-				    
-				}
-				stream.close();
-			    channel.close();*/
-				
+								
 				productoRepo.saveAllAndFlush(listProductos);
 				
-				//productoRepo.bulkLoadData();
 				Long endProducts = System.currentTimeMillis();
 				System.out.println("Duracion de carga de " + listProductos.size() + " productos: "+(endProducts-startProducts)/1000+" segundos");
 				if(error) {
@@ -460,45 +443,26 @@ public class ProductoServiceImpl implements ProductoService {
 						System.out.println("Primer registro");
 						for(String er: errores) {
 							Eror nuevoError = new Eror(1, ruta, er, currentUserName);
-							//System.out.println(nuevoError);
 						 	erroresCarga.add(nuevoError);
 						}
 						erorRepo.saveAll(erroresCarga);
 					}else {
 						int idError = errorr.getIdError();
-						//System.out.println("Ya existen registros: "+ idError);
 						idError+=1;
-						//System.out.println("Siguiente registro: "+ idError);
-						/*File filename = new File("src/main/resources/errorFile.dat");
-					 	RandomAccessFile stream = new RandomAccessFile(filename, "rw");
-					 	FileChannel channel = stream.getChannel();*/ 
+
 						for(String er: errores) {
 							
 							Eror nuevoError = new Eror(idError, ruta, er, currentUserName);
-							//System.out.println(nuevoError);
 						 	erroresCarga.add(nuevoError);
 						 	
 						    
-						    /*String linea = nuevoError.toString()+"\r\n";
-						    byte[] strBytes = linea.getBytes();
-						    ByteBuffer buffer = ByteBuffer.allocate(strBytes.length);
-						    buffer.put(strBytes);
-						    buffer.flip();
-						    channel.write(buffer);*/
-						    
 						}
-						/*stream.close();
-					    channel.close();*/
+
 						Long start = System.currentTimeMillis();
 						erorRepo.saveAll(erroresCarga);
 						Long end = System.currentTimeMillis();
 						System.out.println("Duracion de carga de errores con "+count+" lineas: "+(end-start)/1000+" segundos");
 
-					/*System.out.println("los errores son:");
-					for(String er: errores) {
-						System.out.println(er);						
-					}
-					//erorRepo.saveAll(errores);*/
 					}
 				}
 				

@@ -58,7 +58,6 @@ public class AuthController {
 	@PostMapping("/login")
 	@Operation(summary = "Autenticacion de usuarios")
 	public ResponseEntity<JWTAuthResonseDTO> authenticateUser(@RequestBody LoginDTO loginDTO){
-		System.out.println("ingreso");
 		Authentication autentication = authenticationMnager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUsernameOrEmail(), loginDTO.getPassword()));
 		
 		SecurityContextHolder.getContext().setAuthentication(autentication);
@@ -84,7 +83,6 @@ public class AuthController {
 			throw new IllegalAccessError("Debe estar logueado para realizar el registro");
 		}
 		Usuario usuarioActual = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
-		System.out.println(usuarioActual);
 		if(usuarioActual == null) {
 			System.out.println("Debe estar logueado para realizar el registro");
 		}

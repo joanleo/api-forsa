@@ -66,9 +66,7 @@ public class Rol implements Serializable{
     private Boolean estaActivo=true;
     
     public void addPolitica(DetalleRutina detalle) {
-    	System.out.println("añadiendo politica");
     	Politica nuevaPolitica = new Politica(this,detalle,false);
-    	System.out.println(nuevaPolitica.getDetalle().getRuta().getNombre());
     	politicas.add(nuevaPolitica);
     	
     }

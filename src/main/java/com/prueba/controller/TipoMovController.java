@@ -164,7 +164,6 @@ public class TipoMovController {
 			List<TipoMovDTO> estados =  tipoMovService.findByNombreAndEmpresaAndEstaActivo(letras, empresa, true);
 			csvService.writeTiposMovToCsv(servletResponse.getWriter(), estados);
 		}else{
-			System.out.println("Controller busqueda vacia");
 			List<TipoMovDTO> estados = tipoMovService.list(empresa);
 			csvService.writeTiposMovToCsv(servletResponse.getWriter(), estados);
 		}

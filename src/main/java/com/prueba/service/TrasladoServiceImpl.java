@@ -80,7 +80,6 @@ public class TrasladoServiceImpl implements TrasladoService {
 			throw new IllegalArgumentException("Las ubicaciones destino y origen deben ser distintos");
 		}
 		if(trasladoDTO.getCantActivos() == 0) {
-			System.out.println("cantidad se toma del tamaño del la lista "+trasladoDTO.getDetalles().size());
 			traslado.setCantActivos(trasladoDTO.getDetalles().size());
 		}else {
 			traslado.setCantActivos(trasladoDTO.getCantActivos());			
@@ -91,7 +90,6 @@ public class TrasladoServiceImpl implements TrasladoService {
 			usuario = usuarioRepo.findById(idUsuario)
 					.orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", idUsuario));
 		}else {
-			System.out.println("Usuario que envia es null");
 			traslado.setUsuarioEnvio(usuario);
 		}
 
@@ -109,7 +107,6 @@ public class TrasladoServiceImpl implements TrasladoService {
 		traslado = trasladoRepo.saveAndFlush(traslado);
 		
 		Long idtraslado = traslado.getIdTraslado();
-		System.out.println("Traslado creado con id" + idtraslado);
 		List<Producto> productos = trasladoDTO.getDetalles();
 		Traslado actualizar = trasladoRepo.findById(idtraslado)
 				.orElseThrow(() -> new ResourceNotFoundException("Traslado", "id", idtraslado));

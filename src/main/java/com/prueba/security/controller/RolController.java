@@ -91,7 +91,6 @@ public class RolController {
 		if(letras == null) {
 			return rolService.list(empresa);
 		}
-		System.out.println("controller, empresa: "+empresa.getNombre());
 		return rolService.list(letras, empresa);
 	}
 	
@@ -185,9 +184,7 @@ public class RolController {
 		}
 
 		Set<RutinaDTO> politicas = politicaService.buscarPoliticas(rol, empresa);
-		
-		System.out.println(politicas);
-		
+				
 		return politicas;
 
 	}
@@ -215,19 +212,7 @@ public class RolController {
 		Set<RutinaDTO> politicas = politicaService.buscarPoliticas(rol, empresa);
 		csvService.writePolitica(servletResponse.getWriter(), politicas);
 	}
-	
-	/*@GetMapping("/politicas/indexados")
-	public ApiResponse<Page<Politica>> obtenerTodasPoliticasPaginadas(
-			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
-			@RequestParam(required=false, defaultValue = "0") Integer items,
-			@RequestParam(required=true) Long nit){
-		System.out.println("Ingreso");
-		Page<Politica> politicas = politicaService.buscarPoliticas(nit, pagina, items);
 		
-		return new ApiResponse<>(politicas.getSize(), politicas);
-
-	}*/
-	
 	@PutMapping("/politicas/{idPolitica}")
 	@Operation(summary = "Actualiza el permiso de una politica", description = "Actualiza el permiso de una politica segun su id")
 	public ResponseEntity<?> actualizarPolitica(@PathVariable Long idPolitica,
