@@ -162,7 +162,7 @@ public class Salida implements Serializable {
 	}
 	
 	public void updateActivo(Producto producto, Usuario usuario, Date date) {
-		for (Iterator<DetalleSalida> iterator = detalles.iterator(); iterator.hasNext();) {
+		/*for (Iterator<DetalleSalida> iterator = detalles.iterator(); iterator.hasNext();) {
 			DetalleSalida detalle = iterator.next();
 			
 			if(detalle.getProducto().equals(producto)) {
@@ -170,6 +170,16 @@ public class Salida implements Serializable {
 				detalle.setUsuarioConfirma(usuario);
 				detalle.setFechaConfirma(date);
 			}
+		}*/
+		
+		for( int i = 0; i < detalles.size(); i++ )
+		{
+		    if(detalles.get(i).getProducto().equals(producto))
+		    {
+		    	detalles.remove(producto);
+		    	detalles.get(i).setUsuarioConfirma(usuario);
+				detalles.get(i).setFechaConfirma(date);
+		    }  
 		}
 	}
 

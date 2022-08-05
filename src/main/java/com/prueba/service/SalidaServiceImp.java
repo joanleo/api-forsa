@@ -171,9 +171,12 @@ public class SalidaServiceImp implements SalidaService {
 		for(DetalleSalida detalle:detalles) {
 				Producto activoEliminar = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
 				activoEliminar.setEstaActivo(false);
-				productoRepo.save(activoEliminar);
+				System.out.println(activoEliminar.getCodigoPieza());
+				activoEliminar = productoRepo.save(activoEliminar);
 				salida.updateActivo(activoEliminar, usuario, new Date());
+				salida.setEstadoSalida("F");
 		}
+
 		
 		salida = salidaRepo.save(salida);
 		
@@ -269,7 +272,7 @@ public class SalidaServiceImp implements SalidaService {
 				if(!activoEliminar.getEstaActivo()) {
 					throw new ResourceCannotBeDeleted("Activo", "se encuentra inhabilitado");
 				}
-				if(activoEliminar.getEstadoTraslado().equalsIgnoreCase("F")) {
+				if(activoEliminar.getEstadoTraslado() != null && activoEliminar.getEstadoTraslado().equalsIgnoreCase("F")) {
 					List<DetalleTrasl> lista = activoEliminar.getDetalles();
 					if(!lista.get(0).getTraslado().getEstadoTraslado().equalsIgnoreCase("F")) {
 						throw new ResourceCannotBeDeleted("Activo", "se encuentra en un traslado sin finalizar");
