@@ -175,7 +175,7 @@ public class CsvExportService {
 	public void writeUsuariosToCsv(PrintWriter writer, List<Usuario> usuarios) {
 		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
 			csvPrinter.printRecord(
-        			"Id", "Nombres Completos", "Nombre de usuario", "Contraseña", "Email", "Rol", "Contraseña");
+        			"Id", "Nombres Completos", "Nombre de usuario", "Email", "Rol", "Contraseña"  );
     		for(Usuario usuario: usuarios) {
     			csvPrinter.printRecord(usuario.getId(), usuario.getNombre(), usuario.getNombreUsuario(), 
     					usuario.getEmail(), usuario.getRol().getNombre(), usuario.getContrasena());    			
