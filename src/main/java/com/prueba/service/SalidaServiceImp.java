@@ -147,6 +147,9 @@ public class SalidaServiceImp implements SalidaService {
 		for(DetalleSalida detalle:detalles) {
 			if(detalle.getProducto().getCodigoPieza().equalsIgnoreCase(codigopieza)) {
 				Producto activoEliminar = productoRepo.findByCodigoPieza(codigopieza);
+				if(!activoEliminar.getEstaActivo()) {
+					throw new IllegalAccessError("El activo ya se encuentra inhabilitado");
+				}
 				activoEliminar.setEstaActivo(false);
 				productoRepo.save(activoEliminar);
 				salida.updateActivo(activoEliminar, usuario, new Date());
