@@ -68,7 +68,7 @@ public class RolController {
 	
 	@PostMapping
 	@Operation(summary = "Crea un rol", description = "Crea un nuevo rol" )
-	public ResponseEntity<RolDTO> create(@Valid @RequestBody RolDTO rolDTO) throws IllegalArgumentException{
+	public ResponseEntity<RolDTO> create(@Valid @RequestBody RolDTO rolDTO){
 		return new ResponseEntity<RolDTO>(rolService.create(rolDTO), HttpStatus.CREATED);
 	}
 	

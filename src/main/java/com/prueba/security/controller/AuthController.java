@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.entity.Empresa;
+import com.prueba.exception.ResourceCannotBeAccessException;
 import com.prueba.security.dto.JWTAuthResonseDTO;
 import com.prueba.security.dto.LoginDTO;
 import com.prueba.security.dto.RegistroDTO;
@@ -80,11 +81,11 @@ public class AuthController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
 		if(authentication.getName() == "anonymousUser") {
-			throw new IllegalAccessError("Debe estar logueado para realizar el registro");
+			throw new ResourceCannotBeAccessException("Debe estar logueado para realizar el registro");
 		}
 		Usuario usuarioActual = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		if(usuarioActual == null) {
-			System.out.println("Debe estar logueado para realizar el registro");
+			throw new ResourceCannotBeAccessException("Debe estar logueado para realizar el registro");
 		}
 		
 		if(registroDTO.getEmpresa() != null) {

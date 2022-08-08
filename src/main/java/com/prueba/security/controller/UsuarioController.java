@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.ApiResponse;
 import com.prueba.entity.Empresa;
+import com.prueba.exception.ResourceCannotBeAccessException;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.security.dto.RegistroDTO;
 import com.prueba.security.dto.ResDTO;
@@ -127,7 +128,7 @@ public class UsuarioController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
 		if(authentication.getName() == "anonymousUser") {
-			throw new IllegalAccessError("Debe estar logueado para realizar el registro");
+			throw new ResourceCannotBeAccessException("Debe estar logueado para realizar el registro");
 		}
 		Usuario usuarioActual = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		if(usuarioActual == null) {

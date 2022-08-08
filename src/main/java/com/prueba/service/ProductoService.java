@@ -24,7 +24,7 @@ public interface ProductoService {
 	
 	public String delete(String codigoPieza);
 	
-	public Producto receive(String id, ProductoDTO productoDTO) throws IllegalAccessException;
+	public Producto receive(String id, ProductoDTO productoDTO);
 	
 	public Page<Producto> searchProducts(Empresa empresa, SearchDTO searchDTO, int offset, int pageSize);
 	

@@ -32,6 +32,7 @@ import com.prueba.entity.Familia;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceAlreadyExistsException;
+import com.prueba.exception.ResourceCannotBeAccessException;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.ErorRepository;
@@ -132,7 +133,7 @@ public class ProductoServiceImpl implements ProductoService {
 		if(exist == null) {
 			throw new ResourceNotFoundException("Activo", "codigo de pieza ", codigoPieza);
 		}
-		
+		exist.setFechaActualizacion(new Date());
 		exist.setArea(productoDTO.getArea());
 		exist.setOrden(productoDTO.getOrden());
 		exist.setDescripcion(productoDTO.getDescripcion());
@@ -153,7 +154,7 @@ public class ProductoServiceImpl implements ProductoService {
 			producto.setEstaActivo(false);
 		}else {
 			error = true;
-			throw new IllegalAccessError("No es posible realizar la accion solicitada, el producto ha sido verificado verificado");
+			throw new ResourceCannotBeAccessException("No es posible realizar la accion solicitada, el producto ha sido verificado verificado");
 			
 		}
 		
@@ -176,7 +177,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	
 	@Override
-	public Producto receive(String codigoPieza, ProductoDTO productoDTO) throws IllegalAccessException {
+	public Producto receive(String codigoPieza, ProductoDTO productoDTO) {
 		
 		Producto producto = productoRepo.findByCodigoPieza(codigoPieza);		
 		if(producto == null) {
@@ -188,7 +189,7 @@ public class ProductoServiceImpl implements ProductoService {
 			if(authentication != null) {
 			    usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 			}else {
-				throw new IllegalAccessException("Debe estar logueado para realizar esta accion");
+				throw new ResourceCannotBeAccessException("Debe estar logueado para realizar esta accion");
 			}
 
 			//Capturar datos de la empresa del usuario		
@@ -221,9 +222,9 @@ public class ProductoServiceImpl implements ProductoService {
 			
 			
 		}else if(producto.getVerificado()){
-			throw new IllegalAccessError("No se puede realizar esta accion el activo ya fue verificado");
+			throw new ResourceCannotBeAccessException("No se puede realizar esta accion el activo ya fue verificado");
 		}else if(!producto.getEstaActivo()) {
-			throw new IllegalAccessError("No se puede realizar esta accion el activo no esta activo");
+			throw new ResourceCannotBeAccessException("No se puede realizar esta accion el activo no esta activo");
 		}
 		
 		return producto;
@@ -265,11 +266,11 @@ public class ProductoServiceImpl implements ProductoService {
 			if (authentication != null) {
 			    currentUserName = authentication.getName();
 			}else {
-				throw new IllegalAccessException("Debe estar logueado para realizar esta accion");
+				throw new ResourceCannotBeAccessException("Debe estar logueado para realizar esta accion");
 			}
 			String extArchivo = file.getOriginalFilename().split("\\.")[1];
 			if(!extArchivo.equals("txt")) {
-				throw new IllegalArgumentException("El tipo de archivo no es compatible");
+				throw new ResourceCannotBeAccessException("El tipo de archivo no es compatible");
 			}
 			String ruta = webRequest.getDescription(false);
 			//Eror errorr = erorRepo.findTopByOrderByIdErrorDesc();

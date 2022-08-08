@@ -18,6 +18,7 @@ import com.prueba.entity.DetalleRutina;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Rutina;
 import com.prueba.exception.ResourceAlreadyExistsException;
+import com.prueba.exception.ResourceCannotBeAccessException;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.RutinaRepository;
 import com.prueba.security.dto.RolDTO;
@@ -51,7 +52,7 @@ public class RolServiceImpl implements RolService{
 	private RutinaRepository rutinaRepo;
 	
 	@Override
-	public RolDTO create(RolDTO rolDTO) throws IllegalArgumentException {
+	public RolDTO create(RolDTO rolDTO){
 		Pattern special = Pattern.compile("[!@#$%&*()+=|<>?:;{}/./,\\\\[\\\\^'\"]~]", Pattern.CASE_INSENSITIVE);
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
@@ -59,7 +60,7 @@ public class RolServiceImpl implements RolService{
 		boolean errorNombre = matcher.find();
 		
 		if(errorNombre) {
-			throw new IllegalArgumentException("El nombre no debe contener caracteres espaciales []!@#$%&*()+=|<>?{},.:;");
+			throw new ResourceCannotBeAccessException("El nombre no debe contener caracteres espaciales []!@#$%&*()+=|<>?{},.:;");
 		}
 		
 		if(rolDTO.getEmpresa() == null) {

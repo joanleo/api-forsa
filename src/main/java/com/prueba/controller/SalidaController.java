@@ -64,7 +64,7 @@ public class SalidaController {
 	
 	@PostMapping
 	@Operation(summary = "Crea una salida")
-	public ResponseEntity<?> crearSalida(@RequestBody Salida salida) throws IllegalAccessException{
+	public ResponseEntity<?> crearSalida(@RequestBody Salida salida) {
 		return new ResponseEntity<Salida>(salidaService.crearSalida(salida), HttpStatus.CREATED);
 	}
 	

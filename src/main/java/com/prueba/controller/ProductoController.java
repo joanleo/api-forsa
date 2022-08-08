@@ -32,6 +32,7 @@ import com.prueba.dto.ProductoDTO;
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
+import com.prueba.exception.ResourceCannotBeAccessException;
 import com.prueba.repository.ProductoRepository;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.security.entity.Usuario;
@@ -145,9 +146,9 @@ public class ProductoController {
 	@PatchMapping("/{id}")
 	@Operation(summary = "Verifica un activo", description = "Actualiza un activo por su id")
 	public ResponseEntity<Producto> verify(@PathVariable(name = "id") String id,
-										   @RequestBody(required=false) ProductoDTO productoDTO) throws IllegalAccessException{
+										   @RequestBody(required=false) ProductoDTO productoDTO) {
 		if(productoDTO == null) {
-			throw new IllegalArgumentException("Falta informacion"); 
+			throw new ResourceCannotBeAccessException("Falta informacion"); 
 		}
 		return new ResponseEntity<Producto>(productoService.receive(id, productoDTO), HttpStatus.ACCEPTED);
 	}

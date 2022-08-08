@@ -21,6 +21,7 @@ import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Salida;
 import com.prueba.entity.TipoMov;
+import com.prueba.exception.ResourceCannotBeAccessException;
 import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.DetalleSalidaRepository;
@@ -57,7 +58,7 @@ public class SalidaServiceImp implements SalidaService {
 	private DetalleSalidaRepository detalleSalidaRepo;
 	
 	@Override
-	public Salida crearSalida(Salida salida) throws IllegalAccessException {
+	public Salida crearSalida(Salida salida){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
@@ -91,11 +92,13 @@ public class SalidaServiceImp implements SalidaService {
 				throw new ResourceNotFoundException("activo", "codigo de pieza", detalle.getProducto().getCodigoPieza());
 			}
 			if(!activo.getEstaActivo()) {
-				throw new IllegalAccessException("Activo se encuentra inhabilitado");
+				throw new ResourceCannotBeAccessException("Activo se encuentra inhabilitado");
 			}
+			activo.setEstadoSalida("P");
+			activo = productoRepo.save(activo);
 			nuevaSalida.addActivo(activo);
 		}
-		
+		 
 		nuevaSalida.setEstadoSalida("A");
 		
 		nuevaSalida = salidaRepo.save(nuevaSalida);
@@ -148,9 +151,13 @@ public class SalidaServiceImp implements SalidaService {
 			if(detalle.getProducto().getCodigoPieza().equalsIgnoreCase(codigopieza)) {
 				Producto activoEliminar = productoRepo.findByCodigoPieza(codigopieza);
 				if(!activoEliminar.getEstaActivo()) {
-					throw new IllegalAccessError("El activo ya se encuentra inhabilitado");
+					throw new ResourceCannotBeAccessException("El activo ya se encuentra inhabilitado");
+				}
+				if(activoEliminar.getEstadoSalida().equalsIgnoreCase("P")) {
+					throw new ResourceCannotBeAccessException("El activo se encuentra en una salida");
 				}
 				activoEliminar.setEstaActivo(false);
+				activoEliminar.setFechaAEliminacion(new Date());
 				productoRepo.save(activoEliminar);
 				salida.updateActivo(activoEliminar, usuario, new Date());
 			}

@@ -20,9 +20,8 @@ public interface SalidaService {
 	/**
 	 * @param salida
 	 * @return
-	 * @throws IllegalAccessException 
 	 */
-	public Salida crearSalida(Salida salida) throws IllegalAccessException ;
+	public Salida crearSalida(Salida salida);
 
 	/**
 	 * @param empresa

@@ -176,7 +176,7 @@ public class Salida implements Serializable {
 		{
 		    if(detalles.get(i).getProducto().equals(producto))
 		    {
-		    	detalles.remove(producto);
+		    	//detalles.remove(producto);
 		    	detalles.get(i).setUsuarioConfirma(usuario);
 				detalles.get(i).setFechaConfirma(date);
 		    }  
