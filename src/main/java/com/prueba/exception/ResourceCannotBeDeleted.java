@@ -3,10 +3,14 @@
  */
 package com.prueba.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 /**
  * @author Joan Leon
  *
  */
+@ResponseStatus(value = HttpStatus.CONFLICT)
 public class ResourceCannotBeDeleted extends RuntimeException  {
 
 	/**
