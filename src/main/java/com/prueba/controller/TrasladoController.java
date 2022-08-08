@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lowagie.text.DocumentException;
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.TrasladoDTO;
+import com.prueba.entity.DetalleTrasl;
 import com.prueba.entity.Traslado;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.service.TrasladoService;
@@ -182,6 +183,19 @@ public class TrasladoController {
 		Traslado traslado = trasladoService.getTraslado(idtraslado);
 		ReporteTrasladoPDF exportar = new ReporteTrasladoPDF(traslado);
 		exportar.export(response);
+	}
+	
+	@GetMapping("/detalle/{idtraslado}")
+	@Operation(summary = "Obtiene el detalle de un traslado")
+	public ApiResponse<Page<DetalleTrasl>> obtenerDetalleTraslado(
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
+			@PathVariable Long idtraslado){
+		
+		Page<DetalleTrasl> detalles = trasladoService.obtieneDetalleTraslado(idtraslado, pagina, items);
+		
+		
+		return new ApiResponse<>(detalles.getSize(), detalles);
 	}
 	
 }

@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import org.springframework.data.domain.Page;
 
 import com.prueba.dto.TrasladoDTO;
+import com.prueba.entity.DetalleTrasl;
 import com.prueba.entity.Traslado;
 
 public interface TrasladoService {
@@ -77,6 +78,14 @@ public interface TrasladoService {
 	 * @return
 	 */
 	public Page<Traslado> buscarTraslados(TrasladoDTO trasladoDTO, Integer pagina, Integer items);
+
+	/**
+	 * @param idtraslado
+	 * @param pagina
+	 * @param items
+	 * @return
+	 */
+	Page<DetalleTrasl> obtieneDetalleTraslado(Long idtraslado, Integer pagina, Integer items);
 
 
 

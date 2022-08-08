@@ -23,8 +23,10 @@ import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Traslado;
 import com.prueba.entity.Ubicacion;
+import com.prueba.exception.ResourceCannotBeAccessException;
 import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
+import com.prueba.repository.DetalleTrasladoRepository;
 import com.prueba.repository.ProductoRepository;
 import com.prueba.repository.TrasladoRepository;
 import com.prueba.repository.UbicacionRepository;
@@ -56,6 +58,9 @@ public class TrasladoServiceImpl implements TrasladoService {
 	
 	@Autowired
 	private TrasladoSpecifications trasladoSpec;
+	
+	@Autowired
+	private DetalleTrasladoRepository detalleTrasladoRepo;
 
 	@Override
 	public TrasladoDTO create(TrasladoDTO trasladoDTO) {
@@ -77,7 +82,7 @@ public class TrasladoServiceImpl implements TrasladoService {
 					.orElseThrow(() -> new ResourceNotFoundException("Ubicacion", "id", idOrigen));			
 		}
 		if(destino.equals(origen)) {
-			throw new IllegalArgumentException("Las ubicaciones destino y origen deben ser distintos");
+			throw new ResourceCannotBeAccessException("Las ubicaciones destino y origen deben ser distintos");
 		}
 		if(trasladoDTO.getCantActivos() == 0) {
 			traslado.setCantActivos(trasladoDTO.getDetalles().size());
@@ -113,6 +118,9 @@ public class TrasladoServiceImpl implements TrasladoService {
 		for(Producto producto: productos) {
 			Producto nuevo = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
 			if(nuevo != null) {
+				if(nuevo.getEstadoTraslado().equalsIgnoreCase("E")) {
+					System.out.println("Crear una excepcion, mensaje que el activo ya se encuentra en un traslado");
+				}
 				nuevo.setEstadoTraslado("A");
 				nuevo = productoRepo.save(nuevo);
 				actualizar.addActivo(nuevo, empresa, usuario);
@@ -390,6 +398,20 @@ public class TrasladoServiceImpl implements TrasladoService {
 		
 		trasladoRepo.delete(traslado);
 		
+	}
+
+	@Override
+	public Page<DetalleTrasl> obtieneDetalleTraslado(Long idtraslado, Integer pagina, Integer items) {
+		
+		Traslado traslado = trasladoRepo.findById(idtraslado)
+				.orElseThrow(() -> new ResourceNotFoundException("Traslado", "id", idtraslado));
+		
+		if(items == 0) {
+			Page<DetalleTrasl> detalles = detalleTrasladoRepo.findByTraslado(traslado, PageRequest.of(0, 10));
+			return detalles;
+		}
+		Page<DetalleTrasl> detalles = detalleTrasladoRepo.findByTraslado(traslado, PageRequest.of(pagina, items));
+		return detalles;
 	}
 
 }
