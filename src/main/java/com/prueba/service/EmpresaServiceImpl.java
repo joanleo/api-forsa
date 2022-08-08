@@ -7,14 +7,21 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.prueba.dto.EmpresaDTO;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Trazabilidad;
 import com.prueba.exception.ResourceAlreadyExistsException;
 import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
+import com.prueba.repository.TrazabilidadRepository;
+import com.prueba.security.entity.Usuario;
+import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.EmpresaSpecifications;
 
 @Service
@@ -28,9 +35,19 @@ public class EmpresaServiceImpl implements EmpresaService {
 	
 	@Autowired
 	private EmpresaSpecifications empresaSpec;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepo;
+	
+	@Autowired
+	private TrazabilidadRepository trazaRepo;
 
 	@Override
 	public EmpresaDTO create(EmpresaDTO empresaDTO) {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
 		Empresa empresa = mapearDto(empresaDTO);
 		Empresa exist = empresaRepo.findByNit(empresa.getNit());
 		if (exist == null) {
@@ -38,6 +55,11 @@ public class EmpresaServiceImpl implements EmpresaService {
 		} else {
 			throw new ResourceAlreadyExistsException("Empresa", "nombre", empresa.getNombre());
 		}
+		
+		ServletUriComponentsBuilder ruta = ServletUriComponentsBuilder.fromCurrentRequest();
+		String operacion = "El usuario "+usuario.getNombre()+" creo la empresa "+empresa.getNombre()+" con nit "+empresa.getNit();
+		Trazabilidad trazaCrearEmpresa = new Trazabilidad(operacion,usuario,ruta.toUriString());
+		trazaRepo.save(trazaCrearEmpresa);
 		return mapearEntidad(empresa);
 	}
 	
@@ -70,8 +92,8 @@ public class EmpresaServiceImpl implements EmpresaService {
 	
 	@Override
 	public List<EmpresaDTO> list() {
-		List<Empresa> empresas = empresaRepo.findByEstaActivoTrue();
 		
+		List<Empresa> empresas = empresaRepo.findByEstaActivoTrue();		
 		return empresas.stream().map(empresa -> mapearEntidad(empresa)).collect(Collectors.toList());
 	}
 
@@ -92,6 +114,14 @@ public class EmpresaServiceImpl implements EmpresaService {
 		empresa.setNombre(empresaDTO.getNombre());
 		
 		empresaRepo.save(empresa);
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		ServletUriComponentsBuilder ruta = ServletUriComponentsBuilder.fromCurrentRequest();
+		String operacion = "El usuario "+usuario.getNombre()+" actualizo la empresa "+empresa.getNombre();
+		Trazabilidad trazaCrearEmpresa = new Trazabilidad(operacion,usuario,ruta.toUriString());
+		trazaRepo.save(trazaCrearEmpresa);
+		
 		return mapearEntidad(empresa);
 	}
 
@@ -105,6 +135,13 @@ public class EmpresaServiceImpl implements EmpresaService {
 		}
 		
 		empresaRepo.delete(empresa);
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		ServletUriComponentsBuilder ruta = ServletUriComponentsBuilder.fromCurrentRequest();
+		String operacion = "El usuario "+usuario.getNombre()+" elimino la empresa "+empresa.getNombre();
+		Trazabilidad trazaCrearEmpresa = new Trazabilidad(operacion,usuario,ruta.toUriString());
+		trazaRepo.save(trazaCrearEmpresa);
 
 	}
 	
