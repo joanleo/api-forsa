@@ -104,6 +104,12 @@ public class Producto{
     @JsonIgnore
 	@OneToMany(mappedBy = "traslado", cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<DetalleTrasl> detalles = new ArrayList<DetalleTrasl>();
+    
+    @Column(name = "dfechaeliminacion")
+	private Date fechaAEliminacion;
+    
+    @Column(name = "vcestadosalida")
+	public String estadoSalida;
 	
 	public String getCodigoPieza() {
 		return codigoPieza;
@@ -290,6 +296,14 @@ public class Producto{
 		this.sobrante = sobrante;
 	}
 
+	public String getEstadoSalida() {
+		return estadoSalida;
+	}
+
+	public void setEstadoSalida(String estadoSalida) {
+		this.estadoSalida = estadoSalida;
+	}
+
 	public Producto() {
 		super();
 	}
@@ -297,6 +311,14 @@ public class Producto{
 	public Producto(String codigoPieza) {
 		super();
 		this.codigoPieza = codigoPieza;
+	}
+
+	public Date getFechaAEliminacion() {
+		return fechaAEliminacion;
+	}
+
+	public void setFechaAEliminacion(Date fechaAEliminacion) {
+		this.fechaAEliminacion = fechaAEliminacion;
 	}
 
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
