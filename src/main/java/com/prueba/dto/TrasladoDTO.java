@@ -10,6 +10,8 @@ import com.prueba.security.entity.Usuario;
 
 public class TrasladoDTO {
 	
+	public Long idTraslado;
+	
 	private List<Producto> detalles;
 	
 	private int cantActivos;
@@ -29,6 +31,14 @@ public class TrasladoDTO {
 	private String estadoTraslado;
 	
 	private Empresa empresa;
+
+	public Long getIdTraslado() {
+		return idTraslado;
+	}
+
+	public void setIdTraslado(Long idTraslado) {
+		this.idTraslado = idTraslado;
+	}
 
 	public List<Producto> getDetalles() {
 		return detalles;
