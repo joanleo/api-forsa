@@ -18,6 +18,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.prueba.security.entity.Usuario;
 
+/**
+ * @author Joan Leon
+ *
+ */
 @Entity
 @Table(name = "mov_det_traslados")
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
@@ -170,6 +174,13 @@ public class DetalleTrasl implements Serializable{
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	@Override
+	public String toString() {
+		return "DetalleTrasl [id=" + id + ", traslado=" + traslado + ", producto=" + producto + ", usuarioconfirma="
+				+ usuarioconfirma + ", usuarioRecibe=" + usuarioRecibe + ", fechaConfirma=" + fechaConfirma
+				+ ", fechaRecibe=" + fechaRecibe + ", empresa=" + empresa + "]";
 	}
 
 	

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.prueba.entity;
 
 import java.io.Serializable;

@@ -19,6 +19,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.prueba.security.entity.Usuario;
@@ -66,6 +67,7 @@ public class Traslado implements Serializable {
 	public int cantActivos;
 
 	@OneToMany(mappedBy = "traslado", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
 	public List<DetalleTrasl> detalles = new ArrayList<DetalleTrasl>();
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -193,15 +195,42 @@ public class Traslado implements Serializable {
 	}
 
 	public void removeActivo(Producto producto) {
-		for (Iterator<DetalleTrasl> iterator = detalles.iterator(); iterator.hasNext();) {
-			DetalleTrasl detalle = iterator.next();
+		
 
+		/*DetalleTrasl toRemove = null;
+
+		for (int i = 0; i < detalles.size(); i++ ) {
+			System.out.println(detalles.get(i).getProducto().getCodigoPieza());
+		    if(detalles.get(i).getProducto().equals(producto)) {
+		    	System.out.println("item a remover "+producto.getCodigoPieza());
+		        toRemove = detalles.get(i);
+		    }
+		}
+		System.out.println("añadisos "+toRemove.getProducto().getCodigoPieza());
+		System.out.println(detalles.size());
+		detalles.remove(toRemove);
+		System.out.println(detalles.size());*/
+		Iterator<DetalleTrasl> iterator = detalles.iterator();
+		while (iterator.hasNext()) {
+			DetalleTrasl detalle = iterator.next();
 			if (detalle.getTraslado().equals(this) && detalle.getProducto().equals(producto)) {
 				iterator.remove();
 				detalle.setTraslado(null);
 				detalle.setProducto(null);
+				detalle.setEmpresa(null);
 			}
 		}
+	
+		/*for( int i = 0; i < detalles.size(); i++ )
+		{
+		    if(detalles.get(i).getProducto().equals(producto))
+		    {
+		    	System.out.println("Removiendo en la clase "+producto.getCodigoPieza());
+		    	//detalles.remove(producto);
+		    	detalles.get(i).setTraslado(null);
+		    	detalles.get(i).setProducto(null);
+		    }  
+		}*/
 	}
 
 	/**

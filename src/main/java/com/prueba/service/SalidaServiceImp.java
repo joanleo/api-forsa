@@ -279,6 +279,9 @@ public class SalidaServiceImp implements SalidaService {
 		List<DetalleSalida> detalles = salida.getDetalles();
 		for(DetalleSalida detalle:detalles) {
 				Producto activoEliminar = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
+				if(activoEliminar == null) {
+					throw new ResourceNotFoundException("Activo", "codigo de pieza", detalle.getProducto().getCodigoPieza());
+				}
 				if(!activoEliminar.getEstaActivo()) {
 					throw new ResourceCannotBeDeleted("Activo", "se encuentra inhabilitado");
 				}

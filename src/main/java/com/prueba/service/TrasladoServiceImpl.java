@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.TrasladoDTO;
+import com.prueba.entity.DetalleSalida;
 import com.prueba.entity.DetalleTrasl;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
@@ -338,19 +339,27 @@ public class TrasladoServiceImpl implements TrasladoService {
 	public void eliminarTodo(Long idtraslado) {
 		Traslado traslado = trasladoRepo.findById(idtraslado)
 				.orElseThrow(() -> new ResourceNotFoundException("Traslado", "id", idtraslado));
-		
-		List<DetalleTrasl> productos = traslado.getDetalles();
-		for(DetalleTrasl producto: productos) {
+		System.out.println("Traslado "+traslado.getNumDocumento());
+		List<DetalleTrasl> detalles = traslado.getDetalles();
+		for(DetalleTrasl producto: detalles) {
 			Producto eliminar = productoRepo.findByCodigoPieza(producto.getProducto().getCodigoPieza());
-			if(eliminar != null) {
-				eliminar.setEstadoTraslado("");
-				eliminar = productoRepo.save(eliminar);
-				traslado.removeActivo(eliminar);				
+			if(eliminar != null ) {
+				if(eliminar.getEstadoTraslado().equalsIgnoreCase("E") || eliminar.getEstadoTraslado().equalsIgnoreCase("P")) {
+					throw new ResourceCannotBeAccessException("El  activo esta en proceso de traslado");
+				}			
 			}else {
 				throw new ResourceNotFoundException("Activo", "codigo de pieza", producto.getProducto().getCodigoPieza());
 			}
 		}
-		traslado = trasladoRepo.save(traslado);
+		traslado.getDetalles().removeAll(detalles);
+		/*for(DetalleTrasl detalle: detalles) {
+			Producto activoEliminar = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
+			System.out.println("Removiendo "+activoEliminar.getCodigoPieza());
+			traslado.removeActivo(activoEliminar);
+			
+		}
+		System.out.println(traslado.getDetalles().size());*/
+		trasladoRepo.save(traslado);
 		
 		
 	}
