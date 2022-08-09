@@ -192,9 +192,7 @@ public class TrasladoController {
 			@RequestParam(required=false, defaultValue = "0") Integer items,
 			@PathVariable Long idtraslado){
 		
-		Page<DetalleTrasl> detalles = trasladoService.obtieneDetalleTraslado(idtraslado, pagina, items);
-		
-		
+		Page<DetalleTrasl> detalles = trasladoService.obtieneDetalleTraslado(idtraslado, pagina, items);		
 		return new ApiResponse<>(detalles.getSize(), detalles);
 	}
 	

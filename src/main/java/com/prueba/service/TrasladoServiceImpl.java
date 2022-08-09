@@ -118,8 +118,8 @@ public class TrasladoServiceImpl implements TrasladoService {
 		for(Producto producto: productos) {
 			Producto nuevo = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
 			if(nuevo != null) {
-				if(nuevo.getEstadoTraslado().equalsIgnoreCase("E")) {
-					System.out.println("Crear una excepcion, mensaje que el activo ya se encuentra en un traslado");
+				if(nuevo.getEstadoTraslado() != null && nuevo.getEstadoTraslado().equalsIgnoreCase("E")) {
+					throw new ResourceCannotBeAccessException("Crear una excepcion, mensaje que el activo ya se encuentra en un traslado");
 				}
 				nuevo.setEstadoTraslado("A");
 				nuevo = productoRepo.save(nuevo);

@@ -14,6 +14,7 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.prueba.security.entity.Usuario;
 
@@ -22,9 +23,6 @@ import com.prueba.security.entity.Usuario;
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class DetalleTrasl implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
@@ -32,6 +30,7 @@ public class DetalleTrasl implements Serializable{
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@MapsId("idTraslado")
+	@JsonBackReference
 	private Traslado traslado;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
