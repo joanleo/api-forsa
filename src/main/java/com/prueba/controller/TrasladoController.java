@@ -147,15 +147,10 @@ public class TrasladoController {
 		return new ResponseEntity<Traslado>(traslado, HttpStatus.OK);
 	}
 	
-	@PatchMapping("eliminar/{idtraslado}")
-	@Operation(summary = "Eliminar piezas de un traslado", description = "Elimina una pieza de un traslado o elimina todas las piezas de un traslado")
+	@DeleteMapping("eliminar/{idtraslado}")
+	@Operation(summary = "Elimina todas las piezas de un traslado")
 	public ResponseEntity<?> eliminarPieza(@PathVariable Long idtraslado,
-										   @RequestParam String codigopieza,
 										   @RequestParam(required=false) Long nit){
-		if(codigopieza != null) {
-			trasladoService.eliminarPieza(idtraslado, codigopieza);			
-			return new ResponseEntity<ResDTO>(new ResDTO("Activo eliminado del traslado con exito"), HttpStatus.OK);
-		}
 		trasladoService.eliminarTodo(idtraslado);
 		return new ResponseEntity<ResDTO>(new ResDTO("Activos eliminados del traslado con exito"), HttpStatus.OK);
 	}
@@ -166,6 +161,13 @@ public class TrasladoController {
 			   @RequestParam(required=false) Long nit){
 		trasladoService.eliminarTraslado(idtraslado, nit);
 		return new ResponseEntity<ResDTO>(new ResDTO("Traslado eliminado con exito"), HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{idtraslado}/eliminar/{codigopieza}")
+	public ResponseEntity<?> eliminarActivo(@PathVariable Long idtraslado,
+			@PathVariable String codigopieza){
+		trasladoService.eliminarPieza(idtraslado, codigopieza);
+		return new ResponseEntity<ResDTO>(new ResDTO("Activo eliminada con exito"), HttpStatus.OK);
 	}
 	
 	@GetMapping("/detalle/{idtraslado}/descarga")

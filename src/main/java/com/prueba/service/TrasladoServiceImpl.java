@@ -320,6 +320,12 @@ public class TrasladoServiceImpl implements TrasladoService {
 		Traslado traslado = trasladoRepo.findById(idtraslado)
 				.orElseThrow(() -> new ResourceNotFoundException("Traslado", "id", idtraslado));
 		Producto eliminar = productoRepo.findByCodigoPieza(codigopieza);
+		if(Objects.isNull(eliminar)) {
+			throw new ResourceNotFoundException("activo", "codigo de pieza", codigopieza);
+		}
+		if(eliminar.getEstadoTraslado() != null && (eliminar.getEstadoTraslado().equalsIgnoreCase("E") || eliminar.getEstadoTraslado().equalsIgnoreCase("P"))) {
+			throw new ResourceCannotBeAccessException("El activo se encuentra en un traslado");
+		}
 		eliminar.setEstadoTraslado("");
 		eliminar = productoRepo.save(eliminar);
 		traslado.removeActivo(eliminar);
