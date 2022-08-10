@@ -3,6 +3,8 @@
  */
 package com.prueba.entity;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,9 +28,51 @@ public class EstadoTraslado {
 	@Column(name = "vcdescripcion")
 	public String descripcion;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
+
+	public EstadoTraslado() {
+		super();
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(descripcion, empresa, id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EstadoTraslado other = (EstadoTraslado) obj;
+		return Objects.equals(descripcion, other.descripcion) && Objects.equals(empresa, other.empresa)
+				&& Objects.equals(id, other.id);
+	}
 	
 
 }
