@@ -30,6 +30,7 @@ import com.prueba.entity.Estado;
 import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
 import com.prueba.entity.Producto;
+import com.prueba.entity.TipoActivo;
 import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceAlreadyExistsException;
 import com.prueba.exception.ResourceCannotBeAccessException;
@@ -39,6 +40,7 @@ import com.prueba.repository.ErorRepository;
 import com.prueba.repository.FabricanteRepository;
 import com.prueba.repository.FamiliaRepository;
 import com.prueba.repository.ProductoRepository;
+import com.prueba.repository.TipoActivoRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.ProductSpecifications;
@@ -69,6 +71,9 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepo;
+	
+	@Autowired
+	public TipoActivoRepository tipoActivoRepo;
 	
 	
 	@Override
@@ -250,15 +255,13 @@ public class ProductoServiceImpl implements ProductoService {
 		
 	}
 
-	@SuppressWarnings("removal")
 	@Override
 	public String loadFile(MultipartFile file, WebRequest webRequest) {
 		
 		Float area = 0.0f;
-		//Integer familia = 0;
-		String familia = "";
-		Integer fabricante = 0;
-		Integer empresa = 0;
+		String orden = "", familia = "", tipo = "", nombre ="", medidas ="", codigoPieza = "";
+		Long nitfabricante = null;
+		Long nitempresa = null;
 		
 		try {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -273,8 +276,7 @@ public class ProductoServiceImpl implements ProductoService {
 				throw new ResourceCannotBeAccessException("El tipo de archivo no es compatible");
 			}
 			String ruta = webRequest.getDescription(false);
-			//Eror errorr = erorRepo.findTopByOrderByIdErrorDesc();
-			//int idError = errorr.getIdError();
+
 			int count = 0;
 			if(!file.isEmpty()) {
 				File newFile = new File("src/main/resources/targetFile.tmp");
@@ -290,10 +292,11 @@ public class ProductoServiceImpl implements ProductoService {
 				
 				
 				try {
-					Pattern special = Pattern.compile("[!@#$%&*()_+=|<>?{}\\\\[\\\\]~]", Pattern.CASE_INSENSITIVE);
-					String lineError, codigoPiezaError, nombreError, areaError, ordenError, familiaError, fabricanteError, empresaError = "";
+					Pattern special = Pattern.compile("[!@$%&*()_+=|<>?{}\\\\[\\\\]~]", Pattern.CASE_INSENSITIVE);
+					String lineError, errorDescripcion= "";
 					Long start = System.currentTimeMillis();
 					System.out.println("Inicio verificacion");
+					
 					while(it.hasNext()) {
 						boolean erroresCiclo = false;
 						count++;
@@ -303,121 +306,116 @@ public class ProductoServiceImpl implements ProductoService {
 						
 						
 						
-						if(producto.length > 7) {
+						if(producto.length > 9) {
 							error = true;
 							erroresCiclo = true;
-							//Eror nuevoError = new Eror(idError, ruta, lineError, currentUserName);
 							errores.add(lineError);
 						}
-						//System.out.println("Codigopieza " + producto[0] + " Tipo " + ((Object)producto[0]).getClass().getSimpleName());
-						String codigoPieza = producto[0];
-						Matcher matcher = special.matcher(producto[0]);
-						boolean CodigopiezaconstainsSymbols = matcher.find();
-						if(CodigopiezaconstainsSymbols) {
-							error = true;
-							erroresCiclo = true;
-							codigoPiezaError = "Codigopieza Contiene caracteres especiales linea " + count;
-							//Eror nuevoError = new Eror(idError, ruta, codigoPiezaError, currentUserName);
-							errores.add(codigoPiezaError);
-						}						
 						
-						//System.out.println("Nombre " + producto[1] + " Tipo " + ((Object)producto[1]).getClass().getSimpleName());
-						String nombre = producto[1];
-						//System.out.println(nombre);
-						matcher = special.matcher(producto[1]);
-						boolean nombreconstainsSymbols = matcher.find();
-						if(nombreconstainsSymbols) {
-							error = true;
-							erroresCiclo = true;
-							nombreError = "Nombre Contiene caracteres especiales linea " + count;
-							//Eror nuevoError = new Eror(idError, ruta, nombreError, currentUserName);
-							errores.add(nombreError);
-						}						
-						
-						try {
-							//System.out.println("Area " + producto[2] + " Tipo " + ((Object)Float.parseFloat(producto[2])).getClass().getSimpleName());
-							area = Float.parseFloat(producto[2]);
-						} catch (Exception e) {
-							error = true;
-							erroresCiclo = true;
-							areaError = "Error en el campo Area en la linea " + count + " " + e;
-							//Eror nuevoError = new Eror(idError, ruta, areaError, currentUserName);
-							errores.add(areaError);
-						}
-						
-						//System.out.println("Orden " + producto[3] + " Tipo " + ((Object)producto[3]).getClass().getSimpleName());
-						String orden = producto[3];
-						matcher = special.matcher(producto[3]);
+						orden = producto[0];
+						Matcher matcher = special.matcher(orden);
 						boolean ordenconstainsSymbols = matcher.find();
 						if(ordenconstainsSymbols) {
 							error = true;
 							erroresCiclo = true;
-							ordenError = "Orden Contiene caracteres especiales linea " + count;
-							//Eror nuevoError = new Eror(idError, ruta, ordenError, currentUserName);
-							errores.add(ordenError);
-						}						
+							errorDescripcion = "Orden Contiene caracteres especiales linea " + count;
+							errores.add(errorDescripcion);
+						}
 						
-						/*try {
-							//System.out.println("Familia " + producto[4] + " Tipo " + ((Object)Integer.parseInt(producto[4])).getClass().getSimpleName());
-							familia = Integer.parseInt(producto[4]);
-						} catch (Exception e) {
-							error = true;
-							erroresCiclo = true;
-							familiaError = "Error en el campo Familia en la linea " + count + " " + e;
-							//Eror nuevoError = new Eror(idError, ruta, familiaError, currentUserName);
-							errores.add(familiaError);
-						}*/
-						
-						familia = producto[4];
-						//System.out.println(familia);
-						matcher = special.matcher(producto[4]);
+						familia = producto[1];
+						matcher = special.matcher(familia);
 						boolean familiaconstainsSymbols = matcher.find();
 						if(familiaconstainsSymbols) {
 							error = true;
 							erroresCiclo = true;
-							familiaError = "Familia Contiene caracteres especiales linea " + count;
-							//Eror nuevoError = new Eror(idError, ruta, ordenError, currentUserName);
-							errores.add(familiaError);
+							errorDescripcion = "Familia Contiene caracteres especiales linea " + count;
+							errores.add(errorDescripcion);
 						}
-											
+						
+						tipo = producto[2];
+						matcher = special.matcher(tipo);
+						boolean tipoconstainsSymbols = matcher.find();
+						if(tipoconstainsSymbols) {
+							error = true;
+							erroresCiclo = true;
+							errorDescripcion = "Familia Contiene caracteres especiales linea " + count;
+							errores.add(errorDescripcion);
+						}
+						
+						nombre = producto[3];
+						matcher = special.matcher(nombre);
+						boolean nombreconstainsSymbols = matcher.find();
+						if(nombreconstainsSymbols) {
+							error = true;
+							erroresCiclo = true;
+							errorDescripcion = "Nombre Contiene caracteres especiales linea " + count;
+							errores.add(errorDescripcion);
+						}
+						
+						medidas = producto[4];
+						matcher = special.matcher(medidas);
+						boolean medidasconstainsSymbols = matcher.find();
+						if(medidasconstainsSymbols) {
+							error = true;
+							erroresCiclo = true;
+							errorDescripcion = "Nombre Contiene caracteres especiales linea " + count;
+							errores.add(errorDescripcion);
+						}
+						
 						try {
-							//System.out.println("Fabricante " + producto[5] + "  Tipo " + ((Object)Integer.parseInt(producto[5])).getClass().getSimpleName());
-							fabricante = Integer.parseInt(producto[5]);
+							area = Float.parseFloat(producto[5]);
 						} catch (Exception e) {
 							error = true;
 							erroresCiclo = true;
-							fabricanteError = "Error en el campo Fabricante en la linea " + count + " " + e;
-							//Eror nuevoError = new Eror(idError, ruta, fabricanteError, currentUserName);
-							errores.add(fabricanteError);
+							errorDescripcion = "Error en el campo Area en la linea " + count + " " + e;
+							errores.add(errorDescripcion);
+						}
+						
+						codigoPieza = producto[6];
+						matcher = special.matcher(codigoPieza);
+						boolean CodigopiezaconstainsSymbols = matcher.find();
+						if(CodigopiezaconstainsSymbols) {
+							error = true;
+							erroresCiclo = true;
+							errorDescripcion = "Codigopieza Contiene caracteres especiales linea " + count;
+							errores.add(errorDescripcion);
+						}						
+																	
+						try {
+							nitfabricante = Long.valueOf(producto[7]);
+						} catch (Exception e) {
+							error = true;
+							erroresCiclo = true;
+							errorDescripcion = "Error en el campo Fabricante en la linea " + count + " " + e;
+							errores.add(errorDescripcion);
 						}
 						
 						
 						try {
-							//System.out.println("Empresa " + producto[6] + " Tipo " + ((Object)Integer.parseInt(producto[6])).getClass().getSimpleName());
-							empresa = Integer.parseInt(producto[6]);
+							nitempresa = Long.valueOf(producto[8]);
 						} catch (Exception e) {
 							error = true;
 							erroresCiclo = true;
-							empresaError = "Error en el campo Empresa en la linea " + count + " " + e;
-							//Eror nuevoError = new Eror(idError, ruta, empresaError, currentUserName);
-							errores.add(empresaError);
+							errorDescripcion = "Error en el campo Empresa en la linea " + count + " " + e;
+							errores.add(errorDescripcion);
 						}
 						
 						if(!erroresCiclo) {
-							Empresa empresaAdd = new Empresa(new Long(empresa));
-							
+							Empresa empresaAdd = empresaRepo.findByNit(nitempresa);
+							System.out.println(empresaAdd.getNit());
 							Familia familiaAdd = familiaRepo.findBySiglaAndEmpresa(familia, empresaAdd);
-							System.out.println(familiaAdd.getNombre());
-
-
+							System.out.println(familia);
+							Long localNitFabricante = nitfabricante;
+							Fabricante fabricanteAdd = fabricanteRepo.findByNitAndEmpresa(localNitFabricante, empresaAdd)
+									.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "nit", localNitFabricante));
 							
-							Long nuevoFabricante = new Long(fabricante);
-							Fabricante fabricanteAdd = fabricanteRepo.findByNitAndEmpresa(nuevoFabricante, empresaAdd)
-									.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "nit", nuevoFabricante));
-							System.out.println(fabricanteAdd.getNombre());
+							TipoActivo tipoactivo = tipoActivoRepo.findByNombreAndEmpresa(tipo, empresaAdd);
+							if(tipoactivo == null) {
+								tipoactivo = new TipoActivo(tipo, empresaAdd, familiaAdd);
+								tipoactivo = tipoActivoRepo.save(tipoactivo);
+							}
 							
-							
-							Producto product = new Producto(codigoPieza,nombre,area,orden,familiaAdd,fabricanteAdd,empresaAdd);
+							Producto product = new Producto(codigoPieza, nombre, area, orden, familiaAdd, tipoactivo,fabricanteAdd,empresaAdd,true,medidas);
 							listProductos.add(product);
 						}else {
 							System.out.println("Error");
