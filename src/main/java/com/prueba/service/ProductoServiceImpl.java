@@ -30,14 +30,10 @@ import com.prueba.entity.Estado;
 import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
 import com.prueba.entity.Producto;
-<<<<<<< HEAD
 import com.prueba.entity.TipoActivo;
 import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceAlreadyExistsException;
 import com.prueba.exception.ResourceCannotBeAccessException;
-=======
-import com.prueba.exception.ApiException;
->>>>>>> 4fbc5af2062360bdbdd3ff89d55e8cc64a10f9d7
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.ErorRepository;
@@ -103,45 +99,9 @@ public class ProductoServiceImpl implements ProductoService {
 			Page<Producto> productos = productoRepo.findAllByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(0, 10));
 			return productos;
 		}
-		
-	}
-	
-	@Override
-	public ProductoDTO getProducto(Long id) {
-		Producto producto = productoRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Producto", "Codigo de pieza", id));
-		
-		return mapearEntidad(producto);
-	}
-
-	@Override
-	public ProductoDTO update(Long id, ProductoDTO productoDTO) {
-		Producto producto = productoRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Producto", "Codigo de pieza", id));
-		
-		producto.setArea(productoDTO.getArea());
-		producto.setOrden(productoDTO.getOrden());
-		producto.setDescripcion(productoDTO.getDescripcion());
-		producto.setCodigoPieza(productoDTO.getCodigoPieza());
-		
-		
-		return mapearEntidad(producto);
-	}
-
-	@Override
-	public void delete(Long id) {
-		Producto producto = productoRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Producto", "Codigo de pieza", id));
-		
-		if(producto.getVerificado() == false) {
-			producto.setIsEnable(false);
-		}else {
-			throw new IllegalAccessError("No es posible realizar esta opcion");
-		}
-		Page<Producto> productos = productoRepo.findAllByEmpresaAndEstaActivoTrue(empresa,  PageRequest.of(offset, pageSize));
+		Page<Producto> productos = productoRepo.findAllByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(offset, pageSize));
 		return productos;
 	}
-
 	
 	@Override
 	public Page<Producto> searchProducts(Empresa empresa, SearchDTO searchDTO, int offset, int pageSize) {
@@ -274,19 +234,6 @@ public class ProductoServiceImpl implements ProductoService {
 		return producto;
 	}
 	
-
-	/*@Override
-	public Page<Producto> searchProducts(Empresa empresa, String letra, int offset, int pageSize) {
-		
-		if(pageSize == 0) {
-			Page<Producto> productos = productoRepo.findAll(productSpec.getProductosActivos(letra, empresa),PageRequest.of(0, 10));
-			return productos;
-		}
-		Page<Producto> listProducts = productoRepo.findAll(productSpec.getProductosActivos(letra, empresa), PageRequest.of(offset, pageSize));		
-		return listProducts;
-	}*/
-	
-
 	@Override
 	public void load(List<ProductoDTO> listProductoDTO) {
 		List<Producto> listProducts = listProductoDTO.stream().map(productoDTO -> mapearDTO(productoDTO)).collect(Collectors.toList());
