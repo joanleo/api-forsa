@@ -18,6 +18,8 @@ import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.MovInventarioRepository;
 import com.prueba.repository.ProductoRepository;
 import com.prueba.repository.UbicacionRepository;
+import com.prueba.security.entity.Usuario;
+import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.InventarioSpecifications;
 
 @Service
@@ -35,6 +37,9 @@ public class MovInventarioServiceImp implements MovInventarioService {
 	@Autowired
 	private InventarioSpecifications inventarioSpec;
 	
+	@Autowired
+	private UsuarioRepository usuarioRepo;
+	
 	@Override
 	public MovInventarioDTO create(MovInventarioDTO movInventarioDto) {
 		
@@ -42,7 +47,9 @@ public class MovInventarioServiceImp implements MovInventarioService {
 		Ubicacion ubicacion = ubicacionRepo.findById(movInventarioDto.getUbicacion().getId())
 				.orElseThrow(() -> new ResourceNotFoundException("Ubicacion", "Id", movInventarioDto.getUbicacion().getId())); 
 		inventario.setUbicacion(ubicacion);
-		inventario.setRealizo(movInventarioDto.getRealizo());
+		Usuario realizo = usuarioRepo.findById(movInventarioDto.getRealizo().getId())
+				.orElseThrow(()-> new ResourceNotFoundException("Usuario", "id", movInventarioDto.getRealizo().getId()));
+		inventario.setRealizo(realizo);
 		inventario.setEmpresa(movInventarioDto.getEmpresa());
 		inventario = movInvRepo.save(inventario);
 		List<Producto> productos = movInventarioDto.getProductos();
@@ -51,7 +58,7 @@ public class MovInventarioServiceImp implements MovInventarioService {
 		for(Producto producto: productos) {
 			Producto activo = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
 			if(activo != null) {
-				actualizar.addActivo(activo, movInventarioDto.getRealizo(), new Date());
+				actualizar.addActivo(activo, realizo, new Date());
 			}else {
 				throw new ResourceNotFoundException("Activo", "codigo de pieza", producto.getCodigoPieza());
 			}

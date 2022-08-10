@@ -5,7 +5,6 @@ import java.util.List;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Ubicacion;
-import com.prueba.security.entity.Usuario;
 
 public class MovInventarioDTO {
 	
@@ -15,15 +14,15 @@ public class MovInventarioDTO {
 	
 	private List<Producto> productos;
 	
-	private Usuario realizo;
+	private UsuarioDTO realizo;
 	
 	private Empresa empresa;
 
-	public Usuario getRealizo() {
+	public UsuarioDTO getRealizo() {
 		return realizo;
 	}
 
-	public void setRealizo(Usuario realizo) {
+	public void setRealizo(UsuarioDTO realizo) {
 		this.realizo = realizo;
 	}
 

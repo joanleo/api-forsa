@@ -8,6 +8,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.json.ParseException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lowagie.text.DocumentException;
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.MovInventarioDTO;
+import com.prueba.dto.UsuarioDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.MovInventario;
 import com.prueba.security.entity.Usuario;
@@ -54,6 +56,9 @@ public class MovInvController {
 	@Autowired
 	private UtilitiesApi util;
 	
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	@PostMapping
 	@Operation(summary = "Crea un inventario", description = "Crea un nuevo inventario")
 	public ResponseEntity<MovInventarioDTO> create(@RequestBody MovInventarioDTO movInventarioDto,
@@ -61,12 +66,12 @@ public class MovInvController {
 
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
-		
+		Usuario usuariop = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		UsuarioDTO usuario = modelMapper.map(usuariop, UsuarioDTO.class);
 		if(nit != null) {
 			empresa = util.obtenerEmpresa(nit);
 		}else {
-			empresa = usuario.getEmpresa();			
+			empresa = usuariop.getEmpresa();			
 		}
 		if(movInventarioDto.getRealizo() == null) {
 			movInventarioDto.setRealizo(usuario);			
