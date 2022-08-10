@@ -66,7 +66,7 @@ public class MovInventario implements Serializable{
 	private Usuario realizo;
 	
 	@JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
 
