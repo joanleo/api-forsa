@@ -19,11 +19,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.prueba.security.entity.Usuario;
 
 
 @Entity
 @Table(name = "m_empresas")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Empresa implements Serializable{
 	/**
 	 * 
@@ -68,10 +70,6 @@ public class Empresa implements Serializable{
 
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
 	private Boolean estaActivo=true;
-
-
-	
-	
 	
 	public List<Familia> getFamilias() {
 		return familias;

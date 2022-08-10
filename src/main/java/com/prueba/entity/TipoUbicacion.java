@@ -14,9 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "m_tipos_ubicacion")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class TipoUbicacion {
 	
 	@Id
@@ -27,6 +29,7 @@ public class TipoUbicacion {
 	@Column(name = "vcnombre")
 	private String nombre;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;

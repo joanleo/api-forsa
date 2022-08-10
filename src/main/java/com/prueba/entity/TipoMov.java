@@ -12,9 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "m_tipo_mov")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class TipoMov {
 
 	@Id

@@ -12,9 +12,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name = "m_estados")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Estado {
     
 	@Id
@@ -25,6 +29,7 @@ public class Estado {
 	@Column(name = "vcnombre", length = 20)
     private String tipo="";
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;

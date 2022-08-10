@@ -16,9 +16,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "m_familias")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Familia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +34,7 @@ public class Familia {
     @OneToMany(mappedBy = "familia")
     private List<Producto> productos;
     
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
@@ -42,6 +45,7 @@ public class Familia {
     @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
     private Boolean estaActivo=true;
     
+    @JsonIgnore
     @OneToMany(mappedBy = "familia")
     private Set<TipoActivo> tipo;
     
