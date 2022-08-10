@@ -24,11 +24,11 @@ import com.prueba.entity.Empresa;
 
 @Entity
 @Table(name = "m_usuarios", uniqueConstraints = { @UniqueConstraint(columnNames = { "vcusername", "vcemail" }) })
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
 		  property = "id")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Usuario {
 
 	@Id
@@ -60,9 +60,10 @@ public class Usuario {
     @JoinColumn(name="nidrol", referencedColumnName = "nidrol")
     private Rol rol;
 	
-    
+   
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vcnitempresa")
+	@JsonIgnore
     private Empresa empresa;
 	
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")

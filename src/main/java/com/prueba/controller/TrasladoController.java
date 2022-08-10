@@ -10,6 +10,7 @@ import java.util.Objects;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.json.ParseException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lowagie.text.DocumentException;
 import com.prueba.dto.ApiResponse;
+import com.prueba.dto.DetalleTrasladoDTO;
 import com.prueba.dto.TrasladoDTO;
 import com.prueba.entity.DetalleTrasl;
 import com.prueba.entity.Traslado;
@@ -49,6 +51,9 @@ public class TrasladoController {
 	
 	@Autowired
 	private TrasladoService trasladoService;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 		
 	@PostMapping
 	@Operation(summary = "Crear un traslado", description = "Crea un nuevo traslado")
@@ -194,7 +199,13 @@ public class TrasladoController {
 			@RequestParam(required=false, defaultValue = "0") Integer items,
 			@PathVariable Long idtraslado){
 		
-		Page<DetalleTrasl> detalles = trasladoService.obtieneDetalleTraslado(idtraslado, pagina, items);		
+		Page<DetalleTrasl> detalles = trasladoService.obtieneDetalleTraslado(idtraslado, pagina, items);
+		
+		/*for(DetalleTrasl detalle: detalles) {
+			DetalleTrasladoDTO detalleTrasladoDTO = modelMapper.map(detalles, DetalleTrasladoDTO.class);
+			
+		}
+		System.out.println(detalleTrasladoDTO.getUsuarioconfirma().getNombre());*/
 		return new ApiResponse<>(detalles.getSize(), detalles);
 	}
 	

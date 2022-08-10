@@ -24,11 +24,12 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 @Entity
 @Table(name = "m_rutinas")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
 		  property = "idRutina")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Rutina implements Serializable{
 
 	/**

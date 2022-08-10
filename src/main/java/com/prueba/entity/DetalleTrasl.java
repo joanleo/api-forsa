@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.prueba.security.entity.Usuario;
 
@@ -25,6 +27,7 @@ import com.prueba.security.entity.Usuario;
 @Entity
 @Table(name = "mov_det_traslados")
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class DetalleTrasl implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -56,6 +59,7 @@ public class DetalleTrasl implements Serializable{
 	@Column(name = "dfecha_recibe")
 	public Date fechaRecibe;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;

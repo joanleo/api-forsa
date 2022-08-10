@@ -53,6 +53,7 @@ public class Rol implements Serializable{
     @Column(name = "vcnombre", length = 20, nullable = false)
     private String nombre;
     
+    @JsonIgnore
     @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL)
     private Set<Politica> politicas;
     
