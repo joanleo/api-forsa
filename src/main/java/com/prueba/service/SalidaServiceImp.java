@@ -292,16 +292,17 @@ public class SalidaServiceImp implements SalidaService {
 					}
 				}
 		}
-		for(DetalleSalida detalle:detalles) {
+		salida.getDetalles().removeAll(detalles);
+		/*for(DetalleSalida detalle:detalles) {
 			Producto activoEliminar = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
 			salida.removeActivo(activoEliminar);
-		}
-		salida.setEmpresa(null);
-		salida.setFechaCreacion(null);
+		}*/
+		//salida.setEmpresa(null);
+		//salida.setFechaCreacion(null);
 		//salida.setIdSalida(null);
-		salida.setNumDocumento(null);
-		salida.setTipoMovimiento(null);
-		salida.setUsuarioCrea(null);
+		//salida.setNumDocumento(null);
+		//salida.setTipoMovimiento(null);
+		//salida.setUsuarioCrea(null);
 		
 		salidaRepo.save(salida);
 	}
