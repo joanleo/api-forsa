@@ -3,6 +3,7 @@ package com.prueba.entity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.BatchSize;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,6 +31,7 @@ public class Producto{
 	
 	@Id
     @Column(name = "vccodigopieza", length = 20)
+	@BatchSize(size = 20)
     private String codigoPieza;
 
 	@Column(name = "vcnombre", length = 60)
@@ -39,11 +43,11 @@ public class Producto{
     @Column(name = "vcorden", length = 7, nullable = false)
     private String orden;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nidfamilia", nullable = false)
     private Familia familia;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nidtipo")
     private TipoActivo tipo;
 
@@ -66,26 +70,26 @@ public class Producto{
     @Column(name = "dfechaconfirmacion")
     private Date fechaConfirmacion;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitfabricante")
     private Fabricante fabricante;
     
-    @ManyToOne(fetch = FetchType.EAGER, cascade= CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nidestado")
     private Estado estado;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nidubicacion")
     private Ubicacion ubicacion;
     
     @Column(name = "bimportado", columnDefinition="BOOLEAN NOT NULL DEFAULT 0")
     private Boolean importado = false;
     
-    @ManyToOne(fetch = FetchType.EAGER, cascade= CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
     @JoinColumn(name = "nidusuario")
     private Usuario reviso;
     
@@ -321,19 +325,6 @@ public class Producto{
 		this.fechaAEliminacion = fechaAEliminacion;
 	}
 
-	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
-			Fabricante fabricante, Empresa empresa, TipoActivo tipo, String medidas) {
-		super();
-		this.codigoPieza = codigoPieza;
-		this.descripcion = descripcion;
-		this.area = area;
-		this.orden = orden;
-		this.familia = familia;
-		this.fabricante = fabricante;
-		this.empresa = empresa;
-		this.tipo = tipo;
-		this.medidas = medidas;
-	}
 	
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
 			Fabricante fabricante, Empresa empresa) {
@@ -346,6 +337,21 @@ public class Producto{
 		this.fabricante = fabricante;
 		this.empresa = empresa;
 
+	}
+
+	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia, TipoActivo tipo,
+			Fabricante fabricante, Empresa empresa, Boolean importado, String medidas) {
+		super();
+		this.codigoPieza = codigoPieza;
+		this.descripcion = descripcion;
+		this.area = area;
+		this.orden = orden;
+		this.familia = familia;
+		this.tipo = tipo;
+		this.fabricante = fabricante;
+		this.empresa = empresa;
+		this.importado = importado;
+		this.medidas = medidas;
 	}
 
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
@@ -446,6 +452,40 @@ public class Producto{
 				+ fabricante + ", empresa=" + empresa + ", estado=" + estado + ", ubicacion=" + ubicacion
 				+ ", importado=" + importado + ", reviso=" + reviso + ", medidas=" + medidas + ", enviado=" + enviado
 				+ ", estadoTraslado=" + estadoTraslado + ", detalles=" + detalles + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(area, codigoPieza, descripcion, detalles, empresa, enviado, estaActivo, estado,
+				estadoSalida, estadoTraslado, fabricante, familia, fechaAEliminacion, fechaActualizacion,
+				fechaConfirmacion, importado, medidas, motivoIngreso, nconfirmacion, orden, reviso, sobrante, tipo,
+				ubicacion, verificado);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Producto other = (Producto) obj;
+		return Objects.equals(area, other.area) && Objects.equals(codigoPieza, other.codigoPieza)
+				&& Objects.equals(descripcion, other.descripcion) && Objects.equals(detalles, other.detalles)
+				&& Objects.equals(empresa, other.empresa) && Objects.equals(enviado, other.enviado)
+				&& Objects.equals(estaActivo, other.estaActivo) && Objects.equals(estado, other.estado)
+				&& Objects.equals(estadoSalida, other.estadoSalida)
+				&& Objects.equals(estadoTraslado, other.estadoTraslado) && Objects.equals(fabricante, other.fabricante)
+				&& Objects.equals(familia, other.familia) && Objects.equals(fechaAEliminacion, other.fechaAEliminacion)
+				&& Objects.equals(fechaActualizacion, other.fechaActualizacion)
+				&& Objects.equals(fechaConfirmacion, other.fechaConfirmacion)
+				&& Objects.equals(importado, other.importado) && Objects.equals(medidas, other.medidas)
+				&& Objects.equals(motivoIngreso, other.motivoIngreso)
+				&& Objects.equals(nconfirmacion, other.nconfirmacion) && Objects.equals(orden, other.orden)
+				&& Objects.equals(reviso, other.reviso) && Objects.equals(sobrante, other.sobrante)
+				&& Objects.equals(tipo, other.tipo) && Objects.equals(ubicacion, other.ubicacion)
+				&& Objects.equals(verificado, other.verificado);
 	}
 
 	    
