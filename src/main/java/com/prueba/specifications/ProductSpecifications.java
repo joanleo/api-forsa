@@ -3,6 +3,7 @@ package com.prueba.specifications;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
@@ -90,10 +91,11 @@ public class ProductSpecifications {
 	public Specification<Producto> getProductosActivos(String letras, Empresa empresa){
 		return (root, query, criteryBuilder) ->{
 			List<Predicate> predicates = new ArrayList<>();
-			predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+letras+ "%"));
-			
-			predicates.add(criteryBuilder.like(root.get("codigoPieza"), "%"+letras+ "%"));
-			
+			Predicate predicateDecripcion = criteryBuilder.like(root.get("descripcion"), "%"+letras+ "%");
+			//predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+letras+ "%"));
+			Predicate predicateCodigoPieza = criteryBuilder.like(root.get("codigoPieza"), "%"+letras+ "%");
+			//predicates.add(criteryBuilder.like(root.get("codigoPieza"), "%"+letras+ "%"));
+			predicates.add(criteryBuilder.or(predicateDecripcion, predicateCodigoPieza));
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 
 			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));

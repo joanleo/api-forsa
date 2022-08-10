@@ -47,7 +47,7 @@ public class Usuario {
     @Column(name = "vcemail", length = 48)
     private String email;
     
-    
+    @JsonIgnore
     @Column(name = "vcpassword")
     private String contrasena;
     
