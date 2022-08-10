@@ -1,6 +1,9 @@
 package com.prueba.util;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -14,11 +17,15 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import com.prueba.entity.DetalleInv;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.MovInventario;
 import com.prueba.entity.Permiso;
+import com.prueba.entity.Producto;
 import com.prueba.entity.Rutina;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
+import com.prueba.repository.MovInventarioRepository;
 import com.prueba.repository.PermisoRepository;
 import com.prueba.repository.RutinaRepository;
 
@@ -34,6 +41,74 @@ public class UtilitiesApi {
 	
 	@Autowired
 	private RutinaRepository rutinaRepo;
+	
+	@Autowired
+	private MovInventarioRepository movInventarioRepo;
+	
+	public void compararInventarios(Integer inventario1, Integer inventario2) {
+		MovInventario inv1 = movInventarioRepo.findByidMov(inventario1);
+		if(Objects.isNull(inv1)) {
+			throw new ResourceNotFoundException("Inventario", "id", inventario1.toString());
+		}
+		MovInventario inv2 = movInventarioRepo.findByidMov(inventario2);
+		if(Objects.isNull(inv2)) {
+			throw new ResourceNotFoundException("Inventario", "id", inventario2.toString());
+		}
+		
+		//Obtengo la lista de activos del inventario1
+		List<DetalleInv> detallesInv1 = inv1.getDetalles();
+		Iterator<DetalleInv> it = detallesInv1.iterator();
+		List<Producto> activosInv1 = new ArrayList<>();
+		System.out.println("Creando lista de activos de inv1...");
+	    while(it.hasNext()){
+	        DetalleInv item=it.next();
+	        System.out.println("Añadiendo "+item.getProducto().getCodigoPieza()+" a la lista de activos de inv1");
+	        activosInv1.add(item.getProducto());
+	    }
+	    //Obtengo la lista de activos del inventario2
+		List<DetalleInv> detallesInv2 = inv2.getDetalles();
+		it = detallesInv2.iterator();
+		List<Producto> activosInv2 = new ArrayList<>();
+		System.out.println("Creando lista de activos de inv2...");
+	    while(it.hasNext()){
+	        DetalleInv item=it.next();
+	        System.out.println("Añadiendo "+item.getProducto().getCodigoPieza()+" a la lista de activos de inv2");
+	        activosInv2.add(item.getProducto());
+	    }
+	    
+	    //Comparo ambas listas y obtengo item de inventario1 que no estan en inventario2
+	    List<Producto> diferentes = new ArrayList<>();
+		int sizeListActivosInv1 = activosInv1.size();
+		int sizeListActivosInv2 = activosInv2.size();
+		
+		
+		if(sizeListActivosInv1 > sizeListActivosInv2) {
+			System.out.println("Inventario 1 mayor que inventario2");
+			for(int count=0;count<sizeListActivosInv1;count++) {
+				boolean add = true;
+				for(Producto activo: activosInv2) {
+					System.out.println("comparando "+activosInv1.get(count).getCodigoPieza()+" con "+activo.getCodigoPieza());
+					if(activo.getCodigoPieza().equalsIgnoreCase((activosInv1.get(count).getCodigoPieza()))) {
+						System.out.println("No son iguales se añade "+activosInv1.get(count).getCodigoPieza());
+						add = false;
+						break;
+						
+					}
+				}
+				if(add) {
+					diferentes.add(activosInv1.get(count));
+				}
+				
+				
+			}
+		}
+		
+		System.out.println("Codigos de activos diferentes");
+		for(Producto producto:diferentes) {
+			System.out.println(producto.getDescripcion());
+		}	
+		
+	}
 
 	public Empresa obtenerEmpresa(Long nit) {
 		Empresa exist = empresaRepo.findByNit(nit);

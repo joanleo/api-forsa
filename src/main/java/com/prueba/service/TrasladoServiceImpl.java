@@ -18,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.TrasladoDTO;
-import com.prueba.entity.DetalleSalida;
 import com.prueba.entity.DetalleTrasl;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;

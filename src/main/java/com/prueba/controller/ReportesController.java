@@ -104,5 +104,15 @@ public class ReportesController {
         exporter.export(response);
 		
 	}
+	
+	@GetMapping("/compararinventarios/descarga")
+	public void compararInventariosPDF(HttpServletResponse response,
+			@RequestParam Integer inventario1,
+			@RequestParam Integer inventario2,
+			@RequestParam(defaultValue = "todos") String filtro,
+			@RequestParam(required=false) Long nit) {
+		
+			util.compararInventarios(inventario1, inventario2);
+	}
 
 }

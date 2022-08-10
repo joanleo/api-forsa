@@ -30,10 +30,14 @@ import com.prueba.entity.Estado;
 import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
 import com.prueba.entity.Producto;
+<<<<<<< HEAD
 import com.prueba.entity.TipoActivo;
 import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceAlreadyExistsException;
 import com.prueba.exception.ResourceCannotBeAccessException;
+=======
+import com.prueba.exception.ApiException;
+>>>>>>> 4fbc5af2062360bdbdd3ff89d55e8cc64a10f9d7
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.ErorRepository;
@@ -95,9 +99,43 @@ public class ProductoServiceImpl implements ProductoService {
 	@Override
 	public Page<Producto> list(Empresa empresa, Integer offset, Integer pageSize) {
 
+<<<<<<< HEAD
 		if(pageSize == 0) {
 			Page<Producto> productos = productoRepo.findAllByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(0, 10));
 			return productos;
+=======
+	@Override
+	public ProductoDTO getProducto(Long id) {
+		Producto producto = productoRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Producto", "Codigo de pieza", id));
+		
+		return mapearEntidad(producto);
+	}
+
+	@Override
+	public ProductoDTO update(Long id, ProductoDTO productoDTO) {
+		Producto producto = productoRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Producto", "Codigo de pieza", id));
+		
+		producto.setArea(productoDTO.getArea());
+		producto.setOrden(productoDTO.getOrden());
+		producto.setDescripcion(productoDTO.getDescripcion());
+		producto.setCodigoPieza(productoDTO.getCodigoPieza());
+		
+		
+		return mapearEntidad(producto);
+	}
+
+	@Override
+	public void delete(Long id) {
+		Producto producto = productoRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Producto", "Codigo de pieza", id));
+		
+		if(producto.getVerificado() == false) {
+			producto.setIsEnable(false);
+		}else {
+			throw new IllegalAccessError("No es posible realizar esta opcion");
+>>>>>>> 4fbc5af2062360bdbdd3ff89d55e8cc64a10f9d7
 		}
 		Page<Producto> productos = productoRepo.findAllByEmpresaAndEstaActivoTrue(empresa,  PageRequest.of(offset, pageSize));
 		return productos;
