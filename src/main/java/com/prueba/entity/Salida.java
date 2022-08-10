@@ -48,7 +48,7 @@ public class Salida implements Serializable {
 	@Column(name = "vcnumdocumento")
 	public String numDocumento;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nidtipo_mov", nullable = false)
 	public TipoMov tipoMovimiento;
 	
@@ -60,11 +60,11 @@ public class Salida implements Serializable {
 		fechaCreacion = new Date();
 	}
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vcnitempresa")
 	private Empresa empresa;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "usuarioCrea", referencedColumnName = "nidusuario")
 	private Usuario usuarioCrea;
 	

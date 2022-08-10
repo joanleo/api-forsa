@@ -1,5 +1,7 @@
 package com.prueba.entity;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,7 +25,7 @@ public class Estado {
 	@Column(name = "vcnombre", length = 20)
     private String tipo="";
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
 	
@@ -81,6 +83,24 @@ public class Estado {
 		super();
 		this.tipo = tipo;
 		this.empresa = empresa;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(empresa, estaActivo, id, tipo);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Estado other = (Estado) obj;
+		return Objects.equals(empresa, other.empresa) && Objects.equals(estaActivo, other.estaActivo)
+				&& Objects.equals(id, other.id) && Objects.equals(tipo, other.tipo);
 	}
 
 }

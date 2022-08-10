@@ -4,6 +4,7 @@ package com.prueba.entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -165,6 +166,31 @@ public class Empresa implements Serializable{
 	public String toString() {
 		return "Empresa [fecha=" + fecha + ", nit=" + nit + ", nombre=" + nombre + ", nconfimacion=" + nconfimacion
 				+ ", tipoEmpresa=" + tipoEmpresa + ", productos=" + productos + ", usuarios=" + usuarios + "]";
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(estaActivo, familias, fecha, nconfimacion, nit, nombre, productos, tipoEmpresa, usuarios);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Empresa other = (Empresa) obj;
+		return Objects.equals(estaActivo, other.estaActivo) && Objects.equals(familias, other.familias)
+				&& Objects.equals(fecha, other.fecha) && Objects.equals(nconfimacion, other.nconfimacion)
+				&& Objects.equals(nit, other.nit) && Objects.equals(nombre, other.nombre)
+				&& Objects.equals(productos, other.productos) && Objects.equals(tipoEmpresa, other.tipoEmpresa)
+				&& Objects.equals(usuarios, other.usuarios);
 	}
 	
 	

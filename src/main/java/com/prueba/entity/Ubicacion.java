@@ -39,7 +39,7 @@ public class Ubicacion {
 	@JoinColumn(name = "nidtipo_ubicacion")
 	private TipoUbicacion tipo;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
 	

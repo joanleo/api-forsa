@@ -1,5 +1,7 @@
 package com.prueba.security.entity;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -144,6 +146,27 @@ public class Usuario {
 	public Usuario(Long id) {
 		super();
 		this.id = id;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(contrasena, email, empresa, estaActivo, id, nombre, nombreUsuario, rol, tokenPassword);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Usuario other = (Usuario) obj;
+		return Objects.equals(contrasena, other.contrasena) && Objects.equals(email, other.email)
+				&& Objects.equals(empresa, other.empresa) && Objects.equals(estaActivo, other.estaActivo)
+				&& Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
+				&& Objects.equals(nombreUsuario, other.nombreUsuario) && Objects.equals(rol, other.rol)
+				&& Objects.equals(tokenPassword, other.tokenPassword);
 	}
 	
 

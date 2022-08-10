@@ -34,12 +34,12 @@ public class DetalleRutina implements Serializable{
 	@EmbeddedId
 	private DetalleRutina_id idDetalle;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idRutina")
 	//@JsonBackReference
 	private Rutina rutina;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idRuta")
 	private Permiso ruta;
 	

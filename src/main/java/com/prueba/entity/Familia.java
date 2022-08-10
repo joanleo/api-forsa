@@ -1,6 +1,8 @@
 package com.prueba.entity;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +32,7 @@ public class Familia {
     @OneToMany(mappedBy = "familia")
     private List<Producto> productos;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
     
@@ -39,6 +41,9 @@ public class Familia {
     
     @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
     private Boolean estaActivo=true;
+    
+    @OneToMany(mappedBy = "familia")
+    private Set<TipoActivo> tipo;
     
 
 	public Empresa getEmpresa() {
@@ -97,8 +102,36 @@ public class Familia {
 		this.sigla = sigla;
 	}
 
-		public Familia() {
-		super();
+	public Set<TipoActivo> getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Set<TipoActivo> tipo) {
+		this.tipo = tipo;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(empresa, estaActivo, id, nombre, productos, sigla, tipo);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Familia other = (Familia) obj;
+		return Objects.equals(empresa, other.empresa) && Objects.equals(estaActivo, other.estaActivo)
+				&& Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
+				&& Objects.equals(productos, other.productos) && Objects.equals(sigla, other.sigla)
+				&& Objects.equals(tipo, other.tipo);
+	}
+
+	public Familia() {
+	super();
 	}
 
 	public Familia(String nombre, Empresa empresa) {

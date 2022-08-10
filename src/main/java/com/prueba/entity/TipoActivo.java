@@ -32,22 +32,26 @@ public class TipoActivo {
     private List<Producto> productos;
 	
 	@JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
 	
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
-    private Boolean estaActivo;
+    private Boolean estaActivo = true;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nidfamilia", nullable = false)
+    private Familia familia;
 
 	public TipoActivo() {
 		super();
 	}
 
-	public TipoActivo(String nombre, Empresa empresa) {
+	public TipoActivo(String nombre, Empresa empresa, Familia familia) {
 		super();
 		this.nombre = nombre;
 		this.empresa = empresa;
+		this.familia = familia;
 	}
 
 	public Long getId() {

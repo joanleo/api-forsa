@@ -1,6 +1,7 @@
 package com.prueba.entity;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -30,7 +31,7 @@ public class Fabricante {
     @OneToMany(mappedBy = "fabricante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Producto> productos;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitempresa")
     private Empresa empresa;
     
@@ -87,5 +88,24 @@ public class Fabricante {
 
 	public Fabricante() {
 		super();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(empresa, estaActivo, nit, nombre, productos);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Fabricante other = (Fabricante) obj;
+		return Objects.equals(empresa, other.empresa) && Objects.equals(estaActivo, other.estaActivo)
+				&& Objects.equals(nit, other.nit) && Objects.equals(nombre, other.nombre)
+				&& Objects.equals(productos, other.productos);
 	}    
 }

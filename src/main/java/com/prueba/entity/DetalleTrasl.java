@@ -32,21 +32,21 @@ public class DetalleTrasl implements Serializable{
 	@EmbeddedId
 	private DetalleTrasl_id id;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idTraslado")
 	@JsonBackReference
 	private Traslado traslado;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("codigoPieza")
 	private Producto producto;
 	
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "usuarioconfirma", referencedColumnName = "nidusuario")
 	private Usuario usuarioconfirma;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "usuariorecibe", referencedColumnName = "nidusuario")
 	private Usuario usuarioRecibe;
 	

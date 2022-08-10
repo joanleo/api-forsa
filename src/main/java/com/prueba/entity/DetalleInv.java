@@ -31,16 +31,16 @@ public class DetalleInv implements Serializable{
 	@EmbeddedId
 	private DetalleInv_id id;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idMov")
 	@JsonBackReference
 	private MovInventario movimiento;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("codigoPieza")
 	private Producto producto;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "usuarioConfirma", referencedColumnName = "nidusuario")
 	private Usuario usuarioConfirma;
 	

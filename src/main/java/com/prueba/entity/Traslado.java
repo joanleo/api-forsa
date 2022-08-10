@@ -41,11 +41,11 @@ public class Traslado implements Serializable {
 	@Column(name = "vcnumdocumento")
 	public String numDocumento;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "origen", referencedColumnName = "nidubicacion")
 	private Ubicacion origen;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "destino", referencedColumnName = "nidubicacion")
 	private Ubicacion destino;
 
@@ -70,15 +70,15 @@ public class Traslado implements Serializable {
 	@JsonManagedReference
 	public List<DetalleTrasl> detalles = new ArrayList<DetalleTrasl>();
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vcnitempresa")
 	private Empresa empresa;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "usuarioenvio", referencedColumnName = "nidusuario")
 	private Usuario usuarioEnvio;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "usuariorecibe", referencedColumnName = "nidusuario")
 	private Usuario usuarioRecibe;
 
