@@ -123,7 +123,7 @@ public class TrasladoServiceImpl implements TrasladoService {
 				}
 				nuevo.setEstadoTraslado("A");
 				nuevo = productoRepo.save(nuevo);
-				actualizar.addActivo(nuevo, empresa, usuario);
+				actualizar.addActivo(nuevo, empresa);
 			}else {
 				throw new ResourceNotFoundException("Activo", "codigo de pieza", producto.getCodigoPieza());
 			}
@@ -184,14 +184,19 @@ public class TrasladoServiceImpl implements TrasladoService {
 		productoRepo.save(confirmar);
 		List<DetalleTrasl> detallesTras = traslado.getDetalles();
 		for(DetalleTrasl detalle: detallesTras) {
-			if(detalle.getProducto().getCodigoPieza() == codigopieza) {
+			System.out.println(detalle.getProducto().getCodigoPieza() +" enviado"+codigopieza);
+			if(detalle.getProducto().getCodigoPieza().equalsIgnoreCase(codigopieza)) {
+				System.out.println("Encontrado "+detalle.getProducto().getCodigoPieza());
 				DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 				String currentDateTime = dateFormatter.format(new Date());
 				Date fechaConfirma = dateFormatter.parse(currentDateTime);
 				detalle.setUsuarioconfirma(usuario);
 				detalle.setFechaEnvio(fechaConfirma);
+				detalle = detalleTrasladoRepo.save(detalle);
 			}
 		}
+		
+		//detallesTras = detalleTrasladoRepo.saveAll(detallesTras);
 		traslado.setDetalles(detallesTras);
 		int cont = 0;
 		for(DetalleTrasl detalle: detallesTras) {
@@ -222,7 +227,7 @@ public class TrasladoServiceImpl implements TrasladoService {
 		productoRepo.save(recibir);
 		List<DetalleTrasl> detallesTras = traslado.getDetalles();
 		for(DetalleTrasl detalle: detallesTras) {
-			if(detalle.getProducto().getCodigoPieza() == codigopieza) {
+			if(detalle.getProducto().getCodigoPieza().equalsIgnoreCase(codigopieza)) {
 				DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 				String currentDateTime = dateFormatter.format(new Date());
 				Date fechaRecibo = dateFormatter.parse(currentDateTime);
