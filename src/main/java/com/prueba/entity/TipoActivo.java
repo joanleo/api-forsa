@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,7 +23,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class TipoActivo {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,
+    		generator = "seq_tipo_activo")
+	@SequenceGenerator(name = "seq_tipo_activo", allocationSize = 10)
 	@Column(name="nidtipo")
 	private Long id;
 	

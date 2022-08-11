@@ -33,7 +33,7 @@ public class Producto{
 	
 	@Id
     @Column(name = "vccodigopieza", length = 20)
-	@BatchSize(size = 20)
+	//@BatchSize(size = 20)
     private String codigoPieza;
 
 	@Column(name = "vcnombre", length = 60)

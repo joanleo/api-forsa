@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,8 +23,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "m_familias")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Familia {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,
+    		generator = "seq_familia")
+	@SequenceGenerator(name = "seq_familia", allocationSize = 10)
     @Column(name = "nidfamilia", length = 3)
     private Long id;
     

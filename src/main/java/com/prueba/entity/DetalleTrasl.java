@@ -76,6 +76,12 @@ public class DetalleTrasl implements Serializable{
 
 	}
 
+	public DetalleTrasl(Traslado traslado, Producto producto, Empresa empresa) {
+		super();
+		this.producto = producto;
+		this.empresa = empresa;
+	}
+
 	/**
 	 * @param traslado
 	 * @param producto

@@ -243,5 +243,10 @@ public class Traslado implements Serializable {
 		detalles.add(detalle);
 		
 	}
+	public void addActivo(Producto producto, Empresa empresa) {
+		DetalleTrasl detalle = new DetalleTrasl(this, producto, empresa);
+		detalles.add(detalle);
+		
+	}
 
 }
