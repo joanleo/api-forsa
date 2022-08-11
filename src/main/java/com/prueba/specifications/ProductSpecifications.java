@@ -3,7 +3,6 @@ package com.prueba.specifications;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
