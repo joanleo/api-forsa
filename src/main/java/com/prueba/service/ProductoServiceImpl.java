@@ -388,13 +388,10 @@ public class ProductoServiceImpl implements ProductoService {
 						
 						if(!erroresCiclo) {
 							Empresa empresaAdd = empresaRepo.findByNit(nitempresa);
-							System.out.println(empresaAdd.getNit());
 							Familia familiaAdd = familiaRepo.findBySiglaAndEmpresa(familia, empresaAdd);
-							System.out.println(familia);
 							Long localNitFabricante = nitfabricante;
 							Fabricante fabricanteAdd = fabricanteRepo.findByNitAndEmpresa(localNitFabricante, empresaAdd)
 									.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "nit", localNitFabricante));
-							
 							TipoActivo tipoactivo = tipoActivoRepo.findByNombreAndEmpresa(tipo, empresaAdd);
 							if(tipoactivo == null) {
 								tipoactivo = new TipoActivo(tipo, empresaAdd, familiaAdd);
@@ -434,13 +431,9 @@ public class ProductoServiceImpl implements ProductoService {
 					}else {
 						int idError = errorr.getIdError();
 						idError+=1;
-
 						for(String er: errores) {
-							
 							Eror nuevoError = new Eror(idError, ruta, er, currentUserName);
 						 	erroresCarga.add(nuevoError);
-						 	
-						    
 						}
 
 						Long start = System.currentTimeMillis();
