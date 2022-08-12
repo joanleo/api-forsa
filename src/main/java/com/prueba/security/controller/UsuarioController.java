@@ -209,15 +209,16 @@ public class UsuarioController {
 		
 	}
 	
-	@PatchMapping("/{id},{nitEmpresa}")
+	@PatchMapping(value = "/{id}")
 	@Operation(summary = "Deshabilita un usuario", description = "Deshabilita un usuario por su id")
 	public ResponseEntity<?> deshabilitar(@PathVariable(name="id")Long id,
-			 							  @PathVariable(required=false) Long nitEmpresa){
+			 							  @PathVariable(name = "nitEmpresa", required=false) Long nitEmpresa){
 		
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
-				
+		
+		System.out.println(nitEmpresa);
 		if(nitEmpresa != null) {
 		empresa = util.obtenerEmpresa(nitEmpresa);
 		}else {
