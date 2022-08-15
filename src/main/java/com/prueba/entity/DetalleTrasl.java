@@ -78,8 +78,10 @@ public class DetalleTrasl implements Serializable{
 
 	public DetalleTrasl(Traslado traslado, Producto producto, Empresa empresa) {
 		super();
+		this.traslado = traslado;
 		this.producto = producto;
 		this.empresa = empresa;
+		this.id = new DetalleTrasl_id(traslado.getIdTraslado(), producto.getCodigoPieza());
 	}
 
 	/**
