@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
+import com.prueba.entity.TipoActivo;
 import com.prueba.security.entity.Usuario;
 
 public interface ProductoRepository extends JpaRepository<Producto, String>, JpaSpecificationExecutor<Producto>{
@@ -30,6 +31,24 @@ public interface ProductoRepository extends JpaRepository<Producto, String>, Jpa
 	 * @return
 	 */
 	public Producto findByReviso(Usuario usuario);
+
+	/**
+	 * @param key
+	 * @return
+	 */
+	public Producto findByTipo(TipoActivo tipo);
+
+	/**
+	 * @param tipo
+	 * @return
+	 */
+	public Producto findOneByTipo(TipoActivo tipo);
+
+	/**
+	 * @param tipo
+	 * @return
+	 */
+	public Producto findFirstByTipo(TipoActivo tipo);
 	
 	//public Producto findByIdProducto(Producto_id producto_id);
 	
