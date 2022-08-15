@@ -209,7 +209,7 @@ public class UsuarioController {
 		
 	}
 	
-	@PatchMapping(value = "/{id}")
+	@PatchMapping(value = "/{id},{nitEmpresa}")
 	@Operation(summary = "Deshabilita un usuario", description = "Deshabilita un usuario por su id")
 	public ResponseEntity<?> deshabilitar(@PathVariable(name="id")Long id,
 			 							  @PathVariable(name = "nitEmpresa", required=false) Long nitEmpresa){
