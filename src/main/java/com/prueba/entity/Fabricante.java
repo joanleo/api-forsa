@@ -7,10 +7,13 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,6 +26,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Fabricante {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,	generator = "seq_fabricante")
+	@SequenceGenerator(name = "seq_fabricante", allocationSize = 10)
+    @Column(name = "nid_fabricante")
+    private Integer idFabricante;
+    
     @Column(name = "vcnitfabricante", length = 12)
     private Long nit;
     
@@ -35,7 +43,7 @@ public class Fabricante {
     
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vcnitempresa")
+    @JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;
     
     @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")

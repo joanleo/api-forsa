@@ -62,9 +62,8 @@ public class Usuario {
 	
    
 	@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "vcnitempresa")
-	@JsonIgnore
-    private Empresa empresa;
+    @JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
+	private Empresa empresa;
 	
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
     private Boolean estaActivo=true;

@@ -16,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.prueba.entity.DetalleSalida;
-import com.prueba.entity.DetalleTrasl;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Salida;
@@ -205,12 +204,12 @@ public class SalidaServiceImp implements SalidaService {
 				if(!activoEliminar.getEstaActivo()) {
 					throw new ResourceCannotBeDeleted("Activo", "se encuentra inhabilitado");
 				}
-				if(activoEliminar.getEstadoTraslado().equalsIgnoreCase("F")) {
+				/*if(activoEliminar.getEstadoTraslado().equalsIgnoreCase("F")) {
 					List<DetalleTrasl> lista = activoEliminar.getDetalles();
 					if(!lista.get(0).getTraslado().getEstadoTraslado().equalsIgnoreCase("F")) {
 						throw new ResourceCannotBeDeleted("Salida");
 					}
-				}
+				}*/
 		}
 		for(DetalleSalida detalle:detalles) {
 			Producto activoEliminar = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
@@ -285,12 +284,12 @@ public class SalidaServiceImp implements SalidaService {
 				if(!activoEliminar.getEstaActivo()) {
 					throw new ResourceCannotBeDeleted("Activo", "se encuentra inhabilitado");
 				}
-				if(activoEliminar.getEstadoTraslado() != null && activoEliminar.getEstadoTraslado().equalsIgnoreCase("F")) {
+				/*if(activoEliminar.getEstadoTraslado() != null && activoEliminar.getEstadoTraslado().equalsIgnoreCase("F")) {
 					List<DetalleTrasl> lista = activoEliminar.getDetalles();
 					if(!lista.get(0).getTraslado().getEstadoTraslado().equalsIgnoreCase("F")) {
 						throw new ResourceCannotBeDeleted("Activo", "se encuentra en un traslado sin finalizar");
 					}
-				}
+				}*/
 		}
 		salida.getDetalles().removeAll(detalles);
 		/*for(DetalleSalida detalle:detalles) {

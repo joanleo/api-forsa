@@ -17,17 +17,17 @@ public class DetalleInv_id implements Serializable{
 	@Column(name = "nidmov")
 	private Integer idMov;
 	
-	@Column(name = "vccodigopieza")
-	private String codigoPieza;
+	@Column(name = "nid_pieza")
+	private Integer idPieza;
 
 	public DetalleInv_id() {
 		super();
 	}
 
-	public DetalleInv_id(Integer idMov, String codigoPieza) {
+	public DetalleInv_id(Integer idMov, Integer idPieza) {
 		super();
 		this.idMov = idMov;
-		this.codigoPieza = codigoPieza;
+		this.idPieza = idPieza;
 	}
 
 	public Integer getIdMov() {
@@ -38,12 +38,12 @@ public class DetalleInv_id implements Serializable{
 		this.idMov = idMov;
 	}
 
-	public String getCodigoPieza() {
-		return codigoPieza;
+	public Integer getIdPieza() {
+		return idPieza;
 	}
 
-	public void setCodigoPieza(String codigoPieza) {
-		this.codigoPieza = codigoPieza;
+	public void setIdPieza(Integer idPieza) {
+		this.idPieza = idPieza;
 	}
 
 	public static long getSerialversionuid() {
@@ -59,12 +59,12 @@ public class DetalleInv_id implements Serializable{
  
         DetalleInv_id that = (DetalleInv_id) o;
         return Objects.equals(idMov, that.idMov) &&
-               Objects.equals(codigoPieza, that.codigoPieza);
+               Objects.equals(idPieza, that.idPieza);
     }
  
     @Override
     public int hashCode() {
-        return Objects.hash(idMov, codigoPieza);
+        return Objects.hash(idMov, idPieza);
     }
 
 }

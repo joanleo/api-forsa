@@ -123,6 +123,7 @@ public class TrasladoServiceImpl implements TrasladoService {
 				}
 				nuevo.setEstadoTraslado("A");
 				nuevo = productoRepo.save(nuevo);
+				System.out.println("Añadiendo activo, servicio");
 				actualizar.addActivo(nuevo, empresa);
 			}else {
 				throw new ResourceNotFoundException("Activo", "codigo de pieza", producto.getCodigoPieza());

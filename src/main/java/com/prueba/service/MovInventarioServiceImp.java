@@ -41,7 +41,7 @@ public class MovInventarioServiceImp implements MovInventarioService {
 	private UsuarioRepository usuarioRepo;
 	
 	@Override
-	public MovInventarioDTO create(MovInventarioDTO movInventarioDto) {
+	public MovInventario create(MovInventarioDTO movInventarioDto) { 
 		
 		MovInventario inventario = new MovInventario();
 		Ubicacion ubicacion = ubicacionRepo.findById(movInventarioDto.getUbicacion().getId())
@@ -68,7 +68,7 @@ public class MovInventarioServiceImp implements MovInventarioService {
 
 		
 
-		return movInventarioDto;
+		return actualizar;
 	}
 
 	@Override

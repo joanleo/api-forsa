@@ -25,8 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Familia {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,
-    		generator = "seq_familia")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_familia")
 	@SequenceGenerator(name = "seq_familia", allocationSize = 10)
     @Column(name = "nidfamilia", length = 3)
     private Long id;
@@ -40,7 +39,7 @@ public class Familia {
     
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vcnitempresa")
+    @JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;
     
     @Column(name = "vcsigla", length = 3)

@@ -257,6 +257,7 @@ public class ProductoServiceImpl implements ProductoService {
 			}else {
 				throw new ResourceCannotBeAccessException("Debe estar logueado para realizar esta accion");
 			}
+			Usuario usuario = usuarioRepo.findByEmail(currentUserName);
 			String extArchivo = file.getOriginalFilename().split("\\.")[1];
 			if(!extArchivo.equals("txt")) {
 				throw new ResourceCannotBeAccessException("El tipo de archivo no es compatible");
@@ -278,7 +279,7 @@ public class ProductoServiceImpl implements ProductoService {
 				
 				
 				try {
-					Pattern special = Pattern.compile("[!@$%&*()_+=|<>?{}\\\\[\\\\]~]", Pattern.CASE_INSENSITIVE);
+					Pattern special = Pattern.compile("[!@$%&*()_=|<>?{}\\\\[\\\\]~]");
 					String lineError, errorDescripcion= "";
 					Long start = System.currentTimeMillis();
 					System.out.println("Inicio verificacion");
@@ -306,6 +307,7 @@ public class ProductoServiceImpl implements ProductoService {
 							erroresCiclo = true;
 							errorDescripcion = "Orden Contiene caracteres especiales linea " + count;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						familia = producto[1];
@@ -314,8 +316,9 @@ public class ProductoServiceImpl implements ProductoService {
 						if(familiaconstainsSymbols) {
 							error = true;
 							erroresCiclo = true;
-							errorDescripcion = "Familia Contiene caracteres especiales linea " + count;
+							errorDescripcion = "Familia Contiene caracteres especiales "+familia+" linea " + count;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						tipo = producto[2];
@@ -324,8 +327,9 @@ public class ProductoServiceImpl implements ProductoService {
 						if(tipoconstainsSymbols) {
 							error = true;
 							erroresCiclo = true;
-							errorDescripcion = "Familia Contiene caracteres especiales linea " + count;
+							errorDescripcion = "Tipo Contiene caracteres especiales linea " + count;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						nombre = producto[3];
@@ -334,8 +338,9 @@ public class ProductoServiceImpl implements ProductoService {
 						if(nombreconstainsSymbols) {
 							error = true;
 							erroresCiclo = true;
-							errorDescripcion = "Nombre Contiene caracteres especiales linea " + count;
+							errorDescripcion = "Nombre Contiene caracteres especiales "+nombre+" linea " + count;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						medidas = producto[4];
@@ -344,8 +349,9 @@ public class ProductoServiceImpl implements ProductoService {
 						if(medidasconstainsSymbols) {
 							error = true;
 							erroresCiclo = true;
-							errorDescripcion = "Nombre Contiene caracteres especiales linea " + count;
+							errorDescripcion = "Medidas Contiene caracteres especiales linea " + count;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						try {
@@ -355,6 +361,7 @@ public class ProductoServiceImpl implements ProductoService {
 							erroresCiclo = true;
 							errorDescripcion = "Error en el campo Area en la linea " + count + " " + e;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						codigoPieza = producto[6];
@@ -365,6 +372,7 @@ public class ProductoServiceImpl implements ProductoService {
 							erroresCiclo = true;
 							errorDescripcion = "Codigopieza Contiene caracteres especiales linea " + count;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}						
 																	
 						try {
@@ -374,6 +382,7 @@ public class ProductoServiceImpl implements ProductoService {
 							erroresCiclo = true;
 							errorDescripcion = "Error en el campo Fabricante en la linea " + count + " " + e;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						
@@ -384,6 +393,7 @@ public class ProductoServiceImpl implements ProductoService {
 							erroresCiclo = true;
 							errorDescripcion = "Error en el campo Empresa en la linea " + count + " " + e;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						if(!erroresCiclo) {
@@ -398,7 +408,7 @@ public class ProductoServiceImpl implements ProductoService {
 								tipoactivo = tipoActivoRepo.save(tipoactivo);
 							}
 							
-							Producto product = new Producto(codigoPieza, nombre, area, orden, familiaAdd, tipoactivo,fabricanteAdd,empresaAdd,true,medidas);
+							Producto product = new Producto(codigoPieza, nombre, area, orden, familiaAdd, tipoactivo,fabricanteAdd,empresaAdd,true,medidas,usuario);
 							listProductos.add(product);
 						}else {
 							System.out.println("Error");

@@ -1,0 +1,62 @@
+{"properties": [
+  {
+    "name": "jwt.expiration-milliseconds",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.expiration-milliseconds'"
+  },
+  {
+    "name": "jwt.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.secret'"
+  },
+  {
+    "name": "springdoc.swagger-ui.path",
+    "type": "java.lang.String",
+    "description": "A description for 'springdoc.swagger-ui.path'"
+  },
+  {
+    "name": "mail.urlFront",
+    "type": "java.lang.String",
+    "description": "A description for 'mail.urlFront'"
+  },
+  {
+    "name": "mail.urlFront",
+    "type": "java.lang.String",
+    "description": "A description for 'mail.urlFront'"
+  },
+  {
+    "name": "mail.urlFront",
+    "type": "java.lang.String",
+    "description": "A description for 'mail.urlFront'"
+  },
+  {
+    "name": "mail.urlFront",
+    "type": "java.lang.String",
+    "description": "A description for 'mail.urlFront'"
+  },
+  {
+    "name": "mail.url.front",
+    "type": "java.lang.String",
+    "description": "A description for 'mail.url.front'"
+  },
+  {
+    "name": "mail.url.frontusername",
+    "type": "java.lang.String",
+    "description": "A description for 'mail.url.frontusername'"
+  },
+  {
+    "name": "mail.url.frontpass",
+    "type": "java.lang.String",
+    "description": "A description for 'mail.url.frontpass'"
+  },
+  {
+    "name": "file.input",
+    "type": "java.lang.String",
+    "description": "A description for 'file.input'"
+  },
+  {
+    "name": "context-path",
+    "type": "java.lang.String",
+    "description": "A description for 'context-path'"
+  }
+]}

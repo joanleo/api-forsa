@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lowagie.text.DocumentException;
+import com.prueba.dto.ComparativoInventarioDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.service.ProductoService;
+import com.prueba.util.ReporteComparativo;
 import com.prueba.util.ReporteVerificarPDF;
 import com.prueba.util.UtilitiesApi;
 
@@ -109,10 +114,44 @@ public class ReportesController {
 	public void compararInventariosPDF(HttpServletResponse response,
 			@RequestParam Integer inventario1,
 			@RequestParam Integer inventario2,
-			@RequestParam(defaultValue = "todos") String filtro,
+			@RequestParam(required=false) Long nit) throws DocumentException, IOException {
+		
+		response.setContentType("application/pdf");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=comparativo_" + inventario1 + "_" + inventario2 +"  "+ currentDateTime + ".pdf";
+		response.setHeader(headerKey, headerValue);
+		
+		List<ComparativoInventarioDTO> comparativo = util.compararInventarios(inventario1, inventario2);
+		
+		ReporteComparativo exporter = new ReporteComparativo(comparativo);
+        exporter.export(response);
+	}
+	
+	@GetMapping("/compararinventarios")
+	public Page<ComparativoInventarioDTO> compararInventariosPDF(
+			@RequestParam Integer inventario1,
+			@RequestParam Integer inventario2,
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
 			@RequestParam(required=false) Long nit) {
 		
-			util.compararInventarios(inventario1, inventario2);
+		Pageable pageable = null;
+		if(items == 0) {
+			pageable = PageRequest.of(pagina, 10);
+		}else {
+			pageable = PageRequest.of(pagina, items); 			
+		}
+		List<ComparativoInventarioDTO> comparativo = util.compararInventarios(inventario1, inventario2);
+		
+		int start = (int) pageable.getOffset();
+		
+		int end = (int) ((pagina + pageable.getPageSize()) > comparativo.size() ? comparativo.size()
+				  : (start + pageable.getPageSize()));
+		Page<ComparativoInventarioDTO> pages = new PageImpl<ComparativoInventarioDTO> (comparativo.subList(start, end), pageable, comparativo.size());
+
+		return pages;
 	}
 
 }

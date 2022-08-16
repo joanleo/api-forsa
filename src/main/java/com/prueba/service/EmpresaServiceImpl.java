@@ -1,6 +1,7 @@
 package com.prueba.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -99,16 +100,20 @@ public class EmpresaServiceImpl implements EmpresaService {
 
 	@Override
 	public EmpresaDTO getEmpresa(Long id) {
-		Empresa empresa = empresaRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Empresa", "id", id));
+		Empresa empresa = empresaRepo.findByNit(id);
+		if(Objects.isNull(empresa)) {
+			throw new ResourceNotFoundException("Empresa", "id", id);			
+		}
 		
 		return mapearEntidad(empresa);
 	}
 
 	@Override
 	public EmpresaDTO update(Long id, EmpresaDTO empresaDTO) {
-		Empresa empresa = empresaRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Empresa", "id", id));
+		Empresa empresa = empresaRepo.findByNit(id);
+		if(Objects.isNull(empresa)) {
+			throw new ResourceNotFoundException("Empresa", "id", id);			
+		}
 		
 		empresa.setNit(empresaDTO.getNit());
 		empresa.setNombre(empresaDTO.getNombre());
@@ -127,8 +132,10 @@ public class EmpresaServiceImpl implements EmpresaService {
 
 	@Override
 	public void delete(Long id) {
-		Empresa empresa = empresaRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Empresa", "id", id));
+		Empresa empresa = empresaRepo.findByNit(id);
+		if(Objects.isNull(empresa)) {
+			throw new ResourceNotFoundException("Empresa", "id", id);			
+		}
 		
 		if(empresa.getUsuarios().size() > 0 || empresa.getProductos().size() > 0) {
 			throw new ResourceCannotBeDeleted("Empresa");
@@ -147,8 +154,10 @@ public class EmpresaServiceImpl implements EmpresaService {
 	
 	@Override
 	public void unable(Long id) {
-		Empresa empresa = empresaRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Empresa", "id", id));
+		Empresa empresa = empresaRepo.findByNit(id);
+		if(Objects.isNull(empresa)) {
+			throw new ResourceNotFoundException("Empresa", "id", id);			
+		}
 		
 		empresa.setEstaActivo(false);
 		empresaRepo.save(empresa);

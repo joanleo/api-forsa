@@ -9,25 +9,23 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class DetalleTrasl_id implements Serializable{
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "nidtraslado")
 	private Long idTraslado;
 	
-	@Column(name = "vccodigopieza")
-	private String codigoPieza;
+	@Column(name = "nidpieza")
+	private Integer idPieza;
 
 	public DetalleTrasl_id() {
 		super();
 	}
 
-	public DetalleTrasl_id(Long idTraslados, String codigoPieza) {
+	public DetalleTrasl_id(Long idTraslados, Integer idPieza) {
 		super();
 		this.idTraslado = idTraslados;
-		this.codigoPieza = codigoPieza;
+		this.idPieza = idPieza;
 	}
 	
 	 public Long getIdTraslado() {
@@ -38,12 +36,12 @@ public class DetalleTrasl_id implements Serializable{
 		this.idTraslado = idTraslado;
 	}
 
-	public String getCodigoPieza() {
-		return codigoPieza;
+	public Integer getIdPieza() {
+		return idPieza;
 	}
 
-	public void setCodigoPieza(String codigoPieza) {
-		this.codigoPieza = codigoPieza;
+	public void setIdPieza(Integer idPieza) {
+		this.idPieza = idPieza;
 	}
 
 	@Override
@@ -55,12 +53,12 @@ public class DetalleTrasl_id implements Serializable{
  
         DetalleTrasl_id that = (DetalleTrasl_id) o;
         return Objects.equals(idTraslado, that.idTraslado) &&
-               Objects.equals(codigoPieza, that.codigoPieza);
+               Objects.equals(idPieza, that.idPieza);
     }
  
     @Override
     public int hashCode() {
-        return Objects.hash(idTraslado, codigoPieza);
+        return Objects.hash(idTraslado, idPieza);
     }
 	
 }

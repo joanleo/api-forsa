@@ -11,9 +11,6 @@ INSERT INTO m_empresas
 `vcnombre`,
 `nidtipo_empresa`)
 VALUES
-('1111','Empresa Prueba X',3),
-('23456','Empresa Prueba Y',3),
-('34567','Empresa Prueba Z',3),
 ('2222','Metrolink sas',1);
 
 INSERT INTO m_tipos_ubicacion
@@ -56,8 +53,7 @@ INSERT INTO m_fabricantes
 `vcnitempresa`
 )
 VALUES
-('11111','Fabricante prueba', '2222'),
-('12345', 'Formaletas XX', '2222');
+('11111','Forsa sa', '2222');
 
 INSERT INTO m_estados
 (`nidestado`,
@@ -68,27 +64,6 @@ VALUES
 (2,'Regular', '2222'),
 (3,'Malo', '2222');
 
-INSERT INTO mov_activos
-(`vccodigopieza`,
-`narea`,
-`vcnombre`,
-`vcorden`,
-`vcnitempresa`,
-`nidestado`,
-`vcnitfabricante`,
-`nidfamilia`,
-`nidubicacion`)
-VALUES
-('1111', 22.4, 'prueba', 'OR1', '2222', 1, '11111', 1, 1),
-('1112', 74.55, 'prueba', 'OR1', '23456', 1, '12345', 1, 1),
-('1113', 97, 'prueba', 'OR1', '2222', 1, '11111', 1, 1),
-('1114', 99, 'prueba', 'OR5', '23456', 1, '12345', 1, 1),
-('1115', 223, 'prueba', 'OR6', '2222', 1, '11111', 1, 1),
-('8484', 22.12, 'prueba', 'OR4', '23456', 1, '12345', 1, 1),
-('64785', 74.2, 'prueba', 'OR3', '1111', 1, '11111', 1, 1),
-('37585', 9.7, 'prueba', 'OR2', '23456', 1, '11111', 1, 1),
-('14256', 8.3, 'prueba', 'OR2', '1111', 1, '12345', 1, 1);
-
 INSERT INTO m_usuarios
 (`vcemail`,
 `vcnombre`,
@@ -97,4 +72,4 @@ INSERT INTO m_usuarios
 `vcnitempresa`,
 `nidrol`)
 VALUES
-('jleon@metrolinkeu.com', 'Joan David Leon', '$2a$10$wTWky7f3N.ASn.Q1VN0u/e3q2.cIo/5A4C8XHFFUM7oiZLNbmF9GO', 'joan1', '2222',1)
+('jleon@metrolinkeu.com', 'Joan David Leon', '$2a$10$wTWky7f3N.ASn.Q1VN0u/e3q2.cIo/5A4C8XHFFUM7oiZLNbmF9GO', 'joan', '2222',1)

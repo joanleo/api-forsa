@@ -18,16 +18,16 @@ public class DetalleSalida_id implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name = "nidtraslado")
+	@Column(name = "nidsalida")
 	private Integer idSalida;
 	
-	@Column(name = "vccodigopieza")
-	private String codigoPieza;
+	@Column(name = "nid_pieza")
+	private Integer idPieza;
 
-	public DetalleSalida_id(Integer idSalida, String codigoPieza) {
+	public DetalleSalida_id(Integer idSalida, Integer idPieza) {
 		super();
 		this.idSalida = idSalida;
-		this.codigoPieza = codigoPieza;
+		this.idPieza = idPieza;
 	}
 
 	public DetalleSalida_id() {
@@ -42,12 +42,12 @@ public class DetalleSalida_id implements Serializable{
 		this.idSalida = idSalida;
 	}
 
-	public String getCodigoPieza() {
-		return codigoPieza;
+	public Integer getIdPieza() {
+		return idPieza;
 	}
 
-	public void setCodigoPieza(String codigoPieza) {
-		this.codigoPieza = codigoPieza;
+	public void setIdPieza(Integer idPieza) {
+		this.idPieza = idPieza;
 	}
 
 	public static long getSerialversionuid() {
@@ -56,7 +56,7 @@ public class DetalleSalida_id implements Serializable{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(codigoPieza, idSalida);
+		return Objects.hash(idPieza, idSalida);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class DetalleSalida_id implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		DetalleSalida_id other = (DetalleSalida_id) obj;
-		return Objects.equals(codigoPieza, other.codigoPieza) && Objects.equals(idSalida, other.idSalida);
+		return Objects.equals(idPieza, other.idPieza) && Objects.equals(idSalida, other.idSalida);
 	}
 
 }

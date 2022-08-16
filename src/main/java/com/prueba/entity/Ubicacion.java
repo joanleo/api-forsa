@@ -1,6 +1,7 @@
 package com.prueba.entity;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -43,7 +44,7 @@ public class Ubicacion {
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vcnitempresa")
+	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;
 	
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
@@ -124,6 +125,26 @@ public class Ubicacion {
 	public Ubicacion(Long id) {
 		super();
 		this.id = id;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(ciudad, direccion, empresa, estaActivo, id, nombre, productos, tipo);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Ubicacion other = (Ubicacion) obj;
+		return Objects.equals(ciudad, other.ciudad) && Objects.equals(direccion, other.direccion)
+				&& Objects.equals(empresa, other.empresa) && Objects.equals(estaActivo, other.estaActivo)
+				&& Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
+				&& Objects.equals(productos, other.productos) && Objects.equals(tipo, other.tipo);
 	}
 
 	
