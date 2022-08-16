@@ -94,7 +94,7 @@ public class SalidaServiceImp implements SalidaService {
 			if(!activo.getEstaActivo()) {
 				throw new ResourceCannotBeAccessException("Activo se encuentra inhabilitado");
 			}
-			activo.setEstadoSalida("P");
+			activo.setEstadoSalida("A");
 			activo = productoRepo.save(activo);
 			nuevaSalida.addActivo(activo);
 		}
