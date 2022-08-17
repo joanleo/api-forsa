@@ -15,7 +15,6 @@ import com.prueba.entity.Familia;
 import com.prueba.exception.ResourceAlreadyExistsException;
 import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
-import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.FamiliaRepository;
 import com.prueba.specifications.FamiliaSpecifications;
 
