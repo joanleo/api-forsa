@@ -489,8 +489,8 @@ public class ProductoServiceImpl implements ProductoService {
 			Page<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro, empresa),PageRequest.of(0, 10));
 			return productos;
 		}
-		Page<Producto> listProducts = productoRepo.findAll(productSpec.getVerificacion(orden, filtro, empresa), PageRequest.of(offset, pageSize));		
-		return listProducts;
+		Page<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro, empresa), PageRequest.of(offset, pageSize));		
+		return productos;
 	}
 
 

@@ -50,43 +50,28 @@ public class ReporteVerificarPDF {
         cell.setPhrase(new Phrase("Item", font));
         table.addCell(cell);
          
-        cell.setPhrase(new Phrase("Código de pieza", font));
+        cell.setPhrase(new Phrase("QR", font));
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
          
-        cell.setPhrase(new Phrase("Nombre", font));
+        cell.setPhrase(new Phrase("Familia", font));
         table.addCell(cell);
          
-        cell.setPhrase(new Phrase("Área", font));
+        cell.setPhrase(new Phrase("Tipo", font));
+        table.addCell(cell);
+
+        cell.setPhrase(new Phrase("Medidas", font));
+        table.addCell(cell);
+
+        cell.setPhrase(new Phrase("Área m2", font));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
          
-        //cell.setPhrase(new Phrase("Empresa", font));
-        //table.addCell(cell);
          
         cell.setPhrase(new Phrase("Estado", font));
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
-        
-        cell.setPhrase(new Phrase("Fabricante", font));
-        table.addCell(cell);
-        
-        cell.setPhrase(new Phrase("Familia", font));
-        table.addCell(cell);
-        
-        //cell.setPhrase(new Phrase("Órden", font));
-        //table.addCell(cell);
-        
-        cell.setPhrase(new Phrase("Ubicación", font));
-        table.addCell(cell);
-        
-        //cell.setPhrase(new Phrase("Motivo ingreso", font));
-        //table.addCell(cell);
-        
-        cell.setPhrase(new Phrase("Activo", font));
-        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(cell);
-        
+               
         cell.setPhrase(new Phrase("Verificado", font));
         table.addCell(cell);
 		
@@ -103,32 +88,23 @@ public class ReporteVerificarPDF {
 				table.addCell(cell);
 				
 				table.addCell(producto.getCodigoPieza());
+
+				table.addCell(producto.getFamilia().getNombre());
 				
-				table.addCell(producto.getDescripcion());
+				table.addCell(producto.getTipo().getNombre());
+				
+				table.addCell(producto.getMedidas());
 				
 				phrase = new Phrase(String.format("%.2f",producto.getArea()));
 				cell.setPhrase(phrase);
 				table.addCell(cell);
 				
-				//table.addCell(producto.getEmpresa().getNombre());
 				table.addCell(producto.getEstado() == null ? " ":producto.getEstado().getTipo());
-				
-				table.addCell(producto.getFabricante().getNombre());
-				
-				table.addCell(producto.getFamilia().getNombre());
-				
-				//table.addCell(producto.getOrden());
-				table.addCell(producto.getUbicacion().getNombre());
-				
-				//table.addCell(producto.getMotivoIngreso());
-				phrase = new Phrase(String.valueOf(producto.getEstaActivo()) == "true" ? "Si": "No");
-				cell.setPhrase(phrase);
-				table.addCell(cell);
-				
+			
 				phrase = new Phrase(String.valueOf(producto.getVerificado()) == "true" ? "Si": "No");
 				cell.setPhrase(phrase);
 				table.addCell(cell);
-				//table.setHorizontalAlignment(count);
+
 				
 				count++;
 		}
@@ -177,9 +153,9 @@ public class ReporteVerificarPDF {
         
         
          
-        PdfPTable table = new PdfPTable(10);
+        PdfPTable table = new PdfPTable(8);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[] {1.0f, 2.0f, 2.0f, 1.0f, 1.5f, 2.0f, 2.0f, 2.0f, 1.0f, 1.6f});
+        table.setWidths(new float[] {0.5f, 1.0f, 2.5f, 1.0f, 1.5f, 1.0f, 1.2f, 1.0f});
         table.setSpacingBefore(10);
          
         tableHeader(table);
