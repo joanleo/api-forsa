@@ -97,7 +97,7 @@ public class UsuarioServiceImp implements UsuarioService {
 	}
 
 	@Override
-	public Page<Usuario> searchFabricantes(Empresa empresa, Integer pagina, Integer items) {
+	public Page<Usuario> buscarUsuarios(Empresa empresa, Integer pagina, Integer items) {
 		if(items == 0) {
 			Page<Usuario> usuarios = usuarioRepo.findByEmpresaAndEstaActivoTrue(empresa, PageRequest.of(0, 10));
 			return usuarios;
@@ -107,7 +107,7 @@ public class UsuarioServiceImp implements UsuarioService {
 	}
 
 	@Override
-	public Page<Usuario> searchFabricantes(@Valid RegistroDTO registroDTO, Empresa empresa, Integer pagina,
+	public Page<Usuario> buscarUsuarios(@Valid RegistroDTO registroDTO, Empresa empresa, Integer pagina,
 			Integer items) {
 		if(items == 0) {
 			Page<Usuario> usuarios = usuarioRepo.findAll(usuarioSpec.getUsuarios(registroDTO, empresa), PageRequest.of(0, 10));
