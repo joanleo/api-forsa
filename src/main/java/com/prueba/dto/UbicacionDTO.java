@@ -10,16 +10,16 @@ public class UbicacionDTO {
 	
 	private Long id;
 	
-	@NotBlank(message = "Este campo no puede ser nulo")
+	//@NotBlank(message = "Este campo no puede ser nulo")
 	private String direccion;
 	
-	@NotBlank(message = "Este campo no puede ser nulo")
+	//@NotBlank(message = "Este campo no puede ser nulo")
 	private String ciudad;
 	
-	@NotBlank(message = "Este campo no puede ser nulo")
+	//@NotBlank(message = "Este campo no puede ser nulo")
 	private String nombre;
 	
-	@NotNull(message = "Este campo no puede ser nulo")
+	//@NotNull(message = "Este campo no puede ser nulo")
 	private TipoUbicacion tipo;
 	
 	//@NotNull(message = "Este campo no puede ser nulo")
