@@ -21,6 +21,7 @@ import com.prueba.repository.UbicacionRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.UbicacionSpecifications;
+import com.prueba.util.UtilitiesApi;
 
 @Service
 public class UbicacionServiceImpl implements UbicacionService {
@@ -37,15 +38,23 @@ public class UbicacionServiceImpl implements UbicacionService {
 	@Autowired
 	private UbicacionSpecifications ubicacionSpec;
 	
+	@Autowired
+	private UtilitiesApi util;
+	
 	@Override
 	public UbicacionDTO create(UbicacionDTO ubicacionDTO) {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		Empresa empresa; 
 		
-		if(ubicacionDTO.getEmpresa() == null) {
-			ubicacionDTO.setEmpresa(usuario.getEmpresa());
+		if(ubicacionDTO.getEmpresa() != null) {
+			empresa = util.obtenerEmpresa(ubicacionDTO.getEmpresa().getNit());
+		}else {
+			empresa = usuario.getEmpresa();			
 		}
+		
+		ubicacionDTO.setEmpresa(empresa);
 		
 		Ubicacion ubicacion = mapearDTO(ubicacionDTO);
 		Ubicacion exist = ubicacionRepo.findByNombreAndEmpresa(ubicacion.getNombre(), ubicacionDTO.getEmpresa());
