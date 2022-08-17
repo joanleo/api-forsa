@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import com.prueba.dto.SalidaDTO;
 import com.prueba.entity.DetalleSalida;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Salida;
@@ -91,6 +92,8 @@ public interface SalidaService {
 	 * 
 	 */
 	public void eliminarTodosActivos(Integer idsalida);
+
+	public Salida crearSalida(SalidaDTO salida);
 
 
 }

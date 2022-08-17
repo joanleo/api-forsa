@@ -485,7 +485,7 @@ public class Producto implements Serializable{
 		this.enviado = enviado;
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "Producto [codigoPieza=" + codigoPieza + ", descripcion=" + descripcion + ", area=" + area + ", orden="
 				+ orden + ", familia=" + familia.getNombre() + ", tipo=" + tipo.getNombre() + ", nconfirmacion=" + nconfirmacion
@@ -494,7 +494,7 @@ public class Producto implements Serializable{
 				+ fabricante.getNombre() + ", empresa=" + empresa.getNombre() + ", estado=" + estado 
 				+ ", importado=" + importado + ", medidas=" + medidas + ", enviado=" + enviado
 				+ ", estadoTraslado=" + estadoTraslado + "]";
-	}
+	}*/
 
 	@Override
 	public int hashCode() {
