@@ -74,6 +74,7 @@ public class FamiliaController {
 		}else {
 			empresa = usuario.getEmpresa();			
 		}
+		familiaDTO.setEmpresa(empresa);
 		return new ResponseEntity<FamiliaDTO>(familiaService.create(familiaDTO, empresa), HttpStatus.CREATED);
 	}
 	

@@ -34,12 +34,12 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 		TipoEmpresa tipoEmpresa = mapearDto(tipoEmpresaDTO);
 		TipoEmpresa exist = tipoEmpresaRepo.findByTipo(tipoEmpresa.getTipo());
 		if (exist == null) {
-			tipoEmpresaRepo.save(tipoEmpresa);
+			exist = tipoEmpresaRepo.save(tipoEmpresa);
 		} else {
 			throw new ResourceAlreadyExistsException("Tipo de empresa", "nombre", tipoEmpresa.getTipo());
 		}
 
-		return mapearEntidad(tipoEmpresa);
+		return mapearEntidad(exist);
 	}
 
 	@Override

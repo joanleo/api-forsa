@@ -112,11 +112,12 @@ public class RolController {
 		}else {
 			empresa = usuario.getEmpresa();			
 		}
-		
+		System.out.println(empresa.getNombre());
 		if(Objects.isNull(rolDTO)) {
 			Page<Rol> roles = rolService.searchRoles(empresa, pagina, items);
 			return new ApiResponse<>(roles.getSize(), roles);
 		}else {
+			rolDTO.setEmpresa(empresa);
 			Page<Rol> roles = rolService.serachRoles(rolDTO, empresa, pagina, items);
 			return new ApiResponse<>(roles.getSize(), roles);
 		}

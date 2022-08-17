@@ -102,17 +102,17 @@ public class SalidaServiceImp implements SalidaService {
 			throw new ResourceCannotBeAccessException("Debe incluir al menos un activo");
 		}
 		nuevaSalida = salidaRepo.saveAndFlush(nuevaSalida);
-		List<DetalleSalida> productos = salidaDTO.getDetalles();
+		List<Producto> productos = salidaDTO.getDetalles();
 		Salida actualizar = salidaRepo.findByIdSalida(nuevaSalida.idSalida);
 		if(Objects.isNull(actualizar)) {
 			throw new ResourceNotFoundException("Salida", "id", nuevaSalida.toString());
 		}
 				
-		for(DetalleSalida detalle: productos) {
-			System.out.println(detalle.getProducto().getCodigoPieza());
-			Producto activo = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
+		for(Producto producto: productos) {
+			System.out.println(producto.getCodigoPieza());
+			Producto activo = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
 			if(Objects.isNull(activo)) {
-				throw new ResourceNotFoundException("activo", "codigo de pieza", detalle.getProducto().getCodigoPieza());
+				throw new ResourceNotFoundException("activo", "codigo de pieza", producto.getCodigoPieza());
 			}
 			if(!activo.getEstaActivo()) {
 				throw new ResourceCannotBeAccessException("Activo se encuentra inhabilitado");
@@ -260,7 +260,7 @@ public class SalidaServiceImp implements SalidaService {
 
 	@Override
 	public Page<DetalleSalida> obtieneDetalleSalida(Integer idsalida, Integer pagina, Integer items) {
-		System.out.println(idsalida);
+		
 		Salida salida = salidaRepo.findByIdSalida(idsalida);
 		if(Objects.isNull(salida)) {
 			throw new ResourceNotFoundException("Salida", "id", String.valueOf(idsalida));
