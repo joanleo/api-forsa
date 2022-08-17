@@ -113,6 +113,7 @@ public class FamiliaController {
 		}else {
 			empresa = usuario.getEmpresa();			
 		}
+		familiaDTO.setEmpresa(empresa);
 		
 		FamiliaDTO actualizada = familiaService.update(id, familiaDTO, empresa);
 		
@@ -142,6 +143,7 @@ public class FamiliaController {
 			Page<Familia> familias = familiaService.searchFabricantes(empresa, pagina, items);
 			return new ApiResponse<>(familias.getSize(), familias);
 		}else {
+			familiaDTO.setEmpresa(empresa);
 			Page<Familia> familias = familiaService.searchFabricantes(familiaDTO, empresa, pagina, items);
 			return new ApiResponse<>(familias.getSize(), familias);
 		}
@@ -228,6 +230,7 @@ public class FamiliaController {
         	List<FamiliaDTO> familias = familiaService.list(empresa);
         	csvService.writeFamiliasToCsv(servletResponse.getWriter(), familias);
 		}else{
+			familiaDTO.setEmpresa(empresa);
 			List<FamiliaDTO> familias =  familiaService.listFamilias(familiaDTO, empresa);
 			csvService.writeFamiliasToCsv(servletResponse.getWriter(), familias);
 		}

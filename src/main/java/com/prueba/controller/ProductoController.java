@@ -94,6 +94,7 @@ public class ProductoController {
 			Page<Producto> productos = productoService.list(empresa, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);			
 		}else {
+			searchDTO.setEmpresa(empresa);
 			Page<Producto> productos =  productoService.searchProducts(empresa, searchDTO, pagina, items);
 			return new ApiResponse<>(productos.getSize(), productos);
 		}
@@ -138,6 +139,18 @@ public class ProductoController {
 	@Operation(summary = "Actualiza un activo", description = "Actualiza los datos de un activo")
 	public ResponseEntity<Producto> update(@Valid @RequestBody ProductoDTO productoDTO,
 										   @PathVariable String id){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(productoDTO.getEmpresa() != null) {
+			empresa = util.obtenerEmpresa(productoDTO.getEmpresa().getNit());
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		productoDTO.setEmpresa(empresa);
 		Producto actualizado = productoService.update(id, productoDTO);
 		
 		return new ResponseEntity<Producto>(actualizado, HttpStatus.OK);
@@ -150,6 +163,19 @@ public class ProductoController {
 		if(productoDTO == null) {
 			throw new ResourceCannotBeAccessException("Falta informacion"); 
 		}
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(productoDTO.getEmpresa() != null) {
+			empresa = util.obtenerEmpresa(productoDTO.getEmpresa().getNit());
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		productoDTO.setEmpresa(empresa);
+		
 		return new ResponseEntity<Producto>(productoService.receive(id, productoDTO), HttpStatus.ACCEPTED);
 	}
 	
@@ -197,6 +223,7 @@ public class ProductoController {
         
         
 		if (searchDTO != null) {
+			searchDTO.setEmpresa(empresa);
 			List<Producto> productos =  productoService.searchProducts(searchDTO, empresa);
 			csvService.writeProductsToCsv(servletResponse.getWriter(), productos);
 		}else if(letras != null){

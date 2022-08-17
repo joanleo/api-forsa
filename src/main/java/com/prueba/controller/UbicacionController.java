@@ -111,6 +111,7 @@ public class UbicacionController {
 			Page<Ubicacion> ubicaciones = ubicacionService.searchUbicaciones(empresa, pagina, items);
 			return new ApiResponse<>(ubicaciones.getSize(), ubicaciones);
 		}else {
+			ubicacionDTO.setEmpresa(empresa);
 			Page<Ubicacion> ubicaciones = ubicacionService.searchUbicaciones(ubicacionDTO, empresa, pagina, items);
 			return new ApiResponse<>(ubicaciones.getSize(), ubicaciones);
 		}
@@ -139,6 +140,18 @@ public class UbicacionController {
 	@Operation(summary = "Actualiza una ubicacion", description = "Actualiza los datos de una ubicacion")
 	public ResponseEntity<UbicacionDTO> update(@Valid @RequestBody UbicacionDTO ubicacionDTO,
 											@PathVariable Long id){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		
+		if(ubicacionDTO.getEmpresa() != null) {
+		empresa = util.obtenerEmpresa(ubicacionDTO.getEmpresa().getNit());
+		}else {
+		empresa = usuario.getEmpresa();			
+		}
+		ubicacionDTO.setEmpresa(empresa);
 		UbicacionDTO actualizado = ubicacionService.update(id, ubicacionDTO);
 		
 		return new ResponseEntity<>(actualizado, HttpStatus.OK);
@@ -208,6 +221,7 @@ public class UbicacionController {
         	List<UbicacionDTO> ubicaciones = ubicacionService.list(empresa);
         	csvService.writeUbicacionesToCsv(servletResponse.getWriter(), ubicaciones);
 		}else{
+			ubicacionDTO.setEmpresa(empresa);
 			List<UbicacionDTO> ubicaciones =  ubicacionService.listUbicaciones(ubicacionDTO, empresa); 
 			csvService.writeUbicacionesToCsv(servletResponse.getWriter(), ubicaciones);
 		}

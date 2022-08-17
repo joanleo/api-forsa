@@ -79,7 +79,7 @@ public class MovInvController {
 		if(movInventarioDto.getEmpresa() == null) {
 			movInventarioDto.setEmpresa(empresa);
 		}
-
+		movInventarioDto.setEmpresa(empresa);
 		return new ResponseEntity<MovInventario>(movInvService.create(movInventarioDto), HttpStatus.CREATED);
 	}
 	

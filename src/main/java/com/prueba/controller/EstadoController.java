@@ -106,6 +106,7 @@ public class EstadoController {
 			Page<Estado> estados = estadoService.searchEstados(empresa, pagina, items);
 			return new ApiResponse<>(estados.getSize(), estados);
 		}else {
+			estadoDTO.setEmpresa(empresa);
 			Page<Estado> estados = estadoService.searchEstados(estadoDTO, empresa, pagina, items);
 			return new ApiResponse<>(estados.getSize(), estados);
 		}
@@ -132,6 +133,18 @@ public class EstadoController {
 	@Operation(summary = "Actualiza el estado de una empresa", description = "Actualiza los datos de un estado")
 	public ResponseEntity<EstadoDTO> update(@Valid @RequestBody EstadoDTO estadoDTO,
 											@PathVariable Long id){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		
+		if(estadoDTO.getEmpresa() != null) {
+			empresa = util.obtenerEmpresa(estadoDTO.getEmpresa().getNit());
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		estadoDTO.setEmpresa(empresa);
 		EstadoDTO actualizado = estadoService.update(id, estadoDTO);
 		
 		return new ResponseEntity<>(actualizado, HttpStatus.OK);
@@ -199,6 +212,7 @@ public class EstadoController {
         	List<EstadoDTO> estados = estadoService.list(empresa);
         	csvService.writeEstadosToCsv(servletResponse.getWriter(), estados);
 		}else{
+			estadoDTO.setEmpresa(empresa);
 			List<EstadoDTO> estados =  estadoService.listEstados(estadoDTO, empresa);
 			csvService.writeEstadosToCsv(servletResponse.getWriter(), estados);
 		}
