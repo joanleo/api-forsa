@@ -112,10 +112,11 @@ public class UsuarioController {
 		}
 
 		if(Objects.isNull(registroDTO)) {
-			Page<Usuario> usuarios = usuarioService.searchFabricantes(empresa, pagina, items);
+			Page<Usuario> usuarios = usuarioService.buscarUsuarios(empresa, pagina, items);
 			return new ApiResponse<>(usuarios.getSize(), usuarios);
 		}else {
-			Page<Usuario> usuarios = usuarioService.searchFabricantes(registroDTO, empresa, pagina, items);
+			registroDTO.setEmpresa(empresa);
+			Page<Usuario> usuarios = usuarioService.buscarUsuarios(registroDTO, empresa, pagina, items);
 			return new ApiResponse<>(usuarios.getSize(), usuarios);
 		}
 	}
