@@ -30,7 +30,7 @@ public class TipoMov {
 	@Column(name = "vcnombre", length = 20)
 	private String nombre;
 	
-	@JsonIgnore
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;

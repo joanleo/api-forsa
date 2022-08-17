@@ -32,7 +32,7 @@ public class Estado {
 	@Column(name = "vcnombre", length = 20)
     private String tipo="";
 	
-	@JsonIgnore
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;
