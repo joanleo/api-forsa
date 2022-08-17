@@ -2,6 +2,7 @@ package com.prueba.dto;
 
 import java.util.List;
 
+import com.prueba.entity.DetalleSalida;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.entity.TipoMov;
@@ -11,7 +12,7 @@ public class SalidaDTO {
 	
 	private Empresa empresa;
 	
-	private List<Producto> detalles;
+	private List<DetalleSalida> detalles;
 	
 	private TipoMov tipoMovimiento;
 	
@@ -27,11 +28,11 @@ public class SalidaDTO {
 		this.empresa = empresa;
 	}
 
-	public List<Producto> getDetalles() {
+	public List<DetalleSalida> getDetalles() {
 		return detalles;
 	}
 
-	public void setDetalles(List<Producto> detalles) {
+	public void setDetalles(List<DetalleSalida> detalles) {
 		this.detalles = detalles;
 	}
 

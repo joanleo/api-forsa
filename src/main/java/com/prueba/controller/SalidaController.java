@@ -147,7 +147,7 @@ public class SalidaController {
 	
 	@GetMapping("/detalle/{idsalida}")
 	@Operation(summary = "Obtiene el detalle de una salida")
-	public ApiResponse<Page<DetalleSalida>> getInventario(
+	public ApiResponse<Page<DetalleSalida>> obtieneDetalleSalida(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
 			@PathVariable Integer idsalida){
