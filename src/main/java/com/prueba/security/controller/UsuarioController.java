@@ -137,10 +137,13 @@ public class UsuarioController {
 		}
 		
 		if(registroDTO.getEmpresa() != null) {
-			empresa = registroDTO.getEmpresa();
+			empresa = util.obtenerEmpresa(registroDTO.getEmpresa().getNit());
 		}else {
 			empresa = usuarioActual.getEmpresa();			
 		}
+		
+		registroDTO.setEmpresa(empresa);
+		
 		if(usuarioRepo.existsByNombreUsuario(registroDTO.getNombreUsuario())) {
 			return new ResponseEntity<>("Ese nombre de usuario ya existe",HttpStatus.BAD_REQUEST);
 		}
