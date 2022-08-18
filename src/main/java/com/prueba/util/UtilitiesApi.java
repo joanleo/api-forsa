@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +46,8 @@ public class UtilitiesApi {
 	
 	@Autowired
 	private MovInventarioRepository movInventarioRepo;
-	
-	public void compararInventarios(Integer inventario1, Integer inventario2) {
+		
+	public void compararInventarios(Integer inventario1, Integer inventario2/*, Writer writer*/) {
 		MovInventario inv1 = movInventarioRepo.findByidMov(inventario1);
 		if(Objects.isNull(inv1)) {
 			throw new ResourceNotFoundException("Inventario", "id", inventario1.toString());
@@ -88,12 +90,18 @@ public class UtilitiesApi {
 				boolean add = true;
 				for(Producto activo: activosInv2) {
 					System.out.println("comparando "+activosInv1.get(count).getCodigoPieza()+" con "+activo.getCodigoPieza());
-					if(activo.getCodigoPieza().equalsIgnoreCase((activosInv1.get(count).getCodigoPieza()))) {
+					System.out.println(activosInv1.get(count).getDescripcion()+" "+activo.getDescripcion());
+					System.out.println(activosInv1.get(count).getEmpresa().getNombre()+" "+activo.getEmpresa().getNombre());
+					System.out.println(activosInv1.get(count).getFamilia().getSigla()+" "+activo.getFamilia().getSigla());
+					System.out.println(activosInv1.get(count).getFabricante().getNombre()+" "+activo.getFabricante().getNombre());
+					//System.out.println(activosInv1.get(count).getUbicacion().getNombre()+" "+activo.getUbicacion().getNombre());
+					System.out.println(activosInv1.get(count).getTipo().getNombre()+" "+activo.getTipo().getNombre());
+					/*if(activo.getCodigoPieza().equalsIgnoreCase(activosInv1.get(count).getCodigoPieza())) {
 						System.out.println("No son iguales se añade "+activosInv1.get(count).getCodigoPieza());
 						add = false;
 						break;
 						
-					}
+					}*/
 				}
 				if(add) {
 					diferentes.add(activosInv1.get(count));
@@ -105,10 +113,38 @@ public class UtilitiesApi {
 		
 		System.out.println("Codigos de activos diferentes");
 		for(Producto producto:diferentes) {
-			System.out.println(producto.getDescripcion());
+			System.out.println(producto.getTipo().getNombre());
 		}	
 		
+		//Agrupacion por tipo
+		Map<Object, Long> map = activosInv1.stream().collect(Collectors.groupingByConcurrent(producto -> producto.getTipo().getNombre(), Collectors.counting()));
+		System.out.println(map);
+		for(Entry<Object, Long> it1: map.entrySet()) {
+			System.out.println(it1.getKey().toString()+" "+it1.getValue().toString());
+		}
+		
+		/*try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+		        	
+			csvPrinter.printRecord(
+					"Descripcion", "Familia", "Tipo", "Medidas", "Cant");
+				
+			    for (Entry<Object, Long> it1: map.entrySet()) {
+			    	TipoActivo tipo = tipoRepo.findByNombre(it1.getKey().toString());
+			    	Producto producto = productoRepo.findFirstByTipo(tipo);
+			        csvPrinter.printRecord(
+			        		producto.getDescripcion(),
+			        		producto.getFamilia().getSigla(),
+			        		it1.getKey().toString(),
+			        		producto.getMedidas(),
+			        		it1.getValue().toString()
+			        		);
+			    }
+			} catch (IOException e) {
+			    System.out.println("Error en la generacion del CSV "+ e);
+			}
+		*/
 	}
+	
 
 	public Empresa obtenerEmpresa(Long nit) {
 		Empresa exist = empresaRepo.findByNit(nit);
