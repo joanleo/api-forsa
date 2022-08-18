@@ -218,11 +218,10 @@ public class UsuarioController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
-		System.out.println(nitEmpresa);
 		if(nitEmpresa != null) {
-		empresa = util.obtenerEmpresa(nitEmpresa);
+			empresa = util.obtenerEmpresa(nitEmpresa);
 		}else {
-		empresa = usuario.getEmpresa();			
+			empresa = usuario.getEmpresa();			
 		}
 		
 		usuarioService.deshabilitar(id, empresa);

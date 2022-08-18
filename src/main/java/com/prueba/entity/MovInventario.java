@@ -10,12 +10,15 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -39,10 +42,12 @@ public class MovInventario implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
-	private static int countBase = 0;
+	//private static int countBase = 0;
 	
 	@Id
 	@Column(name = "nidmov", length = 6)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,	generator = "seq_inv")
+	@SequenceGenerator(name = "seq_inv", allocationSize = 10)
 	private Integer idMov;
 	
 	@Column(name = "vcnumdocumento")
@@ -69,7 +74,7 @@ public class MovInventario implements Serializable{
 	
 	@JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vcnitempresa")
+	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;
 
 	
@@ -154,9 +159,9 @@ public class MovInventario implements Serializable{
 	public MovInventario(Long idMov, Date fecha, Ubicacion ubicacion, List<DetalleInv> detalles, Usuario realizo,
 			Empresa empresa) {
 		super();
-		MovInventario.countBase +=1;
-		this.idMov = countBase;
-		this.numDocumento = "INV-" + String.valueOf(countBase);
+		/*MovInventario.countBase +=1;
+		this.idMov = countBase;*/
+		this.numDocumento = "INV-" + String.valueOf(this.idMov);
 		this.fecha = fecha;
 		this.ubicacion = ubicacion;
 		this.detalles = detalles;
@@ -166,9 +171,9 @@ public class MovInventario implements Serializable{
 
 	public MovInventario() {
 		super();
-		MovInventario.countBase +=1;
-		this.idMov = countBase;
-		this.numDocumento = "INV-" + String.valueOf(countBase);
+		/*MovInventario.countBase +=1;
+		this.idMov = countBase;*/
+		this.numDocumento = "INV-" + String.valueOf(this.idMov);
 	}
 
 	

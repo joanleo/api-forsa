@@ -17,7 +17,7 @@ public interface TipoActivoRepository extends JpaRepository<TipoActivo, Long> {
 	Optional<TipoActivo> findByIdAndEmpresa(Long id, Empresa empresa);
 
 	/**
-	 * @param key
+	 * @param nombre
 	 * @return
 	 */
 	TipoActivo findByNombre(String nombre);

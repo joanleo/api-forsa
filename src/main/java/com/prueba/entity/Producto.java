@@ -1,21 +1,26 @@
 package com.prueba.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.NaturalId;
+
+//import org.hibernate.annotations.BatchSize;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,14 +34,22 @@ import com.prueba.security.entity.Usuario;
 		  property = "codigoPieza")
 @Entity
 @Table(name = "mov_activos")
-public class Producto{
+public class Producto implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
+
 	@Id
+	@Column(name = "nidpieza")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,	generator = "seq_pieza")
+	@SequenceGenerator(name = "seq_pieza", allocationSize = 10)
+	private Integer idPieza;
+	
+	@NaturalId
     @Column(name = "vccodigopieza", length = 20)
 	//@BatchSize(size = 20)
     private String codigoPieza;
 
-	@Column(name = "vcnombre", length = 60)
+	@Column(name = "vcnombre", length = 100)
     private String descripcion;
 	
     @Column(name = "narea", precision = 10, scale = 2, nullable = false)
@@ -77,7 +90,7 @@ public class Producto{
     private Fabricante fabricante;
     
     @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
-    @JoinColumn(name = "vcnitempresa")
+    @JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;
     
     @ManyToOne(fetch = FetchType.LAZY)
@@ -92,7 +105,7 @@ public class Producto{
     private Boolean importado = false;
     
     @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
-    @JoinColumn(name = "nidusuario")
+    @JoinColumn(name = "nidusuario_recibe")
     private Usuario reviso;
     
     @Column(name = "vcmedidas")
@@ -108,15 +121,32 @@ public class Producto{
     public Boolean sobrante = false;
     
     @JsonIgnore
-	@OneToMany(mappedBy = "traslado", cascade = CascadeType.ALL, orphanRemoval = true)
-	public List<DetalleTrasl> detalles = new ArrayList<DetalleTrasl>();
+	@OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+	public List<DetalleTrasl> detalleTrasl = new ArrayList<DetalleTrasl>();
     
     @Column(name = "dfechaeliminacion")
 	private Date fechaAEliminacion;
     
     @Column(name = "vcestadosalida")
 	public String estadoSalida;
+    
+    @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
+    @JoinColumn(name = "nidusuario_crea")
+    Usuario usuarioCrea;
+ 
 	
+	public Integer getIdPieza() {
+		return idPieza;
+	}
+
+	public void setIdPieza(Integer idPieza) {
+		this.idPieza = idPieza;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	public String getCodigoPieza() {
 		return codigoPieza;
 	}
@@ -278,12 +308,12 @@ public class Producto{
 	}	
 	
 
-	public List<DetalleTrasl> getDetalles() {
-		return detalles;
+	public List<DetalleTrasl> getDetalleTrasl() {
+		return detalleTrasl;
 	}
 
-	public void setDetalles(List<DetalleTrasl> detalles) {
-		this.detalles = detalles;
+	public void setDetalleTrasl(List<DetalleTrasl> detalles) {
+		this.detalleTrasl = detalles;
 	}
 
 	public Date getFechaConfirmacion() {
@@ -326,6 +356,14 @@ public class Producto{
 	public void setFechaAEliminacion(Date fechaAEliminacion) {
 		this.fechaAEliminacion = fechaAEliminacion;
 	}
+	
+	public Usuario getUsuarioCrea() {
+		return usuarioCrea;
+	}
+
+	public void setUsuarioCrea(Usuario usuarioCrea) {
+		this.usuarioCrea = usuarioCrea;
+	}
 
 	
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
@@ -342,7 +380,7 @@ public class Producto{
 	}
 
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia, TipoActivo tipo,
-			Fabricante fabricante, Empresa empresa, Boolean importado, String medidas) {
+			Fabricante fabricante, Empresa empresa, Boolean importado, String medidas, Usuario usuario) {
 		super();
 		this.codigoPieza = codigoPieza;
 		this.descripcion = descripcion;
@@ -354,6 +392,7 @@ public class Producto{
 		this.empresa = empresa;
 		this.importado = importado;
 		this.medidas = medidas;
+		this.usuarioCrea = usuario;
 	}
 
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
@@ -448,47 +487,14 @@ public class Producto{
 	@Override
 	public String toString() {
 		return "Producto [codigoPieza=" + codigoPieza + ", descripcion=" + descripcion + ", area=" + area + ", orden="
-				+ orden + ", familia=" + familia + ", tipo=" + tipo + ", nconfirmacion=" + nconfirmacion
+				+ orden + ", familia=" + familia.getNombre() + ", tipo=" + tipo.getNombre() + ", nconfirmacion=" + nconfirmacion
 				+ ", verificado=" + verificado + ", estaActivo=" + estaActivo + ", motivoIngreso=" + motivoIngreso
 				+ ", fechaActualizacion=" + fechaActualizacion + ", fechaCreacion=" + fechaConfirmacion + ", fabricante="
-				+ fabricante + ", empresa=" + empresa + ", estado=" + estado + ", ubicacion=" + ubicacion
-				+ ", importado=" + importado + ", reviso=" + reviso + ", medidas=" + medidas + ", enviado=" + enviado
-				+ ", estadoTraslado=" + estadoTraslado + ", detalles=" + detalles + "]";
+				+ fabricante.getNombre() + ", empresa=" + empresa.getNombre() + ", estado=" + estado 
+				+ ", importado=" + importado + ", medidas=" + medidas + ", enviado=" + enviado
+				+ ", estadoTraslado=" + estadoTraslado + "]";
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(area, codigoPieza, descripcion, detalles, empresa, enviado, estaActivo, estado,
-				estadoSalida, estadoTraslado, fabricante, familia, fechaAEliminacion, fechaActualizacion,
-				fechaConfirmacion, importado, medidas, motivoIngreso, nconfirmacion, orden, reviso, sobrante, tipo,
-				ubicacion, verificado);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Producto other = (Producto) obj;
-		return Objects.equals(area, other.area) && Objects.equals(codigoPieza, other.codigoPieza)
-				&& Objects.equals(descripcion, other.descripcion) && Objects.equals(detalles, other.detalles)
-				&& Objects.equals(empresa, other.empresa) && Objects.equals(enviado, other.enviado)
-				&& Objects.equals(estaActivo, other.estaActivo) && Objects.equals(estado, other.estado)
-				&& Objects.equals(estadoSalida, other.estadoSalida)
-				&& Objects.equals(estadoTraslado, other.estadoTraslado) && Objects.equals(fabricante, other.fabricante)
-				&& Objects.equals(familia, other.familia) && Objects.equals(fechaAEliminacion, other.fechaAEliminacion)
-				&& Objects.equals(fechaActualizacion, other.fechaActualizacion)
-				&& Objects.equals(fechaConfirmacion, other.fechaConfirmacion)
-				&& Objects.equals(importado, other.importado) && Objects.equals(medidas, other.medidas)
-				&& Objects.equals(motivoIngreso, other.motivoIngreso)
-				&& Objects.equals(nconfirmacion, other.nconfirmacion) && Objects.equals(orden, other.orden)
-				&& Objects.equals(reviso, other.reviso) && Objects.equals(sobrante, other.sobrante)
-				&& Objects.equals(tipo, other.tipo) && Objects.equals(ubicacion, other.ubicacion)
-				&& Objects.equals(verificado, other.verificado);
-	}
 
 	    
 }

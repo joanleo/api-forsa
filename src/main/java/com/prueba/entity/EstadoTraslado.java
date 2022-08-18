@@ -35,7 +35,7 @@ public class EstadoTraslado {
 	public String descripcion;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vcnitempresa")
+	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;
 
 	public EstadoTraslado() {

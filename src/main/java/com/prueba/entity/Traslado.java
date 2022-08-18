@@ -10,11 +10,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -32,10 +35,12 @@ public class Traslado implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static int countBase = 0;
+	//private static int countBase = 0;
 
 	@Id
 	@Column(name = "nidtraslado")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,	generator = "seq_traslado")
+	@SequenceGenerator(name = "seq_traslado", allocationSize = 10)
 	public Long idTraslado;
 	
 	@Column(name = "vcnumdocumento")
@@ -71,7 +76,7 @@ public class Traslado implements Serializable {
 	public List<DetalleTrasl> detalles = new ArrayList<DetalleTrasl>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "vcnitempresa")
+	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
 	private Empresa empresa;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -84,9 +89,9 @@ public class Traslado implements Serializable {
 
 	public Traslado() {
 		super();
-		Traslado.countBase += 1;
-		this.idTraslado = Long.valueOf(countBase);
-		this.numDocumento = "TR-" + String.valueOf(countBase);
+		/*Traslado.countBase += 1;
+		this.idTraslado = Long.valueOf(countBase);*/
+		//this.numDocumento = "TR-" + String.valueOf(this.idTraslado);
 	}
 
 	public Long getIdTraslado() {
@@ -244,7 +249,9 @@ public class Traslado implements Serializable {
 		
 	}
 	public void addActivo(Producto producto, Empresa empresa) {
+		System.out.println("Funcion de traslado añadiendo producto "+producto.getCodigoPieza()+" al traslado "+this.getIdTraslado());
 		DetalleTrasl detalle = new DetalleTrasl(this, producto, empresa);
+		//System.out.println(detalle.getTraslado().getIdTraslado());
 		detalles.add(detalle);
 		
 	}

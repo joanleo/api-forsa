@@ -12,7 +12,7 @@ import com.prueba.entity.Producto;
 import com.prueba.entity.TipoActivo;
 import com.prueba.security.entity.Usuario;
 
-public interface ProductoRepository extends JpaRepository<Producto, String>, JpaSpecificationExecutor<Producto>{
+public interface ProductoRepository extends JpaRepository<Producto, Integer>, JpaSpecificationExecutor<Producto>{
 		
 	public Page<Producto> findAllByEmpresaAndEstaActivoTrue(Empresa empresa, Pageable page);
 	
@@ -33,7 +33,7 @@ public interface ProductoRepository extends JpaRepository<Producto, String>, Jpa
 	public Producto findByReviso(Usuario usuario);
 
 	/**
-	 * @param key
+	 * @param tipo
 	 * @return
 	 */
 	public Producto findByTipo(TipoActivo tipo);

@@ -38,7 +38,7 @@ public class DetalleSalida implements Serializable {
 	private Salida salida;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("codigoPieza")
+	@MapsId("idPieza")
 	private Producto producto;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -52,7 +52,7 @@ public class DetalleSalida implements Serializable {
 		super();
 		this.salida = salida;
 		this.producto = producto;
-		this.id = new DetalleSalida_id(salida.getIdSalida(), producto.getCodigoPieza());
+		this.id = new DetalleSalida_id(salida.getIdSalida(), producto.getIdPieza());
 	}
 
 	public DetalleSalida() {

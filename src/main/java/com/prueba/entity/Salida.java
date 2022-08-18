@@ -13,11 +13,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -39,10 +42,12 @@ public class Salida implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	private static int countBase = 0;
+	//private static int countBase = 0;
 
 	@Id
 	@Column(name = "nidsalida")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,	generator = "seq_salida")
+	@SequenceGenerator(name = "seq_salida", allocationSize = 10)
 	public Integer idSalida;
 	
 	@Column(name = "vcnumdocumento")
@@ -61,7 +66,7 @@ public class Salida implements Serializable {
 	}
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "vcnitempresa")
+	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
 	private Empresa empresa;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -77,9 +82,9 @@ public class Salida implements Serializable {
 
 	public Salida(Empresa empresa, Usuario usuarioCrea, List<DetalleSalida> detalles) {
 		super();
-		Salida.countBase +=1;
-		this.idSalida = countBase;
-		this.numDocumento = "SIN-" + String.valueOf(countBase);
+		/*Salida.countBase +=1;
+		this.idSalida = countBase;*/
+		this.numDocumento = "SIN-" + String.valueOf(this.idSalida);
 		this.empresa = empresa;
 		this.usuarioCrea = usuarioCrea;
 		this.detalles = detalles;
@@ -87,9 +92,9 @@ public class Salida implements Serializable {
 
 	public Salida() {
 		super();
-		Salida.countBase +=1;
-		this.idSalida = countBase;
-		this.numDocumento = "SIN-" + String.valueOf(countBase);
+		/*Salida.countBase +=1;
+		this.idSalida = countBase;*/
+		this.numDocumento = "SIN-" + String.valueOf(this.idSalida);
 	}
 
 	public Integer getIdSalida() {

@@ -61,8 +61,8 @@ public class Usuario {
     private Rol rol;
 	
    
-	@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "vcnitempresa")
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
 	private Empresa empresa;
 	
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")

@@ -23,9 +23,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class DetalleInv implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
@@ -37,7 +34,7 @@ public class DetalleInv implements Serializable{
 	private MovInventario movimiento;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("codigoPieza")
+	@MapsId("idPieza")
 	private Producto producto;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -53,7 +50,7 @@ public class DetalleInv implements Serializable{
 
 	public DetalleInv(MovInventario movimiento, Producto producto) {
 		super();
-		this.id = new DetalleInv_id(movimiento.getIdMov(), producto.getCodigoPieza());
+		this.id = new DetalleInv_id(movimiento.getIdMov(), producto.getIdPieza());
 		this.movimiento = movimiento;
 		this.producto = producto;
 	}

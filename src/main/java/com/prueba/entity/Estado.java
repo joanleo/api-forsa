@@ -34,7 +34,7 @@ public class Estado {
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vcnitempresa")
+	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;
 	
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")

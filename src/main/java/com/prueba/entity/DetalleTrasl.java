@@ -41,7 +41,7 @@ public class DetalleTrasl implements Serializable{
 	private Traslado traslado;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("codigoPieza")
+	@MapsId("idPieza")
 	private Producto producto;
 	
 	
@@ -61,7 +61,7 @@ public class DetalleTrasl implements Serializable{
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vcnitempresa")
+	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;
 	
 	public DetalleTrasl() {
@@ -72,30 +72,30 @@ public class DetalleTrasl implements Serializable{
 		super();
 		this.traslado = traslado;
 		this.producto = producto;
-		this.id = new DetalleTrasl_id(traslado.getIdTraslado(), producto.getCodigoPieza());
+		this.id = new DetalleTrasl_id(traslado.getIdTraslado(), producto.getIdPieza());
 
 	}
 
-	public DetalleTrasl(Traslado traslado, Producto producto, Empresa empresa) {
+	public DetalleTrasl(Traslado trasladoe, Producto producto, Empresa empresa) {
 		super();
-		this.traslado = traslado;
+		this.traslado = trasladoe;
 		this.producto = producto;
 		this.empresa = empresa;
-		this.id = new DetalleTrasl_id(traslado.getIdTraslado(), producto.getCodigoPieza());
+		this.id = new DetalleTrasl_id(traslado.getIdTraslado(), producto.getIdPieza());
 	}
 
 	/**
-	 * @param traslado
+	 * @param trasladoe
 	 * @param producto
 	 * @param empresa
 	 * @param usuarioEnvia
 	 */
-	public DetalleTrasl(Traslado traslado, Producto producto, Empresa empresa, Usuario usuarioEnvia) {
-		this.traslado = traslado;
+	public DetalleTrasl(Traslado trasladoe, Producto producto, Empresa empresa, Usuario usuarioEnvia) {
+		this.traslado = trasladoe;
 		this.producto = producto;
 		this.empresa = empresa;
 		this.usuarioconfirma = usuarioEnvia;
-		this.id = new DetalleTrasl_id(traslado.getIdTraslado(), producto.getCodigoPieza());
+		this.id = new DetalleTrasl_id(traslado.getIdTraslado(), producto.getIdPieza());
 		
 	}
 

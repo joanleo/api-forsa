@@ -1,6 +1,7 @@
 package com.prueba.entity;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,7 +35,7 @@ public class TipoUbicacion {
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vcnitempresa")
+	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;
 	
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
@@ -98,6 +99,25 @@ public class TipoUbicacion {
 		this.nombre = nombre;
 		this.empresa = empresa;
 		this.estaActivo = estaActivo;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(empresa, estaActivo, id, nombre, ubicaciones);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TipoUbicacion other = (TipoUbicacion) obj;
+		return Objects.equals(empresa, other.empresa) && Objects.equals(estaActivo, other.estaActivo)
+				&& Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
+				&& Objects.equals(ubicaciones, other.ubicaciones);
 	}
 
 	

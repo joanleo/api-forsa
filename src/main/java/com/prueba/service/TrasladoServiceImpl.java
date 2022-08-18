@@ -180,6 +180,9 @@ public class TrasladoServiceImpl implements TrasladoService {
 		if(Objects.isNull(confirmar)) {
 			throw new ResourceNotFoundException("Activo", "codigo de pieza", codigopieza);
 		}
+		if(!confirmar.getVerificado()) {
+			throw new ResourceCannotBeAccessException("La pieza aun no ha sido verificada");
+		}
 		confirmar.setEstadoTraslado("E");
 		productoRepo.save(confirmar);
 		List<DetalleTrasl> detallesTras = traslado.getDetalles();
@@ -193,20 +196,17 @@ public class TrasladoServiceImpl implements TrasladoService {
 				detalle.setUsuarioconfirma(usuario);
 				detalle.setFechaEnvio(fechaConfirma);
 				detalle = detalleTrasladoRepo.save(detalle);
+				break;
 			}
 		}
 		
 		//detallesTras = detalleTrasladoRepo.saveAll(detallesTras);
 		traslado.setDetalles(detallesTras);
-		int cont = 0;
 		for(DetalleTrasl detalle: detallesTras) {
 			if(detalle.getProducto().getEstadoTraslado().equalsIgnoreCase("F")) {
-				cont += 1;
 			}
 		}
-		if(cont == traslado.getDetalles().size()) {
-			traslado.setEstadoTraslado("E");			
-		}
+		
 		traslado.setEstadoTraslado("E");
 		traslado = trasladoRepo.save(traslado);
 		
