@@ -16,25 +16,25 @@ import com.prueba.security.entity.Usuario;
 		  property = "codigoPieza")
 public class ProductoDTO {
 	 
-	@NotNull(message = "Este campo no puede ser nulo")
+	//@NotNull(message = "Este campo no puede ser nulo")
 	private String codigoPieza;
 	
-	@NotBlank(message = "Este campo no puede ser nulo")
+	//@NotBlank(message = "Este campo no puede ser nulo")
 	private String descripcion;
 	
-	@NotNull(message = "Este campo no puede ser nulo")
+	//@NotNull(message = "Este campo no puede ser nulo")
 	private Float area;
 	
-	@NotBlank(message = "Este campo no puede ser nulo")
+	//@NotBlank(message = "Este campo no puede ser nulo")
 	private String orden;
 	
-	@NotNull(message = "Este campo no puede ser nulo")
+	//@NotNull(message = "Este campo no puede ser nulo")
 	private Fabricante fabricante;
 	
-	@NotNull(message = "Este campo no puede ser nulo")
+	//@NotNull(message = "Este campo no puede ser nulo")
 	private Familia familia;
 	
-	@NotNull(message = "Este campo no puede ser nulo")
+	//@NotNull(message = "Este campo no puede ser nulo")
 	private EstadoDTO estado;
 	
 	private Empresa empresa;

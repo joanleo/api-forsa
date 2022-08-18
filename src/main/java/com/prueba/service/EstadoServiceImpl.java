@@ -20,6 +20,7 @@ import com.prueba.repository.EstadoRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.EstadoSpecifications;
+import com.prueba.util.UtilitiesApi;
 
 @Service
 public class EstadoServiceImpl implements EstadoService {
@@ -35,6 +36,9 @@ public class EstadoServiceImpl implements EstadoService {
 	
 	@Autowired
 	private EstadoSpecifications estadoSpec;
+	
+	@Autowired
+	private UtilitiesApi util;
 
 	@Override
 	public EstadoDTO create(EstadoDTO estadoDTO) {
@@ -44,6 +48,14 @@ public class EstadoServiceImpl implements EstadoService {
 		if(estadoDTO.getEmpresa() == null) {
 			estadoDTO.setEmpresa(usuario.getEmpresa());
 		}
+		
+		Empresa empresa;
+		if(estadoDTO.getEmpresa() != null) {
+			empresa = util.obtenerEmpresa(estadoDTO.getEmpresa().getNit());
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		estadoDTO.setEmpresa(empresa);
 		Estado estado = mapearDTO(estadoDTO);
 		Estado exist = estadoRepo.findByTipoAndEmpresa(estadoDTO.getTipo(), estadoDTO.getEmpresa());
 		if(exist == null) {

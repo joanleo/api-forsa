@@ -7,10 +7,10 @@ import javax.validation.constraints.NotNull;
 import com.prueba.entity.TipoEmpresa;
 
 public class EmpresaDTO {
-	@NotNull(message = "Este campo no puede ser nulo")
+	//@NotNull(message = "Este campo no puede ser nulo")
 	private Long nit;
 	
-	@NotBlank(message = "Este campo no puede ser nulo")
+	//@NotBlank(message = "Este campo no puede ser nulo")
 	private String nombre;
 	
 	private TipoEmpresa tipoEmpresa;

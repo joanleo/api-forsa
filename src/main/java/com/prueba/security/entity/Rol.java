@@ -59,7 +59,7 @@ public class Rol implements Serializable{
     
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vcnitEmpresa")
+    @JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;
     
     @JsonIgnore

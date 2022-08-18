@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -85,6 +86,9 @@ public class ProductoServiceImpl implements ProductoService {
 		Producto exist = productoRepo.findByCodigoPieza(productoDTO.getCodigoPieza());
 		if(exist == null) {
 			Empresa empresa = empresaRepo.findByNit(productoDTO.getEmpresa().getNit());
+			if(Objects.isNull(empresa)) {
+				throw new ResourceNotFoundException("Empresa", "nit", productoDTO.getEmpresa().getNit());
+			}
 			producto.setEmpresa(empresa);
 			productoRepo.save(producto);
 		}else {
@@ -493,8 +497,8 @@ public class ProductoServiceImpl implements ProductoService {
 			Page<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro, empresa),PageRequest.of(0, 10));
 			return productos;
 		}
-		Page<Producto> listProducts = productoRepo.findAll(productSpec.getVerificacion(orden, filtro, empresa), PageRequest.of(offset, pageSize));		
-		return listProducts;
+		Page<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro, empresa), PageRequest.of(offset, pageSize));		
+		return productos;
 	}
 
 

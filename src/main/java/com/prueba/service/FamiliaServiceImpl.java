@@ -30,17 +30,18 @@ public class FamiliaServiceImpl implements FamiliaService {
 	
 	@Autowired
 	private FamiliaSpecifications familiaSpec;
+	
 
 	@Override
 	public FamiliaDTO create(FamiliaDTO familiaDto, Empresa empresa) {
 		Familia familia = mapearDTO(familiaDto);
 		Familia exist = familiaRepo.findByNombreAndEmpresa(familia.getNombre(), empresa);
 		if(exist == null) {
-			familiaRepo.save(familia);
+			exist = familiaRepo.saveAndFlush(familia);
 		}else {
 			throw new ResourceAlreadyExistsException("Familia ", "nombre" , familia.getNombre());
 		}
-		return mapearEntidad(familia);
+		return mapearEntidad(exist);
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public class Familia {
     @OneToMany(mappedBy = "familia")
     private List<Producto> productos;
     
-    @JsonIgnore
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;

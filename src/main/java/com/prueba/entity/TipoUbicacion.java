@@ -33,7 +33,7 @@ public class TipoUbicacion {
 	@Column(name = "vcnombre")
 	private String nombre;
 	
-	@JsonIgnore
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;

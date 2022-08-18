@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Fabricante;
 
-public interface FabricanteRepository extends JpaRepository<Fabricante, Long>, JpaSpecificationExecutor<Fabricante>{
+public interface FabricanteRepository extends JpaRepository<Fabricante, Integer>, JpaSpecificationExecutor<Fabricante>{
 	
 	//List<Fabricante> findByEmpresaAndEstaActivo(Empresa empresa, boolean b);
 

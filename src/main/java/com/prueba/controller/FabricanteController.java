@@ -110,6 +110,7 @@ public class FabricanteController {
 			Page<Fabricante> fabricantes = fabricanteService.searchFabricantes(empresa, pagina, items);
 			return new ApiResponse<>(fabricantes.getSize(), fabricantes);
 		}else {
+			fabricanteDTO.setEmpresa(empresa);
 			Page<Fabricante> fabricantes = fabricanteService.searchFabricantes(fabricanteDTO, empresa, pagina, items);
 			return new ApiResponse<>(fabricantes.getSize(), fabricantes);
 		}
@@ -136,6 +137,18 @@ public class FabricanteController {
 	@Operation(summary = "Actualiza un fabricante", description = "Actualiza los datos de un fabricante")
 	public ResponseEntity<FabricanteDTO> update(@Valid @RequestBody FabricanteDTO fabricanteDTO,
 												@PathVariable Long nitFabricante){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(fabricanteDTO.getEmpresa() != null) {
+			empresa = util.obtenerEmpresa(fabricanteDTO.getEmpresa().getNit());
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		fabricanteDTO.setEmpresa(empresa);
 		FabricanteDTO actualizado = fabricanteService.update(nitFabricante, fabricanteDTO);
 		
 		return new ResponseEntity<FabricanteDTO>(actualizado, HttpStatus.OK);
@@ -204,6 +217,7 @@ public class FabricanteController {
         	List<FabricanteDTO> fabricantes = fabricanteService.list(empresa);
         	csvService.writeFabricantesToCsv(servletResponse.getWriter(), fabricantes);
 		}else{
+			fabricanteDTO.setEmpresa(empresa);
 			List<FabricanteDTO> fabricantes =  fabricanteService.listFabricantes(fabricanteDTO, empresa);
 			csvService.writeFabricantesToCsv(servletResponse.getWriter(), fabricantes);
 		}

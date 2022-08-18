@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import com.prueba.dto.SalidaDTO;
 import com.prueba.entity.DetalleSalida;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
@@ -30,6 +31,7 @@ import com.prueba.repository.TipoMovRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.SalidaSpecifications;
+import com.prueba.util.UtilitiesApi;
 
 /**
  * @author Joan Leon
@@ -56,53 +58,75 @@ public class SalidaServiceImp implements SalidaService {
 	@Autowired
 	private DetalleSalidaRepository detalleSalidaRepo;
 	
+	@Autowired
+	private UtilitiesApi util;
+	
 	@Override
-	public Salida crearSalida(Salida salida){
+	public Salida crearSalida(SalidaDTO salidaDTO){
+		System.out.println(salidaDTO);
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
-		
+		System.out.println("Creo salida vacia");
 		Salida nuevaSalida = new Salida();
+		Empresa empresa;
+		TipoMov tipomov = new TipoMov();
 		
-		if(salida.getEmpresa().getNit() != null) {
-			nuevaSalida.setEmpresa(salida.getEmpresa());
+		System.out.println("Agregando empresa");
+		if(salidaDTO.getEmpresa() != null) {
+			empresa = util.obtenerEmpresa(salidaDTO.getEmpresa().getNit());
 		}else {
-			nuevaSalida.setEmpresa(usuario.getEmpresa());
+			empresa = usuario.getEmpresa();;
 		}
-		
-		if(salida.getUsuarioCrea() != null) {
-			nuevaSalida.setUsuarioCrea(salida.getUsuarioCrea());
+		System.out.println("Agregando usuario");
+		if(salidaDTO.getUsuarioCrea() != null) {
+			Long idUsuario = salidaDTO.getUsuarioCrea().getId();
+			usuario = usuarioRepo.findById(idUsuario)
+					.orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", idUsuario));
 		}else {
 			nuevaSalida.setUsuarioCrea(usuario);
 		}
-		
-		TipoMov tipomov = tipoMovRepo.findById(salida.getTipoMovimiento().getId())
-				.orElseThrow(() -> new ResourceNotFoundException("Tipo de Movimiento", "id", salida.getTipoMovimiento().getId()));
-		if(tipomov != null) {
-			nuevaSalida.setTipoMovimiento(tipomov);
+		System.out.println("Agregando tipo");
+		tipomov = tipoMovRepo.findById(salidaDTO.getTipoMovimiento().getId())
+				.orElseThrow(() -> new ResourceNotFoundException("Tipo de Movimiento", "id", salidaDTO.getTipoMovimiento().getId()));
+		if(salidaDTO.getTipoMovimiento() != null) {
+			tipomov = tipoMovRepo.findById(salidaDTO.getTipoMovimiento().getId())
+					.orElseThrow(() -> new ResourceNotFoundException("Tipo de Movimiento", "id", salidaDTO.getTipoMovimiento().getId()));
 		}
 		
-		if(salida.getDetalles() != null) {
-			System.out.println(salida.getDetalles());
+		nuevaSalida.setEmpresa(empresa);
+		nuevaSalida.setUsuarioCrea(usuario);
+		nuevaSalida.setTipoMovimiento(tipomov);
+		
+		System.out.println("Obteniendo detalles(productos)");
+		if(salidaDTO.getDetalles() == null) {
+			throw new ResourceCannotBeAccessException("Debe incluir al menos un activo");
 		}
-		List<DetalleSalida> detalles = salida.getDetalles();
-		for(DetalleSalida detalle: detalles) {
-			Producto activo = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
+		nuevaSalida = salidaRepo.saveAndFlush(nuevaSalida);
+		List<Producto> productos = salidaDTO.getDetalles();
+		Salida actualizar = salidaRepo.findByIdSalida(nuevaSalida.idSalida);
+		if(Objects.isNull(actualizar)) {
+			throw new ResourceNotFoundException("Salida", "id", nuevaSalida.toString());
+		}
+				
+		for(Producto producto: productos) {
+			System.out.println(producto.getCodigoPieza());
+			Producto activo = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
 			if(Objects.isNull(activo)) {
-				throw new ResourceNotFoundException("activo", "codigo de pieza", detalle.getProducto().getCodigoPieza());
+				throw new ResourceNotFoundException("activo", "codigo de pieza", producto.getCodigoPieza());
 			}
 			if(!activo.getEstaActivo()) {
 				throw new ResourceCannotBeAccessException("Activo se encuentra inhabilitado");
 			}
 			activo.setEstadoSalida("A");
 			activo = productoRepo.save(activo);
-			nuevaSalida.addActivo(activo);
+			actualizar.addActivo(activo);
 		}
 		 
-		nuevaSalida.setEstadoSalida("A");
+		actualizar.setEstadoSalida("A");
 		
-		nuevaSalida = salidaRepo.save(nuevaSalida);
+		actualizar = salidaRepo.save(actualizar);
 		
-		return nuevaSalida;
+		return actualizar;
 	}
 
 	@Override
@@ -304,6 +328,12 @@ public class SalidaServiceImp implements SalidaService {
 		//salida.setUsuarioCrea(null);
 		
 		salidaRepo.save(salida);
+	}
+
+	@Override
+	public Salida crearSalida(Salida salida) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lowagie.text.DocumentException;
 import com.prueba.dto.ApiResponse;
+import com.prueba.dto.SalidaDTO;
 import com.prueba.entity.DetalleSalida;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Salida;
@@ -64,8 +65,8 @@ public class SalidaController {
 	
 	@PostMapping
 	@Operation(summary = "Crea una salida")
-	public ResponseEntity<?> crearSalida(@RequestBody Salida salida) {
-		return new ResponseEntity<Salida>(salidaService.crearSalida(salida), HttpStatus.CREATED);
+	public ResponseEntity<?> crearSalida(@RequestBody SalidaDTO SalidaDTO) {
+		return new ResponseEntity<Salida>(salidaService.crearSalida(SalidaDTO), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
@@ -146,7 +147,7 @@ public class SalidaController {
 	
 	@GetMapping("/detalle/{idsalida}")
 	@Operation(summary = "Obtiene el detalle de una salida")
-	public ApiResponse<Page<DetalleSalida>> getInventario(
+	public ApiResponse<Page<DetalleSalida>> obtieneDetalleSalida(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
 			@PathVariable Integer idsalida){

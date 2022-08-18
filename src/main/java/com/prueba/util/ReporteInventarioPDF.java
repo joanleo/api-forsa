@@ -55,38 +55,17 @@ public class ReporteInventarioPDF {
         cell.setPhrase(new Phrase("Nombre", font));
         table.addCell(cell);
          
-        cell.setPhrase(new Phrase("Área", font));
-        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(cell);
-         
-        //cell.setPhrase(new Phrase("Empresa", font));
-        //table.addCell(cell);
-         
-        cell.setPhrase(new Phrase("Estado", font));
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-        table.addCell(cell);
-        
-        cell.setPhrase(new Phrase("Fabricante", font));
-        table.addCell(cell);
-        
         cell.setPhrase(new Phrase("Familia", font));
         table.addCell(cell);
-        
-        //cell.setPhrase(new Phrase("Órden", font));
-        //table.addCell(cell);
-        
+
+    
         cell.setPhrase(new Phrase("Ubicación", font));
         table.addCell(cell);
         
-        //cell.setPhrase(new Phrase("Motivo ingreso", font));
-        //table.addCell(cell);
-        
-        cell.setPhrase(new Phrase("Activo", font));
-        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setPhrase(new Phrase("Estado", font));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
-        
-        cell.setPhrase(new Phrase("Verificado", font));
-        table.addCell(cell);
+
 	}
 	
 	private void tableData(PdfPTable table) {

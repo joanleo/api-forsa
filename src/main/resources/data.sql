@@ -64,7 +64,10 @@ VALUES
 (2,'Regular', '2222'),
 (3,'Malo', '2222');
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e030e3d312359efb1c1e385d7d162026b29ab30a
 INSERT INTO m_usuarios
 (`vcemail`,
 `vcnombre`,
@@ -73,4 +76,4 @@ INSERT INTO m_usuarios
 `vcnitempresa`,
 `nidrol`)
 VALUES
-('jleon@metrolinkeu.com', 'Joan David Leon', '$2a$10$wTWky7f3N.ASn.Q1VN0u/e3q2.cIo/5A4C8XHFFUM7oiZLNbmF9GO', 'joan1', '2222',1)
+('jleon@metrolinkeu.com', 'Joan David Leon', '$2a$10$wTWky7f3N.ASn.Q1VN0u/e3q2.cIo/5A4C8XHFFUM7oiZLNbmF9GO', 'joan', '2222',1)

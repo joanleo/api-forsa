@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -484,17 +485,16 @@ public class Producto implements Serializable{
 		this.enviado = enviado;
 	}
 
+
 	@Override
-	public String toString() {
-		return "Producto [codigoPieza=" + codigoPieza + ", descripcion=" + descripcion + ", area=" + area + ", orden="
-				+ orden + ", familia=" + familia.getNombre() + ", tipo=" + tipo.getNombre() + ", nconfirmacion=" + nconfirmacion
-				+ ", verificado=" + verificado + ", estaActivo=" + estaActivo + ", motivoIngreso=" + motivoIngreso
-				+ ", fechaActualizacion=" + fechaActualizacion + ", fechaCreacion=" + fechaConfirmacion + ", fabricante="
-				+ fabricante.getNombre() + ", empresa=" + empresa.getNombre() + ", estado=" + estado 
-				+ ", importado=" + importado + ", medidas=" + medidas + ", enviado=" + enviado
-				+ ", estadoTraslado=" + estadoTraslado + "]";
+	public int hashCode() {
+		return Objects.hash(area, codigoPieza, descripcion, empresa, enviado, estaActivo, estado,
+				estadoSalida, estadoTraslado, fabricante, familia, fechaAEliminacion, fechaActualizacion,
+				fechaConfirmacion, importado, medidas, motivoIngreso, nconfirmacion, orden, reviso, sobrante, tipo,
+				ubicacion, verificado);
 	}
 
+	
 
 	    
 }

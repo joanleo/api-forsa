@@ -60,8 +60,7 @@ public class Usuario {
     @JoinColumn(name="nidrol", referencedColumnName = "nidrol")
     private Rol rol;
 	
-   
-	@ManyToOne(fetch = FetchType.LAZY)
+   	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
 	private Empresa empresa;
 	

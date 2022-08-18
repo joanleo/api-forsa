@@ -8,7 +8,7 @@ import com.prueba.entity.MovInventario;
 
 public interface MovInventarioService {
 
-	MovInventarioDTO create(MovInventarioDTO movInventarioDto);
+	MovInventario create(MovInventarioDTO movInventarioDto);
 
 	//Page<MovInventario> searchInv(String letras, Integer pagina, Integer items);
 

@@ -21,6 +21,7 @@ import com.prueba.repository.FabricanteRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.FabricanteSpecificatios;
+import com.prueba.util.UtilitiesApi;
 
 @Service
 public class FabricanteServiceImpl implements FabricanteService {
@@ -36,6 +37,9 @@ public class FabricanteServiceImpl implements FabricanteService {
 	
 	@Autowired
 	private FabricanteSpecificatios fabricanteSpec;
+	
+	@Autowired
+	private UtilitiesApi util;
 
 	@Override
 	public FabricanteDTO create(FabricanteDTO fabricanteDTO) {
@@ -46,7 +50,13 @@ public class FabricanteServiceImpl implements FabricanteService {
 		if(fabricanteDTO.getEmpresa() == null) {
 			fabricanteDTO.setEmpresa(usuario.getEmpresa());
 		}
-		
+		Empresa empresa;
+		if(fabricanteDTO.getEmpresa() != null) {
+			empresa = util.obtenerEmpresa(fabricanteDTO.getEmpresa().getNit());
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		fabricanteDTO.setEmpresa(empresa);
 		Fabricante fabricante = mapearDTO(fabricanteDTO);
 		Fabricante exist = fabricanteRepo.findByNitAndEmpresaAndEstaActivoTrue(fabricanteDTO.getNit(), fabricanteDTO.getEmpresa());
 		

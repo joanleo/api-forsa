@@ -21,7 +21,7 @@ public class DetalleSalida_id implements Serializable{
 	@Column(name = "nidsalida")
 	private Integer idSalida;
 	
-	@Column(name = "nid_pieza")
+	@Column(name = "nidpieza")
 	private Integer idPieza;
 
 	public DetalleSalida_id(Integer idSalida, Integer idPieza) {

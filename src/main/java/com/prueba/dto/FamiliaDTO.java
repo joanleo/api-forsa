@@ -9,10 +9,10 @@ public class FamiliaDTO {
 
 	private Long id;
 	
-	@NotBlank(message = "Este campo no puede ser nulo")
+	//@NotBlank(message = "Este campo no puede ser nulo")
     private String nombre;
 	
-	@NotNull(message = "Este campo no puede ser nulo")
+	//@NotNull(message = "Este campo no puede ser nulo")
 	private Empresa empresa;
 	
 	private String sigla;

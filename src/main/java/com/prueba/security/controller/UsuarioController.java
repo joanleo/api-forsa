@@ -112,10 +112,11 @@ public class UsuarioController {
 		}
 
 		if(Objects.isNull(registroDTO)) {
-			Page<Usuario> usuarios = usuarioService.searchFabricantes(empresa, pagina, items);
+			Page<Usuario> usuarios = usuarioService.buscarUsuarios(empresa, pagina, items);
 			return new ApiResponse<>(usuarios.getSize(), usuarios);
 		}else {
-			Page<Usuario> usuarios = usuarioService.searchFabricantes(registroDTO, empresa, pagina, items);
+			registroDTO.setEmpresa(empresa);
+			Page<Usuario> usuarios = usuarioService.buscarUsuarios(registroDTO, empresa, pagina, items);
 			return new ApiResponse<>(usuarios.getSize(), usuarios);
 		}
 	}
@@ -136,10 +137,13 @@ public class UsuarioController {
 		}
 		
 		if(registroDTO.getEmpresa() != null) {
-			empresa = registroDTO.getEmpresa();
+			empresa = util.obtenerEmpresa(registroDTO.getEmpresa().getNit());
 		}else {
 			empresa = usuarioActual.getEmpresa();			
 		}
+		
+		registroDTO.setEmpresa(empresa);
+		
 		if(usuarioRepo.existsByNombreUsuario(registroDTO.getNombreUsuario())) {
 			return new ResponseEntity<>("Ese nombre de usuario ya existe",HttpStatus.BAD_REQUEST);
 		}
@@ -217,7 +221,7 @@ public class UsuarioController {
 		Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
-		
+
 		if(nitEmpresa != null) {
 			empresa = util.obtenerEmpresa(nitEmpresa);
 		}else {

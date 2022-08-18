@@ -107,6 +107,7 @@ public class TipoUbicacionController {
 			Page<TipoUbicacion> tipoUbicacion = tipoUbicService.searchTipoUbicacion(empresa, pagina, items);
 			return new ApiResponse<>(tipoUbicacion.getSize(), tipoUbicacion);
 		}else {
+			tipoUbicacionDTO.setEmpresa(empresa);
 			Page<TipoUbicacion> tipoUbicacion = tipoUbicService.searchTipoUbicacion(tipoUbicacionDTO, empresa, pagina, items);
 			return new ApiResponse<>(tipoUbicacion.getSize(), tipoUbicacion);
 		}
@@ -133,6 +134,18 @@ public class TipoUbicacionController {
 	@Operation(summary = "Actualiza un tipo de ubicacion", description = "Actualiza los datos de un tipo de ubicacion")
 	public ResponseEntity<TipoUbicacionDTO> update(@Valid @RequestBody TipoUbicacionDTO tipoUbicacionDTO,
 											 @PathVariable Long id){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		
+		if(tipoUbicacionDTO.getEmpresa() != null) {
+		empresa = util.obtenerEmpresa(tipoUbicacionDTO.getEmpresa().getNit());
+		}else {
+		empresa = usuario.getEmpresa();			
+		}
+		tipoUbicacionDTO.setEmpresa(empresa);
 		TipoUbicacionDTO actualizado = tipoUbicService.update(id, tipoUbicacionDTO);
 		
 		return new ResponseEntity<>(actualizado, HttpStatus.OK);
@@ -200,6 +213,7 @@ public class TipoUbicacionController {
         	List<TipoUbicacionDTO> tiposUbic = tipoUbicService.list(empresa);
         	csvService.writeTiposUbiToCsv(servletResponse.getWriter(), tiposUbic);
 		}else{
+			tipoUbicacionDTO.setEmpresa(empresa);
 			List<TipoUbicacionDTO> tiposUbic =  tipoUbicService.listTipoUbicacion(tipoUbicacionDTO, empresa, true);
 			csvService.writeTiposUbiToCsv(servletResponse.getWriter(), tiposUbic);
 		}

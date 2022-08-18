@@ -41,7 +41,7 @@ public class DetalleTrasl implements Serializable{
 	private Traslado traslado;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("idPieza")
+	@JoinColumn(name = "vccodigopieza", referencedColumnName = "vccodigopieza")
 	private Producto producto;
 	
 	

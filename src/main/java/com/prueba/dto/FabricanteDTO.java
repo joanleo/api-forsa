@@ -6,7 +6,7 @@ import com.prueba.entity.Empresa;
 
 public class FabricanteDTO {
 	
-	@NotNull(message = "Este campo no puede ser nulo")
+	//@NotNull(message = "Este campo no puede ser nulo")
 	private Long nit;
 	
 	//@NotBlank(message = "Este campo no puede ser nulo")

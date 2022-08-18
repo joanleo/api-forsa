@@ -14,11 +14,6 @@ public interface UsuarioService {
 	
 	public Usuario update(Long id, RegistroDTO registroDTO) throws Exception;
 
-	public Page<Usuario> searchFabricantes(Empresa empresa, Integer pagina, Integer items);
-
-	public Page<Usuario> searchFabricantes(@Valid RegistroDTO registroDTO, Empresa empresa, Integer pagina,
-			Integer items);
-
 	public List<Usuario> findByNombreAndEmpresaAndEstaActivo(String letras, Empresa empresa);
 
 	public void delete(Long nitFabricante, Empresa empresa) throws Exception;
@@ -37,6 +32,10 @@ public interface UsuarioService {
 	 * @return
 	 */
 	public List<Usuario> listUsuarios(RegistroDTO registroDTO, Empresa empresa);
+
+	public Page<Usuario> buscarUsuarios(@Valid RegistroDTO registroDTO, Empresa empresa, Integer pagina, Integer items);
+
+	public Page<Usuario> buscarUsuarios(Empresa empresa, Integer pagina, Integer items);
 	
 	
 

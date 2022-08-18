@@ -14,10 +14,10 @@ public class EstadoDTO {
 
 	private Long id;
 	
-	@NotBlank(message = "Este campo no puede ser nulo")
+	//@NotBlank(message = "Este campo no puede ser nulo")
 	private String tipo;
 	
-	@NotNull(message = "Este campo no puede ser nulo")
+	//@NotNull(message = "Este campo no puede ser nulo")
 	private Empresa empresa;
 	
 	private Boolean estaActivo=true;

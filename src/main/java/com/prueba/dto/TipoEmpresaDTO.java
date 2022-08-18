@@ -6,7 +6,7 @@ public class TipoEmpresaDTO {
 	
 	private Long id;
 	
-	@NotBlank(message="este campo no puede ser nulo")
+	//@NotBlank(message="este campo no puede ser nulo")
 	private String tipo;
 	
 	private Boolean estaActivo=true;

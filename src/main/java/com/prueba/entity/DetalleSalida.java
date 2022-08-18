@@ -38,7 +38,7 @@ public class DetalleSalida implements Serializable {
 	private Salida salida;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("idPieza")
+	@JoinColumn(name = "vccodigopieza", referencedColumnName = "vccodigopieza")
 	private Producto producto;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

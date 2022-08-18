@@ -61,7 +61,7 @@ public class MovInvController {
 	
 	@PostMapping
 	@Operation(summary = "Crea un inventario", description = "Crea un nuevo inventario")
-	public ResponseEntity<MovInventarioDTO> create(@RequestBody MovInventarioDTO movInventarioDto,
+	public ResponseEntity<MovInventario> create(@RequestBody MovInventarioDTO movInventarioDto,
 													@RequestParam(required=false) Long nit){
 
 		Empresa empresa;
@@ -79,8 +79,8 @@ public class MovInvController {
 		if(movInventarioDto.getEmpresa() == null) {
 			movInventarioDto.setEmpresa(empresa);
 		}
-
-		return new ResponseEntity<MovInventarioDTO>(movInvService.create(movInventarioDto), HttpStatus.CREATED);
+		movInventarioDto.setEmpresa(empresa);
+		return new ResponseEntity<MovInventario>(movInvService.create(movInventarioDto), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
