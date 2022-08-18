@@ -7,6 +7,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prueba.dto.ProductoDTO;
+import com.prueba.dto.ReconversionDTO;
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
@@ -47,4 +48,10 @@ public interface ProductoService {
 	 * @return
 	 */
 	public List<Producto> list(Empresa empresa);
+
+	/**
+	 * @param reconversion
+	 * @return
+	 */
+	public List<ProductoDTO> reconversionPieza(ReconversionDTO reconversion);
 }
