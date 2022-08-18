@@ -110,9 +110,9 @@ public class ReportesController {
 			@RequestParam Integer inventario1,
 			@RequestParam Integer inventario2,
 			@RequestParam(defaultValue = "todos") String filtro,
-			@RequestParam(required=false) Long nit) {
+			@RequestParam(required=false) Long nit) throws IOException {
 		
-			util.compararInventarios(inventario1, inventario2);
+			util.compararInventarios(inventario1, inventario2/*, response.getWriter()*/);
 	}
 
 }
