@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.ProductoDTO;
+import com.prueba.dto.ReconversionDTO;
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
@@ -207,7 +208,15 @@ public class ProductoController {
 			csvService.writeProductsToCsv(servletResponse.getWriter(), productos);
 		}
 		
-		
+			 
         
+	}
+	
+	@PostMapping("/reconversion")
+	@Operation(summary = "Realiza la conversion de una pieza en una o varias mas", description = "Recibe un json con el codigo de la pieza padre y "
+			+ "una lista de objetos tipo ProductoDTO con la informacion de las piezas hijas. Retorna una lista con las piezas creadas")
+	public ResponseEntity<List<ProductoDTO>> reconversion(@RequestBody ReconversionDTO reconversion){
+		
+		return new ResponseEntity<List<ProductoDTO>>(productoService.reconversionPieza(reconversion), HttpStatus.CREATED);
 	}
 }
