@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -23,6 +25,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prueba.dto.ProductoDTO;
+import com.prueba.dto.ReconversionDTO;
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Eror;
@@ -257,6 +260,7 @@ public class ProductoServiceImpl implements ProductoService {
 			}else {
 				throw new ResourceCannotBeAccessException("Debe estar logueado para realizar esta accion");
 			}
+			Usuario usuario = usuarioRepo.findByEmail(currentUserName);
 			String extArchivo = file.getOriginalFilename().split("\\.")[1];
 			if(!extArchivo.equals("txt")) {
 				throw new ResourceCannotBeAccessException("El tipo de archivo no es compatible");
@@ -273,12 +277,12 @@ public class ProductoServiceImpl implements ProductoService {
 				
 				boolean error = false;
 				List<String> errores = new ArrayList<String>();
-				List<Producto> listProductos = new ArrayList<Producto>();
+				Set<Producto> listProductos = new HashSet<Producto>();
 				
 				
 				
 				try {
-					Pattern special = Pattern.compile("[!@$%&*()_+=|<>?{}\\\\[\\\\]~]", Pattern.CASE_INSENSITIVE);
+					Pattern special = Pattern.compile("[!@$%&*()_=|<>?{}\\\\[\\\\]~]");
 					String lineError, errorDescripcion= "";
 					Long start = System.currentTimeMillis();
 					System.out.println("Inicio verificacion");
@@ -306,6 +310,7 @@ public class ProductoServiceImpl implements ProductoService {
 							erroresCiclo = true;
 							errorDescripcion = "Orden Contiene caracteres especiales linea " + count;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						familia = producto[1];
@@ -314,8 +319,9 @@ public class ProductoServiceImpl implements ProductoService {
 						if(familiaconstainsSymbols) {
 							error = true;
 							erroresCiclo = true;
-							errorDescripcion = "Familia Contiene caracteres especiales linea " + count;
+							errorDescripcion = "Familia Contiene caracteres especiales "+familia+" linea " + count;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						tipo = producto[2];
@@ -324,8 +330,9 @@ public class ProductoServiceImpl implements ProductoService {
 						if(tipoconstainsSymbols) {
 							error = true;
 							erroresCiclo = true;
-							errorDescripcion = "Familia Contiene caracteres especiales linea " + count;
+							errorDescripcion = "Tipo Contiene caracteres especiales linea " + count;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						nombre = producto[3];
@@ -334,8 +341,9 @@ public class ProductoServiceImpl implements ProductoService {
 						if(nombreconstainsSymbols) {
 							error = true;
 							erroresCiclo = true;
-							errorDescripcion = "Nombre Contiene caracteres especiales linea " + count;
+							errorDescripcion = "Nombre Contiene caracteres especiales "+nombre+" linea " + count;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						medidas = producto[4];
@@ -344,8 +352,9 @@ public class ProductoServiceImpl implements ProductoService {
 						if(medidasconstainsSymbols) {
 							error = true;
 							erroresCiclo = true;
-							errorDescripcion = "Nombre Contiene caracteres especiales linea " + count;
+							errorDescripcion = "Medidas Contiene caracteres especiales linea " + count;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						try {
@@ -355,6 +364,7 @@ public class ProductoServiceImpl implements ProductoService {
 							erroresCiclo = true;
 							errorDescripcion = "Error en el campo Area en la linea " + count + " " + e;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						codigoPieza = producto[6];
@@ -365,6 +375,7 @@ public class ProductoServiceImpl implements ProductoService {
 							erroresCiclo = true;
 							errorDescripcion = "Codigopieza Contiene caracteres especiales linea " + count;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}						
 																	
 						try {
@@ -374,6 +385,7 @@ public class ProductoServiceImpl implements ProductoService {
 							erroresCiclo = true;
 							errorDescripcion = "Error en el campo Fabricante en la linea " + count + " " + e;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						
@@ -384,6 +396,7 @@ public class ProductoServiceImpl implements ProductoService {
 							erroresCiclo = true;
 							errorDescripcion = "Error en el campo Empresa en la linea " + count + " " + e;
 							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
 						}
 						
 						if(!erroresCiclo) {
@@ -398,7 +411,7 @@ public class ProductoServiceImpl implements ProductoService {
 								tipoactivo = tipoActivoRepo.save(tipoactivo);
 							}
 							
-							Producto product = new Producto(codigoPieza, nombre, area, orden, familiaAdd, tipoactivo,fabricanteAdd,empresaAdd,true,medidas);
+							Producto product = new Producto(codigoPieza, nombre, area, orden, familiaAdd, tipoactivo,fabricanteAdd,empresaAdd,true,medidas,usuario);
 							listProductos.add(product);
 						}else {
 							System.out.println("Error");
@@ -412,8 +425,9 @@ public class ProductoServiceImpl implements ProductoService {
 				
 				System.out.println("Inicio de guardado");
 				Long startProducts = System.currentTimeMillis();
-								
-				productoRepo.saveAllAndFlush(listProductos);
+				List<Producto> productosGuardar = new ArrayList<>();
+				productosGuardar.addAll(listProductos);
+				productoRepo.saveAllAndFlush(productosGuardar);
 				
 				Long endProducts = System.currentTimeMillis();
 				System.out.println("Duracion de carga de " + listProductos.size() + " productos: "+(endProducts-startProducts)/1000+" segundos");
@@ -495,6 +509,13 @@ public class ProductoServiceImpl implements ProductoService {
 	public List<Producto> list(Empresa empresa) {
 		List<Producto> productos = productoRepo.findAllByEmpresaAndEstaActivoTrue(empresa);		
 		return productos;
+	}
+
+
+	@Override
+	public List<ProductoDTO> reconversionPieza(ReconversionDTO reconversion) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
