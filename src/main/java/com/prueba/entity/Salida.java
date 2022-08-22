@@ -19,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PostPersist;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -53,6 +54,11 @@ public class Salida implements Serializable {
 	@Column(name = "vcnumdocumento")
 	public String numDocumento;
 	
+	@PostPersist
+	public void numDoc() {
+		numDocumento = "SIN-" + String.valueOf(this.idSalida);
+	}
+	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nidtipo_mov", nullable = false)
 	public TipoMov tipoMovimiento;
@@ -84,7 +90,7 @@ public class Salida implements Serializable {
 		super();
 		/*Salida.countBase +=1;
 		this.idSalida = countBase;*/
-		this.numDocumento = "SIN-" + String.valueOf(this.idSalida);
+		//this.numDocumento = "SIN-" + String.valueOf(this.idSalida);
 		this.empresa = empresa;
 		this.usuarioCrea = usuarioCrea;
 		this.detalles = detalles;

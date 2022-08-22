@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PostPersist;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -35,8 +36,6 @@ public class Traslado implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	//private static int countBase = 0;
-
 	@Id
 	@Column(name = "nidtraslado")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,	generator = "seq_traslado")
@@ -45,6 +44,11 @@ public class Traslado implements Serializable {
 	
 	@Column(name = "vcnumdocumento")
 	public String numDocumento;
+	
+	@PostPersist
+	public void numDoc() {
+		numDocumento = "SIN-" + String.valueOf(this.idTraslado);
+	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "origen", referencedColumnName = "nidubicacion")
