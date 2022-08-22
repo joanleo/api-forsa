@@ -170,7 +170,7 @@ public class UsuarioController {
 		}
 				
 		usuarioRepo.save(usuario);
-		return new ResponseEntity<>("Usuario creado exitosamente",HttpStatus.OK);
+		return new ResponseEntity<ResDTO>(new ResDTO("Usuario creado exitosamente"),HttpStatus.OK);
 	}
 	
 	@PutMapping("/{id}")
