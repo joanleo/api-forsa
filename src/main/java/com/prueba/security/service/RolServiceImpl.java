@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.prueba.entity.DetalleRutina;
 import com.prueba.entity.Empresa;
@@ -29,8 +30,10 @@ import com.prueba.security.repository.PoliticaRepository;
 import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.RolSpecifications;
+import com.prueba.util.UtilitiesApi;
 
 @Service
+@Transactional
 public class RolServiceImpl implements RolService{
 	
 	@Autowired
@@ -51,6 +54,9 @@ public class RolServiceImpl implements RolService{
 	@Autowired
 	private RutinaRepository rutinaRepo;
 	
+	@Autowired
+	private UtilitiesApi util;
+	
 	@Override
 	public RolDTO create(RolDTO rolDTO){
 		Pattern special = Pattern.compile("[!@#$%&*()+=|<>?:;{}/./,\\\\[\\\\^'\"]~]", Pattern.CASE_INSENSITIVE);
@@ -63,9 +69,14 @@ public class RolServiceImpl implements RolService{
 			throw new ResourceCannotBeAccessException("El nombre no debe contener caracteres espaciales []!@#$%&*()+=|<>?{},.:;");
 		}
 		
-		if(rolDTO.getEmpresa() == null) {
-			rolDTO.setEmpresa(usuario.getEmpresa());
+		Empresa empresa;
+		if(rolDTO.getEmpresa() != null) {
+			empresa = util.obtenerEmpresa(rolDTO.getEmpresa().getNit());
+		}else {
+			empresa = usuario.getEmpresa();			
 		}
+		
+		rolDTO.setEmpresa(empresa);
 		
 		//Rol rol = mapearDTO(rolDTO);
 		Rol exist = rolRepo.findByNombreAndEmpresaAndEstaActivoTrue(rolDTO.getNombre(), rolDTO.getEmpresa());
