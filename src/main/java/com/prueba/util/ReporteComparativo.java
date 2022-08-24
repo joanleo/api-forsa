@@ -33,10 +33,10 @@ public class ReporteComparativo {
 	
 	private Integer inv2;
 	
-	public ReporteComparativo(List<ComparativoInventarioDTO> comparativo) {
+	public ReporteComparativo(List<ComparativoInventarioDTO> comparativo, Usuario usuario) {
 		super();
 		this.comparativo = comparativo;
-		this.usuarioCrea = comparativo.get(0).getUsuarioRealizo();
+		this.usuarioCrea = usuario;
 		this.inv1 = comparativo.get(0).getNumInv1();
 		this.inv2 = comparativo.get(0).getNumInv2();
 	}
@@ -56,29 +56,30 @@ public class ReporteComparativo {
         table.addCell(cell);
          
         cell.setPhrase(new Phrase("QR", font));
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(cell);
+        
+        cell.setPhrase(new Phrase("Descripcion", font));
         table.addCell(cell);
          
         cell.setPhrase(new Phrase("Familia", font));
         table.addCell(cell);
          
         cell.setPhrase(new Phrase("Tipo", font));
-        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
         
         cell.setPhrase(new Phrase("Medidas", font));
         table.addCell(cell);
         
+        cell.setPhrase(new Phrase("Área m2", font));
+        table.addCell(cell);
+        
         cell.setPhrase(new Phrase("Estado", font));
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
         
         cell.setPhrase(new Phrase("INV-"+inv1.toString(), font));
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
         
         cell.setPhrase(new Phrase("INV-"+inv2.toString(), font));
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
 	}
 	
@@ -97,33 +98,42 @@ public class ReporteComparativo {
 			table.addCell(cell);
 			
 			phrase = new Phrase(detalle.getCodigo(), font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);			
+			table.addCell(cell);
+			
+			phrase = new Phrase(detalle.getDescripcion(), font);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
 			phrase = new Phrase(detalle.getFamilia(), font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 
 						
 			phrase = new Phrase(detalle.getTipo(), font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
 			phrase = new Phrase(detalle.getMedidas(), font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);
+			table.addCell(cell);
+			
+			phrase = new Phrase(String.format("%.2f", detalle.getArea()), font);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
 			phrase = new Phrase(detalle.getEstado(), font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
 			phrase = new Phrase(detalle.getInv1() ? "Si":"No", font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
 			phrase = new Phrase(detalle.getInv2() ? "Si":"No", font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
+			
 			count++;
 		}
 		
@@ -165,9 +175,9 @@ public void export(HttpServletResponse response) throws DocumentException, IOExc
         documento.add(porden);
         documento.add(cantidad);
         
-        PdfPTable table = new PdfPTable(8);
+        PdfPTable table = new PdfPTable(10);
         table.setWidthPercentage(100f);
-        //table.setWidths(new float[] {0.6f, 2.0f, 2.0f, 0.8f, 1.5f, 2.0f, 2.0f, 2.0f, 0.7f, 1.0f});
+        table.setWidths(new float[] {0.5f, 1.0f, 3.0f, 0.88f, 0.9f, 1.35f, 0.91f, 0.93f, 0.9f, 0.9f});
         table.setSpacingBefore(10);
          
         tableHeader(table);
