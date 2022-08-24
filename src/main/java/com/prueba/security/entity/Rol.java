@@ -63,7 +63,7 @@ public class Rol implements Serializable{
     private Empresa empresa;
     
     @JsonIgnore
-    @OneToMany(targetEntity=Usuario.class, mappedBy="rol",cascade=CascadeType.ALL, fetch = FetchType.LAZY)  
+    @OneToMany(targetEntity=Usuario.class, mappedBy="rol",cascade=CascadeType.ALL)  
     private Set<Usuario> usuario = new HashSet<>();
     
     @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
