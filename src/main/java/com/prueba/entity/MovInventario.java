@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PostPersist;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -52,6 +53,11 @@ public class MovInventario implements Serializable{
 	
 	@Column(name = "vcnumdocumento")
 	public String numDocumento;
+	
+	@PostPersist
+	private void afterCreate() {
+		numDocumento = "INV-" + String.valueOf(this.idMov);
+	}
 	
 	@Column(name = "dfecha")
 	private Date fecha;
@@ -161,7 +167,7 @@ public class MovInventario implements Serializable{
 		super();
 		/*MovInventario.countBase +=1;
 		this.idMov = countBase;*/
-		this.numDocumento = "INV-" + String.valueOf(this.idMov);
+		//this.numDocumento = "INV-" + String.valueOf(this.idMov);
 		this.fecha = fecha;
 		this.ubicacion = ubicacion;
 		this.detalles = detalles;
@@ -173,7 +179,7 @@ public class MovInventario implements Serializable{
 		super();
 		/*MovInventario.countBase +=1;
 		this.idMov = countBase;*/
-		this.numDocumento = "INV-" + String.valueOf(this.idMov);
+		//this.numDocumento = "INV-" + String.valueOf(this.idMov);
 	}
 
 	
