@@ -21,19 +21,22 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.prueba.entity.Producto;
+import com.prueba.security.entity.Usuario;
 
 
 public class ReporteVerificarPDF {
-	
+		
 	private List<Producto> productos;
 	private String filtro;
 	private String orden;
+	private Usuario usuario;
 
-	public ReporteVerificarPDF(List<Producto> productos, String filtro, String orden) {
+	public ReporteVerificarPDF(List<Producto> productos, String filtro, String orden, Usuario usuario) {
 		super();
 		this.productos = productos;
 		this.filtro = filtro;
 		this.orden = orden;
+		this.usuario = usuario;
 	}
 
 	private void tableHeader(PdfPTable table) {
@@ -51,7 +54,9 @@ public class ReporteVerificarPDF {
         table.addCell(cell);
          
         cell.setPhrase(new Phrase("QR", font));
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(cell);
+        
+        cell.setPhrase(new Phrase("Descripcion", font));
         table.addCell(cell);
          
         cell.setPhrase(new Phrase("Familia", font));
@@ -64,12 +69,10 @@ public class ReporteVerificarPDF {
         table.addCell(cell);
 
         cell.setPhrase(new Phrase("Área m2", font));
-        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
          
          
         cell.setPhrase(new Phrase("Estado", font));
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
                
         cell.setPhrase(new Phrase("Verificado", font));
@@ -87,19 +90,33 @@ public class ReporteVerificarPDF {
 				
 				table.addCell(cell);
 				
-				table.addCell(producto.getCodigoPieza());
+				phrase = new Phrase(producto.getCodigoPieza());
+				cell.setPhrase(phrase);
+				table.addCell(cell);
+				
+				table.addCell(producto.getDescripcion());
+				
+				phrase = new Phrase(producto.getFamilia().getSigla());
+				cell.setPhrase(phrase);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(cell);
 
-				table.addCell(producto.getFamilia().getNombre());
+				phrase = new Phrase(producto.getTipo().getNombre());
+				cell.setPhrase(phrase);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(cell);
 				
-				table.addCell(producto.getTipo().getNombre());
-				
-				table.addCell(producto.getMedidas());
+				phrase = new Phrase(producto.getMedidas());
+				cell.setPhrase(phrase);
+				table.addCell(cell);
 				
 				phrase = new Phrase(String.format("%.2f",producto.getArea()));
 				cell.setPhrase(phrase);
 				table.addCell(cell);
 				
-				table.addCell(producto.getEstado() == null ? " ":producto.getEstado().getTipo());
+				phrase = new Phrase(producto.getEstado() == null ? " ":producto.getEstado().getTipo());
+				cell.setPhrase(phrase);
+				table.addCell(cell);
 			
 				phrase = new Phrase(String.valueOf(producto.getVerificado()) == "true" ? "Si": "No");
 				cell.setPhrase(phrase);
@@ -114,7 +131,7 @@ public class ReporteVerificarPDF {
 	public void export(HttpServletResponse response) throws DocumentException, IOException {
 		Document documento = new Document(PageSize.LETTER.rotate());
 		PdfWriter.getInstance(documento, response.getOutputStream());
-		
+				
 		documento.setMargins(30, 20, 20, 20);
 		
 		documento.open();
@@ -123,7 +140,6 @@ public class ReporteVerificarPDF {
         font.setSize(18);
         font.setColor(new Color(226,119,12));
          
-        //Paragraph p = new Paragraph(filtro.toUpperCase(), font);
         Paragraph titulo = new Paragraph("REPORTE DE VERIFICACION DE ORDEN", font);
         titulo.setAlignment(Paragraph.ALIGN_CENTER);
         titulo.setSpacingBefore(20);
@@ -133,6 +149,10 @@ public class ReporteVerificarPDF {
         Paragraph fechaCreacion = new Paragraph("Fecha de creacion: " + currentDateTime, font1);
         fechaCreacion.setAlignment(Paragraph.ALIGN_RIGHT);
         
+        Paragraph usuarioGenera =  new Paragraph("GENERADO POR POR: " + usuario.getNombre().toUpperCase());
+        usuarioGenera.setAlignment(Paragraph.ALIGN_LEFT);
+        usuarioGenera.setSpacingBefore(30);
+        
         Paragraph porden =  new Paragraph("ORDEN: " + orden.toUpperCase() + "         FILTRO: " + filtro.toUpperCase(), font1);
         porden.setAlignment(Paragraph.ALIGN_LEFT);
         porden.setSpacingBefore(30);
@@ -140,22 +160,16 @@ public class ReporteVerificarPDF {
         Paragraph cantidad = new Paragraph("Total [" + productos.size() + "]");
         cantidad.setAlignment(Paragraph.ALIGN_RIGHT);
         cantidad.setSpacingBefore(20);
-        /*Paragraph pfiltro =  new Paragraph("Filtro", font);
-        pfiltro.setAlignment(Paragraph.ALIGN_LEFT);
-        pfiltro.setSpacingBefore(20);
-         */
         
         documento.add(fechaCreacion);
         documento.add(titulo);
+        documento.add(usuarioGenera);
         documento.add(porden);
         documento.add(cantidad);
-        //documento.add(pfiltro);
-        
-        
-         
-        PdfPTable table = new PdfPTable(8);
+                 
+        PdfPTable table = new PdfPTable(9);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[] {0.5f, 1.0f, 2.5f, 1.0f, 1.5f, 1.0f, 1.2f, 1.0f});
+        table.setWidths(new float[] {0.5f, 1.0f, 3.0f, 0.88f, 0.9f, 1.35f, 0.91f, 0.93f, 1.0f});
         table.setSpacingBefore(10);
          
         tableHeader(table);
