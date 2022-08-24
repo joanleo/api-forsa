@@ -24,6 +24,9 @@ import com.lowagie.text.DocumentException;
 import com.prueba.dto.ComparativoInventarioDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
+import com.prueba.entity.Ubicacion;
+import com.prueba.exception.ResourceNotFoundException;
+import com.prueba.repository.UbicacionRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.service.ProductoService;
@@ -50,6 +53,9 @@ public class ReportesController {
 	
 	@Autowired
 	private UtilitiesApi util;
+	
+	@Autowired
+	private UbicacionRepository ubicacionRepo;
 	
 	@GetMapping("/verificacion")
 	@Operation(summary = "Crea un reporte de verificacion", description = "Retorna un listado de los activos de una orden dada "
@@ -105,7 +111,7 @@ public class ReportesController {
 		
 		List<Producto> productos =  productoService.getVerificacion(orden,filtro, empresa);
 		
-		ReporteVerificarPDF exporter = new ReporteVerificarPDF(productos, filtro, orden);
+		ReporteVerificarPDF exporter = new ReporteVerificarPDF(productos, filtro, orden, usuario);
         exporter.export(response);
 		
 	}
@@ -114,8 +120,11 @@ public class ReportesController {
 	public void compararInventariosPDF(HttpServletResponse response,
 			@RequestParam Integer inventario1,
 			@RequestParam Integer inventario2,
-			@RequestParam(defaultValue = "todos") String filtro,		
+			/*@RequestParam(defaultValue = "todos") String filtro,		*/
 			@RequestParam(required=false) Long nit) throws DocumentException, IOException {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		response.setContentType("application/pdf");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -126,7 +135,7 @@ public class ReportesController {
 		
 		List<ComparativoInventarioDTO> comparativo = util.compararInventarios(inventario1, inventario2);
 		
-		ReporteComparativo exporter = new ReporteComparativo(comparativo);
+		ReporteComparativo exporter = new ReporteComparativo(comparativo, usuario);
         exporter.export(response);
 	}
 	
@@ -153,6 +162,27 @@ public class ReportesController {
 		Page<ComparativoInventarioDTO> pages = new PageImpl<ComparativoInventarioDTO> (comparativo.subList(start, end), pageable, comparativo.size());
 
 		return pages;
+	}
+	
+	@GetMapping("/diferenciainventario/descarga")
+	public void diferenciainventarioPDF(HttpServletResponse response,
+			@RequestParam Long idubicacion,
+			@RequestParam Integer idinventario,
+			@RequestParam(required=false) Long nit) throws DocumentException, IOException {
+		
+		Ubicacion ubicacion = ubicacionRepo.findById(idubicacion).orElseThrow(()->new ResourceNotFoundException("Ubicacion", "id", idubicacion));
+	
+		response.setContentType("application/pdf");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=diferencias" + ubicacion.getNombre() + "_INV-" + idinventario +"  "+ currentDateTime + ".pdf";
+		response.setHeader(headerKey, headerValue);
+		
+		List<ComparativoInventarioDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
+		
+		//ReporteComparativo exporter = new ReporteComparativo(comparativo);
+        //exporter.export(response);
 	}
 
 }
