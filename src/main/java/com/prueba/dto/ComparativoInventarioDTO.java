@@ -10,11 +10,15 @@ public class ComparativoInventarioDTO{
 	
 	private String codigo;
 	
+	private String descripcion;
+	
 	private String familia;
 	
 	private String tipo;
 	
 	private String medidas;
+	
+	private Float area; 
 	
 	private String estado;
 	
@@ -25,22 +29,52 @@ public class ComparativoInventarioDTO{
 	private Integer numInv1;
 	
 	private Integer numInv2;
+	
+	private String Ubicacion;
 
 	public ComparativoInventarioDTO() {
 		super();
 	}
 
-	public ComparativoInventarioDTO(Usuario usuario, String codigo, String familia, String tipo,
-			String medidas, String estado, Integer numInv1, Integer numInv2) {
+	public ComparativoInventarioDTO(String codigo, String descripcion, String familia, String tipo,
+			String medidas, float area, String estado, Integer numInv1, Integer numInv2) {
 		super();
-		this.usuarioRealizo = usuario;
 		this.codigo = codigo;
+		this.descripcion = descripcion;
 		this.familia = familia;
 		this.tipo = tipo;
 		this.medidas = medidas;
+		this.area = area;
 		this.estado = estado;
 		this.numInv1 = numInv1;
 		this.numInv2 = numInv2;
+	}
+
+	/**
+	 * @param usuario 
+	 * @param codigo 
+	 * @param descripcion 
+	 * @param familia 
+	 * @param tipo 
+	 * @param medidas 
+	 * @param area 
+	 * @param estado 
+	 * @param numInv1 
+	 * @param ubicacion 
+	 
+	 */
+	public ComparativoInventarioDTO(String codigo, String descripcion, String familia, String tipo,
+			String medidas, float area, String estado, Integer numInv1, String ubicacion) {
+		super();
+		this.codigo = codigo;
+		this.descripcion = descripcion;
+		this.familia = familia;
+		this.tipo = tipo;
+		this.medidas = medidas;
+		this.area = area;
+		this.estado = estado;
+		this.numInv1 = numInv1;
+		this.Ubicacion = ubicacion;
 	}
 
 	public Usuario getUsuarioRealizo() {
@@ -57,6 +91,14 @@ public class ComparativoInventarioDTO{
 
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public String getFamilia() {
@@ -77,6 +119,14 @@ public class ComparativoInventarioDTO{
 
 	public String getMedidas() {
 		return medidas;
+	}
+
+	public Float getArea() {
+		return area;
+	}
+
+	public void setArea(Float area) {
+		this.area = area;
 	}
 
 	public void setMedidas(String medidas) {
@@ -123,9 +173,18 @@ public class ComparativoInventarioDTO{
 		this.numInv2 = numInv2;
 	}
 
+	public String getUbicacion() {
+		return Ubicacion;
+	}
+
+	public void setUbicacion(String ubicacion) {
+		Ubicacion = ubicacion;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(codigo, estado, familia, inv1, inv2, medidas, numInv1, numInv2, tipo);
+		return Objects.hash(Ubicacion, area, codigo, descripcion, estado, familia, inv1, inv2, medidas, numInv1,
+				numInv2, tipo, usuarioRealizo);
 	}
 
 	@Override
@@ -137,13 +196,21 @@ public class ComparativoInventarioDTO{
 		if (getClass() != obj.getClass())
 			return false;
 		ComparativoInventarioDTO other = (ComparativoInventarioDTO) obj;
-		return Objects.equals(codigo, other.codigo) && Objects.equals(estado, other.estado)
-				&& Objects.equals(familia, other.familia) && Objects.equals(inv1, other.inv1)
-				&& Objects.equals(inv2, other.inv2) && Objects.equals(medidas, other.medidas)
-				&& Objects.equals(numInv1, other.numInv1) && Objects.equals(numInv2, other.numInv2)
-				&& Objects.equals(tipo, other.tipo);
+		return Objects.equals(Ubicacion, other.Ubicacion) && Objects.equals(area, other.area)
+				&& Objects.equals(codigo, other.codigo) && Objects.equals(descripcion, other.descripcion)
+				&& Objects.equals(estado, other.estado) && Objects.equals(familia, other.familia)
+				&& Objects.equals(inv1, other.inv1) && Objects.equals(inv2, other.inv2)
+				&& Objects.equals(medidas, other.medidas) && Objects.equals(numInv1, other.numInv1)
+				&& Objects.equals(numInv2, other.numInv2) && Objects.equals(tipo, other.tipo)
+				;
 	}
 
-
+	@Override
+	public String toString() {
+		return "ComparativoInventarioDTO [usuarioRealizo=" + usuarioRealizo + ", codigo=" + codigo + ", descripcion="
+				+ descripcion + ", familia=" + familia + ", tipo=" + tipo + ", medidas=" + medidas + ", area=" + area
+				+ ", estado=" + estado + ", inv1=" + inv1 + ", inv2=" + inv2 + ", numInv1=" + numInv1 + ", numInv2="
+				+ numInv2 + ", Ubicacion=" + Ubicacion + "]";
+	}
 	
 }
