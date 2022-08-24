@@ -3,6 +3,7 @@ package com.prueba.entity;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -34,7 +35,7 @@ public class TipoActivo {
 	private String nombre;
 	
 	@JsonIgnore
-    @OneToMany(mappedBy = "familia")
+    @OneToMany(mappedBy = "tipo", cascade = CascadeType.ALL)
     private List<Producto> productos;
 	
 	@JsonIgnore
@@ -45,8 +46,9 @@ public class TipoActivo {
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
     private Boolean estaActivo = true;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "nidfamilia", nullable = false)
+    @JoinColumn(name = "nidfamilia", referencedColumnName = "nidfamilia",  nullable = false)
     private Familia familia;
 
 	public TipoActivo() {

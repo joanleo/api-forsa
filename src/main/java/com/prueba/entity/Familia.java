@@ -117,25 +117,6 @@ public class Familia {
 		this.tipo = tipo;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(empresa, estaActivo, id, nombre, productos, sigla, tipo);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Familia other = (Familia) obj;
-		return Objects.equals(empresa, other.empresa) && Objects.equals(estaActivo, other.estaActivo)
-				&& Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
-				&& Objects.equals(productos, other.productos) && Objects.equals(sigla, other.sigla)
-				&& Objects.equals(tipo, other.tipo);
-	}
 
 	public Familia() {
 	super();
