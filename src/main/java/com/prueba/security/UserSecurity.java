@@ -1,8 +1,7 @@
 package com.prueba.security;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -11,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import com.prueba.entity.Rutina;
-import com.prueba.security.entity.Rol;
+import com.prueba.security.entity.Politica;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 
@@ -25,29 +23,32 @@ public class UserSecurity {
 	public boolean hasPrivilege(Authentication authentication, ServletRequest  servletRequest) {
 		
 		var request = (HttpServletRequest) servletRequest;
-		System.out.println("Metodo: "+request.getMethod());
-		System.out.println("Metodo: "+request.getServletPath());
-		System.out.println(authentication.getName());
+		String rutaRequest = request.getServletPath();
+		System.out.println("Metodo: "+rutaRequest);
+		//System.out.println(authentication.getName());
 		Usuario usuario = UsuarioRepo.findByEmail(authentication.getName());
 		if(usuario == null) return false;
-		Rol roles = usuario.getRol();
-		System.out.println(Arrays.asList(usuario.getRol()));
+		Set<Politica> politicas = usuario.getRol().getPoliticas();
+		//System.out.println(Arrays.asList(usuario.getRol()));
 		
-		List<String> privileges = new ArrayList<>();
-        List<Rutina> collection = new ArrayList<>();
+		//List<String> privileges = new ArrayList<>();
+        //List<Rutina> collection = new ArrayList<>();
+     	
+        //collection.addAll(rol.getPoliticas());
 
-        	System.out.println("Rol "+ roles.getNombre());
-            privileges.add(roles.getNombre());
-            //collection.addAll(rol.getPoliticas());
-
-        for (Rutina item : collection) {
-        	System.out.println("PoliRol "+ item.getNombre());
-            privileges.add(item.getNombre());
+        for (Politica item : politicas) {
+        	List<String> urls = item.getDetalle().getRuta().getUrl();
+        	if(urls.contains(rutaRequest)) {
+        		System.out.println("Ruta: " + item.getDetalle().getRuta().getUrl());
+        		System.out.println("Permiso: "+ item.getPermiso());
+        		if(item.getPermiso()) return item.getPermiso();
+        		break;
+        	}
         }
         
-        boolean permiso = privileges.contains("READ_PRIVILEGE");
+       // boolean permiso = privileges.contains("READ_PRIVILEGE");
 		
-        System.out.println(permiso);
+        //System.out.println(permiso);
         
 		return true;
 	}
