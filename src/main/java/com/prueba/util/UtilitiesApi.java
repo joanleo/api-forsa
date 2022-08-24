@@ -1,6 +1,7 @@
 package com.prueba.util;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -27,11 +28,14 @@ import com.prueba.entity.MovInventario;
 import com.prueba.entity.Permiso;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Rutina;
+import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.MovInventarioRepository;
 import com.prueba.repository.PermisoRepository;
+import com.prueba.repository.ProductoRepository;
 import com.prueba.repository.RutinaRepository;
+import com.prueba.repository.UbicacionRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 
@@ -49,14 +53,24 @@ public class UtilitiesApi {
 	private RutinaRepository rutinaRepo;
 	
 	@Autowired
-	private MovInventarioRepository movInventarioRepo;		
+	private MovInventarioRepository movInventarioRepo;
 	
+	@Autowired
+	private UbicacionRepository ubicacionRepo;
+		
 	@Autowired
 	private UsuarioRepository usuarioRepo;
 	
+	@Autowired
+	private ProductoRepository productoRepo;
+	
+	public List<ComparativoInventarioDTO> analisisDiferencias(Long idUbicacion, Integer idInven){
+
+		return null;
+	}
+	
 	public List<ComparativoInventarioDTO> compararInventarios(Integer inventario1, Integer inventario2) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
 		
 		MovInventario inv1 = movInventarioRepo.findByidMov(inventario1);
 		if(Objects.isNull(inv1)) {
@@ -95,10 +109,16 @@ public class UtilitiesApi {
 	    System.out.println("Activos en ambos inventarios "+productosAmbosInv.size());
 	    Set<ComparativoInventarioDTO> comparativo = new HashSet<ComparativoInventarioDTO>();
 	    for(Producto producto: productosAmbosInv) {
-	    	ComparativoInventarioDTO itemAddComparativo = new ComparativoInventarioDTO(usuario,
-	    			producto.getCodigoPieza(), producto.getFamilia().getSigla(), producto.getTipo().getNombre(),
-	    			producto.getMedidas(), producto.getEstado() == null ? " ": producto.getEstado().getTipo(),
-	    					detallesInv1.get(0).getMovimiento().getIdMov(), detallesInv2.get(0).getMovimiento().getIdMov());
+	    	ComparativoInventarioDTO itemAddComparativo = new ComparativoInventarioDTO(
+	    			producto.getCodigoPieza(), 
+	    			producto.getDescripcion(), 
+	    			producto.getFamilia().getSigla(), 
+	    			producto.getTipo().getNombre(),
+	    			producto.getMedidas(), 
+	    			producto.getArea(), 
+	    			producto.getEstado() == null ? " ": producto.getEstado().getTipo(),
+	    			detallesInv1.get(0).getMovimiento().getIdMov(), 
+	    			detallesInv2.get(0).getMovimiento().getIdMov());
 	    	comparativo.add(itemAddComparativo);
 	    	for(Producto item: activosInv1) {
 	    		if(item.getCodigoPieza().equalsIgnoreCase(producto.getCodigoPieza())) {
@@ -204,7 +224,7 @@ public class UtilitiesApi {
 				System.out.println(producto);
 			}
 		}*/
-		
+		comparativoLista.sort(Comparator.comparing(ComparativoInventarioDTO :: getCodigo));
 		return comparativoLista;
 		/*
 		//Agrupacion por tipo
