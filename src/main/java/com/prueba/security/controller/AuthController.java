@@ -1,5 +1,10 @@
 package com.prueba.security.controller;
 
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +24,13 @@ import com.prueba.exception.ResourceCannotBeAccessException;
 import com.prueba.security.dto.JWTAuthResonseDTO;
 import com.prueba.security.dto.LoginDTO;
 import com.prueba.security.dto.RegistroDTO;
+import com.prueba.security.entity.Politica;
 import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.jwt.JwtTokenProvider;
 import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.UsuarioRepository;
+import com.prueba.security.service.RolService;
 import com.prueba.util.UtilitiesApi;
 
 import io.swagger.v3.oas.annotations.Hidden;
@@ -48,6 +55,9 @@ public class AuthController {
 	private RolRepository rolRepo;
 	
 	@Autowired
+	private RolService rolService;
+	
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
@@ -58,17 +68,22 @@ public class AuthController {
 	
 	@PostMapping("/login")
 	@Operation(summary = "Autenticacion de usuarios")
-	public ResponseEntity<JWTAuthResonseDTO> authenticateUser(@RequestBody LoginDTO loginDTO){
+	public ResponseEntity<JWTAuthResonseDTO> authenticateUser(@RequestBody LoginDTO loginDTO, HttpSession session){
 		Authentication autentication = authenticationMnager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUsernameOrEmail(), loginDTO.getPassword()));
 		
 		SecurityContextHolder.getContext().setAuthentication(autentication);
 		
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(loginDTO.getUsernameOrEmail(), loginDTO.getUsernameOrEmail()).get();
-
+		
+	    
 		//Obtenemos el token
 		String token = jwtTokenProvider.generarToken(autentication, usuario.getNombre());
 		
 		UserDetails user = (UserDetails)autentication.getPrincipal();
+		
+		
+		Set<Politica> politicas = usuario.getRol().getPoliticas();
+	    session.setAttribute("politicas", politicas);
 		
 		return ResponseEntity.ok(new JWTAuthResonseDTO(token, user.getAuthorities()));
 		

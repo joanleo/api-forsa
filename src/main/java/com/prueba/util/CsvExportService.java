@@ -204,4 +204,27 @@ public class CsvExportService {
 	    }
 		
 	}
+	
+	/**
+	 * @param writer
+	 * @param productos
+	 * @param filtro
+	 * @param orden
+	 * @param usuario
+	 */
+	public void writeReporteVerificarToCsv(PrintWriter writer, List<Producto> productos, String filtro, String orden, Usuario usuario) {
+		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			int count = 1;
+			csvPrinter.printRecord("No", "QR", "Descripcion", "Familia", "Tipo", "Medidas", "Área m2",
+					"Ubicacion", "Estado", "Pallet", "Revisado");
+    		for(Producto producto: productos) {
+    				csvPrinter.printRecord(count, producto.getCodigoPieza(), producto.getDescripcion(), producto.getFamilia().getSigla(),
+    						producto.getTipo().getNombre(), producto.getMedidas(), producto.getArea(), producto.getUbicacion().getNombre(),
+    						producto.getEstado().getTipo(), producto.getPallet()  == null ? "":producto.getPallet(), producto.getVerificado() == true ? "Si":"No");
+    				count++;
+    		}
+	    }catch (IOException e) {
+	        log.error("Error en la generacion del CSV  ", e);
+	    }
+	}
 }

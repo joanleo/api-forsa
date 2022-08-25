@@ -144,7 +144,9 @@ public class ReporteVerificarPDF {
 		documento.open();
         Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
         Font font1 = FontFactory.getFont(FontFactory.HELVETICA);
-        font.setSize(15);
+
+        font.setSize(14);
+
         font.setColor(new Color(226,119,12));
          
         Paragraph titulo = new Paragraph("REPORTE DE VERIFICACION DE ORDEN", font);

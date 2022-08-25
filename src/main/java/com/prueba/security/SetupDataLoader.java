@@ -53,6 +53,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if ((authentication != null)) {
 		    currentUserName = authentication.getName();
+		   
+		    
 		}
 		
 		if(isConfig) return;

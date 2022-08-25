@@ -134,6 +134,9 @@ public class Producto implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
     @JoinColumn(name = "nidusuario_crea")
     Usuario usuarioCrea;
+    
+    @Column(name = "vcpallet")
+    private String pallet;
  
 	
 	public Integer getIdPieza() {
@@ -367,6 +370,14 @@ public class Producto implements Serializable{
 	}
 
 	
+	public String getPallet() {
+		return pallet;
+	}
+
+	public void setPallet(String pallet) {
+		this.pallet = pallet;
+	}
+
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
 			Fabricante fabricante, Empresa empresa) {
 		super();
@@ -381,7 +392,7 @@ public class Producto implements Serializable{
 	}
 
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia, TipoActivo tipo,
-			Fabricante fabricante, Empresa empresa, Boolean importado, String medidas, Usuario usuario) {
+			Fabricante fabricante, Empresa empresa, Boolean importado, String medidas, Usuario usuario, String pallet) {
 		super();
 		this.codigoPieza = codigoPieza;
 		this.descripcion = descripcion;
@@ -394,6 +405,7 @@ public class Producto implements Serializable{
 		this.importado = importado;
 		this.medidas = medidas;
 		this.usuarioCrea = usuario;
+		this.pallet = pallet;
 	}
 
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,

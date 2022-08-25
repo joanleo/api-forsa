@@ -54,7 +54,7 @@ public class Rol implements Serializable{
     private String nombre;
     
     @JsonIgnore
-    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Politica> politicas;
     
     @JsonIgnore
@@ -149,25 +149,6 @@ public class Rol implements Serializable{
 	public String toString() {
 		return "Rol [idRol=" + idRol + ", nombre=" + nombre + ", politicas=" + politicas + ", empresa=" + empresa
 				+ ", usuario=" + usuario + ", estaActivo=" + estaActivo + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(empresa, estaActivo, idRol, nombre, politicas, usuario);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Rol other = (Rol) obj;
-		return Objects.equals(empresa, other.empresa) && Objects.equals(estaActivo, other.estaActivo)
-				&& Objects.equals(idRol, other.idRol) && Objects.equals(nombre, other.nombre)
-				&& Objects.equals(politicas, other.politicas) && Objects.equals(usuario, other.usuario);
 	}
 
 }
