@@ -49,6 +49,7 @@ public class ReporteVerificarPDF {
          
         Font font = FontFactory.getFont(FontFactory.HELVETICA);
         font.setColor(Color.WHITE);
+        font.setSize(11);
         
         cell.setPhrase(new Phrase("No", font));
         table.addCell(cell);
@@ -86,52 +87,57 @@ public class ReporteVerificarPDF {
 	}
 	
 	private void tableData(PdfPTable table) {
+		Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+		font.setSize(11);
 		int count = 1;
 		for(Producto producto: productos) {
-				Phrase phrase = new Phrase(String.valueOf(count));
+				Phrase phrase = new Phrase(String.valueOf(count), font);
 				PdfPCell cell = new PdfPCell(phrase);
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_CENTER);
 				
 				table.addCell(cell);
 				
-				phrase = new Phrase(producto.getCodigoPieza());
+				phrase = new Phrase(producto.getCodigoPieza(), font);
 				cell.setPhrase(phrase);
 				table.addCell(cell);
 				
-				table.addCell(producto.getDescripcion());
+				phrase = new Phrase(producto.getDescripcion(), font);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPhrase(phrase);
+				table.addCell(cell);
 				
-				phrase = new Phrase(producto.getFamilia().getSigla());
+				phrase = new Phrase(producto.getFamilia().getSigla(), font);
 				cell.setPhrase(phrase);
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(cell);
 
-				phrase = new Phrase(producto.getTipo().getNombre());
+				phrase = new Phrase(producto.getTipo().getNombre(), font);
 				cell.setPhrase(phrase);
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(cell);
 				
-				phrase = new Phrase(producto.getMedidas());
+				phrase = new Phrase(producto.getMedidas(), font);
 				cell.setPhrase(phrase);
 				table.addCell(cell);
 				
-				phrase = new Phrase(String.format("%.2f",producto.getArea()));
+				phrase = new Phrase(String.format("%.2f",producto.getArea()), font);
 				cell.setPhrase(phrase);
 				table.addCell(cell);
 				
-				phrase = new Phrase(producto.getUbicacion().getNombre());
+				phrase = new Phrase(producto.getUbicacion().getNombre(), font);
 				cell.setPhrase(phrase);
 				table.addCell(cell);
 				
-				phrase = new Phrase(producto.getEstado() == null ? " ":producto.getEstado().getTipo());
+				phrase = new Phrase(producto.getEstado() == null ? " ":producto.getEstado().getTipo(), font);
 				cell.setPhrase(phrase);
 				table.addCell(cell);
 				
-				phrase = new Phrase(producto.getPallet());
+				phrase = new Phrase(producto.getPallet().toString(), font);
 				cell.setPhrase(phrase);
 				table.addCell(cell);
 			
-				phrase = new Phrase(String.valueOf(producto.getVerificado()) == "true" ? "Si": "No");
+				phrase = new Phrase(String.valueOf(producto.getVerificado()) == "true" ? "Si": "No", font);
 				cell.setPhrase(phrase);
 				table.addCell(cell);
 
@@ -151,7 +157,7 @@ public class ReporteVerificarPDF {
         Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
         Font font1 = FontFactory.getFont(FontFactory.HELVETICA);
 
-        font.setSize(11);
+        font.setSize(18);
 
         font.setColor(new Color(226,119,12));
          
@@ -188,7 +194,7 @@ public class ReporteVerificarPDF {
         
         PdfPTable table = new PdfPTable(11);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[] {0.5f, 1.0f, 3.0f, 0.88f, 0.9f, 1.35f, 0.89f, 1.35f, 0.93f, 0.8f, 1.0f});
+        table.setWidths(new float[] {0.5f, 1.0f, 3.0f, 0.88f, 0.9f, 1.35f, 0.89f, 1.35f, 0.93f, 0.78f, 1.0f});
         table.setSpacingBefore(10);
          
         tableHeader(table);
