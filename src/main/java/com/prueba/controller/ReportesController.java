@@ -30,6 +30,7 @@ import com.prueba.repository.UbicacionRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.service.ProductoService;
+import com.prueba.util.CsvExportService;
 import com.prueba.util.ReporteComparativo;
 import com.prueba.util.ReporteVerificarPDF;
 import com.prueba.util.UtilitiesApi;
@@ -57,6 +58,9 @@ public class ReportesController {
 	@Autowired
 	private UbicacionRepository ubicacionRepo;
 	
+	@Autowired
+	private CsvExportService csvService;
+	
 	@GetMapping("/verificacion")
 	@Operation(summary = "Crea un reporte de verificacion", description = "Retorna un listado de los activos de una orden dada "
 			+ "segun el filtro indicado. Los filtros podran ser 'faltantes', 'sobrantes', 'ok', 'todos'")
@@ -82,6 +86,35 @@ public class ReportesController {
 		Page<Producto> reporte = productoService.getVerificacion(orden, filtro, empresa, pagina, items);
 		
 		return reporte; 
+	}
+	
+	@GetMapping("/verificacion/csv/descarga")
+	@Operation(summary = "Crea un reporte de verificacion", description = "Retorna un listado de los activos de una orden dada "
+			+ "segun el filtro indicado. Los filtros podran ser 'faltantes', 'sobrantes', 'ok', 'todos'")
+	public void getCsvVerificacion(HttpServletResponse response,
+			@RequestParam String orden,
+			@RequestParam(defaultValue = "todos") String filtro,
+			@RequestParam(required=false) Long nit) throws IOException{
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+				
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		
+		response.setContentType("application/x-download");
+		response.addHeader("Content-Disposition", "attachment; filename=reporteVerificacion_" + orden + "_" + currentDateTime + ".csv");
+		
+		List<Producto> productos =  productoService.getVerificacion(orden,filtro, empresa);
+		csvService.writeReporteVerificarToCsv(response.getWriter(), productos, filtro, orden, usuario);
+		
 	}
 	
 	@GetMapping("/verificacion/descarga")
