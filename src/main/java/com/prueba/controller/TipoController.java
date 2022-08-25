@@ -44,6 +44,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Tipos", description = "Operaciones referentes a los tipos de activos")
 public class TipoController {
 	
+	@Autowired
 	private TipoActivoService tipoActivoService;
 	
 	@Autowired
