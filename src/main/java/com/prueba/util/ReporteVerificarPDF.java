@@ -74,8 +74,10 @@ public class ReporteVerificarPDF {
         cell.setPhrase(new Phrase("Ubicacion", font));
         table.addCell(cell);
          
-         
         cell.setPhrase(new Phrase("Estado", font));
+        table.addCell(cell);
+        
+        cell.setPhrase(new Phrase("Pallet", font));
         table.addCell(cell);
                
         cell.setPhrase(new Phrase("Revisado", font));
@@ -124,6 +126,10 @@ public class ReporteVerificarPDF {
 				phrase = new Phrase(producto.getEstado() == null ? " ":producto.getEstado().getTipo());
 				cell.setPhrase(phrase);
 				table.addCell(cell);
+				
+				phrase = new Phrase(producto.getPallet());
+				cell.setPhrase(phrase);
+				table.addCell(cell);
 			
 				phrase = new Phrase(String.valueOf(producto.getVerificado()) == "true" ? "Si": "No");
 				cell.setPhrase(phrase);
@@ -145,7 +151,7 @@ public class ReporteVerificarPDF {
         Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
         Font font1 = FontFactory.getFont(FontFactory.HELVETICA);
 
-        font.setSize(14);
+        font.setSize(11);
 
         font.setColor(new Color(226,119,12));
          
@@ -180,9 +186,9 @@ public class ReporteVerificarPDF {
         
         
         
-        PdfPTable table = new PdfPTable(10);
+        PdfPTable table = new PdfPTable(11);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[] {0.5f, 1.0f, 3.0f, 0.88f, 0.9f, 1.35f, 0.91f, 1.35f, 0.93f, 1.0f});
+        table.setWidths(new float[] {0.5f, 1.0f, 3.0f, 0.88f, 0.9f, 1.35f, 0.89f, 1.35f, 0.93f, 0.8f, 1.0f});
         table.setSpacingBefore(10);
          
         tableHeader(table);
