@@ -252,7 +252,7 @@ public class ProductoServiceImpl implements ProductoService {
 	public String loadFile(MultipartFile file, WebRequest webRequest) {
 		
 		Float area = 0.0f;
-		String orden = "", familia = "", tipo = "", nombre ="", medidas ="", codigoPieza = "";
+		String orden = "", familia = "", tipo = "", nombre ="", medidas ="", codigoPieza = "", pallet = "";
 		Long nitfabricante = null;
 		Long nitempresa = null;
 		
@@ -300,7 +300,7 @@ public class ProductoServiceImpl implements ProductoService {
 						
 						
 						
-						if(producto.length > 9) {
+						if(producto.length > 10) {
 							error = true;
 							erroresCiclo = true;
 							errores.add(lineError);
@@ -403,6 +403,17 @@ public class ProductoServiceImpl implements ProductoService {
 							System.out.println(errorDescripcion);
 						}
 						
+						pallet = producto[9];
+						matcher = special.matcher(pallet);
+						boolean palletConstainsSymbols = matcher.find();
+						if(palletConstainsSymbols) {
+							error = true;
+							erroresCiclo = true;
+							errorDescripcion = "Codigopieza Contiene caracteres especiales linea " + count;
+							errores.add(errorDescripcion);
+							System.out.println(errorDescripcion);
+						}
+						
 						if(!erroresCiclo) {
 							Empresa empresaAdd = empresaRepo.findByNit(nitempresa);
 							Familia familiaAdd = familiaRepo.findBySiglaAndEmpresa(familia, empresaAdd);
@@ -415,7 +426,7 @@ public class ProductoServiceImpl implements ProductoService {
 								tipoactivo = tipoActivoRepo.save(tipoactivo);
 							}
 							
-							Producto product = new Producto(codigoPieza, nombre, area, orden, familiaAdd, tipoactivo,fabricanteAdd,empresaAdd,true,medidas,usuario);
+							Producto product = new Producto(codigoPieza, nombre, area, orden, familiaAdd, tipoactivo,fabricanteAdd,empresaAdd,true,medidas,usuario,pallet);
 							listProductos.add(product);
 						}else {
 							System.out.println("Error");
