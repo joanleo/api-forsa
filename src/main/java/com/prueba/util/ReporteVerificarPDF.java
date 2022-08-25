@@ -50,7 +50,7 @@ public class ReporteVerificarPDF {
         Font font = FontFactory.getFont(FontFactory.HELVETICA);
         font.setColor(Color.WHITE);
         
-        cell.setPhrase(new Phrase("Item", font));
+        cell.setPhrase(new Phrase("No", font));
         table.addCell(cell);
          
         cell.setPhrase(new Phrase("QR", font));
@@ -70,12 +70,15 @@ public class ReporteVerificarPDF {
 
         cell.setPhrase(new Phrase("Área m2", font));
         table.addCell(cell);
+        
+        cell.setPhrase(new Phrase("Ubicacion", font));
+        table.addCell(cell);
          
          
         cell.setPhrase(new Phrase("Estado", font));
         table.addCell(cell);
                
-        cell.setPhrase(new Phrase("Verificado", font));
+        cell.setPhrase(new Phrase("Revisado", font));
         table.addCell(cell);
 		
 	}
@@ -114,6 +117,10 @@ public class ReporteVerificarPDF {
 				cell.setPhrase(phrase);
 				table.addCell(cell);
 				
+				phrase = new Phrase(producto.getUbicacion().getNombre());
+				cell.setPhrase(phrase);
+				table.addCell(cell);
+				
 				phrase = new Phrase(producto.getEstado() == null ? " ":producto.getEstado().getTipo());
 				cell.setPhrase(phrase);
 				table.addCell(cell);
@@ -137,7 +144,7 @@ public class ReporteVerificarPDF {
 		documento.open();
         Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
         Font font1 = FontFactory.getFont(FontFactory.HELVETICA);
-        font.setSize(18);
+        font.setSize(15);
         font.setColor(new Color(226,119,12));
          
         Paragraph titulo = new Paragraph("REPORTE DE VERIFICACION DE ORDEN", font);
@@ -167,15 +174,28 @@ public class ReporteVerificarPDF {
         documento.add(porden);
         documento.add(cantidad);
                  
-        PdfPTable table = new PdfPTable(9);
+       
+        
+        
+        
+        PdfPTable table = new PdfPTable(10);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[] {0.5f, 1.0f, 3.0f, 0.88f, 0.9f, 1.35f, 0.91f, 0.93f, 1.0f});
+        table.setWidths(new float[] {0.5f, 1.0f, 3.0f, 0.88f, 0.9f, 1.35f, 0.91f, 1.35f, 0.93f, 1.0f});
         table.setSpacingBefore(10);
          
         tableHeader(table);
         tableData(table);
          
         documento.add(table);
+        
+        Paragraph recibido =  new Paragraph("Firma Recibido : "
+        		+ "\n"
+        		+ "\n"
+        		+ "__________________________________________________" , font1);
+        recibido.setAlignment(Paragraph.ALIGN_LEFT);
+        recibido.setSpacingBefore(60);
+        
+        documento.add(recibido);
          
         documento.close();
 		
