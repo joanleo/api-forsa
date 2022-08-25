@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.prueba.dto.ComparativoInventarioDTO;
 import com.prueba.dto.ProductoDTO;
 import com.prueba.dto.ReconversionDTO;
 import com.prueba.dto.SearchDTO;
@@ -252,7 +254,8 @@ public class ProductoServiceImpl implements ProductoService {
 	public String loadFile(MultipartFile file, WebRequest webRequest) {
 		
 		Float area = 0.0f;
-		String orden = "", familia = "", tipo = "", nombre ="", medidas ="", codigoPieza = "", pallet = "";
+		String orden = "", familia = "", tipo = "", nombre ="", medidas ="", codigoPieza = "";
+		Integer pallet = null;
 		Long nitfabricante = null;
 		Long nitempresa = null;
 		
@@ -403,15 +406,14 @@ public class ProductoServiceImpl implements ProductoService {
 							System.out.println(errorDescripcion);
 						}
 						
-						pallet = producto[9];
-						matcher = special.matcher(pallet);
-						boolean palletConstainsSymbols = matcher.find();
-						if(palletConstainsSymbols) {
+						try {
+							pallet = Integer.valueOf(producto[9]);							
+						}catch (Exception e) {
 							error = true;
 							erroresCiclo = true;
 							errorDescripcion = "Codigopieza Contiene caracteres especiales linea " + count;
 							errores.add(errorDescripcion);
-							System.out.println(errorDescripcion);
+							System.out.println(errorDescripcion);							
 						}
 						
 						if(!erroresCiclo) {
@@ -516,6 +518,7 @@ public class ProductoServiceImpl implements ProductoService {
 	@Override
 	public List<Producto> getVerificacion(String orden, String filtro, Empresa empresa){
 		List<Producto> productos = productoRepo.findAll(productSpec.getVerificacion(orden, filtro, empresa));
+		productos.sort(Comparator.comparing(Producto :: getPallet));
 		return productos;
 	}
 
