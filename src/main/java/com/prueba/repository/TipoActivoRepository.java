@@ -22,4 +22,11 @@ public interface TipoActivoRepository extends JpaRepository<TipoActivo, Long> {
 	 */
 	TipoActivo findByNombre(String nombre);
 
+	/**
+	 * @param letras
+	 * @param empresa
+	 * @return
+	 */
+	List<TipoActivo> findByNombreContainsAndEmpresaAndEstaActivoTrue(String letras, Empresa empresa);
+
 }

@@ -55,6 +55,11 @@ public class TipoActivo {
 		super();
 	}
 
+	public TipoActivo(Long id) {
+		super();
+		this.id = id;
+	}
+
 	public TipoActivo(String nombre, Empresa empresa, Familia familia) {
 		super();
 		this.nombre = nombre;
