@@ -392,6 +392,24 @@ public class Producto implements Serializable{
 	}
 
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia, TipoActivo tipo,
+			Boolean verificado, Fabricante fabricante, Empresa empresa, Estado estado, Ubicacion ubicacion,
+			String medidas) {
+		super();
+		this.codigoPieza = codigoPieza;
+		this.descripcion = descripcion;
+		this.area = area;
+		this.orden = orden;
+		this.familia = familia;
+		this.tipo = tipo;
+		this.verificado = verificado;
+		this.fabricante = fabricante;
+		this.empresa = empresa;
+		this.estado = estado;
+		this.ubicacion = ubicacion;
+		this.medidas = medidas;
+	}
+
+	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia, TipoActivo tipo,
 			Fabricante fabricante, Empresa empresa, Boolean importado, String medidas, Usuario usuario, String pallet) {
 		super();
 		this.codigoPieza = codigoPieza;
