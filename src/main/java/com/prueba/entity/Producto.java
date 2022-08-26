@@ -145,8 +145,8 @@ public class Producto implements Serializable{
     Usuario usuarioCrea;
     
     @Column(name = "npallet")
-    private String pallet;
-
+    private Integer pallet;
+ 
 	public Integer getIdPieza() {
 		return idPieza;
 	}
@@ -371,11 +371,11 @@ public class Producto implements Serializable{
 		this.usuarioCrea = usuarioCrea;
 	}
 
-	public String getPallet() {
+	public Integer getPallet() {
 		return pallet;
 	}
 
-	public void setPallet(String pallet) {
+	public void setPallet(Integer pallet) {
 		this.pallet = pallet;
 	}
 
@@ -424,7 +424,7 @@ public class Producto implements Serializable{
 	}
 
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia, TipoActivo tipo,
-			Fabricante fabricante, Empresa empresa, Boolean importado, String medidas, Usuario usuario, String pallet) {
+			Fabricante fabricante, Empresa empresa, Boolean importado, String medidas, Usuario usuario, Integer pallet) {
 		super();
 		this.codigoPieza = codigoPieza;
 		this.descripcion = descripcion;
