@@ -86,7 +86,7 @@ public class Producto implements Serializable{
     @Column(name = "dfechaconfirmacion")
     private Date fechaConfirmacion;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
     @JoinColumn(name = "vcnitfabricante")
     private Fabricante fabricante;
     

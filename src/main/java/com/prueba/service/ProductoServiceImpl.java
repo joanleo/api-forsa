@@ -89,7 +89,12 @@ public class ProductoServiceImpl implements ProductoService {
 			if(Objects.isNull(empresa)) {
 				throw new ResourceNotFoundException("Empresa", "nit", productoDTO.getEmpresa().getNit());
 			}
+			Fabricante fabricante = fabricanteRepo.findByNitAndEmpresaAndEstaActivoTrue(productoDTO.getFabricante().getNit(), empresa);
+			if(Objects.isNull(fabricante)) {
+				throw new ResourceNotFoundException("Fabricante", "nit", productoDTO.getFabricante().getNit());
+			}
 			producto.setEmpresa(empresa);
+			producto.setFabricante(fabricante);
 			productoRepo.save(producto);
 		}else {
 			throw new ResourceAlreadyExistsException("Activo", "codigo de pieza", productoDTO.getCodigoPieza());
