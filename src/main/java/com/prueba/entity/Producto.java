@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -85,6 +86,14 @@ public class Producto implements Serializable{
     
     @Column(name = "dfechaconfirmacion")
     private Date fechaConfirmacion;
+    
+    @Column(name = "dfechacreacion")
+    private Date fechaCreacion;
+    
+    @PrePersist
+	private void onCreate() {
+		fechaCreacion = new Date();
+	}    
 
     @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
     @JoinColumn(name = "vcnitfabricante")
@@ -137,8 +146,7 @@ public class Producto implements Serializable{
     
     @Column(name = "vcpallet")
     private String pallet;
- 
-	
+
 	public Integer getIdPieza() {
 		return idPieza;
 	}
@@ -147,32 +155,12 @@ public class Producto implements Serializable{
 		this.idPieza = idPieza;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	public String getCodigoPieza() {
 		return codigoPieza;
 	}
 
 	public void setCodigoPieza(String codigoPieza) {
 		this.codigoPieza = codigoPieza;
-	}
-
-	public Usuario getReviso() {
-		return reviso;
-	}
-
-	public void setReviso(Usuario reviso) {
-		this.reviso = reviso;
-	}
-
-	public Boolean getImportado() {
-		return importado;
-	}
-
-	public void setImportado(Boolean importado) {
-		this.importado = importado;
 	}
 
 	public String getDescripcion() {
@@ -207,6 +195,70 @@ public class Producto implements Serializable{
 		this.familia = familia;
 	}
 
+	public TipoActivo getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoActivo tipo) {
+		this.tipo = tipo;
+	}
+
+	public String getNconfirmacion() {
+		return nconfirmacion;
+	}
+
+	public void setNconfirmacion(String nconfirmacion) {
+		this.nconfirmacion = nconfirmacion;
+	}
+
+	public Boolean getVerificado() {
+		return verificado;
+	}
+
+	public void setVerificado(Boolean verificado) {
+		this.verificado = verificado;
+	}
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
+	}
+
+	public String getMotivoIngreso() {
+		return motivoIngreso;
+	}
+
+	public void setMotivoIngreso(String motivoIngreso) {
+		this.motivoIngreso = motivoIngreso;
+	}
+
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
+	}
+
+	public Date getFechaConfirmacion() {
+		return fechaConfirmacion;
+	}
+
+	public void setFechaConfirmacion(Date fechaConfirmacion) {
+		this.fechaConfirmacion = fechaConfirmacion;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
 	public Fabricante getFabricante() {
 		return fabricante;
 	}
@@ -239,60 +291,28 @@ public class Producto implements Serializable{
 		this.ubicacion = ubicacion;
 	}
 
-	public Boolean getVerificado() {
-		return verificado;
+	public Boolean getImportado() {
+		return importado;
 	}
 
-	public void setVerificado(Boolean verificado) {
-		this.verificado = verificado;
+	public void setImportado(Boolean importado) {
+		this.importado = importado;
 	}
 
-	public Boolean getEstaActivo() {
-		return estaActivo;
+	public Usuario getReviso() {
+		return reviso;
 	}
 
-	public void setEstaActivo(Boolean estaActivo) {
-		this.estaActivo = estaActivo;
+	public void setReviso(Usuario reviso) {
+		this.reviso = reviso;
 	}
 
-	public String getNconfirmacion() {
-		return nconfirmacion;
-	}
-
-	public void setNconfirmacion(String nconfirmacion) {
-		this.nconfirmacion = nconfirmacion;
-	}
-
-	public String getMotivoIngreso() {
-		return motivoIngreso;
-	}
-
-	public void setMotivoIngreso(String motivoIngreso) {
-		this.motivoIngreso = motivoIngreso;
-	}
-
-	public Date getFechaActualizacion() {
-		return fechaActualizacion;
-	}
-
-	public void setFechaActualizacion(Date fechaActualizacion) {
-		this.fechaActualizacion = fechaActualizacion;
-	}
-	
 	public String getMedidas() {
 		return medidas;
 	}
 
 	public void setMedidas(String medidas) {
 		this.medidas = medidas;
-	}		
-
-	public TipoActivo getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(TipoActivo tipo) {
-		this.tipo = tipo;
 	}
 
 	public Boolean getEnviado() {
@@ -301,7 +321,7 @@ public class Producto implements Serializable{
 
 	public void setEnviado(Boolean enviado) {
 		this.enviado = enviado;
-	}	
+	}
 
 	public String getEstadoTraslado() {
 		return estadoTraslado;
@@ -309,23 +329,6 @@ public class Producto implements Serializable{
 
 	public void setEstadoTraslado(String estadoTraslado) {
 		this.estadoTraslado = estadoTraslado;
-	}	
-	
-
-	public List<DetalleTrasl> getDetalleTrasl() {
-		return detalleTrasl;
-	}
-
-	public void setDetalleTrasl(List<DetalleTrasl> detalles) {
-		this.detalleTrasl = detalles;
-	}
-
-	public Date getFechaConfirmacion() {
-		return fechaConfirmacion;
-	}
-
-	public void setFechaConfirmacion(Date fechaConfirmacion) {
-		this.fechaConfirmacion = fechaConfirmacion;
 	}
 
 	public Boolean getSobrante() {
@@ -336,21 +339,12 @@ public class Producto implements Serializable{
 		this.sobrante = sobrante;
 	}
 
-	public String getEstadoSalida() {
-		return estadoSalida;
+	public List<DetalleTrasl> getDetalleTrasl() {
+		return detalleTrasl;
 	}
 
-	public void setEstadoSalida(String estadoSalida) {
-		this.estadoSalida = estadoSalida;
-	}
-
-	public Producto() {
-		super();
-	}
-
-	public Producto(String codigoPieza) {
-		super();
-		this.codigoPieza = codigoPieza;
+	public void setDetalleTrasl(List<DetalleTrasl> detalleTrasl) {
+		this.detalleTrasl = detalleTrasl;
 	}
 
 	public Date getFechaAEliminacion() {
@@ -360,7 +354,15 @@ public class Producto implements Serializable{
 	public void setFechaAEliminacion(Date fechaAEliminacion) {
 		this.fechaAEliminacion = fechaAEliminacion;
 	}
-	
+
+	public String getEstadoSalida() {
+		return estadoSalida;
+	}
+
+	public void setEstadoSalida(String estadoSalida) {
+		this.estadoSalida = estadoSalida;
+	}
+
 	public Usuario getUsuarioCrea() {
 		return usuarioCrea;
 	}
@@ -369,13 +371,25 @@ public class Producto implements Serializable{
 		this.usuarioCrea = usuarioCrea;
 	}
 
-	
 	public String getPallet() {
 		return pallet;
 	}
 
 	public void setPallet(String pallet) {
 		this.pallet = pallet;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public Producto() {
+		super();
+	}
+
+	public Producto(String codigoPieza) {
+		super();
+		this.codigoPieza = codigoPieza;
 	}
 
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
