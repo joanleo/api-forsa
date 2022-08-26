@@ -144,7 +144,7 @@ public class Producto implements Serializable{
     @JoinColumn(name = "nidusuario_crea")
     Usuario usuarioCrea;
     
-    @Column(name = "vcpallet")
+    @Column(name = "npallet")
     private String pallet;
 
 	public Integer getIdPieza() {
