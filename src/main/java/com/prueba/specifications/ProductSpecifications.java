@@ -5,16 +5,21 @@ import java.util.List;
 
 import javax.persistence.criteria.Predicate;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Empresa;
+import com.prueba.entity.Fabricante;
 import com.prueba.entity.Producto;
+import com.prueba.repository.FabricanteRepository;
 
 @Component
 public class ProductSpecifications {
 
+	@Autowired
+	private FabricanteRepository fabricateRepo;
 
 	public Specification<Producto> getProductos(SearchDTO searchDTO, Empresa empresa){
 		return (root, query, criteryBuilder) ->{
@@ -38,7 +43,8 @@ public class ProductSpecifications {
 				predicates.add(criteryBuilder.like(root.get("orden"), "%"+searchDTO.getOrden()+"%"));
 			}
 			if(searchDTO.getFabricante() != null) {
-				predicates.add(criteryBuilder.equal(root.get("fabricante"), searchDTO.getFabricante()));
+				Fabricante fabricante = fabricateRepo.findByNitAndEmpresaAndEstaActivoTrue(searchDTO.getFabricante().getNit(), empresa);
+				predicates.add(criteryBuilder.equal(root.get("fabricante"), fabricante));
 			}
 			if(searchDTO.getFamilia() != null) {
 				predicates.add(criteryBuilder.equal(root.get("familia"), searchDTO.getFamilia()));
