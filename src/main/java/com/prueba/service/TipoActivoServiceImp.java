@@ -30,9 +30,9 @@ public class TipoActivoServiceImp implements TipoActivoService {
 	}
 
 	@Override
-	public List<TipoActivo> findByNameAndEmpreaAndEstaActivo(String letras, Empresa empresa, Boolean estaActivo) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<TipoActivo> findByNameAndEmpreaAndEstaActivo(String letras, Empresa empresa) {
+		List<TipoActivo> tipos = tipoActivoRepo.findByNombreContainsAndEmpresaAndEstaActivoTrue(letras, empresa);
+		return tipos;
 	}
 
 	@Override
