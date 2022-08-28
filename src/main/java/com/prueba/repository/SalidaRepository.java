@@ -44,6 +44,6 @@ public interface SalidaRepository extends JpaRepository<Salida, Integer>, JpaSpe
 	 * @param idsalida
 	 * @return
 	 */
-	public Salida findByIdSalida(Integer idsalida);
+	public Salida findByIdSalida(Long idsalida);
 
 }

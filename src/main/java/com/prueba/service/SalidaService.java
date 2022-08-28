@@ -53,25 +53,25 @@ public interface SalidaService {
 	 * @param codigopieza
 	 * @return
 	 */
-	public Salida confirmarActivoSalida(Integer idsalida, String codigopieza);
+	public Salida confirmarActivoSalida(Long idsalida, String codigopieza);
 
 	/**
 	 * @param idsalida
 	 * @return
 	 */
-	public Salida confirmarSalida(Integer idsalida);
+	public Salida confirmarSalida(Long idsalida);
 
 	/**
 	 * @param idsalida
 	 * @param nit
 	 */
-	public void eliminarSalida(Integer idsalida, Long nit);
+	public void eliminarSalida(Long idsalida, Long nit);
 
 	/**
 	 * @param id
 	 * @return
 	 */
-	public Salida obtieneSalida(Integer id);
+	public Salida obtieneSalida(Long id);
 
 	/**
 	 * @param idsalida
@@ -79,19 +79,19 @@ public interface SalidaService {
 	 * @param pagina 
 	 * @return
 	 */
-	public Page<DetalleSalida> obtieneDetalleSalida(Integer idsalida, Integer pagina, Integer items);
+	public Page<DetalleSalida> obtieneDetalleSalida(Long idsalida, Integer pagina, Integer items);
 
 	/**
 	 * @param idsalida
 	 * @param codigopieza
 	 */
-	public void eliminarActivo(Integer idsalida, String codigopieza);
+	public void eliminarActivo(Long idsalida, String codigopieza);
 
 	/**
 	 * @param idsalida 
 	 * 
 	 */
-	public void eliminarTodosActivos(Integer idsalida);
+	public void eliminarTodosActivos(Long idsalida);
 
 	public Salida crearSalida(SalidaDTO salida);
 
