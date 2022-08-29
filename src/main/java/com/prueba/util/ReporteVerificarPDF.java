@@ -87,7 +87,7 @@ public class ReporteVerificarPDF {
 	}
 	
 	private void tableData(PdfPTable table) {
-		Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+		Font font = FontFactory.getFont(FontFactory.HELVETICA);
 		font.setSize(11);
 		int count = 1;
 		for(Producto producto: productos) {

@@ -56,28 +56,35 @@ public class ReporteSalidaPDF {
         cell.setPhrase(new Phrase("Item", font));
         table.addCell(cell);
          
-        cell.setPhrase(new Phrase("Código de pieza", font));
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setPhrase(new Phrase("QR", font));
         table.addCell(cell);
          
-        cell.setPhrase(new Phrase("Nombre", font));
+        cell.setPhrase(new Phrase("Descripcion", font));
         table.addCell(cell);
         
-        cell.setPhrase(new Phrase("Tipo Mov", font));
+        cell.setPhrase(new Phrase("Familia", font));
+        table.addCell(cell);
+         
+        cell.setPhrase(new Phrase("Tipo", font));
+        table.addCell(cell);
+
+        cell.setPhrase(new Phrase("Medidas", font));
+        table.addCell(cell);
+        
+        cell.setPhrase(new Phrase("Motivo", font));
         table.addCell(cell);
         
         cell.setPhrase(new Phrase("Confirmado por", font));
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
 	}
 	
 	private void tableData(PdfPTable table) {
 		List<DetalleSalida> detalles = salida.getDetalles();
 		TipoMov tipom = salida.getTipoMovimiento();
+		Font font = FontFactory.getFont(FontFactory.HELVETICA);
+		font.setSize(9);
 		int count = 1;
 		for(DetalleSalida detalle: detalles) {
-			Font font = FontFactory.getFont(FontFactory.HELVETICA);
-			font.setSize(8);
 			
 			Producto producto = detalle.getProducto();
 			String usuario = "Sin confirmar";
@@ -93,11 +100,26 @@ public class ReporteSalidaPDF {
 			table.addCell(cell);
 			
 			phrase = new Phrase(producto.getCodigoPieza(), font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
-			phrase = new Phrase(producto.getFabricante().getNombre(), font);
-			cell = new PdfPCell(phrase);
+			phrase = new Phrase(producto.getDescripcion(), font);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setPhrase(phrase);
+			table.addCell(cell);
+			
+			phrase = new Phrase(producto.getFamilia().getSigla(), font);
+			cell.setPhrase(phrase);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(cell);
+
+			phrase = new Phrase(producto.getTipo().getNombre(), font);
+			cell.setPhrase(phrase);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(cell);
+			
+			phrase = new Phrase(producto.getMedidas(), font);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
 			phrase = new Phrase(tipom.getNombre(), font);
@@ -147,9 +169,9 @@ public class ReporteSalidaPDF {
         documento.add(porden);
         documento.add(cantidad);
         
-        PdfPTable table = new PdfPTable(5);
+        PdfPTable table = new PdfPTable(8);
         table.setWidthPercentage(100f);
-        //table.setWidths(new float[] {0.6f, 2.0f, 2.0f, 0.8f, 1.5f, 2.0f, 2.0f, 2.0f, 0.7f, 1.0f});
+        table.setWidths(new float[] {0.5f, 0.89f, 3.0f, 0.8f, 0.9f, 1.18f, 0.92f, 1.3f});
         table.setSpacingBefore(10);
          
         tableHeader(table);
