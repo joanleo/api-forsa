@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -137,8 +138,19 @@ public class Producto implements Serializable{
     
     @Column(name = "npallet")
     private Integer pallet;
- 
-	
+    
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="vccodigopadre", referencedColumnName = "vccodigopieza")
+    private Producto padre;
+    
+    @Column(name = "dfechacreacion")
+	private Date fechaCreacion;
+
+    @PrePersist
+	private void onCreate() {
+    	fechaCreacion = new Date();
+	}
+    
 	public Integer getIdPieza() {
 		return idPieza;
 	}
@@ -376,6 +388,22 @@ public class Producto implements Serializable{
 
 	public void setPallet(Integer pallet) {
 		this.pallet = pallet;
+	}
+
+	public Producto getPadre() {
+		return padre;
+	}
+
+	public void setPadre(Producto padre) {
+		this.padre = padre;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
 	}
 
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,

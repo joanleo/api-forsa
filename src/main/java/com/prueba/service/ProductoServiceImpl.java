@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.prueba.dto.ComparativoInventarioDTO;
 import com.prueba.dto.ProductoDTO;
 import com.prueba.dto.ReconversionDTO;
 import com.prueba.dto.SearchDTO;
@@ -43,10 +42,12 @@ import com.prueba.exception.ResourceCannotBeAccessException;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EmpresaRepository;
 import com.prueba.repository.ErorRepository;
+import com.prueba.repository.EstadoRepository;
 import com.prueba.repository.FabricanteRepository;
 import com.prueba.repository.FamiliaRepository;
 import com.prueba.repository.ProductoRepository;
 import com.prueba.repository.TipoActivoRepository;
+import com.prueba.repository.UbicacionRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.ProductSpecifications;
@@ -79,7 +80,13 @@ public class ProductoServiceImpl implements ProductoService {
 	private UsuarioRepository usuarioRepo;
 	
 	@Autowired
-	public TipoActivoRepository tipoActivoRepo;
+	private TipoActivoRepository tipoActivoRepo;
+	
+	@Autowired
+	private EstadoRepository estadoRepo;
+	
+	@Autowired
+	private UbicacionRepository ubicacionRepo;
 	
 	
 	@Override
@@ -531,9 +538,89 @@ public class ProductoServiceImpl implements ProductoService {
 
 
 	@Override
-	public List<ProductoDTO> reconversionPieza(ReconversionDTO reconversion) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ProductoDTO> reconversionPieza(ReconversionDTO reconversion ) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		if(reconversion.getCodigoPadre() == null) {
+			throw new ResourceCannotBeAccessException("Debe incluir el codigo padre");
+		}
+		Producto padre = productoRepo.findByCodigoPieza(reconversion.getCodigoPadre());
+		if(padre == null) {
+			throw new ResourceNotFoundException("Activo", "QR", reconversion.getCodigoPadre());
+		}
+		List<ProductoDTO> hijos = reconversion.getPiezasHijas();
+		List<ProductoDTO> creados = new ArrayList<>();
+		for(ProductoDTO item: hijos) {
+			Producto hijo = productoRepo.findByCodigoPieza(item.getCodigoPieza());
+			if(hijo != null) {
+				throw new ResourceAlreadyExistsException("Activo", "codigo pieza", item.getCodigoPieza());
+			}
+			
+			hijo = new Producto();
+			hijo.setUsuarioCrea(usuario);
+			hijo.setReviso(usuario);
+			hijo.setFechaCreacion(new Date());
+			hijo.setFechaConfirmacion(new Date());
+			hijo.setPadre(padre);
+			Empresa empresa = null;
+			if(item.getEmpresa() != null) {
+				empresa = empresaRepo.findByNit(item.getEmpresa().getNit());				
+			}else {
+				empresa = usuario.getEmpresa();			
+			}
+			if(item.getUbicacion() == null) {
+				hijo.setUbicacion(padre.getUbicacion());				
+			}else {
+				Ubicacion ubicacion = ubicacionRepo.findByIdAndEmpresa(item.getUbicacion().getId(), empresa)
+						.orElseThrow(()-> new ResourceNotFoundException("Ubicacion", "id", item.getUbicacion().getId()));
+				hijo.setUbicacion(ubicacion);
+			}
+			hijo.setCodigoPieza(item.getCodigoPieza());
+			hijo.setDescripcion(item.getDescripcion());
+			hijo.setMedidas(item.getMedidas());
+			hijo.setArea(item.getArea());
+			if(item.getOrden() == null) {
+				hijo.setOrden("99999");
+			}else {
+				hijo.setOrden(item.getOrden());
+			}
+			hijo.setVerificado(true);
+			
+			Estado estado = null;
+			if(item.getEstado() == null) {
+				estado = estadoRepo.findByIdAndEmpresa(Long.valueOf(1), empresa)
+						.orElseThrow(()-> new ResourceNotFoundException("Estado", "id", Long.valueOf(1)));
+			}else {
+				estado = estadoRepo.findByIdAndEmpresa(item.getEstado().getId(), empresa)
+						.orElseThrow(()-> new ResourceNotFoundException("Estado", "id", Long.valueOf(1)));
+			}
+			Fabricante fabricante = null;
+			if(item.getFabricante() != null) {
+				fabricante = fabricanteRepo.findByNitAndEmpresaAndEstaActivoTrue(item.getFabricante().getNit(), empresa);				
+			}else {
+				fabricante = fabricanteRepo.findByNombre("Forsa SAS");
+			}
+			Familia familia = familiaRepo.findByIdAndEmpresa(item.getFamilia().getId(), empresa)
+					.orElseThrow(() -> new ResourceNotFoundException("Familia", "id", item.getFamilia().getId()));
+			TipoActivo tipo = tipoActivoRepo.findById(item.getTipo().getId())
+					.orElseThrow(()-> new ResourceNotFoundException("Tipo", "id", item.getTipo().getId()));
+			hijo.setEmpresa(empresa);
+			hijo.setEstado(estado);
+			hijo.setFabricante(fabricante);
+			hijo.setFamilia(familia);
+			hijo.setTipo(tipo);
+			
+			hijo = productoRepo.saveAndFlush(hijo);
+			
+			ProductoDTO creado = mapearEntidad(hijo);
+			
+			creados.add(creado);
+			
+		}
+		
+		padre.setEstaActivo(false);
+		productoRepo.save(padre);
+		return creados;
 	}
 	
 }
