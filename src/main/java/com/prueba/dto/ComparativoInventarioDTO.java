@@ -26,9 +26,9 @@ public class ComparativoInventarioDTO{
 	
 	private Boolean inv2=false;
 	
-	private Integer numInv1;
+	private Long numInv1;
 	
-	private Integer numInv2;
+	private Long numInv2;
 	
 	private String Ubicacion;
 
@@ -37,7 +37,7 @@ public class ComparativoInventarioDTO{
 	}
 
 	public ComparativoInventarioDTO(String codigo, String descripcion, String familia, String tipo,
-			String medidas, float area, String estado, Integer numInv1, Integer numInv2) {
+			String medidas, float area, String estado, Long numInv1, Long numInv2) {
 		super();
 		this.codigo = codigo;
 		this.descripcion = descripcion;
@@ -64,7 +64,7 @@ public class ComparativoInventarioDTO{
 	 
 	 */
 	public ComparativoInventarioDTO(String codigo, String descripcion, String familia, String tipo,
-			String medidas, float area, String estado, Integer numInv1, String ubicacion) {
+			String medidas, float area, String estado, Long numInv1, String ubicacion) {
 		super();
 		this.codigo = codigo;
 		this.descripcion = descripcion;
@@ -76,6 +76,8 @@ public class ComparativoInventarioDTO{
 		this.numInv1 = numInv1;
 		this.Ubicacion = ubicacion;
 	}
+
+
 
 	public Usuario getUsuarioRealizo() {
 		return usuarioRealizo;
@@ -157,19 +159,19 @@ public class ComparativoInventarioDTO{
 		this.inv2 = inv2;
 	}
 
-	public Integer getNumInv1() {
+	public Long getNumInv1() {
 		return numInv1;
 	}
 
-	public void setNumInv1(Integer numInv1) {
+	public void setNumInv1(Long numInv1) {
 		this.numInv1 = numInv1;
 	}
 
-	public Integer getNumInv2() {
+	public Long getNumInv2() {
 		return numInv2;
 	}
 
-	public void setNumInv2(Integer numInv2) {
+	public void setNumInv2(Long numInv2) {
 		this.numInv2 = numInv2;
 	}
 

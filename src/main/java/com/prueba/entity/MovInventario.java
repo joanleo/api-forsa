@@ -49,7 +49,7 @@ public class MovInventario implements Serializable{
 	@Column(name = "nidmov", length = 6)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,	generator = "seq_inv")
 	@SequenceGenerator(name = "seq_inv", allocationSize = 10)
-	private Integer idMov;
+	private Long idMov;
 	
 	@Column(name = "vcnumdocumento")
 	public String numDocumento;
@@ -101,11 +101,11 @@ public class MovInventario implements Serializable{
 		this.ubicacion = ubicacion;
 	}
 
-	public Integer getIdMov() {
+	public Long getIdMov() {
 		return idMov;
 	}
 
-	public void setIdMov(Integer idMov) {
+	public void setIdMov(Long idMov) {
 		this.idMov = idMov;
 	}
 

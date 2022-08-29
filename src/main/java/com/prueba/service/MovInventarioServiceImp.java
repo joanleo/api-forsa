@@ -53,7 +53,7 @@ public class MovInventarioServiceImp implements MovInventarioService {
 		inventario.setEmpresa(movInventarioDto.getEmpresa());
 		inventario = movInvRepo.save(inventario);
 		List<Producto> productos = movInventarioDto.getProductos();
-		Integer idInventario = inventario.getIdMov();
+		Long idInventario = inventario.getIdMov();
 		MovInventario actualizar = movInvRepo.findByidMov(idInventario);
 		for(Producto producto: productos) {
 			Producto activo = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
@@ -85,7 +85,7 @@ public class MovInventarioServiceImp implements MovInventarioService {
 	}
 
 	@Override
-	public MovInventario getInventario(Integer id) {
+	public MovInventario getInventario(Long id) {
 
 		MovInventario inventario = movInvRepo.findByidMov(id);
 		if(Objects.isNull(inventario)) {

@@ -36,9 +36,9 @@ public class ReporteDiferenciasPDF {
 		
 		private Usuario usuarioCrea;
 		
-		private Integer inv1;
+		private Long inv1;
 		
-		private Integer inv2;
+		private Long inv2;
 		
 		public ReporteDiferenciasPDF(List<ComparativoInventarioDTO> comparativo) {
 			super();

@@ -69,7 +69,7 @@ public class UtilitiesApi {
 		return null;
 	}
 	
-	public List<ComparativoInventarioDTO> compararInventarios(Integer inventario1, Integer inventario2) {
+	public List<ComparativoInventarioDTO> compararInventarios(Long inventario1, Long inventario2) {
 		
 		
 		MovInventario inv1 = movInventarioRepo.findByidMov(inventario1);

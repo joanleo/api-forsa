@@ -24,6 +24,7 @@ public interface MovInventarioService {
 	 * @param id
 	 * @return
 	 */
-	MovInventario getInventario(Integer id);
+	MovInventario getInventario(Long id);
+
 
 }

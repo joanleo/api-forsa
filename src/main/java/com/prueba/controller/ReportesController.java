@@ -151,8 +151,8 @@ public class ReportesController {
 	
 	@GetMapping("/compararinventarios/descarga")
 	public void compararInventariosPDF(HttpServletResponse response,
-			@RequestParam Integer inventario1,
-			@RequestParam Integer inventario2,
+			@RequestParam Long inventario1,
+			@RequestParam Long inventario2,
 			/*@RequestParam(defaultValue = "todos") String filtro,		*/
 			@RequestParam(required=false) Long nit) throws DocumentException, IOException {
 		
@@ -174,8 +174,8 @@ public class ReportesController {
 	
 	@GetMapping("/compararinventarios")
 	public Page<ComparativoInventarioDTO> compararInventariosPDF(
-			@RequestParam Integer inventario1,
-			@RequestParam Integer inventario2,
+			@RequestParam Long inventario1,
+			@RequestParam Long inventario2,
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
 			@RequestParam(required=false) Long nit) {

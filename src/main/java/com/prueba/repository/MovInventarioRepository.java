@@ -23,6 +23,6 @@ public interface MovInventarioRepository extends JpaRepository<MovInventario, In
 	 * @param idMov
 	 * @return
 	 */
-	MovInventario findByidMov(Integer idMov);
+	MovInventario findByidMov(Long idMov);
 	
 }

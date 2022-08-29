@@ -115,14 +115,14 @@ public class MovInvController {
 	
 	@GetMapping("/detalle/{id}")
 	@Operation(summary = "Encuentra un inventario", description = "Retorna un inventario con detalle segun el numero de inventario")
-	public ResponseEntity<MovInventario> getInventario(@PathVariable Integer id){
+	public ResponseEntity<MovInventario> getInventario(@PathVariable Long id){
 		return ResponseEntity.ok(movInvService.getInventario(id));
 	}
 	
 	@GetMapping("/detalle/{id}/descarga")
 	@Operation(summary = "Crea un inventario en formato PDF", description = "Retorna un inventario con detalle segun el numero de inventario")
 	public void exportToPDF(HttpServletResponse response,
-							@PathVariable Integer id) throws DocumentException, IOException {
+							@PathVariable Long id) throws DocumentException, IOException {
 		response.setContentType("application/pdf");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
