@@ -134,7 +134,7 @@ public class ReporteSalidaPDF {
         Paragraph fechaCreacion = new Paragraph("Fecha de creacion: " + currentDateTime, font1);
         fechaCreacion.setAlignment(Paragraph.ALIGN_RIGHT);
         
-        Paragraph porden =  new Paragraph("REALIZADO POR: " + salida.getUsuarioCrea().getNombre().toUpperCase() + "         DOCUMENTO: " + salida.getNumDocumento().toUpperCase(), font1);
+        Paragraph porden =  new Paragraph("REALIZADO POR: " + salida.getUsuarioCrea().getNombre().toUpperCase() + "         DOCUMENTO: SIN-" + salida.getIdSalida(), font1);
         porden.setAlignment(Paragraph.ALIGN_LEFT);
         porden.setSpacingBefore(30);
         
