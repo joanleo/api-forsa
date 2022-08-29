@@ -58,7 +58,7 @@ public class ReporteTrasladoPDF {
 	        cell.setPhrase(new Phrase("QR", font));
 	        table.addCell(cell);
 	         
-	        cell.setPhrase(new Phrase("Nombre", font));
+	        cell.setPhrase(new Phrase("Descripcion", font));
 	        table.addCell(cell);
 	        
 	        cell.setPhrase(new Phrase("Origen", font));
@@ -108,7 +108,7 @@ public class ReporteTrasladoPDF {
 			table.addCell(cell);
 			
 			phrase = new Phrase(producto.getCodigoPieza(), font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
 			phrase = new Phrase(producto.getDescripcion(), font);
