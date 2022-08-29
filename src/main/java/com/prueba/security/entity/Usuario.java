@@ -56,7 +56,7 @@ public class Usuario {
     private String tokenPassword;
     
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="nidrol", referencedColumnName = "nidrol")
     private Rol rol;
 	
