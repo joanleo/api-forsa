@@ -127,26 +127,5 @@ public class Ubicacion {
 		this.id = id;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(ciudad, direccion, empresa, estaActivo, id, nombre, productos, tipo);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Ubicacion other = (Ubicacion) obj;
-		return Objects.equals(ciudad, other.ciudad) && Objects.equals(direccion, other.direccion)
-				&& Objects.equals(empresa, other.empresa) && Objects.equals(estaActivo, other.estaActivo)
-				&& Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
-				&& Objects.equals(productos, other.productos) && Objects.equals(tipo, other.tipo);
-	}
-
-	
 
 }
