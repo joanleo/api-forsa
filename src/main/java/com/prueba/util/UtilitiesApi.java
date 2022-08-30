@@ -64,9 +64,63 @@ public class UtilitiesApi {
 	@Autowired
 	private ProductoRepository productoRepo;
 	
-	public List<ComparativoInventarioDTO> analisisDiferencias(Long idUbicacion, Integer idInven){
-
-		return null;
+	public List<ComparativoInventarioDTO> analisisDiferencias(Long idUbicacion, Long idInven){
+		Ubicacion ubicacion = ubicacionRepo.findById(idUbicacion)
+				.orElseThrow(()-> new ResourceNotFoundException("ubicacion", "id", idUbicacion));
+		List<Producto> activosUbicacion = productoRepo.findByUbicacion(idUbicacion);
+		System.out.println("Total activos ubicacion: "+activosUbicacion.size());
+		MovInventario inv = movInventarioRepo.findByidMov(idInven);
+		if(Objects.isNull(inv)) {
+			throw new ResourceNotFoundException("Inventario", "id", idInven);
+		}
+		//Obtengo la lista de activos del inventario
+		List<DetalleInv> activosInv = inv.getDetalles();
+		System.out.println("Total activos inventario: "+activosInv.size());
+		Iterator<DetalleInv> it = activosInv.iterator();
+		List<Producto> activosInv1 = new ArrayList<>();
+		Set<Producto> totalActivos = new HashSet<>();
+	    while(it.hasNext()){
+	        DetalleInv item=it.next();
+	        activosInv1.add(item.getProducto());
+	        totalActivos.add(item.getProducto());
+	    }
+	    
+	    for(Producto producto: activosUbicacion) {
+	    	totalActivos.add(producto);
+	    }
+	    System.out.println("Total activos en inventario: "+totalActivos.size());
+	    
+	    List<Producto> productosAmbosInv = totalActivos.stream().collect(Collectors.toList());
+	    System.out.println("Activos en ambos inventarios "+productosAmbosInv.size());
+	    Set<ComparativoInventarioDTO> comparativo = new HashSet<ComparativoInventarioDTO>();
+	    for(Producto producto: productosAmbosInv) {
+	    	ComparativoInventarioDTO itemAddComparativo = new ComparativoInventarioDTO(
+	    			producto.getCodigoPieza(), 
+	    			producto.getDescripcion(), 
+	    			producto.getFamilia().getSigla(), 
+	    			producto.getTipo().getNombre(),
+	    			producto.getMedidas(), 
+	    			producto.getArea(), 
+	    			producto.getEstado() == null ? " ": producto.getEstado().getTipo(),
+	    					idUbicacion, 
+	    					idInven);
+	    	comparativo.add(itemAddComparativo);
+	    	for(Producto item: activosUbicacion) {
+	    		if(item.getCodigoPieza().equalsIgnoreCase(producto.getCodigoPieza())) {
+	    			itemAddComparativo.setInv1(true);
+	    			
+	    		}
+	    	}
+	    	for(Producto item: activosInv1) {
+	    		if(item.getCodigoPieza().equalsIgnoreCase(producto.getCodigoPieza())) {
+	    			itemAddComparativo.setInv2(true);
+	    		}
+	    	}
+	    }
+	    
+	    List<ComparativoInventarioDTO> comparativoLista = comparativo.stream().collect(Collectors.toList());
+	    comparativoLista.sort(Comparator.comparing(ComparativoInventarioDTO :: getCodigo));
+		return comparativoLista;
 	}
 	
 	public List<ComparativoInventarioDTO> compararInventarios(Long inventario1, Long inventario2) {
