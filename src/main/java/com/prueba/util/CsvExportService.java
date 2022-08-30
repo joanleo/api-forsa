@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.prueba.dto.ComparativoInventarioDTO;
 import com.prueba.dto.EmpresaDTO;
 import com.prueba.dto.EstadoDTO;
 import com.prueba.dto.FabricanteDTO;
@@ -22,6 +23,7 @@ import com.prueba.dto.TipoUbicacionDTO;
 import com.prueba.dto.UbicacionDTO;
 import com.prueba.entity.Producto;
 import com.prueba.entity.TipoActivo;
+import com.prueba.entity.Ubicacion;
 import com.prueba.security.dto.PoliticaDTO;
 import com.prueba.security.dto.RutinaDTO;
 import com.prueba.security.entity.Usuario;
@@ -226,5 +228,48 @@ public class CsvExportService {
 	    }catch (IOException e) {
 	        log.error("Error en la generacion del CSV  ", e);
 	    }
+	}
+
+	/**
+	 * @param writer 
+	 * @param comparativo
+	 * @param ubicacion 
+	 */
+	public void writeDiferenciaInventarioToCsv(PrintWriter writer, List<ComparativoInventarioDTO> comparativo, Ubicacion ubicacion) {
+		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			int count = 1;
+			csvPrinter.printRecord("No", "QR", "Descripcion", "Familia", "Tipo", "Medidas", "Área m2",
+					"Estado", ubicacion.getNombre(), "INV-"+comparativo.get(0).getNumInv2());
+    		for(ComparativoInventarioDTO producto: comparativo) {
+    				csvPrinter.printRecord(count, producto.getCodigo(), producto.getDescripcion(), producto.getFamilia(),
+    						producto.getTipo(), producto.getMedidas(), producto.getArea(), producto.getEstado(), 
+    						producto.getInv1()? "Si":"No", producto.getInv2()? "Si":"No");
+    				count++;
+    		}
+	    }catch (IOException e) {
+	        log.error("Error en la generacion del CSV  ", e);
+	    }
+		
+	}
+
+	/**
+	 * @param writer
+	 * @param comparativo
+	 */
+	public void compararInventariosToCsv(PrintWriter writer, List<ComparativoInventarioDTO> comparativo) {
+		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			int count = 1;
+			csvPrinter.printRecord("No", "QR", "Descripcion", "Familia", "Tipo", "Medidas", "Área m2",
+					"Estado", "INV-"+comparativo.get(0).getNumInv1(), "INV-"+comparativo.get(0).getNumInv2());
+    		for(ComparativoInventarioDTO producto: comparativo) {
+    				csvPrinter.printRecord(count, producto.getCodigo(), producto.getDescripcion(), producto.getFamilia(),
+    						producto.getTipo(), producto.getMedidas(), producto.getArea(), producto.getEstado(), 
+    						producto.getInv1()? "Si":"No", producto.getInv2()? "Si":"No");
+    				count++;
+    		}
+	    }catch (IOException e) {
+	        log.error("Error en la generacion del CSV  ", e);
+	    }
+		
 	}
 }
