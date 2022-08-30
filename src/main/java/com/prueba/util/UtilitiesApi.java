@@ -14,8 +14,6 @@ import java.util.Map.Entry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -36,8 +34,6 @@ import com.prueba.repository.PermisoRepository;
 import com.prueba.repository.ProductoRepository;
 import com.prueba.repository.RutinaRepository;
 import com.prueba.repository.UbicacionRepository;
-import com.prueba.security.entity.Usuario;
-import com.prueba.security.repository.UsuarioRepository;
 
 
 @Service
@@ -57,14 +53,12 @@ public class UtilitiesApi {
 	
 	@Autowired
 	private UbicacionRepository ubicacionRepo;
-		
-	@Autowired
-	private UsuarioRepository usuarioRepo;
-	
+			
 	@Autowired
 	private ProductoRepository productoRepo;
 	
 	public List<ComparativoInventarioDTO> analisisDiferencias(Long idUbicacion, Long idInven){
+		@SuppressWarnings("unused")
 		Ubicacion ubicacion = ubicacionRepo.findById(idUbicacion)
 				.orElseThrow(()-> new ResourceNotFoundException("ubicacion", "id", idUbicacion));
 		List<Producto> activosUbicacion = productoRepo.findByUbicacion(idUbicacion);

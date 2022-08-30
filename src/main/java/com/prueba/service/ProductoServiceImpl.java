@@ -562,12 +562,8 @@ public class ProductoServiceImpl implements ProductoService {
 			hijo.setFechaCreacion(new Date());
 			hijo.setFechaConfirmacion(new Date());
 			hijo.setPadre(padre);
-			Empresa empresa = null;
-			if(item.getEmpresa() != null) {
-				empresa = empresaRepo.findByNit(item.getEmpresa().getNit());				
-			}else {
-				empresa = usuario.getEmpresa();			
-			}
+			Empresa empresa = padre.getEmpresa();
+
 			if(item.getUbicacion() == null) {
 				hijo.setUbicacion(padre.getUbicacion());				
 			}else {

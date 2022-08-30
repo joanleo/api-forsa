@@ -1,7 +1,5 @@
 package com.prueba.dto;
 
-import javax.validation.constraints.NotBlank;
-
 public class TipoEmpresaDTO {
 	
 	private Long id;

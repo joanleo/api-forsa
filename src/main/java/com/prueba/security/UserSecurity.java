@@ -1,6 +1,5 @@
 package com.prueba.security;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletRequest;
@@ -9,36 +8,22 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.prueba.security.dto.PoliticaDTO;
-import com.prueba.security.dto.RutinaDTO;
 import com.prueba.security.entity.Politica;
-import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
-import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.UsuarioRepository;
-import com.prueba.security.service.RolService;
-import com.prueba.service.PoliticaService;
+
 
 @Component("userSecurity")
 public class UserSecurity {
 	
 	@Autowired
 	private UsuarioRepository UsuarioRepo;
-	
-	@Autowired
-	private RolRepository rolRepo;
-	
-	@Autowired
-	private RolService rolService;
-	
-	@Autowired
-	private PoliticaService politicaService;
-	
+		
+	@SuppressWarnings("unchecked")
 	public boolean hasPrivilege(Authentication authentication, ServletRequest  servletRequest) {
 		
 		var request = (HttpServletRequest) servletRequest;

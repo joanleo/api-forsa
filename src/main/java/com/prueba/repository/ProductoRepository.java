@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.entity.TipoActivo;
-import com.prueba.entity.Ubicacion;
 import com.prueba.security.entity.Usuario;
 
 public interface ProductoRepository extends JpaRepository<Producto, Integer>, JpaSpecificationExecutor<Producto>{

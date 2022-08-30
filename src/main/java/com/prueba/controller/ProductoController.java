@@ -244,15 +244,6 @@ public class ProductoController {
 			+ "una lista de objetos tipo ProductoDTO con la informacion de las piezas hijas. Retorna una lista con las piezas creadas")
 	public ResponseEntity<List<ProductoDTO>> reconversion(@RequestBody ReconversionDTO reconversion,
 														  @RequestParam(required=false) Long nit){
-		Empresa empresa;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
-		
-		if(nit != null) {
-			empresa = util.obtenerEmpresa(nit);
-		}else {
-			empresa = usuario.getEmpresa();			
-		}
 		
 		return new ResponseEntity<List<ProductoDTO>>(productoService.reconversionPieza(reconversion), HttpStatus.CREATED);
 	}

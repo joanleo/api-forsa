@@ -1,6 +1,5 @@
 package com.prueba.security.controller;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -30,7 +29,6 @@ import com.prueba.security.entity.Usuario;
 import com.prueba.security.jwt.JwtTokenProvider;
 import com.prueba.security.repository.RolRepository;
 import com.prueba.security.repository.UsuarioRepository;
-import com.prueba.security.service.RolService;
 import com.prueba.util.UtilitiesApi;
 
 import io.swagger.v3.oas.annotations.Hidden;
@@ -53,9 +51,6 @@ public class AuthController {
 	
 	@Autowired
 	private RolRepository rolRepo;
-	
-	@Autowired
-	private RolService rolService;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;

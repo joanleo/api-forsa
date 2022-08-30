@@ -1,8 +1,5 @@
 package com.prueba.dto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import com.prueba.entity.Empresa;
 
 public class FamiliaDTO {
