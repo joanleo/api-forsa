@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
@@ -55,8 +56,8 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer>, Jp
 	 * @param ubicacion
 	 * @return
 	 */
-	public List<Producto> findByUbicacion(Ubicacion ubicacion);
-	
-	//public Producto findByIdProducto(Producto_id producto_id);
-	
+	@Query(value = "SELECT * FROM mov_activos "
+			+ "WHERE mov_activos.nidubicacion=?1", nativeQuery = true)
+	public List<Producto> findByUbicacion(Long ubicacion);
+		
 }
