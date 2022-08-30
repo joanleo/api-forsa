@@ -32,6 +32,7 @@ import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.service.ProductoService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.ReporteComparativo;
+import com.prueba.util.ReporteDiferenciasPDF;
 import com.prueba.util.ReporteVerificarPDF;
 import com.prueba.util.UtilitiesApi;
 
@@ -149,7 +150,7 @@ public class ReportesController {
 		
 	}
 	
-	@GetMapping("/compararinventarios/descarga")
+	@GetMapping("/compararinventarios/descarga/pdf")
 	public void compararInventariosPDF(HttpServletResponse response,
 			@RequestParam Long inventario1,
 			@RequestParam Long inventario2,
@@ -173,7 +174,7 @@ public class ReportesController {
 	}
 	
 	@GetMapping("/compararinventarios")
-	public Page<ComparativoInventarioDTO> compararInventariosPDF(
+	public Page<ComparativoInventarioDTO> compararInventarios(
 			@RequestParam Long inventario1,
 			@RequestParam Long inventario2,
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
@@ -197,11 +198,14 @@ public class ReportesController {
 		return pages;
 	}
 	
-	@GetMapping("/diferenciainventario/descarga")
+	@GetMapping("/diferenciainventario/descarga/pdf")
 	public void diferenciainventarioPDF(HttpServletResponse response,
 			@RequestParam Long idubicacion,
-			@RequestParam Integer idinventario,
+			@RequestParam Long idinventario,
 			@RequestParam(required=false) Long nit) throws DocumentException, IOException {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		Ubicacion ubicacion = ubicacionRepo.findById(idubicacion).orElseThrow(()->new ResourceNotFoundException("Ubicacion", "id", idubicacion));
 	
@@ -213,9 +217,34 @@ public class ReportesController {
 		response.setHeader(headerKey, headerValue);
 		
 		List<ComparativoInventarioDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
+		System.out.println("Enviando lista para generar pdf");
+		ReporteDiferenciasPDF exporter = new ReporteDiferenciasPDF(comparativo, usuario, ubicacion); 
+        exporter.export(response);
+	}
+	
+	@GetMapping("/diferenciainventario")
+	public Page<ComparativoInventarioDTO> diferenciainventario(
+			@RequestParam Long idubicacion,
+			@RequestParam Long idinventario,
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
+			@RequestParam(required=false) Long nit) {
 		
-		//ReporteComparativo exporter = new ReporteComparativo(comparativo);
-        //exporter.export(response);
+		Pageable pageable = null;
+		if(items == 0) {
+			pageable = PageRequest.of(pagina, 10);
+		}else {
+			pageable = PageRequest.of(pagina, items); 			
+		}
+		List<ComparativoInventarioDTO> comparativo = util.compararInventarios(idubicacion, idinventario);
+		
+		int start = (int) pageable.getOffset();
+		
+		int end = (int) ((pagina + pageable.getPageSize()) > comparativo.size() ? comparativo.size()
+				  : (start + pageable.getPageSize()));
+		Page<ComparativoInventarioDTO> pages = new PageImpl<ComparativoInventarioDTO> (comparativo.subList(start, end), pageable, comparativo.size());
+
+		return pages;
 	}
 
 }
