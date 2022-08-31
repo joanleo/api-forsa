@@ -19,7 +19,7 @@ public class InventarioSpecifications {
 		return (root, query, criteryBuilder) ->{
 			List<Predicate> predicates = new ArrayList<>();
 			
-			predicates.add(criteryBuilder.like(root.get("id").as(String.class), "%"+id+ "%"));
+			predicates.add(criteryBuilder.like(root.get("idMov").as(String.class), "%"+id+ "%"));
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 			
