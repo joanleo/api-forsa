@@ -95,6 +95,18 @@ public class MovInventarioServiceImp implements MovInventarioService {
 		return inventario;
 	}
 
+	@Override
+	public List<MovInventario> listado(Empresa empresa) {
+		List<MovInventario> inventarios = movInvRepo.findByEmpresa(empresa);
+		return inventarios;
+	}
+
+	@Override
+	public List<MovInventario> findNumeroInv(String letras, Empresa empresa) {
+		List<MovInventario> inventarios = movInvRepo.findAll(inventarioSpec.getInvenId(letras, empresa));
+		return inventarios;
+	}
+
 
 
 }

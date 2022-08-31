@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -84,9 +85,35 @@ public class MovInvController {
 	}
 	
 	@GetMapping
+	@Operation(summary = "Obtiene los inventarios existentes", description = "Retorna los inventarios "
+			+ "contenga los valores  indicadas en la variable letras. Si no se incluye ningun valor retorna todos los inventarios existentes")
+	public List<MovInventario> list(@RequestParam(required=false) String letras,
+												 @RequestParam(required=false) Long nit){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		if(letras == null) {
+			List<MovInventario> inventarios = movInvService.listado(empresa);
+			return inventarios;
+		}else {
+			List<MovInventario> inventarios = movInvService.findNumeroInv(letras, empresa);
+			return inventarios;
+		}
+		
+	}
+	
+	@GetMapping("/indexados")
 	@Operation(summary = "Pagina los inventarios existentes", description = "Retorna los inventarios que se encuentren en el rango de fechas dado (formato de fecha 'yyyy-MM-dd') o que en su nombre "
 			+ "	contenga los valores  indicadas en la variable letras. Si no se incluye ningun valor retorna todos los inventarios existentes")
-	public ApiResponse<Page<MovInventario>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+	public ApiResponse<Page<MovInventario>> listPaginado(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 												 @RequestParam(required=false, defaultValue = "10") Integer items,
 												 @RequestParam(required=false) String letras,
 												 @RequestParam(required=false) Long nit,

@@ -1,5 +1,7 @@
 package com.prueba.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 import com.prueba.dto.MovInventarioDTO;
@@ -25,6 +27,19 @@ public interface MovInventarioService {
 	 * @return
 	 */
 	MovInventario getInventario(Long id);
+
+	/**
+	 * @param empresa
+	 * @return
+	 */
+	List<MovInventario> listado(Empresa empresa);
+
+	/**
+	 * @param letras
+	 * @param empresa 
+	 * @return
+	 */
+	List<MovInventario> findNumeroInv(String letras, Empresa empresa);
 
 
 }

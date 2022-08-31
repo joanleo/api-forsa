@@ -1,5 +1,7 @@
 package com.prueba.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,5 +26,11 @@ public interface MovInventarioRepository extends JpaRepository<MovInventario, In
 	 * @return
 	 */
 	MovInventario findByidMov(Long idMov);
+
+	/**
+	 * @param empresa
+	 * @return
+	 */
+	List<MovInventario> findByEmpresa(Empresa empresa);
 	
 }
