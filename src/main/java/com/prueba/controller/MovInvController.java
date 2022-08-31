@@ -104,6 +104,7 @@ public class MovInvController {
 			List<MovInventario> inventarios = movInvService.listado(empresa);
 			return inventarios;
 		}else {
+			System.out.println("Controller Numero de inventario: "+letras);
 			List<MovInventario> inventarios = movInvService.findNumeroInv(letras, empresa);
 			return inventarios;
 		}
@@ -130,7 +131,7 @@ public class MovInvController {
 			empresa = usuario.getEmpresa();			
 		}
 		
-		if(letras != null && desde != null) {
+		if(letras != null) {// && desde != null
 			Page<MovInventario> inventarios = movInvService.searchInv(letras, empresa, pagina, items);
 			return new ApiResponse<>(inventarios.getSize(), inventarios);
 		}else {
