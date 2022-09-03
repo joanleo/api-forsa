@@ -215,8 +215,8 @@ public class ReportesController {
 		
 		int start = (int) pageable.getOffset();
 		
-		int end = (int) ((pagina + pageable.getPageSize()) < comparativo.size() ? comparativo.size()
-				  : (start + pageable.getPageSize()));
+		int end = Math.min((start + pageable.getPageSize()), comparativo.size());
+
 		Page<ComparativoInventarioDTO> pages = new PageImpl<ComparativoInventarioDTO> (comparativo.subList(start, end), pageable, comparativo.size());
 
 		return pages;
@@ -256,18 +256,17 @@ public class ReportesController {
 			@RequestParam(required=false, defaultValue = "0") Integer items,
 			@RequestParam(required=false) Long nit) {
 		
+		List<ComparativoInventarioDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
 		Pageable pageable = null;
 		if(items == 0) {
 			pageable = PageRequest.of(pagina, 10);
-		}else {
+		}else {		
 			pageable = PageRequest.of(pagina, items); 			
 		}
-		List<ComparativoInventarioDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
 		
 		int start = (int) pageable.getOffset();
 		System.out.println(start);
-		int end = (int) ((pagina + pageable.getPageSize()) < comparativo.size() ? comparativo.size()
-				  : (start + pageable.getPageSize()));
+		int end = Math.min((start + pageable.getPageSize()), comparativo.size());
 		System.out.println(comparativo.size());
 		System.out.println(pagina + pageable.getPageSize());
 		Page<ComparativoInventarioDTO> pages = new PageImpl<ComparativoInventarioDTO> (comparativo.subList(start, end), pageable, comparativo.size());
