@@ -262,7 +262,7 @@ public class ReportesController {
 		}else {
 			pageable = PageRequest.of(pagina, items); 			
 		}
-		List<ComparativoInventarioDTO> comparativo = util.compararInventarios(idubicacion, idinventario);
+		List<ComparativoInventarioDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
 		
 		int start = (int) pageable.getOffset();
 		
