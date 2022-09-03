@@ -215,7 +215,7 @@ public class ReportesController {
 		
 		int start = (int) pageable.getOffset();
 		
-		int end = (int) ((pagina + pageable.getPageSize()) > comparativo.size() ? comparativo.size()
+		int end = (int) ((pagina + pageable.getPageSize()) < comparativo.size() ? comparativo.size()
 				  : (start + pageable.getPageSize()));
 		Page<ComparativoInventarioDTO> pages = new PageImpl<ComparativoInventarioDTO> (comparativo.subList(start, end), pageable, comparativo.size());
 
@@ -265,9 +265,11 @@ public class ReportesController {
 		List<ComparativoInventarioDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
 		
 		int start = (int) pageable.getOffset();
-		
-		int end = (int) ((pagina + pageable.getPageSize()) > comparativo.size() ? comparativo.size()
+		System.out.println(start);
+		int end = (int) ((pagina + pageable.getPageSize()) < comparativo.size() ? comparativo.size()
 				  : (start + pageable.getPageSize()));
+		System.out.println(comparativo.size());
+		System.out.println(pagina + pageable.getPageSize());
 		Page<ComparativoInventarioDTO> pages = new PageImpl<ComparativoInventarioDTO> (comparativo.subList(start, end), pageable, comparativo.size());
 
 		return pages;
