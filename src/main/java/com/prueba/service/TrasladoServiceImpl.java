@@ -234,6 +234,8 @@ public class TrasladoServiceImpl implements TrasladoService {
 				Date fechaRecibo = dateFormatter.parse(currentDateTime);
 				detalle.setUsuarioRecibe(usuario);
 				detalle.setFechaRecibe(fechaRecibo);
+				recibir.setUbicacion(traslado.getDestino());
+				recibir = productoRepo.saveAndFlush(recibir);
 			}
 		}
 		traslado.setDetalles(detallesTras);
@@ -298,6 +300,7 @@ public class TrasladoServiceImpl implements TrasladoService {
 			Producto nuevo = productoRepo.findByCodigoPieza(detalle.getProducto().getCodigoPieza());
 			if(nuevo != null) {
 				nuevo.setEstadoTraslado("F");
+				nuevo.setUbicacion(traslado.getDestino());
 				nuevo = productoRepo.save(nuevo);
 			}else {
 				throw new ResourceNotFoundException("Activo", "codigo de pieza", detalle.getProducto().getCodigoPieza());
