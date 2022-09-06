@@ -98,7 +98,21 @@ public class ProductoServiceImpl implements ProductoService {
 			if(Objects.isNull(empresa)) {
 				throw new ResourceNotFoundException("Empresa", "nit", productoDTO.getEmpresa().getNit());
 			}
+			Fabricante fabricante = fabricanteRepo.findByNitAndEmpresaAndEstaActivoTrue(productoDTO.getFabricante().getNit(), empresa);
+			if(Objects.isNull(fabricante)) {
+				throw new ResourceNotFoundException("Fabricante", "nit", productoDTO.getFabricante().getNit());
+			}
+			Familia familia = familiaRepo.findById(productoDTO.getFamilia().getId())
+					.orElseThrow(()-> new ResourceNotFoundException("Familia", "id", productoDTO.getFamilia().getId()));
+			Ubicacion ubicacion = ubicacionRepo.findById(productoDTO.getUbicacion().getId())
+					.orElseThrow(()->new ResourceNotFoundException("Ubicacion", "id", productoDTO.getUbicacion().getId()));
+			Estado estado = estadoRepo.findById(productoDTO.getEstado().getId())
+					.orElseThrow(()->new ResourceNotFoundException("Estado", "id", productoDTO.getEstado().getId()));
+			producto.setUbicacion(ubicacion);
+			producto.setEstado(estado);
 			producto.setEmpresa(empresa);
+			producto.setFabricante(fabricante);
+			producto.setFamilia(familia);
 			productoRepo.save(producto);
 		}else {
 			throw new ResourceAlreadyExistsException("Activo", "codigo de pieza", productoDTO.getCodigoPieza());
