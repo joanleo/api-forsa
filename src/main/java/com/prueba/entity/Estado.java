@@ -37,7 +37,7 @@ public class Estado {
     private Empresa empresa;
 	
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
-	private Boolean estaActivo;
+	private Boolean estaActivo=true;
 	
 	
 	
