@@ -56,15 +56,17 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 		
 		tipoUbicacionDTO.setEmpresa(empresa);
 		
-		TipoUbicacion tipoUbicacion = mapearDTO(tipoUbicacionDTO);
+		TipoUbicacion tipoUbicacion = new TipoUbicacion();
 		TipoUbicacion exist = tipoUbicRepo.findByNombreAndEmpresaAndEstaActivoTrue(tipoUbicacion.getNombre(), tipoUbicacionDTO.getEmpresa());
 		if(exist == null) {
-			tipoUbicRepo.save(tipoUbicacion);
+			tipoUbicacion.setEmpresa(empresa);
+			tipoUbicacion.setNombre(tipoUbicacionDTO.getNombre());
+			exist = tipoUbicRepo.save(tipoUbicacion);
 		}else {
 			throw new ResourceAlreadyExistsException("Tipo de ubicacion", "nombre", tipoUbicacionDTO.getNombre());
 		}
 		
-		return mapearEntidad(tipoUbicacion);
+		return mapearEntidad(exist);
 	}
 
 	@Override
