@@ -27,11 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.ApiResponse;
 import com.prueba.dto.EmpresaDTO;
-import com.prueba.dto.TipoEmpresaDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.security.dto.ResDTO;
 import com.prueba.service.EmpresaService;
-import com.prueba.service.TipoEmpresaService;
 import com.prueba.util.CsvExportService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,9 +47,7 @@ public class EmpresaController {
 	
 	@Autowired
 	private CsvExportService csvService;
-	
-	@Autowired
-	private TipoEmpresaService tipoEmpresaService;
+
 	
 	@PostMapping
 	@Operation(summary = "Crea una empresa", description = "Crea una nueva empresa")
@@ -61,11 +57,11 @@ public class EmpresaController {
 	
 	@GetMapping
 	@Operation(summary="Encuentra las empresas", description = "Retorna una lista de las empresas que coincidan con las letras indicadas, retorna todas las empresas si no se indica ninguna letra")
-	public List<TipoEmpresaDTO> get(@RequestParam(required=false)String letras){
+	public List<EmpresaDTO> get(@RequestParam(required=false)String letras){
 		if(letras == null) {
-			return tipoEmpresaService.list();
+			return empresaService.list();
 		}
-		return  tipoEmpresaService.list(letras);
+		return  empresaService.list(letras);
 	}
 	
 	@PutMapping("/{nit}")
