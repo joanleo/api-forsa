@@ -78,7 +78,9 @@ public class ProductSpecifications {
 			if(searchDTO.getReviso() != null) {
 				predicates.add(criteryBuilder.equal(root.get("reviso"), searchDTO.getReviso()));
 			}
-			
+			if(searchDTO.getEstaActivo() == null) {
+				predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));				
+			}
 			
 			
 			query.orderBy(criteryBuilder.desc(root.get("descripcion")));
@@ -126,6 +128,7 @@ public class ProductSpecifications {
 				predicates.add(criteryBuilder.isTrue(root.get("importado").as(Boolean.class)));
 				predicates.add(criteryBuilder.isTrue(root.get("verificado").as(Boolean.class)));
 			}
+			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
 						
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
