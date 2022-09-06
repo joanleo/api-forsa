@@ -63,25 +63,18 @@ public class FamiliaServiceImpl implements FamiliaService {
 
 	@Override
 	public FamiliaDTO update(Long id, FamiliaDTO familiaDTO, Empresa empresa) {
-		if(familiaDTO.getEmpresa() == null) {
-			familiaDTO.setEmpresa(empresa);
-		}
+
 		Familia familia = familiaRepo.findByIdAndEmpresa(id, familiaDTO.getEmpresa())
 				.orElseThrow(() -> new ResourceNotFoundException("Familia", "id", id));
 
 		if(familiaDTO.getNombre() != null) {
 			familia.setNombre(familiaDTO.getNombre());			
 		}
-		if(familiaDTO.getId() != null) {
-			familia.setId(familiaDTO.getId());			
-		}
 		if(familiaDTO.getSigla() != null) {
 			familia.setSigla(familiaDTO.getSigla());			
 		}
-		if(familiaDTO.getEmpresa() != null) {
-			familia.setEmpresa(familiaDTO.getEmpresa());			
-		}
-		familiaRepo.save(familia);
+
+		familia = familiaRepo.saveAndFlush(familia);
 		return mapearEntidad(familia);
 	}
 
