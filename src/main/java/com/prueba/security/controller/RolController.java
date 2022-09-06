@@ -209,7 +209,7 @@ public class RolController {
 		}else {
 			empresa = usuario.getEmpresa();			
 		}
-		
+		System.out.println(rol.getIdRol());
 		Set<RutinaDTO> politicas = politicaService.buscarPoliticas(rol, empresa);
 		csvService.writePolitica(servletResponse.getWriter(), politicas);
 	}
