@@ -31,9 +31,10 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 
 	@Override
 	public TipoEmpresaDTO create(TipoEmpresaDTO tipoEmpresaDTO) {
-		TipoEmpresa tipoEmpresa = mapearDto(tipoEmpresaDTO);
+		TipoEmpresa tipoEmpresa = new TipoEmpresa();
 		TipoEmpresa exist = tipoEmpresaRepo.findByTipo(tipoEmpresa.getTipo());
 		if (exist == null) {
+			tipoEmpresa.setTipo(tipoEmpresaDTO.getTipo());
 			exist = tipoEmpresaRepo.save(tipoEmpresa);
 		} else {
 			throw new ResourceAlreadyExistsException("Tipo de empresa", "nombre", tipoEmpresa.getTipo());
