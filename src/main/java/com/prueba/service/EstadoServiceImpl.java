@@ -44,11 +44,7 @@ public class EstadoServiceImpl implements EstadoService {
 	public EstadoDTO create(EstadoDTO estadoDTO) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
-		
-		if(estadoDTO.getEmpresa() == null) {
-			estadoDTO.setEmpresa(usuario.getEmpresa());
-		}
-		
+				
 		Empresa empresa;
 		if(estadoDTO.getEmpresa() != null) {
 			empresa = util.obtenerEmpresa(estadoDTO.getEmpresa().getNit());
@@ -56,15 +52,17 @@ public class EstadoServiceImpl implements EstadoService {
 			empresa = usuario.getEmpresa();			
 		}
 		estadoDTO.setEmpresa(empresa);
-		Estado estado = mapearDTO(estadoDTO);
+		Estado estado = new Estado();
 		Estado exist = estadoRepo.findByTipoAndEmpresa(estadoDTO.getTipo(), estadoDTO.getEmpresa());
 		if(exist == null) {
-			estadoRepo.save(estado);
+			estado.setEmpresa(empresa);
+			estado.setTipo(estadoDTO.getTipo());
+			exist = estadoRepo.save(estado);
 		}else {
 			throw new ResourceAlreadyExistsException("Estado", "nombre", estado.getTipo());
 		}
 		
-		return mapearEntidad(estado);
+		return mapearEntidad(exist);
 	}
 	
 	@Override
