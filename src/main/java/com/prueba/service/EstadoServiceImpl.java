@@ -116,7 +116,7 @@ public class EstadoServiceImpl implements EstadoService {
 	@Override
 	public void delete(Long id, Empresa empresa) {
 		Estado estado = estadoRepo.findByIdAndEmpresa(id, empresa)
-				.orElseThrow(() -> new ResourceNotFoundException("EStado", "id", id));
+				.orElseThrow(() -> new ResourceNotFoundException("Estado", "id", id));
 		
 		estadoRepo.delete(estado);
 	}
