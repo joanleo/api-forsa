@@ -198,7 +198,7 @@ public class CsvExportService {
     			csvPrinter.printRecord(politica.getNombre());
     			csvPrinter.printRecord("Id politica", "Nombre permiso", "Url", "Permitido");
     			for(PoliticaDTO detalle: politica.getPoliticas()) {
-    				csvPrinter.printRecord(detalle.getIdPolitica(), detalle.getNombre(), detalle.getUrl(), detalle.getPermiso());
+    				csvPrinter.printRecord(detalle.getIdPolitica(), detalle.getNombre(), detalle.getUrl(), detalle.getPermiso()==true?"Si":"No");
     			}
     		}
 	    }catch (IOException e) {
