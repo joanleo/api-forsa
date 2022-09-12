@@ -95,6 +95,11 @@ public class Permiso implements Serializable{
 		this.url.add(url);
 	}
 
+	@Override
+	public String toString() {
+		return "Permiso [idRuta=" + idRuta + ", url=" + url + ", nombre=" + nombre + ", metodo=" + metodo + "]";
+	}
+
 
 		
 
