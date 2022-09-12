@@ -158,8 +158,13 @@ public class EmpresaServiceImpl implements EmpresaService {
 		if(Objects.isNull(empresa)) {
 			throw new ResourceNotFoundException("Empresa", "id", id);			
 		}
-		
-		empresa.setEstaActivo(false);
+		Boolean estado = empresa.getEstaActivo();
+		if(estado) {
+			empresa.setEstaActivo(false);			
+		}else {
+			empresa.setEstaActivo(true);
+		}
+
 		empresaRepo.save(empresa);
 		
 	}

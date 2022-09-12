@@ -19,16 +19,21 @@ public class EmpresaSpecifications {
 			List<Predicate> predicates = new ArrayList<>();
 			
 			if(empresaDTO.getNit() != null) {
-			predicates.add(criteryBuilder.like(root.get("nit").as(String.class), "%"+empresaDTO.getNit()+ "%"));
+				predicates.add(criteryBuilder.like(root.get("nit").as(String.class), "%"+empresaDTO.getNit()+ "%"));
 			}
 			if(empresaDTO.getNombre() != null) {
-			predicates.add(criteryBuilder.like(root.get("nombre"), "%" + empresaDTO.getNombre() +"%"));
+				predicates.add(criteryBuilder.like(root.get("nombre"), "%" + empresaDTO.getNombre() +"%"));
 			}
 			if(empresaDTO.getTipoEmpresa() != null) {
-			predicates.add(criteryBuilder.equal(root.get("tipoEmpresa"), empresaDTO.getTipoEmpresa()));
+				predicates.add(criteryBuilder.equal(root.get("tipoEmpresa"), empresaDTO.getTipoEmpresa()));
+			}
+			if(empresaDTO.getEstaActivo() != null && empresaDTO.getEstaActivo()) {
+				predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
+			}
+			if(empresaDTO.getEstaActivo() != null && !empresaDTO.getEstaActivo()) {
+				predicates.add(criteryBuilder.isFalse(root.get("estaActivo").as(Boolean.class)));
 			}
 			
-			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
 			
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
