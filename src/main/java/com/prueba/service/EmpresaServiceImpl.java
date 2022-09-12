@@ -52,9 +52,10 @@ public class EmpresaServiceImpl implements EmpresaService {
 		Empresa empresa = mapearDto(empresaDTO);
 		Empresa exist = empresaRepo.findByNit(empresa.getNit());
 		if (exist == null) {
+			empresa.setEstaActivo(true);
 			empresaRepo.save(empresa);
 		} else {
-			throw new ResourceAlreadyExistsException("Empresa", "nombre", empresa.getNombre());
+			throw new ResourceAlreadyExistsException("Empresa", "nit", empresa.getNit());
 		}
 		
 		ServletUriComponentsBuilder ruta = ServletUriComponentsBuilder.fromCurrentRequest();

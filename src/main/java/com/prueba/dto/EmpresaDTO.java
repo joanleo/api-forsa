@@ -11,7 +11,7 @@ public class EmpresaDTO {
 	
 	private TipoEmpresa tipoEmpresa;
 	
-	private Boolean estaActivo=true;
+	private Boolean estaActivo;
 
 	public Long getNit() {
 		return nit;
