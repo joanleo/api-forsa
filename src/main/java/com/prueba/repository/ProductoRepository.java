@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.entity.TipoActivo;
+import com.prueba.entity.Ubicacion;
 import com.prueba.security.entity.Usuario;
 
 public interface ProductoRepository extends JpaRepository<Producto, Integer>, JpaSpecificationExecutor<Producto>{
@@ -58,5 +59,11 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer>, Jp
 	@Query(value = "SELECT * FROM mov_activos "
 			+ "WHERE mov_activos.nidubicacion=?1", nativeQuery = true)
 	public List<Producto> findByUbicacion(Long ubicacion);
+
+	/**
+	 * @param idUbicacion
+	 * @return
+	 */
+	public List<Producto> findByUbicacionAndEstaActivoTrue(Ubicacion idUbicacion);
 		
 }
