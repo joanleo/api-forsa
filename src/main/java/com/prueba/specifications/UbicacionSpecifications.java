@@ -34,10 +34,15 @@ public class UbicacionSpecifications {
 			if(ubicacionDTO.getTipo() != null) {
 				predicates.add(criteryBuilder.equal(root.get("tipo"), ubicacionDTO.getTipo()));
 			}
+			if(ubicacionDTO.getEstaActiva() != null && ubicacionDTO.getEstaActiva()) {
+				predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));				
+			}
+			if(ubicacionDTO.getEstaActiva() != null && !ubicacionDTO.getEstaActiva()) {
+				predicates.add(criteryBuilder.isFalse(root.get("estaActivo").as(Boolean.class)));				
+			}
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 			
-			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
 			
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};

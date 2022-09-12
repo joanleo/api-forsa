@@ -14,12 +14,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "m_ubicaciones")
+@Table(name = "m_ubicaciones", uniqueConstraints = { @UniqueConstraint(columnNames = { "vcnombre"}) })
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Ubicacion {
 	

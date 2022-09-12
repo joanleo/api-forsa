@@ -21,6 +21,8 @@ public class UbicacionDTO {
 	
 	//@NotNull(message = "Este campo no puede ser nulo")
 	private Empresa empresa;
+	
+	private Boolean estaActiva;
 
 	public Long getId() {
 		return id;
@@ -68,6 +70,14 @@ public class UbicacionDTO {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public Boolean getEstaActiva() {
+		return estaActiva;
+	}
+
+	public void setEstaActiva(Boolean estaActiva) {
+		this.estaActiva = estaActiva;
 	}
 
 }
