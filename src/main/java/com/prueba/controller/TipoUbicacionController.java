@@ -188,7 +188,7 @@ public class TipoUbicacionController {
 	}
 	
 	@PostMapping("/descarga")
-	@Operation(summary = "Descarga listado en formato csv", description = "Descarga listado de Tipo de movimiento de la busqueda realizada en formato csv")
+	@Operation(summary = "Descarga listado en formato csv", description = "Descarga listado de Tipo de ubicacion de la busqueda realizada en formato csv")
 	public void getCsvEmpresas(HttpServletResponse servletResponse,
 								@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 								@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -197,7 +197,7 @@ public class TipoUbicacionController {
 		servletResponse.setContentType("application/x-download");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
-        servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "estados"+ "_" + currentDateTime + ".csv" + "\"");
+        servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "tiposUbicaciones"+ "_" + currentDateTime + ".csv" + "\"");
         
         Empresa empresa;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

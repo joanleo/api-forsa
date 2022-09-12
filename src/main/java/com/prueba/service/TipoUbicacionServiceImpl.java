@@ -57,7 +57,7 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 		tipoUbicacionDTO.setEmpresa(empresa);
 		
 		TipoUbicacion tipoUbicacion = new TipoUbicacion();
-		TipoUbicacion exist = tipoUbicRepo.findByNombreAndEmpresaAndEstaActivoTrue(tipoUbicacion.getNombre(), tipoUbicacionDTO.getEmpresa());
+		TipoUbicacion exist = tipoUbicRepo.findByNombreAndEmpresaAndEstaActivoTrue(tipoUbicacionDTO.getNombre(), tipoUbicacionDTO.getEmpresa());
 		if(exist == null) {
 			tipoUbicacion.setEmpresa(empresa);
 			tipoUbicacion.setNombre(tipoUbicacionDTO.getNombre());
@@ -114,7 +114,13 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 		TipoUbicacion tipoUbicacion = tipoUbicRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Tipo de ubicacion", "id", id));
 		
-		tipoUbicacion.setEstaActivo(false);
+		Boolean estado = tipoUbicacion.getEstaActivo();
+		if(estado) {
+			tipoUbicacion.setEstaActivo(false);			
+		}else {
+			tipoUbicacion.setEstaActivo(true);
+		}
+ 
 		tipoUbicRepo.save(tipoUbicacion);
 		
 	}
