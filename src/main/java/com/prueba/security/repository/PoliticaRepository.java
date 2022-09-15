@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.prueba.entity.DetalleRutina;
-import com.prueba.entity.Permiso;
 import com.prueba.security.entity.Politica;
 import com.prueba.security.entity.Rol;
 
