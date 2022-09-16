@@ -31,9 +31,9 @@ import com.prueba.entity.Empresa;
 @Table(name = "m_roles")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
-@JsonIdentityInfo(
-		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "idRol")
+//@JsonIdentityInfo(
+//		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+//		  property = "idRol")
 public class Rol implements Serializable{
     /**
 	 * 
