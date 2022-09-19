@@ -15,6 +15,7 @@ import com.prueba.dto.EstadoDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Estado;
 import com.prueba.exception.ResourceAlreadyExistsException;
+import com.prueba.exception.ResourceCannotBeAccessException;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.EstadoRepository;
 import com.prueba.security.entity.Usuario;
@@ -54,12 +55,17 @@ public class EstadoServiceImpl implements EstadoService {
 		estadoDTO.setEmpresa(empresa);
 		Estado estado = new Estado();
 		Estado exist = estadoRepo.findByTipoAndEmpresa(estadoDTO.getTipo(), estadoDTO.getEmpresa());
-		if(exist == null) {
-			estado.setEmpresa(empresa);
-			estado.setTipo(estadoDTO.getTipo());
-			exist = estadoRepo.save(estado);
+		String verNombre = estadoDTO.getTipo().trim();
+		if(verNombre.length() > 0) {
+			if(exist == null) {
+				estado.setEmpresa(empresa);
+				estado.setTipo(estadoDTO.getTipo());
+				exist = estadoRepo.save(estado);
+			}else {
+				throw new ResourceAlreadyExistsException("Estado", "nombre", estado.getTipo());
+			}
 		}else {
-			throw new ResourceAlreadyExistsException("Estado", "nombre", estado.getTipo());
+			throw new ResourceCannotBeAccessException("El nombre debe ser un nombre valildo, no solo espacios");
 		}
 		
 		return mapearEntidad(exist);
@@ -105,9 +111,19 @@ public class EstadoServiceImpl implements EstadoService {
 	public EstadoDTO update(Long id, EstadoDTO estadoDTO) {
 		Estado estado = estadoRepo.findByIdAndEmpresa(id, estadoDTO.getEmpresa())
 				.orElseThrow(() -> new ResourceNotFoundException("Estado", "id", id));
-		
-		//estado.setDescripcion(estadoDTO.getDescripcion());
-		estado.setTipo(estadoDTO.getTipo());
+		String verNombre = estadoDTO.getTipo().trim();
+		if(verNombre.length() > 0) {
+			if(estadoDTO.getTipo() != null) {
+				Estado estadoUpdae = estadoRepo.findByTipoAndEmpresa(estadoDTO.getTipo(), estadoDTO.getEmpresa());
+				if(estadoUpdae == null) {
+					estado.setTipo(estadoDTO.getTipo());
+				}else {
+					throw new ResourceAlreadyExistsException("Estado", "nombre", estadoDTO.getTipo());
+				}
+			}			
+		}else {
+			throw new ResourceCannotBeAccessException("El nombre debe ser un nombre valildo, no solo espacios");
+		}
 		estadoRepo.save(estado);
 		
 		return mapearEntidad(estado);
@@ -126,7 +142,13 @@ public class EstadoServiceImpl implements EstadoService {
 		Estado estado = estadoRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Estado", "id", id));
 		
-		estado.setEstaActivo(false);
+		Boolean activo = estado.getEstaActivo();
+		if(activo) {
+			estado.setEstaActivo(false);			
+		}else {
+			estado.setEstaActivo(true);
+		}
+		
 		estadoRepo.save(estado);
 		
 	}
