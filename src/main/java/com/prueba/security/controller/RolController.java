@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.dto.ApiResponse;
 import com.prueba.entity.Empresa;
+import com.prueba.security.dto.ResDTO;
 import com.prueba.security.dto.RolDTO;
 import com.prueba.security.dto.RutinaDTO;
 import com.prueba.security.entity.Politica;
@@ -112,7 +114,6 @@ public class RolController {
 		}else {
 			empresa = usuario.getEmpresa();			
 		}
-		System.out.println(empresa.getNombre());
 		if(Objects.isNull(rolDTO)) {
 			Page<Rol> roles = rolService.searchRoles(empresa, pagina, items);
 			return new ApiResponse<>(roles.getSize(), roles);
@@ -157,6 +158,26 @@ public class RolController {
 	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) {
 		rolService.delete(id);
 		return new ResponseEntity<>("Rol eliminado con exito", HttpStatus.OK);
+	}
+	
+	@PatchMapping(value = "/{id},{nitEmpresa}")
+	@Operation(summary = "Deshabilita un rol", description = "Deshabilita un rol por su id")
+	public ResponseEntity<?> deshabilitar(@PathVariable(name="id")Long id,
+			 							  @PathVariable(name = "nitEmpresa", required=false) Long nitEmpresa){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+
+		if(nitEmpresa != null) {
+			empresa = util.obtenerEmpresa(nitEmpresa);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		rolService.deshabilitar(id, empresa);
+		
+		return new ResponseEntity<ResDTO>(new ResDTO("Usuario inhabilitado con exito"), HttpStatus.OK);
 	}
 	
 	@GetMapping("/politicas")
@@ -219,6 +240,41 @@ public class RolController {
 	public ResponseEntity<?> actualizarPolitica(@PathVariable Long idPolitica,
 			@RequestBody Politica politica){
 		return new ResponseEntity<>(rolService.actualizarPoliticar(idPolitica, politica), HttpStatus.OK);
+	}
+	
+	@PostMapping("/descarga")
+	@Operation(summary = "Descarga listado en formato csv", description = "Descarga listadode roles en formato csv")
+	public void obtenerRolesCsv(HttpServletResponse servletResponse,
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
+			@RequestBody(required=false) RolDTO rolDTO,
+			@RequestParam(required=false) Long nit) throws IOException{
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		
+		servletResponse.setContentType("application/x-download");
+        servletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + "roles_"+currentDateTime+".csv" + "\"");
+        
+        if(Objects.isNull(rolDTO)) {
+			List<Rol> roles = rolService.list(empresa);
+			csvService.writeRoles(servletResponse.getWriter(), roles);
+		}else {
+			rolDTO.setEmpresa(empresa);
+			List<Rol> roles = rolService.buscarRoles(rolDTO, empresa);
+			csvService.writeRoles(servletResponse.getWriter(), roles);
+		}
+		
 	}
 }
 
