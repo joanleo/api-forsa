@@ -93,6 +93,26 @@ public class ProductoServiceImpl implements ProductoService {
 	public ProductoDTO create(ProductoDTO productoDTO) {
 		Producto producto = mapearDTO(productoDTO);
 		Producto exist = productoRepo.findByCodigoPieza(productoDTO.getCodigoPieza());
+		String verCodigo = productoDTO.getCodigoPieza().trim();
+		if(verCodigo.length() > 0) {
+			
+		}else {
+			throw new ResourceCannotBeAccessException("El QR debe ser un QR valildo, no solo espacios");
+		}
+		String verNombre = productoDTO.getDescripcion().trim();
+		if(verNombre.length() > 0) {
+			
+		}else {
+			throw new ResourceCannotBeAccessException("El nombre debe ser un nombre valildo, no solo espacios");
+		}
+		 
+		Float verArea = productoDTO.getArea();
+		if(verArea > 0) {
+			
+		}else {
+			throw new ResourceCannotBeAccessException("El area debe ser un valor valido, mayor a cero");
+		}
+
 		if(exist == null) {
 			Empresa empresa = empresaRepo.findByNit(productoDTO.getEmpresa().getNit());
 			if(Objects.isNull(empresa)) {
