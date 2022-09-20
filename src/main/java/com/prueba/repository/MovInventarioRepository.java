@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 
 import com.prueba.entity.Empresa;
 import com.prueba.entity.MovInventario;
@@ -32,5 +33,10 @@ public interface MovInventarioRepository extends JpaRepository<MovInventario, In
 	 * @return
 	 */
 	List<MovInventario> findByEmpresa(Empresa empresa);
+	
+	@Query(value = "SELECT * FROM mov_inventarios "
+			+ "WHERE mov_inventarios.vcnitempresa=?1 "
+			+ "AND mov_inventarios.dfecha<=?2", nativeQuery = true)
+	Page<MovInventario> findBetweenDay(Long empresa, String hasta, Pageable page);
 	
 }

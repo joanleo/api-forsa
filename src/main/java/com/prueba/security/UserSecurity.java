@@ -1,34 +1,22 @@
  package com.prueba.security;
 
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
-import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.prueba.entity.DetalleRutina;
 import com.prueba.entity.Permiso;
 import com.prueba.repository.DetalleRutinaRepository;
 import com.prueba.repository.PermisoRepository;
-import com.prueba.security.dto.PoliticaDTO;
-import com.prueba.security.dto.RutinaDTO;
 import com.prueba.security.entity.Politica;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.PoliticaRepository;
 import com.prueba.security.repository.UsuarioRepository;
-import com.prueba.security.service.RolService;
-import com.prueba.service.PoliticaService;
 import com.prueba.specifications.PermisoSpecifications;
 
 

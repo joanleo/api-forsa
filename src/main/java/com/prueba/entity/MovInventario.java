@@ -82,9 +82,23 @@ public class MovInventario implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;
+	
+	@Column(name = "vclistacodigos")
+	private String codigosSobrantes;
 
-	
-	
+
+	public String getCodigosSobrantes() {
+		return codigosSobrantes;
+	}
+
+	public void setCodigosSobrantes(String codigosSobrantes) {
+		this.codigosSobrantes = codigosSobrantes;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	public Usuario getRealizo() {
 		return realizo;
 	}

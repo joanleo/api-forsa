@@ -1,5 +1,6 @@
 package com.prueba.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -40,6 +41,16 @@ public interface MovInventarioService {
 	 * @return
 	 */
 	List<MovInventario> findNumeroInv(String letras, Empresa empresa);
+
+	/**
+	 * @param empresa 
+	 * @param desde
+	 * @param hasta
+	 * @param pagina
+	 * @param items
+	 * @return
+	 */
+	Page<MovInventario> searchInvBetweenDate(Empresa empresa, Date desde, String hasta, Integer pagina, Integer items);
 
 
 }

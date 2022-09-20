@@ -31,6 +31,7 @@ import com.prueba.dto.MovInventarioDTO;
 import com.prueba.dto.UsuarioDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.MovInventario;
+import com.prueba.repository.ProductoRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.service.MovInventarioService;
@@ -59,6 +60,9 @@ public class MovInvController {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private ProductoRepository productoRepo;
 	
 	@PostMapping
 	@Operation(summary = "Crea un inventario", description = "Crea un nuevo inventario")
@@ -134,10 +138,15 @@ public class MovInvController {
 		if(letras != null) {// && desde != null
 			Page<MovInventario> inventarios = movInvService.searchInv(letras, empresa, pagina, items);
 			return new ApiResponse<>(inventarios.getSize(), inventarios);
-		}else {
-			Page<MovInventario> inventarios = movInvService.list(empresa, pagina, items);
+		}else if(desde != null){
+			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String hastaFormat = dateFormatter.format(hasta);
+			System.out.println(hastaFormat);
+			Page<MovInventario> inventarios = movInvService.searchInvBetweenDate(empresa, desde, hastaFormat, pagina, items);
 			return new ApiResponse<>(inventarios.getSize(), inventarios);
 		}
+		Page<MovInventario> inventarios = movInvService.list(empresa, pagina, items);
+		return new ApiResponse<>(inventarios.getSize(), inventarios);
 		
 	}
 	
@@ -160,7 +169,7 @@ public class MovInvController {
 		
 		MovInventario inventario = movInvService.getInventario(id);
 		
-		ReporteInventarioPDF exportar = new ReporteInventarioPDF(inventario);
+		ReporteInventarioPDF exportar = new ReporteInventarioPDF(inventario, productoRepo);
 		exportar.export(response);
 		
 	}

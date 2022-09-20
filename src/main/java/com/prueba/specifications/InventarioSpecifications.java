@@ -33,8 +33,10 @@ public class InventarioSpecifications {
 			List<Predicate> predicates = new ArrayList<>();
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
+			System.out.println(desde);
 			
-			predicates.add(criteryBuilder.between(root.<Date>get("fecha"), desde, hasta));
+			System.out.println(root.<Date>get("fecha").toString());
+			predicates.add(criteryBuilder.lessThanOrEqualTo(root.<Date>get("fecha"), hasta));
 			
 			return criteryBuilder.and(predicates .toArray(new Predicate[0]));
 		};

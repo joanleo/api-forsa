@@ -107,6 +107,14 @@ public class MovInventarioServiceImp implements MovInventarioService {
 		return inventarios;
 	}
 
+	@Override
+	public Page<MovInventario> searchInvBetweenDate(Empresa empresa, Date desde, String hasta, Integer pagina, Integer items) {
+		Long nitempresa = empresa.getNit();
+		System.out.println(hasta);
+		Page<MovInventario> inventarios = movInvRepo.findBetweenDay(nitempresa, hasta, PageRequest.of(0, 10));
+		return inventarios;
+	}
+
 
 
 }

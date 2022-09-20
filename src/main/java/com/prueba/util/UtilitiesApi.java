@@ -58,10 +58,9 @@ public class UtilitiesApi {
 	private ProductoRepository productoRepo;
 	
 	public List<ComparativoInventarioDTO> analisisDiferencias(Long idUbicacion, Long idInven){
-		@SuppressWarnings("unused")
 		Ubicacion ubicacion = ubicacionRepo.findById(idUbicacion)
 				.orElseThrow(()-> new ResourceNotFoundException("ubicacion", "id", idUbicacion));
-		List<Producto> activosUbicacion = productoRepo.findByUbicacion(idUbicacion);
+		List<Producto> activosUbicacion = productoRepo.findByUbicacionAndEstaActivoTrue(ubicacion);
 		System.out.println("Total activos ubicacion: "+activosUbicacion.size());
 		MovInventario inv = movInventarioRepo.findByidMov(idInven);
 		if(Objects.isNull(inv)) {

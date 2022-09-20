@@ -111,7 +111,8 @@ public class UsuarioController {
 			empresa = usuario.getEmpresa();			
 		}
 
-		if(Objects.isNull(registroDTO)) {
+		if(registroDTO == null) {
+			System.out.println("Sin Json");
 			Page<Usuario> usuarios = usuarioService.buscarUsuarios(empresa, pagina, items);
 			return new ApiResponse<>(usuarios.getSize(), usuarios);
 		}else {
