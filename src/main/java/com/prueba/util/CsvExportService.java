@@ -26,6 +26,7 @@ import com.prueba.entity.TipoActivo;
 import com.prueba.entity.Ubicacion;
 import com.prueba.security.dto.PoliticaDTO;
 import com.prueba.security.dto.RutinaDTO;
+import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
 
 
@@ -266,6 +267,22 @@ public class CsvExportService {
     						producto.getTipo(), producto.getMedidas(), producto.getArea(), producto.getEstado(), 
     						producto.getInv1()? "Si":"No", producto.getInv2()? "Si":"No");
     				count++;
+    		}
+	    }catch (IOException e) {
+	        log.error("Error en la generacion del CSV  ", e);
+	    }
+		
+	}
+
+	/**
+	 * @param writer
+	 * @param roles
+	 */
+	public void writeRoles(PrintWriter writer, List<Rol> roles) {
+		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			csvPrinter.printRecord("Id", "Nombre", "Activo");
+    		for(Rol rol: roles) {
+    				csvPrinter.printRecord(rol.getIdRol(), rol.getNombre(),	rol.getEstaActivo()? "Si":"No");
     		}
 	    }catch (IOException e) {
 	        log.error("Error en la generacion del CSV  ", e);
