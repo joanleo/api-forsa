@@ -35,6 +35,7 @@ import com.prueba.repository.ProductoRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.service.MovInventarioService;
+import com.prueba.util.CsvExportService;
 import com.prueba.util.ReporteInventarioPDF;
 import com.prueba.util.UtilitiesApi;
 
@@ -63,6 +64,9 @@ public class MovInvController {
 	
 	@Autowired
 	private ProductoRepository productoRepo;
+	
+	@Autowired
+	private CsvExportService csvService;
 	
 	@PostMapping
 	@Operation(summary = "Crea un inventario", description = "Crea un nuevo inventario")
@@ -135,14 +139,15 @@ public class MovInvController {
 			empresa = usuario.getEmpresa();			
 		}
 		
-		if(letras != null) {// && desde != null
+		if(letras != null) {
 			Page<MovInventario> inventarios = movInvService.searchInv(letras, empresa, pagina, items);
 			return new ApiResponse<>(inventarios.getSize(), inventarios);
 		}else if(desde != null){
 			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String hastaFormat = dateFormatter.format(hasta);
+			String desdeFormat = dateFormatter.format(desde);
 			System.out.println(hastaFormat);
-			Page<MovInventario> inventarios = movInvService.searchInvBetweenDate(empresa, desde, hastaFormat, pagina, items);
+			Page<MovInventario> inventarios = movInvService.searchInvBetweenDate(empresa, desdeFormat, hastaFormat, pagina, items);
 			return new ApiResponse<>(inventarios.getSize(), inventarios);
 		}
 		Page<MovInventario> inventarios = movInvService.list(empresa, pagina, items);
@@ -171,6 +176,23 @@ public class MovInvController {
 		
 		ReporteInventarioPDF exportar = new ReporteInventarioPDF(inventario, productoRepo);
 		exportar.export(response);
+		
+	}
+	
+	@GetMapping("/detalle/{id}/descarga/csv")
+	@Operation(summary = "Descarga un inventario en formato csv", description = "Retorna un inventario con detalle segun el numero de inventario")
+	public void exportToCsv(HttpServletResponse response,
+							@PathVariable Long id) throws IOException {
+		response.setContentType("application/x-download");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=reporteInventario_" + id + "_" + currentDateTime + ".csv";
+		response.setHeader(headerKey, headerValue);
+		
+		MovInventario inventario = movInvService.getInventario(id);
+		
+		csvService.writeInvToCsv(response.getWriter(), inventario); 
 		
 	}
 

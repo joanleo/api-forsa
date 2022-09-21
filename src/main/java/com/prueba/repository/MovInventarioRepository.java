@@ -34,9 +34,17 @@ public interface MovInventarioRepository extends JpaRepository<MovInventario, In
 	 */
 	List<MovInventario> findByEmpresa(Empresa empresa);
 	
+	/**
+	 * @param empresa
+	 * @param desde
+	 * @param hasta
+	 * @param page
+	 * @return
+	 */
 	@Query(value = "SELECT * FROM mov_inventarios "
 			+ "WHERE mov_inventarios.vcnitempresa=?1 "
-			+ "AND mov_inventarios.dfecha<=?2", nativeQuery = true)
-	Page<MovInventario> findBetweenDay(Long empresa, String hasta, Pageable page);
+			+ "AND mov_inventarios.dfecha>=?2 "
+			+ "AND mov_inventarios.dfecha<=?3 ", nativeQuery = true)
+	Page<MovInventario> findBetweenDay(Long empresa, String desde, String hasta, Pageable page);
 	
 }

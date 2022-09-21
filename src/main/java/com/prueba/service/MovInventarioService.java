@@ -50,7 +50,7 @@ public interface MovInventarioService {
 	 * @param items
 	 * @return
 	 */
-	Page<MovInventario> searchInvBetweenDate(Empresa empresa, Date desde, String hasta, Integer pagina, Integer items);
+	Page<MovInventario> searchInvBetweenDate(Empresa empresa, String desde, String hasta, Integer pagina, Integer items);
 
 
 }
