@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lowagie.text.DocumentException;
 import com.prueba.dto.ComparativoInventarioDTO;
+import com.prueba.dto.ComparativoUbicacionDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Ubicacion;
@@ -241,7 +242,7 @@ public class ReportesController {
 		String headerValue = "attachment; filename=diferencias" + ubicacion.getNombre() + "_INV-" + idinventario +"  "+ currentDateTime + ".pdf";
 		response.setHeader(headerKey, headerValue);
 		
-		List<ComparativoInventarioDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
+		List<ComparativoUbicacionDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
 		System.out.println("Enviando lista para generar pdf");
 		ReporteDiferenciasPDF exporter = new ReporteDiferenciasPDF(comparativo, usuario, ubicacion); 
         exporter.export(response);
@@ -249,14 +250,14 @@ public class ReportesController {
 	
 	@GetMapping("/diferenciainventario")
 	@Operation(summary = "Crea un reporte de diferencias de ubicacion vs inventario", description = "Retorna un reporte con las diferencias de ubicacion vs inventario, paginado")
-	public Page<ComparativoInventarioDTO> diferenciainventario(
+	public Page<ComparativoUbicacionDTO> diferenciainventario(
 			@RequestParam Long idubicacion,
 			@RequestParam Long idinventario,
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
 			@RequestParam(required=false) Long nit) {
 		
-		List<ComparativoInventarioDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
+		List<ComparativoUbicacionDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
 		Pageable pageable = null;
 		if(items == 0) {
 			pageable = PageRequest.of(pagina, 10);
@@ -269,7 +270,7 @@ public class ReportesController {
 		int end = Math.min((start + pageable.getPageSize()), comparativo.size());
 		System.out.println(comparativo.size());
 		System.out.println(pagina + pageable.getPageSize());
-		Page<ComparativoInventarioDTO> pages = new PageImpl<ComparativoInventarioDTO> (comparativo.subList(start, end), pageable, comparativo.size());
+		Page<ComparativoUbicacionDTO> pages = new PageImpl<ComparativoUbicacionDTO> (comparativo.subList(start, end), pageable, comparativo.size());
 
 		return pages;
 	}
@@ -293,7 +294,7 @@ public class ReportesController {
 		String headerValue = "attachment; filename=diferencias" + ubicacion.getNombre() + "_INV-" + idinventario +"  "+ currentDateTime + ".csv";
 		response.setHeader(headerKey, headerValue);
 		
-		List<ComparativoInventarioDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
+		List<ComparativoUbicacionDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
 		System.out.println("Enviando lista para generar pdf");
 		csvService.writeDiferenciaInventarioToCsv(response.getWriter(),comparativo, ubicacion);
 	}

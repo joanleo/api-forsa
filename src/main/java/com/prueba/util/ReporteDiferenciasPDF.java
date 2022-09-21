@@ -23,7 +23,7 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import com.prueba.dto.ComparativoInventarioDTO;
+import com.prueba.dto.ComparativoUbicacionDTO;
 import com.prueba.entity.Ubicacion;
 
 import com.prueba.security.entity.Usuario;
@@ -34,7 +34,7 @@ import com.prueba.security.entity.Usuario;
  */
 public class ReporteDiferenciasPDF {
 	
-	private List<ComparativoInventarioDTO> comparativo;
+	private List<ComparativoUbicacionDTO> comparativo;
 		
 	private Usuario usuarioCrea;
 	
@@ -44,12 +44,12 @@ public class ReporteDiferenciasPDF {
 	
 		
 		
-	public ReporteDiferenciasPDF(List<ComparativoInventarioDTO> comparativo, Usuario usuario, Ubicacion ubicacion) {
+	public ReporteDiferenciasPDF(List<ComparativoUbicacionDTO> comparativo, Usuario usuario, Ubicacion ubicacion) {
 		super();
 		this.comparativo = comparativo;
 		this.usuarioCrea = usuario;
 		this.ubicacion = ubicacion;
-		this.idinv = comparativo.get(0).getNumInv2();
+		this.idinv = comparativo.get(0).getNumInv();
 	}
 
 	private void tableHeader(PdfPTable table) {
@@ -98,9 +98,9 @@ public class ReporteDiferenciasPDF {
 	private void tableData(PdfPTable table) {
 
 		int count = 1;
-		System.out.println("inv1: "+comparativo.get(0).getNumInv1());
+		System.out.println("inv1: "+comparativo.get(0).getNumInv());
 		
-		for(ComparativoInventarioDTO detalle: comparativo) {
+		for(ComparativoUbicacionDTO detalle: comparativo) {
 			Font font = FontFactory.getFont(FontFactory.HELVETICA);
 			font.setSize(8);
 			
@@ -141,11 +141,11 @@ public class ReporteDiferenciasPDF {
 			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
-			phrase = new Phrase(detalle.getInv1() ? "Si":"No", font);
+			phrase = new Phrase(detalle.getUbicacion() ? "Si":"No", font);
 			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
-			phrase = new Phrase(detalle.getInv2() ? "Si":"No", font);
+			phrase = new Phrase(detalle.getInv() ? "Si":"No", font);
 			cell.setPhrase(phrase);
 			table.addCell(cell);
 			

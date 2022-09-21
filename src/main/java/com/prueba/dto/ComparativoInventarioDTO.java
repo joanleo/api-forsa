@@ -4,6 +4,10 @@ import java.util.Objects;
 
 import com.prueba.security.entity.Usuario;
 
+/**
+ * @author Joan Leon
+ *
+ */
 public class ComparativoInventarioDTO{
 	
 	private Usuario usuarioRealizo;
@@ -36,6 +40,17 @@ public class ComparativoInventarioDTO{
 		super();
 	}
 
+	/**
+	 * @param codigo
+	 * @param descripcion
+	 * @param familia
+	 * @param tipo
+	 * @param medidas
+	 * @param area
+	 * @param estado
+	 * @param numInv1
+	 * @param numInv2
+	 */
 	public ComparativoInventarioDTO(String codigo, String descripcion, String familia, String tipo,
 			String medidas, float area, String estado, Long numInv1, Long numInv2) {
 		super();

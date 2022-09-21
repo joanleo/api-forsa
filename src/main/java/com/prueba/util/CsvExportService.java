@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.prueba.dto.ComparativoInventarioDTO;
+import com.prueba.dto.ComparativoUbicacionDTO;
 import com.prueba.dto.EmpresaDTO;
 import com.prueba.dto.EstadoDTO;
 import com.prueba.dto.FabricanteDTO;
@@ -243,15 +244,15 @@ public class CsvExportService {
 	 * @param comparativo
 	 * @param ubicacion 
 	 */
-	public void writeDiferenciaInventarioToCsv(PrintWriter writer, List<ComparativoInventarioDTO> comparativo, Ubicacion ubicacion) {
+	public void writeDiferenciaInventarioToCsv(PrintWriter writer, List<ComparativoUbicacionDTO> comparativo, Ubicacion ubicacion) {
 		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
 			int count = 1;
 			csvPrinter.printRecord("No", "QR", "Descripcion", "Familia", "Tipo", "Medidas", "Área m2",
-					"Estado", ubicacion.getNombre(), "INV-"+comparativo.get(0).getNumInv2());
-    		for(ComparativoInventarioDTO producto: comparativo) {
+					"Estado", ubicacion.getNombre(), "INV-"+comparativo.get(0).getNumInv());
+    		for(ComparativoUbicacionDTO producto: comparativo) {
     				csvPrinter.printRecord(count, producto.getCodigo(), producto.getDescripcion(), producto.getFamilia(),
     						producto.getTipo(), producto.getMedidas(), producto.getArea(), producto.getEstado(), 
-    						producto.getInv1()? "Si":"No", producto.getInv2()? "Si":"No");
+    						producto.getUbicacion()? "Si":"No", producto.getInv()? "Si":"No");
     				count++;
     		}
 	    }catch (IOException e) {
