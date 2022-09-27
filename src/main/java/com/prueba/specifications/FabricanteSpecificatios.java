@@ -27,10 +27,16 @@ public class FabricanteSpecificatios {
 			if(fabricanteDTO.getNombre() != null) {
 			predicates.add(criteryBuilder.like(root.get("nombre"), "%" + fabricanteDTO.getNombre() + "%"));
 			}
+			if(fabricanteDTO.getEstaActivo() != null && fabricanteDTO.getEstaActivo() ) {
+				predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
+			}
+			if(fabricanteDTO.getEstaActivo() != null && !fabricanteDTO.getEstaActivo() ) {
+				predicates.add(criteryBuilder.isFalse(root.get("estaActivo").as(Boolean.class)));
+			}
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 			
-			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
+			
 			
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
