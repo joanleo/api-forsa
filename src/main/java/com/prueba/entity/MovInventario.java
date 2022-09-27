@@ -85,6 +85,9 @@ public class MovInventario implements Serializable{
 	
 	@Column(name = "vclistacodigos")
 	private String codigosSobrantes;
+	
+	@Column(name = "vcestadoinventario")
+	private String estadoInventario;
 
 
 	public String getCodigosSobrantes() {
@@ -153,6 +156,14 @@ public class MovInventario implements Serializable{
 
 	public void setNumDocumento(String numDocumento) {
 		this.numDocumento = numDocumento;
+	}
+
+	public String getEstadoInventario() {
+		return estadoInventario;
+	}
+
+	public void setEstadoInventario(String estadoInventario) {
+		this.estadoInventario = estadoInventario;
 	}
 
 	public void addActivo(Producto producto, Usuario usuario, Date date) {
