@@ -103,7 +103,7 @@ public class SalidaServiceImp implements SalidaService {
 		}
 		nuevaSalida = salidaRepo.saveAndFlush(nuevaSalida);
 		List<Producto> productos = salidaDTO.getDetalles();
-		Salida actualizar = salidaRepo.findByIdSalida(nuevaSalida.idSalida);
+		Salida actualizar = salidaRepo.findByIdSalida(nuevaSalida.getIdSalida());
 		if(Objects.isNull(actualizar)) {
 			throw new ResourceNotFoundException("Salida", "id", nuevaSalida.toString());
 		}
