@@ -61,7 +61,7 @@ public class TipoUbicacionServiceImpl implements TipoUbicacionService {
 		if(exist == null) {
 			tipoUbicacion.setEmpresa(empresa);
 			tipoUbicacion.setNombre(tipoUbicacionDTO.getNombre());
-			exist = tipoUbicRepo.save(tipoUbicacion);
+			exist = tipoUbicRepo.saveAndFlush(tipoUbicacion);
 		}else {
 			throw new ResourceAlreadyExistsException("Tipo de ubicacion", "nombre", tipoUbicacionDTO.getNombre());
 		}
