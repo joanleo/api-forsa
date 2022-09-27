@@ -13,7 +13,7 @@ public class FabricanteDTO {
 	//@NotBlank(message = "Este campo no puede ser nulo")
 	private Empresa empresa;
 	
-	private Boolean estaActivo=true;
+	private Boolean estaActivo;
 
 	public Long getNit() {
 		return nit;
