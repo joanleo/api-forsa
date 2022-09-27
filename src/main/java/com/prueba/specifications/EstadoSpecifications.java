@@ -32,16 +32,22 @@ public class EstadoSpecifications {
 			
 			if(estadoDTO.getId() != null) {
 				predicates.add(criteryBuilder.like(root.get("id").as(String.class), "%"+estadoDTO.getId()+ "%"));
-				}
-				if(estadoDTO.getTipo() != null) {
+			}
+			if(estadoDTO.getTipo() != null) {
 				predicates.add(criteryBuilder.like(root.get("tipo"), "%"+estadoDTO.getTipo()+ "%"));
-				}
-				
-				predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
-				
+			}
+			if(estadoDTO.getEstaActivo() != null && estadoDTO.getEstaActivo()) {
 				predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
+			}
+			if(estadoDTO.getEstaActivo() != null && !estadoDTO.getEstaActivo()) {
+				predicates.add(criteryBuilder.isFalse(root.get("estaActivo").as(Boolean.class)));
+			}
 				
-				return criteryBuilder.and(predicates.toArray(new Predicate[0]));
+			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
+			
+			
+			
+			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
 	}
 
