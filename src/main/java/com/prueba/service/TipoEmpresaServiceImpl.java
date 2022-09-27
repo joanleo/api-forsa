@@ -34,9 +34,9 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 		TipoEmpresa tipoEmpresa = new TipoEmpresa();
 		TipoEmpresa exist = tipoEmpresaRepo.findByTipo(tipoEmpresaDTO.getTipo());
 		if (exist == null) {
-			System.out.println("La empresa no existe");
+			System.out.println("EL Tipo empresa no existe");
 			tipoEmpresa.setTipo(tipoEmpresaDTO.getTipo());
-			exist = tipoEmpresaRepo.save(tipoEmpresa);
+			exist = tipoEmpresaRepo.saveAndFlush(tipoEmpresa);
 		} else {
 			throw new ResourceAlreadyExistsException("Tipo de empresa", "nombre", tipoEmpresaDTO.getTipo());
 		}
