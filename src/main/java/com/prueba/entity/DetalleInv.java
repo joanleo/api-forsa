@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.prueba.security.entity.Usuario;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "mov_det_inventarios")
@@ -34,7 +35,7 @@ public class DetalleInv implements Serializable{
 	private MovInventario movimiento;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("idPieza")
+	@JoinColumn(name = "vccodigopieza", referencedColumnName = "vccodigopieza")
 	private Producto producto;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -42,7 +43,12 @@ public class DetalleInv implements Serializable{
 	private Usuario usuarioConfirma;
 	
 	@Column(name = "dfecha_confirma")
-	public Date fechaConfirma;	
+	public Date fechaConfirma;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
+    private Empresa empresa;
 
 	public DetalleInv() {
 		super();
@@ -93,6 +99,14 @@ public class DetalleInv implements Serializable{
 
 	public void setFechaConfirma(Date fechaConfirma) {
 		this.fechaConfirma = fechaConfirma;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 
 	@Override

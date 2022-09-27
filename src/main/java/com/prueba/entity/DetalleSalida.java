@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.prueba.security.entity.Usuario;
 
@@ -47,6 +48,11 @@ public class DetalleSalida implements Serializable {
 	
 	@Column(name = "dfecha_confirma")
 	public Date fechaConfirma;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
+    private Empresa empresa;
 
 	public DetalleSalida(Salida salida, Producto producto) {
 		super();
@@ -101,6 +107,14 @@ public class DetalleSalida implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 
 	@Override

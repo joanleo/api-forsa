@@ -17,7 +17,7 @@ public class DetalleInv_id implements Serializable{
 	@Column(name = "nidmov")
 	private Long idMov;
 	
-	@Column(name = "nid_pieza")
+	@Column(name = "nidpieza")
 	private Integer idPieza;
 
 	public DetalleInv_id() {
