@@ -38,7 +38,7 @@ public class ProductSpecifications {
 				predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+searchDTO.getDescripcion()+"%"));
 			}
 			if(searchDTO.getArea() != null && !searchDTO.getArea().isEmpty()) {
-				predicates.add(criteryBuilder.equal(root.get("area"), searchDTO.getArea()));
+				predicates.add(criteryBuilder.equal(root.get("area"), Float.parseFloat(searchDTO.getArea())));
 			}
 			if(searchDTO.getOrden() != null) {
 				predicates.add(criteryBuilder.like(root.get("orden"), "%"+searchDTO.getOrden()+"%"));
