@@ -107,7 +107,7 @@ public class Producto implements Serializable{
     private Boolean importado = false;
     
     @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
-    @JoinColumn(name = "nidusuario_recibe")
+    @JoinColumn(name = "nidusuario_recibe", referencedColumnName = "nidusuario")
     private Usuario reviso;
     
     @Column(name = "vcmedidas")
@@ -133,7 +133,7 @@ public class Producto implements Serializable{
 	public String estadoSalida;
     
     @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
-    @JoinColumn(name = "nidusuario_crea")
+    @JoinColumn(name = "nidusuario_crea", referencedColumnName = "nidusuario")
     Usuario usuarioCrea;
     
     @Column(name = "npallet")
