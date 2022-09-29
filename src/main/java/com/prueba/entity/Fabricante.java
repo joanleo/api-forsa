@@ -46,7 +46,7 @@ public class Fabricante {
     private Empresa empresa;
     
     @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
-    private Boolean estaActivo;
+    private Boolean estaActivo=true;
     
 	public Empresa getEmpresa() {
 		return empresa;
@@ -89,6 +89,9 @@ public class Fabricante {
 	}
 
 	
+	public Fabricante() {
+		super();
+	}
 	
 	
 	public Fabricante(Long nit) {
@@ -96,8 +99,11 @@ public class Fabricante {
 		this.nit = nit;
 	}
 
-	public Fabricante() {
+
+	public Fabricante(Long nit, String nombre) {
 		super();
+		this.nit = nit;
+		this.nombre = nombre;
 	}
 
 	@Override
