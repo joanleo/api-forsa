@@ -52,14 +52,13 @@ public class ReporteTrasladoPDF {
 	        font.setColor(Color.WHITE);
 	        font.setSize(9);
 	        
-	        cell.setPhrase(new Phrase("Item", font));
+	        cell.setPhrase(new Phrase("No", font));
 	        table.addCell(cell);
 	         
-	        cell.setPhrase(new Phrase("Código de pieza", font));
-	        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+	        cell.setPhrase(new Phrase("QR", font));
 	        table.addCell(cell);
 	         
-	        cell.setPhrase(new Phrase("Nombre", font));
+	        cell.setPhrase(new Phrase("Descripcion", font));
 	        table.addCell(cell);
 	        
 	        cell.setPhrase(new Phrase("Origen", font));
@@ -109,31 +108,33 @@ public class ReporteTrasladoPDF {
 			table.addCell(cell);
 			
 			phrase = new Phrase(producto.getCodigoPieza(), font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
-			phrase = new Phrase(producto.getFabricante().getNombre(), font);
-			cell = new PdfPCell(phrase);
+			phrase = new Phrase(producto.getDescripcion(), font);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
 			phrase = new Phrase(traslado.getOrigen().getNombre(), font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(cell);
 			
 			phrase = new Phrase(traslado.getDestino().getNombre(), font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
 			phrase = new Phrase(confirmadoPor, font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
 			phrase = new Phrase(recibidoPor, font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
 			phrase = new Phrase(fechaRecibido, font);
-			cell = new PdfPCell(phrase);
+			cell.setPhrase(phrase);
 			table.addCell(cell);
 			
 			count++;
@@ -163,7 +164,7 @@ public void export(HttpServletResponse response) throws DocumentException, IOExc
         Paragraph fechaCreacion = new Paragraph("Fecha de creacion: " + currentDateTime, font1);
         fechaCreacion.setAlignment(Paragraph.ALIGN_RIGHT);
         
-        Paragraph porden =  new Paragraph("REALIZADO POR: " + traslado.getUsuarioEnvio().getNombre().toUpperCase() + "         DOCUMENTO: " + traslado.getNumDocumento().toUpperCase(), font1);
+        Paragraph porden =  new Paragraph("REALIZADO POR: " + traslado.getUsuarioEnvio().getNombre().toUpperCase() + "         DOCUMENTO: TR-" + traslado.getIdTraslado(), font1);
         porden.setAlignment(Paragraph.ALIGN_LEFT);
         porden.setSpacingBefore(30);
         
@@ -178,7 +179,7 @@ public void export(HttpServletResponse response) throws DocumentException, IOExc
         
         PdfPTable table = new PdfPTable(8);
         table.setWidthPercentage(100f);
-        //table.setWidths(new float[] {0.6f, 2.0f, 2.0f, 0.8f, 1.5f, 2.0f, 2.0f, 2.0f, 0.7f, 1.0f});
+        table.setWidths(new float[] {0.5f, 1.0f, 3.0f, 1.2f, 1.2f, 1.8f, 1.8f, 1.8f});
         table.setSpacingBefore(10);
          
         tableHeader(table);

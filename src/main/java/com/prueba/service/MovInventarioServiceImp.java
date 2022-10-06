@@ -53,7 +53,7 @@ public class MovInventarioServiceImp implements MovInventarioService {
 		inventario.setEmpresa(movInventarioDto.getEmpresa());
 		inventario = movInvRepo.save(inventario);
 		List<Producto> productos = movInventarioDto.getProductos();
-		Integer idInventario = inventario.getIdMov();
+		Long idInventario = inventario.getIdMov();
 		MovInventario actualizar = movInvRepo.findByidMov(idInventario);
 		for(Producto producto: productos) {
 			Producto activo = productoRepo.findByCodigoPieza(producto.getCodigoPieza());
@@ -85,7 +85,7 @@ public class MovInventarioServiceImp implements MovInventarioService {
 	}
 
 	@Override
-	public MovInventario getInventario(Integer id) {
+	public MovInventario getInventario(Long id) {
 
 		MovInventario inventario = movInvRepo.findByidMov(id);
 		if(Objects.isNull(inventario)) {
@@ -93,6 +93,30 @@ public class MovInventarioServiceImp implements MovInventarioService {
 			
 		}
 		return inventario;
+	}
+
+	@Override
+	public List<MovInventario> listado(Empresa empresa) {
+		List<MovInventario> inventarios = movInvRepo.findByEmpresa(empresa);
+		return inventarios;
+	}
+
+	@Override
+	public List<MovInventario> findNumeroInv(String letras, Empresa empresa) {
+		List<MovInventario> inventarios = movInvRepo.findAll(inventarioSpec.getInvenId(letras, empresa));
+		return inventarios;
+	}
+
+	@Override
+	public Page<MovInventario> searchInvBetweenDate(Empresa empresa, String desde, String hasta, Integer pagina, Integer items) {
+		Long nitempresa = empresa.getNit();
+		System.out.println(hasta);
+		if(items == 0) {
+			Page<MovInventario> inventarios = movInvRepo.findBetweenDay(nitempresa, desde, hasta, PageRequest.of(0, 10));
+			return inventarios;			
+		}
+		Page<MovInventario> inventarios = movInvRepo.findBetweenDay(nitempresa, desde, hasta, PageRequest.of(pagina, items));
+		return inventarios;	
 	}
 
 

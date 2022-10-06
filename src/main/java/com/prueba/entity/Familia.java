@@ -1,7 +1,6 @@
 package com.prueba.entity;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -42,7 +41,7 @@ public class Familia {
     @JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;
     
-    @Column(name = "vcsigla", length = 3)
+    @Column(name = "vcsigla", length = 5)
     private String sigla;
     
     @Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")

@@ -13,13 +13,16 @@ import com.prueba.dto.SearchDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Fabricante;
 import com.prueba.entity.Producto;
+
+import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.FabricanteRepository;
 
 @Component
 public class ProductSpecifications {
 
 	@Autowired
-	private FabricanteRepository fabricateRepo;
+	private FabricanteRepository fabricanteRepo;
+	
 
 	public Specification<Producto> getProductos(SearchDTO searchDTO, Empresa empresa){
 		return (root, query, criteryBuilder) ->{
@@ -37,13 +40,14 @@ public class ProductSpecifications {
 				predicates.add(criteryBuilder.like(root.get("descripcion"), "%"+searchDTO.getDescripcion()+"%"));
 			}
 			if(searchDTO.getArea() != null && !searchDTO.getArea().isEmpty()) {
-				predicates.add(criteryBuilder.like(root.get("area").as(String.class), "%"+searchDTO.getArea().toString()+"%"));
+				predicates.add(criteryBuilder.equal(root.get("area"), Float.parseFloat(searchDTO.getArea())));
 			}
 			if(searchDTO.getOrden() != null) {
 				predicates.add(criteryBuilder.like(root.get("orden"), "%"+searchDTO.getOrden()+"%"));
 			}
 			if(searchDTO.getFabricante() != null) {
-				Fabricante fabricante = fabricateRepo.findByNitAndEmpresaAndEstaActivoTrue(searchDTO.getFabricante().getNit(), empresa);
+				Fabricante fabricante = fabricanteRepo.findByNitAndEmpresa(searchDTO.getFabricante().getNit(), empresa)
+						.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "nit", searchDTO.getFabricante().getNit()));
 				predicates.add(criteryBuilder.equal(root.get("fabricante"), fabricante));
 			}
 			if(searchDTO.getFamilia() != null) {
@@ -84,7 +88,9 @@ public class ProductSpecifications {
 			if(searchDTO.getReviso() != null) {
 				predicates.add(criteryBuilder.equal(root.get("reviso"), searchDTO.getReviso()));
 			}
-			
+			if(searchDTO.getEstaActivo() == null) {
+				predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));				
+			}
 			
 			
 			query.orderBy(criteryBuilder.desc(root.get("descripcion")));
@@ -132,6 +138,7 @@ public class ProductSpecifications {
 				predicates.add(criteryBuilder.isTrue(root.get("importado").as(Boolean.class)));
 				predicates.add(criteryBuilder.isTrue(root.get("verificado").as(Boolean.class)));
 			}
+			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
 						
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};

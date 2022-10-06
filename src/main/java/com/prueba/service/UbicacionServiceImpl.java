@@ -1,6 +1,7 @@
 package com.prueba.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -15,6 +16,7 @@ import com.prueba.dto.UbicacionDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Ubicacion;
 import com.prueba.exception.ResourceAlreadyExistsException;
+import com.prueba.exception.ResourceCannotBeAccessException;
 import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.UbicacionRepository;
@@ -22,6 +24,7 @@ import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.specifications.UbicacionSpecifications;
 import com.prueba.util.UtilitiesApi;
+
 
 @Service
 public class UbicacionServiceImpl implements UbicacionService {
@@ -57,12 +60,16 @@ public class UbicacionServiceImpl implements UbicacionService {
 		ubicacionDTO.setEmpresa(empresa);
 		
 		Ubicacion ubicacion = mapearDTO(ubicacionDTO);
-		Ubicacion exist = ubicacionRepo.findByNombreAndEmpresa(ubicacion.getNombre(), ubicacionDTO.getEmpresa());
-		
-		if(exist == null) {
-			ubicacionRepo.save(ubicacion);
+		Ubicacion exist = ubicacionRepo.findByNombreAndEmpresa(ubicacionDTO.getNombre(), ubicacionDTO.getEmpresa());
+		String verNombre = ubicacionDTO.getNombre().trim();
+		if(verNombre.length() > 0) {
+			if(exist == null) {
+				ubicacionRepo.save(ubicacion);
+			}else {
+				throw new ResourceAlreadyExistsException("Ubicacion", "nombre", ubicacion.getNombre());
+			}			
 		}else {
-			throw new ResourceAlreadyExistsException("Ubicacion", "nombre", ubicacion.getNombre());
+			throw new ResourceCannotBeAccessException("El nombre debe ser un nombre valildo, no solo espacios");
 		}
 		
 		return mapearEntidad(ubicacion);
@@ -86,11 +93,22 @@ public class UbicacionServiceImpl implements UbicacionService {
 	public UbicacionDTO update(Long id, UbicacionDTO ubicacionDTO) {
 		Ubicacion ubicacion = ubicacionRepo.findByIdAndEmpresa(id, ubicacionDTO.getEmpresa())
 				.orElseThrow(() -> new ResourceNotFoundException("Ubicacion", "id", id));
-		
-		ubicacion.setCiudad(ubicacionDTO.getCiudad());
-		ubicacion.setDireccion(ubicacionDTO.getDireccion());
-		ubicacion.setNombre(ubicacionDTO.getNombre());
-		ubicacion.setTipo(ubicacionDTO.getTipo());
+		Ubicacion ubicacionNombre = ubicacionRepo.findByNombreAndEmpresa(ubicacionDTO.getNombre(), ubicacionDTO.getEmpresa());
+		if(!Objects.isNull(ubicacionNombre)) {
+			throw new ResourceAlreadyExistsException("Ubicacion", "nombre", ubicacionDTO.getNombre());
+		}
+		if(ubicacionDTO.getNombre() != null) {
+			ubicacion.setNombre(ubicacionDTO.getNombre());			
+		}
+		if(ubicacionDTO.getCiudad() != null) {
+			ubicacion.setCiudad(ubicacionDTO.getCiudad());			
+		}
+		if(ubicacionDTO.getDireccion() != null) {
+			ubicacion.setDireccion(ubicacionDTO.getDireccion());			
+		}
+		if(ubicacionDTO.getTipo() != null) {
+			ubicacion.setTipo(ubicacionDTO.getTipo());			
+		}
 		
 		ubicacionRepo.save(ubicacion);
 		
@@ -115,7 +133,13 @@ public class UbicacionServiceImpl implements UbicacionService {
 		Ubicacion ubicacion  = ubicacionRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Ubicacion", "id", id));
 		
-		ubicacion.setEstaActivo(false);
+		Boolean estado = ubicacion.getEstaActivo();
+		if(estado) {
+			ubicacion.setEstaActivo(false);			
+		}else {
+			ubicacion.setEstaActivo(true);
+		}
+
 		ubicacionRepo.save(ubicacion);
 		
 	}

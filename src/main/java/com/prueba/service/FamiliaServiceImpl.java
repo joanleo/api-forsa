@@ -13,6 +13,7 @@ import com.prueba.dto.FamiliaDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Familia;
 import com.prueba.exception.ResourceAlreadyExistsException;
+import com.prueba.exception.ResourceCannotBeAccessException;
 import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.FamiliaRepository;
@@ -34,13 +35,22 @@ public class FamiliaServiceImpl implements FamiliaService {
 
 	@Override
 	public FamiliaDTO create(FamiliaDTO familiaDto, Empresa empresa) {
-		Familia familia = mapearDTO(familiaDto);
+		Familia familia = new Familia();
 		Familia exist = familiaRepo.findByNombreAndEmpresa(familia.getNombre(), empresa);
-		if(exist == null) {
-			exist = familiaRepo.saveAndFlush(familia);
+		String verNombre = familiaDto.getNombre().trim();
+		if(verNombre.length() > 0) {
+			if(exist == null) {
+				familia.setEmpresa(empresa);
+				familia.setNombre(familiaDto.getNombre());
+				familia.setSigla(familiaDto.getSigla());
+				exist = familiaRepo.saveAndFlush(familia);
+			}else {
+				throw new ResourceAlreadyExistsException("Ubicacion", "nombre", familiaDto.getNombre());
+			}			
 		}else {
-			throw new ResourceAlreadyExistsException("Familia ", "nombre" , familia.getNombre());
+			throw new ResourceCannotBeAccessException("El nombre debe ser un nombre valildo, no solo espacios");
 		}
+		
 		return mapearEntidad(exist);
 	}
 
@@ -60,25 +70,23 @@ public class FamiliaServiceImpl implements FamiliaService {
 
 	@Override
 	public FamiliaDTO update(Long id, FamiliaDTO familiaDTO, Empresa empresa) {
-		if(familiaDTO.getEmpresa() == null) {
-			familiaDTO.setEmpresa(empresa);
-		}
+
 		Familia familia = familiaRepo.findByIdAndEmpresa(id, familiaDTO.getEmpresa())
 				.orElseThrow(() -> new ResourceNotFoundException("Familia", "id", id));
 
 		if(familiaDTO.getNombre() != null) {
-			familia.setNombre(familiaDTO.getNombre());			
-		}
-		if(familiaDTO.getId() != null) {
-			familia.setId(familiaDTO.getId());			
+			Familia familiaUpdate = familiaRepo.findByNombreAndEmpresa(familiaDTO.getNombre(), empresa);
+			if(familiaUpdate == null) {
+				familia.setNombre(familiaDTO.getNombre());							
+			}else {
+				throw new ResourceAlreadyExistsException("Familia", "nombre", familiaDTO.getNombre());
+			}
 		}
 		if(familiaDTO.getSigla() != null) {
 			familia.setSigla(familiaDTO.getSigla());			
 		}
-		if(familiaDTO.getEmpresa() != null) {
-			familia.setEmpresa(familiaDTO.getEmpresa());			
-		}
-		familiaRepo.save(familia);
+
+		familia = familiaRepo.saveAndFlush(familia);
 		return mapearEntidad(familia);
 	}
 
@@ -97,7 +105,13 @@ public class FamiliaServiceImpl implements FamiliaService {
 	public void unable(Long id, Empresa empresa) {
 		Familia familia = familiaRepo.findByIdAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Familia", "id", id));
-		familia.setEstaActivo(false);
+		Boolean estado = familia.getEstaActivo();
+		if(estado) {
+			familia.setEstaActivo(false);			
+		}else {
+			familia.setEstaActivo(true);
+		}
+		
 		familiaRepo.save(familia);
 		
 	}

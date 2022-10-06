@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,9 +31,11 @@ import com.prueba.dto.MovInventarioDTO;
 import com.prueba.dto.UsuarioDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.MovInventario;
+import com.prueba.repository.ProductoRepository;
 import com.prueba.security.entity.Usuario;
 import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.service.MovInventarioService;
+import com.prueba.util.CsvExportService;
 import com.prueba.util.ReporteInventarioPDF;
 import com.prueba.util.UtilitiesApi;
 
@@ -59,6 +62,12 @@ public class MovInvController {
 	@Autowired
 	private ModelMapper modelMapper;
 	
+	@Autowired
+	private ProductoRepository productoRepo;
+	
+	@Autowired
+	private CsvExportService csvService;
+	
 	@PostMapping
 	@Operation(summary = "Crea un inventario", description = "Crea un nuevo inventario")
 	public ResponseEntity<MovInventario> create(@RequestBody MovInventarioDTO movInventarioDto,
@@ -84,9 +93,36 @@ public class MovInvController {
 	}
 	
 	@GetMapping
+	@Operation(summary = "Obtiene los inventarios existentes", description = "Retorna los inventarios "
+			+ "contenga los valores  indicadas en la variable letras. Si no se incluye ningun valor retorna todos los inventarios existentes")
+	public List<MovInventario> list(@RequestParam(required=false) String letras,
+												 @RequestParam(required=false) Long nit){
+		
+		Empresa empresa;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		if(nit != null) {
+			empresa = util.obtenerEmpresa(nit);
+		}else {
+			empresa = usuario.getEmpresa();			
+		}
+		
+		if(letras == null) {
+			List<MovInventario> inventarios = movInvService.listado(empresa);
+			return inventarios;
+		}else {
+			System.out.println("Controller Numero de inventario: "+letras);
+			List<MovInventario> inventarios = movInvService.findNumeroInv(letras, empresa);
+			return inventarios;
+		}
+		
+	}
+	
+	@GetMapping("/indexados")
 	@Operation(summary = "Pagina los inventarios existentes", description = "Retorna los inventarios que se encuentren en el rango de fechas dado (formato de fecha 'yyyy-MM-dd') o que en su nombre "
 			+ "	contenga los valores  indicadas en la variable letras. Si no se incluye ningun valor retorna todos los inventarios existentes")
-	public ApiResponse<Page<MovInventario>> list(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+	public ApiResponse<Page<MovInventario>> listPaginado(@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 												 @RequestParam(required=false, defaultValue = "10") Integer items,
 												 @RequestParam(required=false) String letras,
 												 @RequestParam(required=false) Long nit,
@@ -103,26 +139,32 @@ public class MovInvController {
 			empresa = usuario.getEmpresa();			
 		}
 		
-		if(letras != null && desde != null) {
+		if(letras != null) {
 			Page<MovInventario> inventarios = movInvService.searchInv(letras, empresa, pagina, items);
 			return new ApiResponse<>(inventarios.getSize(), inventarios);
-		}else {
-			Page<MovInventario> inventarios = movInvService.list(empresa, pagina, items);
+		}else if(desde != null){
+			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String hastaFormat = dateFormatter.format(hasta);
+			String desdeFormat = dateFormatter.format(desde);
+			System.out.println(hastaFormat);
+			Page<MovInventario> inventarios = movInvService.searchInvBetweenDate(empresa, desdeFormat, hastaFormat, pagina, items);
 			return new ApiResponse<>(inventarios.getSize(), inventarios);
 		}
+		Page<MovInventario> inventarios = movInvService.list(empresa, pagina, items);
+		return new ApiResponse<>(inventarios.getSize(), inventarios);
 		
 	}
 	
 	@GetMapping("/detalle/{id}")
 	@Operation(summary = "Encuentra un inventario", description = "Retorna un inventario con detalle segun el numero de inventario")
-	public ResponseEntity<MovInventario> getInventario(@PathVariable Integer id){
+	public ResponseEntity<MovInventario> getInventario(@PathVariable Long id){
 		return ResponseEntity.ok(movInvService.getInventario(id));
 	}
 	
 	@GetMapping("/detalle/{id}/descarga")
 	@Operation(summary = "Crea un inventario en formato PDF", description = "Retorna un inventario con detalle segun el numero de inventario")
 	public void exportToPDF(HttpServletResponse response,
-							@PathVariable Integer id) throws DocumentException, IOException {
+							@PathVariable Long id) throws DocumentException, IOException {
 		response.setContentType("application/pdf");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
@@ -132,8 +174,25 @@ public class MovInvController {
 		
 		MovInventario inventario = movInvService.getInventario(id);
 		
-		ReporteInventarioPDF exportar = new ReporteInventarioPDF(inventario);
+		ReporteInventarioPDF exportar = new ReporteInventarioPDF(inventario, productoRepo);
 		exportar.export(response);
+		
+	}
+	
+	@GetMapping("/detalle/{id}/descarga/csv")
+	@Operation(summary = "Descarga un inventario en formato csv", description = "Retorna un inventario con detalle segun el numero de inventario")
+	public void exportToCsv(HttpServletResponse response,
+							@PathVariable Long id) throws IOException {
+		response.setContentType("application/x-download");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=reporteInventario_" + id + "_" + currentDateTime + ".csv";
+		response.setHeader(headerKey, headerValue);
+		
+		MovInventario inventario = movInvService.getInventario(id);
+		
+		csvService.writeInvToCsv(response.getWriter(), inventario); 
 		
 	}
 

@@ -10,8 +10,11 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.prueba.dto.ComparativoInventarioDTO;
+import com.prueba.dto.ComparativoUbicacionDTO;
 import com.prueba.dto.EmpresaDTO;
 import com.prueba.dto.EstadoDTO;
 import com.prueba.dto.FabricanteDTO;
@@ -20,10 +23,15 @@ import com.prueba.dto.TipoEmpresaDTO;
 import com.prueba.dto.TipoMovDTO;
 import com.prueba.dto.TipoUbicacionDTO;
 import com.prueba.dto.UbicacionDTO;
+import com.prueba.entity.DetalleInv;
+import com.prueba.entity.MovInventario;
 import com.prueba.entity.Producto;
 import com.prueba.entity.TipoActivo;
+import com.prueba.entity.Ubicacion;
+import com.prueba.repository.ProductoRepository;
 import com.prueba.security.dto.PoliticaDTO;
 import com.prueba.security.dto.RutinaDTO;
+import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
 
 
@@ -31,6 +39,9 @@ import com.prueba.security.entity.Usuario;
 public class CsvExportService {
 
 	private static final Logger log = LoggerFactory.getLogger(CsvExportService.class);
+	
+	@Autowired
+	private ProductoRepository productoRepo;
 
     public void writeProductsToCsv(Writer writer, List<Producto> productos) {
 
@@ -196,7 +207,7 @@ public class CsvExportService {
     			csvPrinter.printRecord(politica.getNombre());
     			csvPrinter.printRecord("Id politica", "Nombre permiso", "Url", "Permitido");
     			for(PoliticaDTO detalle: politica.getPoliticas()) {
-    				csvPrinter.printRecord(detalle.getIdPolitica(), detalle.getNombre(), detalle.getUrl(), detalle.getPermiso());
+    				csvPrinter.printRecord(detalle.getIdPolitica(), detalle.getNombre(), detalle.getUrl(), detalle.getPermiso()==true?"Si":"No");
     			}
     		}
 	    }catch (IOException e) {
@@ -226,5 +237,113 @@ public class CsvExportService {
 	    }catch (IOException e) {
 	        log.error("Error en la generacion del CSV  ", e);
 	    }
+	}
+
+	/**
+	 * @param writer 
+	 * @param comparativo
+	 * @param ubicacion 
+	 */
+	public void writeDiferenciaInventarioToCsv(PrintWriter writer, List<ComparativoUbicacionDTO> comparativo, Ubicacion ubicacion) {
+		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			int count = 1;
+			csvPrinter.printRecord("No", "QR", "Descripcion", "Familia", "Tipo", "Medidas", "Área m2",
+					"Estado", ubicacion.getNombre(), "INV-"+comparativo.get(0).getNumInv());
+    		for(ComparativoUbicacionDTO producto: comparativo) {
+    				csvPrinter.printRecord(count, producto.getCodigo(), producto.getDescripcion(), producto.getFamilia(),
+    						producto.getTipo(), producto.getMedidas(), producto.getArea(), producto.getEstado(), 
+    						producto.getUbicacion()? "Si":"No", producto.getInv()? "Si":"No");
+    				count++;
+    		}
+	    }catch (IOException e) {
+	        log.error("Error en la generacion del CSV  ", e);
+	    }
+		
+	}
+
+	/**
+	 * @param writer
+	 * @param comparativo
+	 */
+	public void compararInventariosToCsv(PrintWriter writer, List<ComparativoInventarioDTO> comparativo) {
+		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			int count = 1;
+			csvPrinter.printRecord("No", "QR", "Descripcion", "Familia", "Tipo", "Medidas", "Área m2",
+					"Estado", "INV-"+comparativo.get(0).getNumInv1(), "INV-"+comparativo.get(0).getNumInv2());
+    		for(ComparativoInventarioDTO producto: comparativo) {
+    				csvPrinter.printRecord(count, producto.getCodigo(), producto.getDescripcion(), producto.getFamilia(),
+    						producto.getTipo(), producto.getMedidas(), producto.getArea(), producto.getEstado(), 
+    						producto.getInv1()? "Si":"No", producto.getInv2()? "Si":"No");
+    				count++;
+    		}
+	    }catch (IOException e) {
+	        log.error("Error en la generacion del CSV  ", e);
+	    }
+		
+	}
+
+	/**
+	 * @param writer
+	 * @param roles
+	 */
+	public void writeRoles(PrintWriter writer, List<Rol> roles) {
+		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			csvPrinter.printRecord("Id", "Nombre", "Activo");
+    		for(Rol rol: roles) {
+    				csvPrinter.printRecord(rol.getIdRol(), rol.getNombre(),	rol.getEstaActivo()? "Si":"No");
+    		}
+	    }catch (IOException e) {
+	        log.error("Error en la generacion del CSV  ", e);
+	    }
+		
+	}
+
+	/**
+	 * @param writer
+	 * @param inventario
+	 */
+	public void writeInvToCsv(PrintWriter writer, MovInventario inventario) {
+		try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+			csvPrinter.printRecord("REPORTE DE INVENTARIO");
+			csvPrinter.printRecord("REALIZADO POR:",inventario.getRealizo().getNombre(), 
+					"DOCUMENTO:", "INV-"+inventario.getIdMov(),
+					"UBICACION:", inventario.getUbicacion().getNombre());
+			csvPrinter.printRecord("");
+			List<DetalleInv> detalles = inventario.getDetalles();
+			String[] sobrantes = inventario.getCodigosSobrantes().split("\\|");
+			int count = 1;
+			csvPrinter.printRecord("No", "QR", "Descripcion", "Familia", "Tipo", "Medidas", "Área m2",
+					"Ubicacion", "Estado");
+    		for(DetalleInv detalle: detalles) {
+    			Producto producto = detalle.getProducto();
+    				csvPrinter.printRecord(count, producto.getCodigoPieza(), producto.getDescripcion(),	
+    						producto.getFamilia().getSigla(), producto.getTipo().getNombre(), producto.getMedidas(),
+    						producto.getArea(), producto.getUbicacion().getNombre(), producto.getEstado().getTipo());
+    				count++;
+    		}
+    		if(sobrantes.length > 0) {
+    			int countSobrantes = 1;
+    			csvPrinter.printRecord("PIEZAS QUE NO PERTENECEN A ESTA UBICACION");
+    			csvPrinter.printRecord("");
+    			csvPrinter.printRecord("No", "QR", "Descripcion", "Familia", "Tipo", "Medidas", "Área m2",
+    					"Ubicacion", "Estado");
+    			for(String sobrante: sobrantes) {
+    				Producto producto = productoRepo.findByCodigoPieza(sobrante.trim());
+    				if(producto != null) {
+    					csvPrinter.printRecord(countSobrantes, producto.getCodigoPieza(), producto.getDescripcion(),	
+        						producto.getFamilia().getSigla(), producto.getTipo().getNombre(), producto.getMedidas(),
+        						producto.getArea(), producto.getUbicacion().getNombre(), producto.getEstado().getTipo());
+    					countSobrantes++;
+    				}else {
+    					csvPrinter.printRecord(countSobrantes, sobrante);
+    					countSobrantes++;
+    				}
+    			}
+    		}
+    		
+	    }catch (IOException e) {
+	        log.error("Error en la generacion del CSV  ", e);
+	    }
+		
 	}
 }

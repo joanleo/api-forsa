@@ -7,18 +7,20 @@ VALUES
 (3,'Cliente');
 
 INSERT INTO m_empresas
-(`vcnitempresa`,
+(`nid_empresa`,
+`vcnitempresa`,
 `vcnombre`,
 `nidtipo_empresa`)
 VALUES
-('2222','Metrolink sas',1);
+(1,'2222','Metrolink sas',1);
 
 INSERT INTO m_tipos_ubicacion
 (`nidtipo_ubicacion`,
 `vcnombre`,
 `vcnitempresa`)
 VALUES
-(1, 'Obra', '2222');
+(1, 'Obra', '2222'),
+(2, 'Almacen mercadeo', '2222');
 
 INSERT INTO m_ubicaciones
 (`nidubicacion`,
@@ -29,8 +31,8 @@ INSERT INTO m_ubicaciones
 `vcnitempresa`
 )
 VALUES
-(1, 'Cali', 'Calle Cra', 'Las flores 1', 1, '2222'),
-(2, 'Cali', 'Calle Cra', 'Las avenidas 1', 1, '2222');
+(1, 'Cali', 'Cra 50 # 13b-83', 'Tribeka', 1, '2222'),
+(2, 'Guachene', 'Zona Franca Permanente del Cauca- Etapa 1', 'Showroom', 2, '2222');
 
 INSERT INTO m_familias
 (`nidfamilia`,
@@ -48,12 +50,13 @@ VALUES
 (10, 'Accesorios', 'AC', '2222');
 
 INSERT INTO m_fabricantes
-(`vcnitfabricante`,
+(`nid_fabricante`,
+`vcnitfabricante`,
 `vcnombre`,
 `vcnitempresa`
 )
 VALUES
-('11111','Forsa sa', '2222');
+(1,'11111','Forsa sa', '2222');
 
 INSERT INTO m_estados
 (`nidestado`,
@@ -64,16 +67,13 @@ VALUES
 (2,'Regular', '2222'),
 (3,'Malo', '2222');
 
-<<<<<<< HEAD
-
-=======
->>>>>>> e030e3d312359efb1c1e385d7d162026b29ab30a
 INSERT INTO m_usuarios
-(`vcemail`,
+(`nidusuario`,
+`vcemail`,
 `vcnombre`,
 `vcpassword`,
 `vcusername`,
 `vcnitempresa`,
 `nidrol`)
 VALUES
-('jleon@metrolinkeu.com', 'Joan David Leon', '$2a$10$wTWky7f3N.ASn.Q1VN0u/e3q2.cIo/5A4C8XHFFUM7oiZLNbmF9GO', 'joan', '2222',1)
+(1,'jleon@metrolinkeu.com', 'Joan David Leon', '$2a$10$wTWky7f3N.ASn.Q1VN0u/e3q2.cIo/5A4C8XHFFUM7oiZLNbmF9GO', 'joan1', '2222',1)

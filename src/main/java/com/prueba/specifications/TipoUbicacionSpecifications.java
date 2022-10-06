@@ -23,13 +23,19 @@ public class TipoUbicacionSpecifications {
 			predicates.add(criteryBuilder.like(root.get("nit").as(String.class), "%" + tipoUbicacionDTO.getId()+ "%"));
 			}
 			if(tipoUbicacionDTO.getNombre() != null) {
+				System.out.println(tipoUbicacionDTO.getNombre());
 			predicates.add(criteryBuilder.like(root.get("nombre"), "%" +tipoUbicacionDTO.getNombre()+ "%"));
+			}
+			if(tipoUbicacionDTO.getEstaActivo() != null && tipoUbicacionDTO.getEstaActivo()) {
+				System.out.println(tipoUbicacionDTO.getEstaActivo());
+				predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));				
+			}
+			if(tipoUbicacionDTO.getEstaActivo() != null && !tipoUbicacionDTO.getEstaActivo()) {
+				predicates.add(criteryBuilder.isFalse(root.get("estaActivo").as(Boolean.class)));				
 			}
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
-			
-			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
-			
+						
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
 	}

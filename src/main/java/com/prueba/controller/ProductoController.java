@@ -242,7 +242,8 @@ public class ProductoController {
 	@PostMapping("/reconversion")
 	@Operation(summary = "Realiza la conversion de una pieza en una o varias mas", description = "Recibe un json con el codigo de la pieza padre y "
 			+ "una lista de objetos tipo ProductoDTO con la informacion de las piezas hijas. Retorna una lista con las piezas creadas")
-	public ResponseEntity<List<ProductoDTO>> reconversion(@RequestBody ReconversionDTO reconversion){
+	public ResponseEntity<List<ProductoDTO>> reconversion(@RequestBody ReconversionDTO reconversion,
+														  @RequestParam(required=false) Long nit){
 		
 		return new ResponseEntity<List<ProductoDTO>>(productoService.reconversionPieza(reconversion), HttpStatus.CREATED);
 	}

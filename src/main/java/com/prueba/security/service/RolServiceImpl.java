@@ -196,4 +196,27 @@ public class RolServiceImpl implements RolService{
 		
 	}
 
+	@Override
+	public void deshabilitar(Long idRole, Empresa empresa) {
+		Rol rol = rolRepo.findByIdRol(idRole);
+		if(Objects.isNull(rol)) {
+			throw new ResourceNotFoundException("Rol", "Id", idRole);
+		}
+		
+		Boolean estado = rol.getEstaActivo();
+		if(estado) {
+			rol.setEstaActivo(false);
+		}else {
+			rol.setEstaActivo(true);
+		}
+		
+		rolRepo.save(rol);
+	}
+
+	@Override
+	public List<Rol> buscarRoles(RolDTO rolDTO, Empresa empresa) {
+		List<Rol> roles = rolRepo.findAll(rolSpec.getRoles(rolDTO, empresa));
+		return roles;
+	}
+
 }

@@ -1,9 +1,5 @@
 package com.prueba.dto;
 
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import com.prueba.entity.TipoEmpresa;
 
 public class EmpresaDTO {
@@ -15,7 +11,7 @@ public class EmpresaDTO {
 	
 	private TipoEmpresa tipoEmpresa;
 	
-	private Boolean estaActivo=true;
+	private Boolean estaActivo;
 
 	public Long getNit() {
 		return nit;

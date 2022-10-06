@@ -32,5 +32,20 @@ public interface RolService {
 
 	public Politica actualizarPoliticar(Long idPolitica, Politica politica);
 
+	/**
+	 * @param id
+	 * @param empresa
+	 */
+	public void deshabilitar(Long id, Empresa empresa);
+
+	/**
+	 * @param rolDTO
+	 * @param empresa
+	 * @param pagina
+	 * @param items
+	 * @return
+	 */
+	public List<Rol> buscarRoles(RolDTO rolDTO, Empresa empresa);
+
 
 }

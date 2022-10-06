@@ -2,7 +2,6 @@ package com.prueba.security.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -19,10 +18,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.prueba.entity.DetalleRutina;
 import com.prueba.entity.Empresa;
@@ -32,9 +29,9 @@ import com.prueba.entity.Empresa;
 @Table(name = "m_roles")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
-@JsonIdentityInfo(
-		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "idRol")
+//@JsonIdentityInfo(
+//		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+//		  property = "idRol")
 public class Rol implements Serializable{
     /**
 	 * 

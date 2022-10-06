@@ -20,19 +20,23 @@ public class FamiliaSpecifications {
 			List<Predicate> predicates = new ArrayList<>();
 			
 			if(familiaDTO.getId() != null) {
-			predicates.add(criteryBuilder.like(root.get("id").as(String.class), "%"+familiaDTO.getId()+ "%"));
+				predicates.add(criteryBuilder.like(root.get("id").as(String.class), "%"+familiaDTO.getId()+ "%"));
 			}
 			if(familiaDTO.getNombre() != null) {
-			predicates.add(criteryBuilder.like(root.get("nombre"), "%"+familiaDTO.getNombre()+ "%"));
+				predicates.add(criteryBuilder.like(root.get("nombre"), "%"+familiaDTO.getNombre()+ "%"));
 			}
 			if(familiaDTO.getSigla() != null) {
 				predicates.add(criteryBuilder.like(root.get("sigla"), "%"+familiaDTO.getSigla()+ "%"));
-				}
+			}
+			if(familiaDTO.getEstaActivo() != null && familiaDTO.getEstaActivo()) {
+				predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
+			}
+			if(familiaDTO.getEstaActivo() != null && !familiaDTO.getEstaActivo()) {
+				predicates.add(criteryBuilder.isFalse(root.get("estaActivo").as(Boolean.class)));
+			}
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
-			
-			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
-			
+						
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
 	}

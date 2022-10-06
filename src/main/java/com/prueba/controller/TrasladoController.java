@@ -188,6 +188,7 @@ public class TrasladoController {
 	}
 	
 	@DeleteMapping("/{idtraslado}/eliminar/{codigopieza}")
+	@Operation(summary = "Elimina una pieza de un traslado", description = "Elimina una pieza de un traslado por su id")
 	public ResponseEntity<?> eliminarActivo(@PathVariable Long idtraslado,
 			@PathVariable String codigopieza){
 		trasladoService.eliminarPieza(idtraslado, codigopieza);

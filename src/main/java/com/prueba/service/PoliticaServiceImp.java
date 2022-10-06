@@ -31,7 +31,7 @@ import com.prueba.specifications.PoliticaSpecifications;
 @Service
 @Transactional
 public class PoliticaServiceImp implements PoliticaService {
-	
+		
 	@Autowired
 	private PoliticaRepository politicaRepo;
 	
@@ -43,6 +43,8 @@ public class PoliticaServiceImp implements PoliticaService {
 
 	@Override
 	public Set<RutinaDTO> buscarPoliticas(Rol rol, Empresa empresa) {
+		
+	
 		Rol esxiste = rolRepo.findByIdRol(rol.getIdRol());
 		if(Objects.isNull(esxiste)) {
 			throw new ResourceNotFoundException("Rol", "Id", rol.getIdRol());
@@ -98,7 +100,5 @@ public class PoliticaServiceImp implements PoliticaService {
 		Page<Politica> politicas = politicaRepo.findAll(politicaSpec.getPoliticas(nit), PageRequest.of(0, 10));
 		return politicas;
 	}
-
-
 
 }

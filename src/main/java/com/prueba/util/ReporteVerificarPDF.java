@@ -87,7 +87,7 @@ public class ReporteVerificarPDF {
 	}
 	
 	private void tableData(PdfPTable table) {
-		Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+		Font font = FontFactory.getFont(FontFactory.HELVETICA);
 		font.setSize(11);
 		int count = 1;
 		for(Producto producto: productos) {
@@ -125,15 +125,15 @@ public class ReporteVerificarPDF {
 				cell.setPhrase(phrase);
 				table.addCell(cell);
 				
-				phrase = new Phrase(producto.getUbicacion().getNombre(), font);
+				phrase = new Phrase(producto.getUbicacion() == null ? " ": producto.getUbicacion().getNombre(), font);
 				cell.setPhrase(phrase);
 				table.addCell(cell);
 				
-				phrase = new Phrase(producto.getEstado() == null ? " ":producto.getEstado().getTipo(), font);
+				phrase = new Phrase(producto.getEstado() == null ? " ": producto.getEstado().getTipo(), font);
 				cell.setPhrase(phrase);
 				table.addCell(cell);
 				
-				phrase = new Phrase(producto.getPallet().toString(), font);
+				phrase = new Phrase(producto.getPallet() == null ? " ": producto.getPallet().toString(), font);
 				cell.setPhrase(phrase);
 				table.addCell(cell);
 			

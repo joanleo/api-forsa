@@ -31,12 +31,14 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 
 	@Override
 	public TipoEmpresaDTO create(TipoEmpresaDTO tipoEmpresaDTO) {
-		TipoEmpresa tipoEmpresa = mapearDto(tipoEmpresaDTO);
-		TipoEmpresa exist = tipoEmpresaRepo.findByTipo(tipoEmpresa.getTipo());
+		TipoEmpresa tipoEmpresa = new TipoEmpresa();
+		TipoEmpresa exist = tipoEmpresaRepo.findByTipo(tipoEmpresaDTO.getTipo());
 		if (exist == null) {
-			exist = tipoEmpresaRepo.save(tipoEmpresa);
+			System.out.println("EL Tipo empresa no existe");
+			tipoEmpresa.setTipo(tipoEmpresaDTO.getTipo());
+			exist = tipoEmpresaRepo.saveAndFlush(tipoEmpresa);
 		} else {
-			throw new ResourceAlreadyExistsException("Tipo de empresa", "nombre", tipoEmpresa.getTipo());
+			throw new ResourceAlreadyExistsException("Tipo de empresa", "nombre", tipoEmpresaDTO.getTipo());
 		}
 
 		return mapearEntidad(exist);
@@ -91,8 +93,12 @@ public class TipoEmpresaServiceImpl implements TipoEmpresaService {
 	public void unable(Long id) {
 		TipoEmpresa tipoEmpresa = tipoEmpresaRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Tipo de empresa", "id", id));
-		
-		tipoEmpresa.setEstaActivo(false);
+		Boolean estado = tipoEmpresa.getEstaActivo();
+		if(estado) {
+			tipoEmpresa.setEstaActivo(false);			
+		}else {
+			tipoEmpresa.setEstaActivo(true);
+		}
 		tipoEmpresaRepo.save(tipoEmpresa);
 		
 	}

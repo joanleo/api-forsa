@@ -36,9 +36,7 @@ public class TipoEmpresa {
 	
 	@Column(name = "bestaActivo", columnDefinition="BOOLEAN NOT NULL DEFAULT 1")
 	private Boolean estaActivo=true;
-	
-	
-	
+		
 	@JsonIgnore
 	@OneToMany(mappedBy = "tipoEmpresa")
 	private List<Empresa> empresas;
@@ -80,10 +78,6 @@ public class TipoEmpresa {
 	}	
 
 	
-	
-	
-	
-
 	/**
 	 * Constructor sin parametros
 	 */
@@ -111,6 +105,14 @@ public class TipoEmpresa {
 		this.id = id;
 		this.tipo = tipo;
 
+	}
+
+	/**
+	 * @param tipo
+	 */
+	public TipoEmpresa(String tipo) {
+		super();
+		this.tipo = tipo;
 	}
 	
 }

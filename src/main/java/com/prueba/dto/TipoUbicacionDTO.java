@@ -9,6 +9,16 @@ public class TipoUbicacionDTO {
 	private String nombre;
 	
 	private Empresa empresa;
+	
+	private Boolean estaActivo;
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
+	}
 
 	public Long getId() {
 		return id;

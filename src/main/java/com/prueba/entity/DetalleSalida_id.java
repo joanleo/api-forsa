@@ -19,12 +19,12 @@ public class DetalleSalida_id implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Column(name = "nidsalida")
-	private Integer idSalida;
+	private Long idSalida;
 	
 	@Column(name = "nidpieza")
 	private Integer idPieza;
 
-	public DetalleSalida_id(Integer idSalida, Integer idPieza) {
+	public DetalleSalida_id(Long idSalida, Integer idPieza) {
 		super();
 		this.idSalida = idSalida;
 		this.idPieza = idPieza;
@@ -34,11 +34,11 @@ public class DetalleSalida_id implements Serializable{
 		super();
 	}
 
-	public Integer getIdSalida() {
+	public Long getIdSalida() {
 		return idSalida;
 	}
 
-	public void setIdSalida(Integer idSalida) {
+	public void setIdSalida(Long idSalida) {
 		this.idSalida = idSalida;
 	}
 

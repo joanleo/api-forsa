@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lowagie.text.DocumentException;
 import com.prueba.dto.ComparativoInventarioDTO;
+import com.prueba.dto.ComparativoUbicacionDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Producto;
 import com.prueba.entity.Ubicacion;
@@ -32,6 +33,7 @@ import com.prueba.security.repository.UsuarioRepository;
 import com.prueba.service.ProductoService;
 import com.prueba.util.CsvExportService;
 import com.prueba.util.ReporteComparativo;
+import com.prueba.util.ReporteDiferenciasPDF;
 import com.prueba.util.ReporteVerificarPDF;
 import com.prueba.util.UtilitiesApi;
 
@@ -63,7 +65,7 @@ public class ReportesController {
 	
 	@GetMapping("/verificacion")
 	@Operation(summary = "Crea un reporte de verificacion", description = "Retorna un listado de los activos de una orden dada "
-			+ "segun el filtro indicado. Los filtros podran ser 'faltantes', 'sobrantes', 'ok', 'todos'")
+			+ "segun el filtro indicado con paginacion. Los filtros podran ser 'faltantes', 'sobrantes', 'ok', 'todos'")
 	public Page<Producto> getVerificacion(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
@@ -88,9 +90,9 @@ public class ReportesController {
 		return reporte; 
 	}
 	
-	@GetMapping("/verificacion/csv/descarga")
+	@GetMapping("/verificacion/descarga/csv")
 	@Operation(summary = "Crea un reporte de verificacion", description = "Retorna un listado de los activos de una orden dada "
-			+ "segun el filtro indicado. Los filtros podran ser 'faltantes', 'sobrantes', 'ok', 'todos'")
+			+ "segun el filtro indicado en formato csv.'")
 	public void getCsvVerificacion(HttpServletResponse response,
 			@RequestParam String orden,
 			@RequestParam(defaultValue = "todos") String filtro,
@@ -117,7 +119,7 @@ public class ReportesController {
 		
 	}
 	
-	@GetMapping("/verificacion/descarga")
+	@GetMapping("/verificacion/descarga/pdf")
 	@Operation(summary = "Crea un reporte de verificacion en formato PDF", description = "Retorna un PDF con el listado de los activos de una orden dada "
 			+ "segun el filtro indicado. Los filtros podran ser 'faltantes', 'sobrantes', 'ok', 'todos'")
 	public void exportToPDF(HttpServletResponse response,
@@ -149,11 +151,11 @@ public class ReportesController {
 		
 	}
 	
-	@GetMapping("/compararinventarios/descarga")
+	@GetMapping("/compararinventarios/descarga/pdf")
+	@Operation(summary = "Crea un reporte de comparacion de 2 inventarios", description = "Retorna un PDF con el listado de comparacion de 2 inventario")
 	public void compararInventariosPDF(HttpServletResponse response,
-			@RequestParam Integer inventario1,
-			@RequestParam Integer inventario2,
-			/*@RequestParam(defaultValue = "todos") String filtro,		*/
+			@RequestParam Long inventario1,
+			@RequestParam Long inventario2,
 			@RequestParam(required=false) Long nit) throws DocumentException, IOException {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -172,10 +174,34 @@ public class ReportesController {
         exporter.export(response);
 	}
 	
+	@GetMapping("/compararinventarios/descarga/csv")
+	@Operation(summary = "Crea un reporte de comparacion de 2 inventarios", description = "Retorna un reporte de comparacion de 2 inventarios en formato csv")
+	public void compararInventariosCSV(HttpServletResponse response,
+			@RequestParam Long inventario1,
+			@RequestParam Long inventario2,
+			@RequestParam(required=false) Long nit) throws IOException {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
+	
+		response.setContentType("application/x-download");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=diferencias" + inventario1 + "_INV-" + inventario2 +"  "+ currentDateTime + ".csv";
+		response.setHeader(headerKey, headerValue);
+		
+		List<ComparativoInventarioDTO> comparativo = util.compararInventarios(inventario1, inventario2);
+		System.out.println("Enviando lista para generar pdf");
+		csvService.compararInventariosToCsv(response.getWriter(),comparativo);
+	}
+	
 	@GetMapping("/compararinventarios")
-	public Page<ComparativoInventarioDTO> compararInventariosPDF(
-			@RequestParam Integer inventario1,
-			@RequestParam Integer inventario2,
+	@Operation(summary = "Crea un reporte de comparacion de 2 inventarios", description = "Retorna un listado de comparacion de 2 inventarios paginado")
+	public Page<ComparativoInventarioDTO> compararInventarios(
+			@RequestParam Long inventario1,
+			@RequestParam Long inventario2,
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
 			@RequestParam(required=false) Long nit) {
@@ -190,18 +216,22 @@ public class ReportesController {
 		
 		int start = (int) pageable.getOffset();
 		
-		int end = (int) ((pagina + pageable.getPageSize()) > comparativo.size() ? comparativo.size()
-				  : (start + pageable.getPageSize()));
+		int end = Math.min((start + pageable.getPageSize()), comparativo.size());
+
 		Page<ComparativoInventarioDTO> pages = new PageImpl<ComparativoInventarioDTO> (comparativo.subList(start, end), pageable, comparativo.size());
 
 		return pages;
 	}
 	
-	@GetMapping("/diferenciainventario/descarga")
+	@GetMapping("/diferenciainventario/descarga/pdf")
+	@Operation(summary = "Crea un reporte de diferencias de ubicacion vs inventario", description = "Retorna un pdf con las diferencias de ubicacion vs inventario")
 	public void diferenciainventarioPDF(HttpServletResponse response,
 			@RequestParam Long idubicacion,
-			@RequestParam Integer idinventario,
+			@RequestParam Long idinventario,
 			@RequestParam(required=false) Long nit) throws DocumentException, IOException {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
 		Ubicacion ubicacion = ubicacionRepo.findById(idubicacion).orElseThrow(()->new ResourceNotFoundException("Ubicacion", "id", idubicacion));
 	
@@ -212,10 +242,61 @@ public class ReportesController {
 		String headerValue = "attachment; filename=diferencias" + ubicacion.getNombre() + "_INV-" + idinventario +"  "+ currentDateTime + ".pdf";
 		response.setHeader(headerKey, headerValue);
 		
-		List<ComparativoInventarioDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
+		List<ComparativoUbicacionDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
+		System.out.println("Enviando lista para generar pdf");
+		ReporteDiferenciasPDF exporter = new ReporteDiferenciasPDF(comparativo, usuario, ubicacion); 
+        exporter.export(response);
+	}
+	
+	@GetMapping("/diferenciainventario")
+	@Operation(summary = "Crea un reporte de diferencias de ubicacion vs inventario", description = "Retorna un reporte con las diferencias de ubicacion vs inventario, paginado")
+	public Page<ComparativoUbicacionDTO> diferenciainventario(
+			@RequestParam Long idubicacion,
+			@RequestParam Long idinventario,
+			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
+			@RequestParam(required=false, defaultValue = "0") Integer items,
+			@RequestParam(required=false) Long nit) {
 		
-		//ReporteComparativo exporter = new ReporteComparativo(comparativo);
-        //exporter.export(response);
+		List<ComparativoUbicacionDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
+		Pageable pageable = null;
+		if(items == 0) {
+			pageable = PageRequest.of(pagina, 10);
+		}else {		
+			pageable = PageRequest.of(pagina, items); 			
+		}
+		
+		int start = (int) pageable.getOffset();
+		System.out.println(start);
+		int end = Math.min((start + pageable.getPageSize()), comparativo.size());
+		System.out.println(comparativo.size());
+		System.out.println(pagina + pageable.getPageSize());
+		Page<ComparativoUbicacionDTO> pages = new PageImpl<ComparativoUbicacionDTO> (comparativo.subList(start, end), pageable, comparativo.size());
+
+		return pages;
+	}
+	
+	@GetMapping("/diferenciainventario/descarga/csv")
+	@Operation(summary = "Crea un reporte de diferencias de ubicacion vs inventario", description = "Retorna un reporte con las diferencias de ubicacion vs inventario en formato csv")
+	public void diferenciainventarioCSV(HttpServletResponse response,
+			@RequestParam Long idubicacion,
+			@RequestParam Long idinventario,
+			@RequestParam(required=false) Long nit) throws IOException {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
+		
+		Ubicacion ubicacion = ubicacionRepo.findById(idubicacion).orElseThrow(()->new ResourceNotFoundException("Ubicacion", "id", idubicacion));
+	
+		response.setContentType("application/x-download");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=diferencias" + ubicacion.getNombre() + "_INV-" + idinventario +"  "+ currentDateTime + ".csv";
+		response.setHeader(headerKey, headerValue);
+		
+		List<ComparativoUbicacionDTO> comparativo = util.analisisDiferencias(idubicacion, idinventario);
+		System.out.println("Enviando lista para generar pdf");
+		csvService.writeDiferenciaInventarioToCsv(response.getWriter(),comparativo, ubicacion);
 	}
 
 }

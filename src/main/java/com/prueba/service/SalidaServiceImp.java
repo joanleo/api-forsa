@@ -103,7 +103,7 @@ public class SalidaServiceImp implements SalidaService {
 		}
 		nuevaSalida = salidaRepo.saveAndFlush(nuevaSalida);
 		List<Producto> productos = salidaDTO.getDetalles();
-		Salida actualizar = salidaRepo.findByIdSalida(nuevaSalida.idSalida);
+		Salida actualizar = salidaRepo.findByIdSalida(nuevaSalida.getIdSalida());
 		if(Objects.isNull(actualizar)) {
 			throw new ResourceNotFoundException("Salida", "id", nuevaSalida.toString());
 		}
@@ -161,7 +161,7 @@ public class SalidaServiceImp implements SalidaService {
 	}
 
 	@Override
-	public Salida confirmarActivoSalida(Integer idsalida, String codigopieza) {
+	public Salida confirmarActivoSalida(Long idsalida, String codigopieza) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
@@ -192,7 +192,7 @@ public class SalidaServiceImp implements SalidaService {
 	}
 
 	@Override
-	public Salida confirmarSalida(Integer idsalida) {
+	public Salida confirmarSalida(Long idsalida) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioRepo.findByNombreUsuarioOrEmail(authentication.getName(), authentication.getName()).get();
 		
@@ -217,7 +217,7 @@ public class SalidaServiceImp implements SalidaService {
 	}
 
 	@Override
-	public void eliminarSalida(Integer idsalida, Long nit) throws ResourceCannotBeDeleted{
+	public void eliminarSalida(Long idsalida, Long nit) throws ResourceCannotBeDeleted{
 		Salida salida = salidaRepo.findByIdSalida(idsalida);
 		if(Objects.isNull(salida)) {
 			throw new ResourceNotFoundException("Salida", "id", String.valueOf(idsalida));
@@ -249,7 +249,7 @@ public class SalidaServiceImp implements SalidaService {
 	}
 
 	@Override
-	public Salida obtieneSalida(Integer id) {
+	public Salida obtieneSalida(Long id) {
 		
 		Salida salida = salidaRepo.findByIdSalida(id);
 		if(Objects.isNull(salida)) {
@@ -259,13 +259,19 @@ public class SalidaServiceImp implements SalidaService {
 	}
 
 	@Override
-	public Page<DetalleSalida> obtieneDetalleSalida(Integer idsalida, Integer pagina, Integer items) {
+	public Page<DetalleSalida> obtieneDetalleSalida(Long idsalida, Integer pagina, Integer items) {
 		
-		Salida salida = salidaRepo.findByIdSalida(idsalida);
+		Salida salida = salidaRepo.findByIdSalida(idsalida); 
 		if(Objects.isNull(salida)) {
 			throw new ResourceNotFoundException("Salida", "id", String.valueOf(idsalida));
 		}
+		System.out.println("Id salida: "+idsalida);
+		System.out.println("Tamaño detalle: "+salida.getDetalles().size());
 		if(items == 0) {
+			List<DetalleSalida> lista = detalleSalidaRepo.findBySalida(salida);
+			for(DetalleSalida detalle: lista) {
+				System.out.println(detalle.getProducto().getCodigoPieza());
+			}
 			Page<DetalleSalida> detalles = detalleSalidaRepo.findBySalida(salida, PageRequest.of(0, 10));
 			return detalles;
 		}
@@ -274,7 +280,7 @@ public class SalidaServiceImp implements SalidaService {
 	}
 
 	@Override
-	public void eliminarActivo(Integer idsalida, String codigopieza) {
+	public void eliminarActivo(Long idsalida, String codigopieza) {
 		Salida salida = salidaRepo.findByIdSalida(idsalida);
 		if(Objects.isNull(salida)) {
 			throw new ResourceNotFoundException("Salida", "id", String.valueOf(idsalida));
@@ -293,7 +299,7 @@ public class SalidaServiceImp implements SalidaService {
 	}
 
 	@Override
-	public void eliminarTodosActivos(Integer idsalida) {
+	public void eliminarTodosActivos(Long idsalida) {
 
 		Salida salida = salidaRepo.findByIdSalida(idsalida);
 		if(Objects.isNull(salida)) {

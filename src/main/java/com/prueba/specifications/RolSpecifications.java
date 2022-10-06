@@ -23,9 +23,14 @@ public class RolSpecifications {
 			if(rolDTO.getNombre() != null) {
 				predicates.add(criteryBuilder.like(root.get("nombre").as(String.class), "%"+rolDTO.getNombre()+ "%"));
 			}
+			if(rolDTO.getEstaActivo() != null && rolDTO.getEstaActivo()) {
+				predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
+			}
+			if(rolDTO.getEstaActivo() != null && !rolDTO.getEstaActivo()) {
+				predicates.add(criteryBuilder.isFalse(root.get("estaActivo").as(Boolean.class)));
+			}
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 			
-			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
 			
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};

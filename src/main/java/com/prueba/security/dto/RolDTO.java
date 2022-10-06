@@ -13,7 +13,7 @@ public class RolDTO {
 	
 	private Empresa empresa;
 	
-	private Boolean estaActivo=true;
+	private Boolean estaActivo;
 	
 	public Long getId() {
 		return id;

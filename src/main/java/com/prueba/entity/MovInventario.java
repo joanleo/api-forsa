@@ -49,7 +49,7 @@ public class MovInventario implements Serializable{
 	@Column(name = "nidmov", length = 6)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,	generator = "seq_inv")
 	@SequenceGenerator(name = "seq_inv", allocationSize = 10)
-	private Integer idMov;
+	private Long idMov;
 	
 	@Column(name = "vcnumdocumento")
 	public String numDocumento;
@@ -82,9 +82,26 @@ public class MovInventario implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vcnitempresa", referencedColumnName = "vcnitempresa")
     private Empresa empresa;
+	
+	@Column(name = "vclistacodigos")
+	private String codigosSobrantes;
+	
+	@Column(name = "vcestadoinventario")
+	private String estadoInventario;
 
-	
-	
+
+	public String getCodigosSobrantes() {
+		return codigosSobrantes;
+	}
+
+	public void setCodigosSobrantes(String codigosSobrantes) {
+		this.codigosSobrantes = codigosSobrantes;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	public Usuario getRealizo() {
 		return realizo;
 	}
@@ -101,11 +118,11 @@ public class MovInventario implements Serializable{
 		this.ubicacion = ubicacion;
 	}
 
-	public Integer getIdMov() {
+	public Long getIdMov() {
 		return idMov;
 	}
 
-	public void setIdMov(Integer idMov) {
+	public void setIdMov(Long idMov) {
 		this.idMov = idMov;
 	}
 
@@ -139,6 +156,14 @@ public class MovInventario implements Serializable{
 
 	public void setNumDocumento(String numDocumento) {
 		this.numDocumento = numDocumento;
+	}
+
+	public String getEstadoInventario() {
+		return estadoInventario;
+	}
+
+	public void setEstadoInventario(String estadoInventario) {
+		this.estadoInventario = estadoInventario;
 	}
 
 	public void addActivo(Producto producto, Usuario usuario, Date date) {

@@ -90,7 +90,7 @@ public class SalidaController {
 	
 	@GetMapping("/{idsalida}")
 	@Operation(summary = "Obtiene una salida")
-	public ResponseEntity<Salida> obtenerSalida(@PathVariable Integer idsalida){
+	public ResponseEntity<Salida> obtenerSalida(@PathVariable Long idsalida){
 		
 		Salida salida = salidaService.obtieneSalida(idsalida);
 		
@@ -128,7 +128,7 @@ public class SalidaController {
 	@PatchMapping("/{idsalida}/{codigopieza}")
 	@Operation(summary = "Confirma un activo de la salida")
 	public ResponseEntity<?> confirmarActivoSalida(
-			@PathVariable Integer idsalida,
+			@PathVariable Long idsalida,
 			@PathVariable String codigopieza){
 		
 		Salida salida = salidaService.confirmarActivoSalida(idsalida, codigopieza);
@@ -138,7 +138,7 @@ public class SalidaController {
 	
 	@PutMapping("/{idsalida}")
 	@Operation(summary = "Confirma todos los activos de la salida")
-	public ResponseEntity<?> confirmarSalida(@PathVariable Integer idsalida){
+	public ResponseEntity<?> confirmarSalida(@PathVariable Long idsalida){
 		
 		Salida salida = salidaService.confirmarSalida(idsalida);
 		
@@ -150,15 +150,15 @@ public class SalidaController {
 	public ApiResponse<Page<DetalleSalida>> obtieneDetalleSalida(
 			@RequestParam(required=false, defaultValue = "0") Integer pagina, 
 			@RequestParam(required=false, defaultValue = "0") Integer items,
-			@PathVariable Integer idsalida){
-		
+			@PathVariable Long idsalida){
+		 
 		Page<DetalleSalida> detalles = salidaService.obtieneDetalleSalida(idsalida, pagina, items);
 		return new ApiResponse<>(detalles.getSize(), detalles);
 	}
 	
 	@DeleteMapping("/{idsalida}/eliminar/{codigopieza}")
 	@Operation(summary = "Elimina un activo de una salida")
-	public ResponseEntity<?> eliminarActivo(@PathVariable Integer idsalida,
+	public ResponseEntity<?> eliminarActivo(@PathVariable Long idsalida,
 			@PathVariable String codigopieza){
 		salidaService.eliminarActivo(idsalida, codigopieza);
 		return new ResponseEntity<ResDTO>(new ResDTO("Activo eliminada con exito"), HttpStatus.OK);
@@ -166,7 +166,7 @@ public class SalidaController {
 	
 	@DeleteMapping("/{idsalida}")
 	@Operation(summary = "Elimina todos los activos de una salida")
-	public ResponseEntity<?> eliminarTodosActivos(@PathVariable Integer idsalida){
+	public ResponseEntity<?> eliminarTodosActivos(@PathVariable Long idsalida){
 		salidaService.eliminarTodosActivos(idsalida);
 		return new ResponseEntity<ResDTO>(new ResDTO("Se eliminaro todos los activos con exito"), HttpStatus.OK);
 	}
@@ -174,7 +174,7 @@ public class SalidaController {
 	@GetMapping("/detalle/{idsalida}/descarga")
 	@Operation(summary = "Retorna una salida en formato PDF", description = "Retorna una salida con detalle segun el numero de salida")
 	public void exportToPdfSlida(HttpServletResponse response,
-			@PathVariable Integer idsalida) throws DocumentException, IOException{
+			@PathVariable Long idsalida) throws DocumentException, IOException{
 		
 		response.setContentType("application/pdf");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");

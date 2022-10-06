@@ -23,7 +23,9 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import com.prueba.dto.ComparativoInventarioDTO;
+import com.prueba.dto.ComparativoUbicacionDTO;
+import com.prueba.entity.Ubicacion;
+
 import com.prueba.security.entity.Usuario;
 
 /**
@@ -31,121 +33,127 @@ import com.prueba.security.entity.Usuario;
  *
  */
 public class ReporteDiferenciasPDF {
+	
+	private List<ComparativoUbicacionDTO> comparativo;
+		
+	private Usuario usuarioCrea;
+	
+	private Ubicacion ubicacion;
+	
+	private Long idinv;
+	
+		
+		
+	public ReporteDiferenciasPDF(List<ComparativoUbicacionDTO> comparativo, Usuario usuario, Ubicacion ubicacion) {
+		super();
+		this.comparativo = comparativo;
+		this.usuarioCrea = usuario;
+		this.ubicacion = ubicacion;
+		this.idinv = comparativo.get(0).getNumInv();
+	}
 
-		private List<ComparativoInventarioDTO> comparativo;
+	private void tableHeader(PdfPTable table) {
 		
-		private Usuario usuarioCrea;
-		
-		private Integer inv1;
-		
-		private Integer inv2;
-		
-		public ReporteDiferenciasPDF(List<ComparativoInventarioDTO> comparativo) {
-			super();
-			this.comparativo = comparativo;
-			this.usuarioCrea = comparativo.get(0).getUsuarioRealizo();
-			this.inv1 = comparativo.get(0).getNumInv1();
-			this.inv2 = comparativo.get(0).getNumInv2();
-		}
+		PdfPCell cell = new PdfPCell();
+	 	cell.setBackgroundColor(new Color(46,60,115));
+        cell.setPadding(5);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		cell.setVerticalAlignment(Element.ALIGN_CENTER);
+         
+        Font font = FontFactory.getFont(FontFactory.HELVETICA);
+        font.setColor(Color.WHITE);
+        font.setSize(9);
+        
+        cell.setPhrase(new Phrase("Item", font));
+        table.addCell(cell);
+         
+        cell.setPhrase(new Phrase("QR", font));
+        table.addCell(cell);
+        
+        cell.setPhrase(new Phrase("Descripcion", font));
+        table.addCell(cell);
+         
+        cell.setPhrase(new Phrase("Familia", font));
+        table.addCell(cell);
+         
+        cell.setPhrase(new Phrase("Tipo", font));
+        table.addCell(cell);
+        
+        cell.setPhrase(new Phrase("Medidas", font));
+        table.addCell(cell);
+        
+        cell.setPhrase(new Phrase("Área m2", font));
+        table.addCell(cell);
+        
+        cell.setPhrase(new Phrase("Estado", font));
+        table.addCell(cell);
+        
+        cell.setPhrase(new Phrase(ubicacion.getNombre(), font));
+        table.addCell(cell);
+        
+        cell.setPhrase(new Phrase("INV-"+idinv, font));
+        table.addCell(cell);
+	}
+	
+	private void tableData(PdfPTable table) {
 
-		private void tableHeader(PdfPTable table) {
-			PdfPCell cell = new PdfPCell();
-		 	cell.setBackgroundColor(new Color(46,60,115));
-	        cell.setPadding(5);
-	        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			cell.setVerticalAlignment(Element.ALIGN_CENTER);
-	         
-	        Font font = FontFactory.getFont(FontFactory.HELVETICA);
-	        font.setColor(Color.WHITE);
-	        font.setSize(9);
-	        
-	        cell.setPhrase(new Phrase("Item", font));
-	        table.addCell(cell);
-	         
-	        cell.setPhrase(new Phrase("QR", font));
-	        table.addCell(cell);
-	        
-	        cell.setPhrase(new Phrase("Descripcion", font));
-	        table.addCell(cell);
-	         
-	        cell.setPhrase(new Phrase("Familia", font));
-	        table.addCell(cell);
-	         
-	        cell.setPhrase(new Phrase("Tipo", font));
-	        table.addCell(cell);
-	        
-	        cell.setPhrase(new Phrase("Medidas", font));
-	        table.addCell(cell);
-	        
-	        cell.setPhrase(new Phrase("Área m2", font));
-	        table.addCell(cell);
-	        
-	        cell.setPhrase(new Phrase("Estado", font));
-	        table.addCell(cell);
-	        
-	        cell.setPhrase(new Phrase("INV-"+inv1.toString(), font));
-	        table.addCell(cell);
-	        
-	        cell.setPhrase(new Phrase("INV-"+inv2.toString(), font));
-	        table.addCell(cell);
-		}
+		int count = 1;
+		System.out.println("inv1: "+comparativo.get(0).getNumInv());
 		
-		private void tableData(PdfPTable table) {
-
-			int count = 1;
-			System.out.println("inv1: "+comparativo.get(0).getNumInv1());
-			for(ComparativoInventarioDTO detalle: comparativo) {
-				Font font = FontFactory.getFont(FontFactory.HELVETICA);
-				font.setSize(8);
-				
-				Phrase phrase = new Phrase(String.valueOf(count), font);
-				PdfPCell cell = new PdfPCell(phrase);
-				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell.setVerticalAlignment(Element.ALIGN_CENTER);			
-				table.addCell(cell);
-				
-				phrase = new Phrase(detalle.getCodigo(), font);
-				cell.setPhrase(phrase);			
-				table.addCell(cell);
-				
-				phrase = new Phrase(detalle.getDescripcion(), font);
-				cell.setPhrase(phrase);
-				table.addCell(cell);
-				
-				phrase = new Phrase(detalle.getFamilia(), font);
-				cell.setPhrase(phrase);
-				table.addCell(cell);
-
-							
-				phrase = new Phrase(detalle.getTipo(), font);
-				cell.setPhrase(phrase);
-				table.addCell(cell);
-				
-				phrase = new Phrase(detalle.getMedidas(), font);
-				cell.setPhrase(phrase);
-				table.addCell(cell);
-				
-				phrase = new Phrase(String.format("%.2f", detalle.getArea()), font);
-				cell.setPhrase(phrase);
-				table.addCell(cell);
-				
-				phrase = new Phrase(detalle.getEstado(), font);
-				cell.setPhrase(phrase);
-				table.addCell(cell);
-				
-				phrase = new Phrase(detalle.getInv1() ? "Si":"No", font);
-				cell.setPhrase(phrase);
-				table.addCell(cell);
-				
-				phrase = new Phrase(detalle.getInv2() ? "Si":"No", font);
-				cell.setPhrase(phrase);
-				table.addCell(cell);
-				
-				count++;
-			}
+		for(ComparativoUbicacionDTO detalle: comparativo) {
+			Font font = FontFactory.getFont(FontFactory.HELVETICA);
+			font.setSize(8);
 			
+			Phrase phrase = new Phrase(String.valueOf(count), font);
+			PdfPCell cell = new PdfPCell(phrase);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setVerticalAlignment(Element.ALIGN_CENTER);			
+			table.addCell(cell);
+			
+			phrase = new Phrase(detalle.getCodigo(), font);
+			cell.setPhrase(phrase);			
+			table.addCell(cell);
+			
+			phrase = new Phrase(detalle.getDescripcion(), font);
+			cell.setPhrase(phrase);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(cell);
+			
+			phrase = new Phrase(detalle.getFamilia(), font);
+			cell.setPhrase(phrase);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(cell);
+
+						
+			phrase = new Phrase(detalle.getTipo(), font);
+			cell.setPhrase(phrase);
+			table.addCell(cell);
+			
+			phrase = new Phrase(detalle.getMedidas(), font);
+			cell.setPhrase(phrase);
+			table.addCell(cell);
+			
+			phrase = new Phrase(String.format("%.2f", detalle.getArea()), font);
+			cell.setPhrase(phrase);
+			table.addCell(cell);
+			
+			phrase = new Phrase(detalle.getEstado(), font);
+			cell.setPhrase(phrase);
+			table.addCell(cell);
+			
+			phrase = new Phrase(detalle.getUbicacion() ? "Si":"No", font);
+			cell.setPhrase(phrase);
+			table.addCell(cell);
+			
+			phrase = new Phrase(detalle.getInv() ? "Si":"No", font);
+			cell.setPhrase(phrase);
+			table.addCell(cell);
+			
+			count++;
 		}
 		
+	}
+	
 	public void export(HttpServletResponse response) throws DocumentException, IOException {
 			
 			Document documento = new Document(PageSize.LETTER.rotate());
@@ -159,7 +167,7 @@ public class ReporteDiferenciasPDF {
 	        font.setSize(18);
 	        font.setColor(new Color(226,119,12));
 	         
-	        Paragraph titulo = new Paragraph("COMPARATIVO DE INVENTARIOS", font);
+	        Paragraph titulo = new Paragraph("ANALISIS DE DIFERENCIAS", font);
 	        titulo.setAlignment(Paragraph.ALIGN_CENTER);
 	        titulo.setSpacingBefore(20);
 	        
@@ -168,7 +176,7 @@ public class ReporteDiferenciasPDF {
 	        Paragraph fechaCreacion = new Paragraph("Fecha de creacion: " + currentDateTime, font1);
 	        fechaCreacion.setAlignment(Paragraph.ALIGN_RIGHT);
 	        
-	        Paragraph porden =  new Paragraph("REALIZADO POR: " + usuarioCrea.getNombre().toUpperCase() + "               INV-"+ inv1 + " vs INV-"+ inv2 , font1);
+	        Paragraph porden =  new Paragraph("REALIZADO POR: " + usuarioCrea.getNombre().toUpperCase() + "               " +ubicacion.getNombre()+ " vs INV-"+ idinv , font1);
 	        porden.setAlignment(Paragraph.ALIGN_LEFT);
 	        porden.setSpacingBefore(30);
 	        

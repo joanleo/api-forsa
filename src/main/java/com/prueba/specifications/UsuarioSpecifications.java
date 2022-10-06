@@ -38,10 +38,16 @@ public class UsuarioSpecifications {
 			if(registroDTO.getNombreUsuario() != null) {
 				predicates.add(criteryBuilder.like(root.get("nombreUsuario"), "%" +registroDTO.getNombreUsuario() + "%"));				
 			}
+			if(registroDTO.getEstaActivo() != null && registroDTO.getEstaActivo()) {
+				predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));				
+			}
+			if(registroDTO.getEstaActivo() != null && !registroDTO.getEstaActivo()) {
+				predicates.add(criteryBuilder.isFalse(root.get("estaActivo").as(Boolean.class)));				
+			}
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 			
-			predicates.add(criteryBuilder.isTrue(root.get("estaActivo").as(Boolean.class)));
+			
 			
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};

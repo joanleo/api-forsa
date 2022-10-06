@@ -15,6 +15,7 @@ import com.prueba.dto.FabricanteDTO;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Fabricante;
 import com.prueba.exception.ResourceAlreadyExistsException;
+import com.prueba.exception.ResourceCannotBeAccessException;
 import com.prueba.exception.ResourceCannotBeDeleted;
 import com.prueba.exception.ResourceNotFoundException;
 import com.prueba.repository.FabricanteRepository;
@@ -59,14 +60,18 @@ public class FabricanteServiceImpl implements FabricanteService {
 		fabricanteDTO.setEmpresa(empresa);
 		Fabricante fabricante = mapearDTO(fabricanteDTO);
 		Fabricante exist = fabricanteRepo.findByNitAndEmpresaAndEstaActivoTrue(fabricanteDTO.getNit(), fabricanteDTO.getEmpresa());
-		
-		if(exist == null) {
-			fabricanteRepo.save(fabricante);
+		String verNombre = fabricanteDTO.getNombre().trim();
+		if(verNombre.length() > 0) {
+			if(exist == null) {
+				exist =fabricanteRepo.save(fabricante);
+			}else {
+				throw new ResourceAlreadyExistsException("Fabricante", "nit", fabricanteDTO.getNit());
+			}			
 		}else {
-			throw new ResourceAlreadyExistsException("Fabricante", "nit", fabricanteDTO.getNit());
+			throw new ResourceCannotBeAccessException("El nombre debe ser un nombre valildo, no solo espacios");
 		}
 		
-		return mapearEntidad(fabricante);
+		return mapearEntidad(exist);
 	}
 	
 	@Override
@@ -134,7 +139,13 @@ public class FabricanteServiceImpl implements FabricanteService {
 		Fabricante fabricante = fabricanteRepo.findByNitAndEmpresa(id, empresa)
 				.orElseThrow(() -> new ResourceNotFoundException("Fabricante", "id", id));
 		
-		fabricante.setEstaActivo(false);
+		Boolean estado = fabricante.getEstaActivo();
+		if(estado) {
+			fabricante.setEstaActivo(false);			
+		}else {
+			fabricante.setEstaActivo(true);
+		}
+		
 		fabricanteRepo.save(fabricante);		
 	}
 	

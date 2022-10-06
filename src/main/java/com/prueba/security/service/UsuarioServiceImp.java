@@ -77,7 +77,7 @@ public class UsuarioServiceImp implements UsuarioService {
 			usuario.setNombre(registroDTO.getNombre());
 		}
 		if(registroDTO.getNombreUsuario() != null) {
-			usuario.setNombreUsuario(registroDTO.getNombreUsuario());
+			usuario.setNombreUsuario(registroDTO.getNombreUsuario().trim());
 		}
 		if(registroDTO.getEmail() != null) {
 			usuario.setEmail(registroDTO.getEmail());
@@ -152,7 +152,14 @@ public class UsuarioServiceImp implements UsuarioService {
 		if(Objects.isNull(usuario)) {
 			throw new ResourceNotFoundException("Usuario", "id", id);
 		}
-		usuario.setEstaActivo(false);
+		
+		Boolean estado = usuario.getEstaActivo();
+		if(estado) {
+			usuario.setEstaActivo(false);			
+		}else {
+			usuario.setEstaActivo(true);
+		}
+
 		usuarioRepo.save(usuario);
 		
 	}

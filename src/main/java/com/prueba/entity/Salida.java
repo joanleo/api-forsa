@@ -49,22 +49,22 @@ public class Salida implements Serializable {
 	@Column(name = "nidsalida")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,	generator = "seq_salida")
 	@SequenceGenerator(name = "seq_salida", allocationSize = 10)
-	public Integer idSalida;
+	private Long idSalida;
 	
 	@Column(name = "vcnumdocumento")
-	public String numDocumento;
+	private String numDocumento;
 	
 	@PostPersist
-	public void numDoc() {
+	private void numDoc() {
 		numDocumento = "SIN-" + String.valueOf(this.idSalida);
 	}
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nidtipo_mov", nullable = false)
-	public TipoMov tipoMovimiento;
+	private TipoMov tipoMovimiento;
 	
 	@Column(name = "dfecha_Salida")
-	public Date fechaCreacion;
+	private Date fechaCreacion;
 
 	@PrePersist
 	private void onCreate() {
@@ -103,11 +103,11 @@ public class Salida implements Serializable {
 		this.numDocumento = "SIN-" + String.valueOf(this.idSalida);
 	}
 
-	public Integer getIdSalida() {
+	public Long getIdSalida() {
 		return idSalida;
 	}
 
-	public void setIdSalida(Integer idSalida) {
+	public void setIdSalida(Long idSalida) {
 		this.idSalida = idSalida;
 	}
 

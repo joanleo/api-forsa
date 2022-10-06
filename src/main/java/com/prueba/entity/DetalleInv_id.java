@@ -15,26 +15,26 @@ public class DetalleInv_id implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "nidmov")
-	private Integer idMov;
+	private Long idMov;
 	
-	@Column(name = "nid_pieza")
+	@Column(name = "nidpieza")
 	private Integer idPieza;
 
 	public DetalleInv_id() {
 		super();
 	}
 
-	public DetalleInv_id(Integer idMov, Integer idPieza) {
+	public DetalleInv_id(Long idMov, Integer idPieza) {
 		super();
 		this.idMov = idMov;
 		this.idPieza = idPieza;
 	}
 
-	public Integer getIdMov() {
+	public Long getIdMov() {
 		return idMov;
 	}
 
-	public void setIdMov(Integer idMov) {
+	public void setIdMov(Long idMov) {
 		this.idMov = idMov;
 	}
 

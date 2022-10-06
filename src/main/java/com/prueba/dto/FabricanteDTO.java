@@ -1,7 +1,5 @@
 package com.prueba.dto;
 
-import javax.validation.constraints.NotNull;
-
 import com.prueba.entity.Empresa;
 
 public class FabricanteDTO {
@@ -15,7 +13,7 @@ public class FabricanteDTO {
 	//@NotBlank(message = "Este campo no puede ser nulo")
 	private Empresa empresa;
 	
-	private Boolean estaActivo=true;
+	private Boolean estaActivo;
 
 	public Long getNit() {
 		return nit;

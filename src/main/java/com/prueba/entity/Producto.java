@@ -115,7 +115,7 @@ public class Producto implements Serializable{
     private Boolean importado = false;
     
     @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
-    @JoinColumn(name = "nidusuario_recibe")
+    @JoinColumn(name = "nidusuario_recibe", referencedColumnName = "nidusuario")
     private Usuario reviso;
     
     @Column(name = "vcmedidas")
@@ -141,12 +141,16 @@ public class Producto implements Serializable{
 	public String estadoSalida;
     
     @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
-    @JoinColumn(name = "nidusuario_crea")
+    @JoinColumn(name = "nidusuario_crea", referencedColumnName = "nidusuario")
     Usuario usuarioCrea;
     
     @Column(name = "npallet")
     private Integer pallet;
- 
+    
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="vccodigopadre", referencedColumnName = "vccodigopieza")
+    private Producto padre;
+    
 	public Integer getIdPieza() {
 		return idPieza;
 	}
@@ -391,6 +395,15 @@ public class Producto implements Serializable{
 		super();
 		this.codigoPieza = codigoPieza;
 	}
+	public Producto getPadre() {
+		return padre;
+	}
+
+	public void setPadre(Producto padre) {
+		this.padre = padre;
+	}
+
+
 
 	public Producto(String codigoPieza, String descripcion, Float area, String orden, Familia familia,
 			Fabricante fabricante, Empresa empresa) {

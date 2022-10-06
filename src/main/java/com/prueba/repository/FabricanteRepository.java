@@ -33,4 +33,10 @@ public interface FabricanteRepository extends JpaRepository<Fabricante, Integer>
 
 	Page<Fabricante> findByEmpresaAndEstaActivoTrue(Empresa empresa, Pageable page);
 
+	/**
+	 * @param string
+	 * @return
+	 */
+	Fabricante findByNombre(String string);
+
 }

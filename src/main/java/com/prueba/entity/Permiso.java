@@ -2,7 +2,10 @@ package com.prueba.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -32,7 +35,7 @@ public class Permiso implements Serializable{
 	private Long idRuta;
 	
 
-	@Column(name = "vcurl")
+	@Column(name = "vcurl", length = 300)
 	@Convert(converter = ListToStringConverter.class)
 	private List<String> url = new ArrayList<>();
 	
@@ -92,7 +95,14 @@ public class Permiso implements Serializable{
 	}
 	
 	public void addUrl(String url) {
-		this.url.add(url);
+		Set<String> urls = new HashSet<>(this.url);
+		urls.add(url);
+		this.url = urls.stream().collect(Collectors.toList());
+	}
+
+	@Override
+	public String toString() {
+		return "Permiso [idRuta=" + idRuta + ", url=" + url + ", nombre=" + nombre + ", metodo=" + metodo + "]";
 	}
 
 

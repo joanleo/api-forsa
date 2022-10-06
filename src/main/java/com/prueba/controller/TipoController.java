@@ -86,7 +86,6 @@ public class TipoController {
 			empresa = usuario.getEmpresa();			
 		}
 		if(letras != null) {
-			System.out.println(letras);
 			return tipoActivoService.findByNameAndEmpreaAndEstaActivo(letras, empresa);
 		}else {
 			return tipoActivoService.list(empresa);			

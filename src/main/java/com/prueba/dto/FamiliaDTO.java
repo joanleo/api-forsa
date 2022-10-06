@@ -1,8 +1,5 @@
 package com.prueba.dto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import com.prueba.entity.Empresa;
 
 public class FamiliaDTO {
@@ -16,6 +13,8 @@ public class FamiliaDTO {
 	private Empresa empresa;
 	
 	private String sigla;
+	
+	private Boolean estaActivo;
 
 	public FamiliaDTO() {
 		super();
@@ -51,6 +50,14 @@ public class FamiliaDTO {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
 	}
 
 }

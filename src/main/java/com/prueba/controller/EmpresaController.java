@@ -47,6 +47,7 @@ public class EmpresaController {
 	
 	@Autowired
 	private CsvExportService csvService;
+
 	
 	@PostMapping
 	@Operation(summary = "Crea una empresa", description = "Crea una nueva empresa")
@@ -58,9 +59,9 @@ public class EmpresaController {
 	@Operation(summary="Encuentra las empresas", description = "Retorna una lista de las empresas que coincidan con las letras indicadas, retorna todas las empresas si no se indica ninguna letra")
 	public List<EmpresaDTO> get(@RequestParam(required=false)String letras){
 		if(letras == null) {
-			empresaService.list();
+			return empresaService.list();
 		}
-		return  empresaService.findByNameAndEstaActivo(letras);
+		return  empresaService.list(letras);
 	}
 	
 	@PutMapping("/{nit}")

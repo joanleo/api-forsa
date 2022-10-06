@@ -1,6 +1,5 @@
 package com.prueba.dto;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -8,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.prueba.entity.Empresa;
 import com.prueba.entity.Fabricante;
 import com.prueba.entity.Familia;
+import com.prueba.entity.TipoActivo;
 import com.prueba.entity.Ubicacion;
 import com.prueba.security.entity.Usuario;
 
@@ -50,11 +50,11 @@ public class ProductoDTO {
 	
 	private String motivoIngreso ="Compra";
 	
-//	private Producto_id idProducto = new Producto_id(empresa.getNit(), codigoPieza);
-	
 	private String medidas;
 	
 	private Usuario reviso;
+	
+	private TipoActivo tipo;
 
 	public String getCodigoPieza() {
 		return codigoPieza;
@@ -159,15 +159,7 @@ public class ProductoDTO {
 	public void setMotivoIngreso(String motivoIngreso) {
 		this.motivoIngreso = motivoIngreso;
 	}
-/*
-	public Producto_id getIdProducto() {
-		return idProducto;
-	}
 
-	public void setIdProducto(Producto_id idProducto) {
-		this.idProducto = idProducto;
-	}
-*/
 	public String getMedidas() {
 		return medidas;
 	}
@@ -184,32 +176,15 @@ public class ProductoDTO {
 		this.reviso = reviso;
 	}
 
-	public ProductoDTO() {
+	public TipoActivo getTipo() {
+		return tipo;
 	}
 
-	public ProductoDTO(@NotNull(message = "Este campo no puede ser nulo") String codigoPieza,
-			@NotBlank(message = "Este campo no puede ser nulo") String descripcion,
-			@NotNull(message = "Este campo no puede ser nulo") Float area,
-			@NotBlank(message = "Este campo no puede ser nulo") String orden,
-			@NotNull(message = "Este campo no puede ser nulo") Fabricante fabricante,
-			@NotNull(message = "Este campo no puede ser nulo") Familia familia,
-			@NotNull(message = "Este campo no puede ser nulo") EstadoDTO estado, Empresa empresa, Boolean verificado,
-			@NotNull(message = "Este campo no puede ser nulo") Ubicacion ubicacion, Boolean estaActivo,
-			String nconfirmacion, String motivoIngreso/* Producto_id idProducto*/) {
-		super();
-		this.descripcion = descripcion;
-		this.area = area;
-		this.orden = orden;
-		this.fabricante = fabricante;
-		this.familia = familia;
-		this.estado = estado;
-		this.empresa = empresa;
-		this.verificado = verificado;
-		this.ubicacion = ubicacion;
-		this.estaActivo = estaActivo;
-		this.nconfirmacion = nconfirmacion;
-		this.motivoIngreso = motivoIngreso;
-		//this.idProducto = idProducto;
+	public void setTipo(TipoActivo tipo) {
+		this.tipo = tipo;
+	}
+
+	public ProductoDTO() {
 	}
 
 	
