@@ -265,13 +265,8 @@ public class SalidaServiceImp implements SalidaService {
 		if(Objects.isNull(salida)) {
 			throw new ResourceNotFoundException("Salida", "id", String.valueOf(idsalida));
 		}
-		System.out.println("Id salida: "+idsalida);
-		System.out.println("Tamaño detalle: "+salida.getDetalles().size());
+
 		if(items == 0) {
-			List<DetalleSalida> lista = detalleSalidaRepo.findBySalida(salida);
-			for(DetalleSalida detalle: lista) {
-				System.out.println(detalle.getProducto().getCodigoPieza());
-			}
 			Page<DetalleSalida> detalles = detalleSalidaRepo.findBySalida(salida, PageRequest.of(0, 10));
 			return detalles;
 		}
