@@ -18,11 +18,6 @@ import com.prueba.entity.Salida;
  */
 public interface SalidaService {
 
-	/**
-	 * @param salida
-	 * @return
-	 */
-	public Salida crearSalida(Salida salida);
 
 	/**
 	 * @param empresa
