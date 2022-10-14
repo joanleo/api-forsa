@@ -207,9 +207,10 @@ public class SalidaServiceImp implements SalidaService {
 				System.out.println(activoEliminar.getCodigoPieza());
 				activoEliminar = productoRepo.save(activoEliminar);
 				salida.updateActivo(activoEliminar, usuario, new Date());
-				salida.setEstadoSalida("F");
+				
 		}
-
+		
+		salida.setEstadoSalida("F");
 		
 		salida = salidaRepo.save(salida);
 		

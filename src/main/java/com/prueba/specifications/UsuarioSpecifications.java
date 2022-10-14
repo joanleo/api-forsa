@@ -5,12 +5,15 @@ import java.util.List;
 
 import javax.persistence.criteria.Predicate;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import com.prueba.entity.Empresa;
 import com.prueba.security.dto.RegistroDTO;
+import com.prueba.security.entity.Rol;
 import com.prueba.security.entity.Usuario;
+import com.prueba.security.repository.RolRepository;
 
 /**
  * 
@@ -19,6 +22,9 @@ import com.prueba.security.entity.Usuario;
  */
 @Component
 public class UsuarioSpecifications {
+	
+	@Autowired
+	private RolRepository rolRepo;
 
 	/**
 	 * 
@@ -44,11 +50,13 @@ public class UsuarioSpecifications {
 			if(registroDTO.getEstaActivo() != null && !registroDTO.getEstaActivo()) {
 				predicates.add(criteryBuilder.isFalse(root.get("estaActivo").as(Boolean.class)));				
 			}
+			if(registroDTO.getRol() != null) {
+				Rol rol = rolRepo.findByIdRol(registroDTO.getRol().getIdRol());
+				predicates.add(criteryBuilder.like(root.get("rol"), "%" + rol));
+			}
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
-			
-			
-			
+						
 			return criteryBuilder.and(predicates.toArray(new Predicate[0]));
 		};
 	}
