@@ -52,8 +52,8 @@ public class UsuarioSpecifications {
 			}
 			if(registroDTO.getRol() != null) {
 				Rol rol = rolRepo.findByIdRol(registroDTO.getRol().getIdRol());
-				predicates.add(criteryBuilder.like(root.get("rol"), "%" + rol));
-			}
+				predicates.add(criteryBuilder.equal(root.get("rol"), rol));
+			} 
 			
 			predicates.add(criteryBuilder.equal(root.get("empresa"), empresa));
 						
